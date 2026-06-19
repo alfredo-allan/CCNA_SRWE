@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco CCNA 2 | Módulo 1: Configuração Básica de Dispositivos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css"> </head>
+<body>
+
+    <div class="top-bar">
+        <button class="menu-toggle" id="openMenu">
+            <i class="fas fa-bars"></i>
+            <span>Menu</span>
+        </button>
+        <a href="index.html" class="top-bar-brand">
+            <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE)
+        </a>
+        <a href="index.html" class="btn-outline">
+            <i class="fas fa-arrow-left"></i> Painel Central
+        </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-compass"></i> Navegação</h3>
+            <button class="close-sidebar" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="nav-modules">
+            <li><a href="#secao1-0-1"><i class="fas fa-graduation-cap"></i> 1.0.1 Início</a></li>
+            <li><a href="#secao1-0-2"><i class="fas fa-list-ul"></i> 1.0.2 Objetivos</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="badge-lab">
+                <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+            </div>
+            <h1>Módulo 1: Configuração Básica de Dispositivos</h1>
+            <p>Aprenda a obter controle granular de ativos de rede configurando precisamente switches e roteadores Cisco.</p>
+            <div style="margin-top: 1.5rem;">
+                <i class="fas fa-server" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Switching"></i>
+                <i class="fas fa-route" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Routing"></i>
+                <i class="fas fa-wifi" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Wireless"></i>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+
+        <section id="secao1-0-1" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                <span class="section-number">1.0.1</span> Por que devo cursar este módulo?
+            </h2>
+            
+            <div class="card">
+                <p><strong>Bem-vindo à Configuração Básica de Dispositivos!</strong></p>
+                <p>Bem-vindo ao primeiro módulo em <em>CCNA Switching, Routing e Wireless Essentials</em>! Você sabe que switches e roteadores já vêm de fábrica com algumas configurações internas básicas de funcionamento, então por que você realmente precisa aprender a configurar esses equipamentos?</p>
+                <p>Imagine que você comprou um conjunto de ferrorama (um modelo de trem elétrico). Depois de montá-lo pela primeira vez, você percebe que a pista é apenas uma forma oval simples e que os vagões do trem só conseguem se mover no sentido horário. No entanto, o seu desejo original era que a pista tivesse o formato de um "oito" completo com um viaduto de cruzamento. Você também pode querer ter dois trens operando de maneira totalmente independente um do outro e movendo-se em direções opostas.</p>
+                <p>Como você poderia fazer isso acontecer? Você precisaria reconfigurar fisicamente a pista e os controladores digitais. O princípio é exatamente idêntico quando lidamos com dispositivos de rede de computadores.</p>
+                <p>Como administrador de infraestrutura de redes, você necessita de um controle detalhado, refinado e granular sobre cada dispositivo ativo em seu ambiente de produção. Isso significa configurar com precisão milimétrica os switches e roteadores para que a sua topologia de rede execute exatamente o comportamento esperado.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>📌 Foco Prático:</strong> Este módulo está repleto de atividades interativas de Verificador de Sintaxe (Syntax Checker) e cenários práticos no Packet Tracer para ajudá-lo a consolidar o desenvolvimento dessas competências críticas de engenharia de redes. Vamos começar!
+                </div>
+            </div>
+        </section>
+
+        <section id="secao1-0-2" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-list-ul"></i>
+                <span class="section-number">1.0.2</span> O que vou aprender neste módulo?
+            </h2>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <p><i class="fas fa-bookmark"></i> <strong>Título do Módulo:</strong></p>
+                    <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem;">Configuração básica de dispositivos</p>
+                </div>
+                <div class="card">
+                    <p><i class="fas fa-bullseye"></i> <strong>Objetivo do Módulo:</strong></p>
+                    <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem;">Configure dispositivos usando as práticas recomendadas de segurança.</p>
+                </div>
+            </div>
+
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>Título do Tópico</th>
+                        <th>Objetivo do Tópico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Configurar um switch com definições iniciais</strong></td>
+                        <td>Configurar definições iniciais em um switch Cisco.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Configurar portas de switch</strong></td>
+                        <td>Configurar as portas do switch para atender aos requisitos de rede.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acesso remoto seguro</strong></td>
+                        <td>Configurar o acesso seguro do gerenciamento em um switch.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Configuração básica do roteador</strong></td>
+                        <td>Definir configurações básicas em um roteador para rotear entre duas redes diretamente conectadas, usando CLI.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verificar redes conectadas diretamente</strong></td>
+                        <td>Verifique a conectividade entre duas redes diretamente conectadas ao um roteador.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>📌 Pronto para Avançar:</strong> Ao concluir esses tópicos, você terá a fundação prática necessária para operar a camada de acesso e distribuição de uma topologia corporativa Cisco de forma segura.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Cisco Networking Academy | CCNA 2 (SRWE) - Material Didático Estruturado</p>
+        </div>
+    </footer>
+
+    <script>
+        class SidebarMenu {
+            constructor() {
+                this.sidebar = document.getElementById('sidebar');
+                this.overlay = document.getElementById('sidebarOverlay');
+                this.openBtn = document.getElementById('openMenu');
+                this.closeBtn = document.getElementById('closeMenu');
+                this.init();
+            }
+
+            init() {
+                if (!this.sidebar) return;
+
+                if (this.openBtn) {
+                    this.openBtn.addEventListener('click', () => this.open());
+                }
+                if (this.closeBtn) {
+                    this.closeBtn.addEventListener('click', () => this.close());
+                }
+                if (this.overlay) {
+                    this.overlay.addEventListener('click', () => this.close());
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+                        this.close();
+                    }
+                });
+
+                const links = document.querySelectorAll('.sidebar .nav-modules a');
+                links.forEach(link => {
+                    link.addEventListener('click', () => this.close());
+                });
+            }
+
+            open() {
+                this.sidebar.classList.add('open');
+                this.overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            close() {
+                this.sidebar.classList.remove('open');
+                this.overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new SidebarMenu();
+        });
+    </script>
+</body>
+</html>

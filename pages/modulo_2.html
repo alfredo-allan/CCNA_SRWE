@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cisco CCNA 2 | Módulo 1.1.1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="top-bar">
+    <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+    </button>
+    <a href="#" class="top-bar-brand">
+        <i class="fas fa-network-wired"></i> Cisco CCNA 2
+    </a>
+    <a href="#" class="btn-outline">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <ul class="nav-modules">
+        <li><a href="#secao1-1"><i class="fas fa-terminal"></i> 1.1 Inicialização do Switch</a></li>
+        <li><a href="#secao1-2"><i class="fas fa-terminal"></i> 1.1.2 O Comando boot system</a></li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<section class="hero">
+    <div class="badge-lab"><i class="fas fa-microchip"></i> CCNA v7 / SRWE</div>
+    <h1>Módulo 1: Conceitos de Switching</h1>
+    <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; padding: 0 1rem;">
+        Entendendo a infraestrutura de redes locais, operação de ativos e o ciclo de vida operacional do hardware Cisco.
+    </p>
+</section>
+
+<div class="container">
+    
+   <section id="secao1-1" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-server"></i>
+        <span class="section-number">1.1.1</span> Sequência de Inicialização do Switch
+    </h2>
+    
+    <div class="card">
+        <p>Antes de configurar um switch, você precisa ativá-lo e permitir que ele passe pela sequência de inicialização de cinco etapas. Este tópico aborda os conceitos básicos de configuração de um switch e inclui um laboratório no final.</p>
+        
+        <p>Depois que um switch Cisco é ligado, ele passa pela seguinte sequência de inicialização em cinco etapas:</p>
+
+        <div class="boot-pipeline">
+            
+            <div class="boot-step">
+                <div class="step-num">Etapa 1</div>
+                <div class="step-content">
+                    <h4><i class="fas fa-shield-alt"></i> Power-On Self-Test (POST)</h4>
+                    <p>Primeiro, o switch carrega um programa <strong>POST (Power-On Self-Test)</strong> armazenado na <strong>ROM</strong>. O POST verifica o subsistema da CPU. Ele testa a CPU, a <strong>DRAM</strong> e a parte do dispositivo flash que compõe o sistema de arquivos flash.</p>
+                </div>
+            </div>
+
+            <div class="boot-step">
+                <div class="step-num">Etapa 2</div>
+                <div class="step-content">
+                    <h4><i class="fas fa-download"></i> Software Carregador de Inicialização</h4>
+                    <p>Depois, o switch carrega o software carregador de inicialização. O <strong>carregador de inicialização (boot loader)</strong> é um programa pequeno armazenado na ROM que é executado imediatamente após a conclusão bem-sucedida do POST.</p>
+                </div>
+            </div>
+
+            <div class="boot-step">
+                <div class="step-num">Etapa 3</div>
+                <div class="step-content">
+                    <h4><i class="fas fa-microchip"></i> Inicialização de Baixo Nível da CPU</h4>
+                    <p>O carregador de inicialização executa a inicialização de baixo nível da CPU. Ele inicializa os registros da CPU, que controlam onde a memória física é mapeada, a quantidade de memória e sua velocidade.</p>
+                </div>
+            </div>
+
+            <div class="boot-step">
+                <div class="step-num">Etapa 4</div>
+                <div class="step-content">
+                    <h4><i class="fas fa-folder-open"></i> Inicialização do Sistema de Arquivos Flash</h4>
+                    <p>O carregador de inicialização (boot loader) inicializa o sistema de arquivos da <strong>memória flash</strong> na placa do sistema.</p>
+                </div>
+            </div>
+
+            <div class="boot-step">
+                <div class="step-num">Etapa 5</div>
+                <div class="step-content">
+                    <h4><i class="fas fa-cogs"></i> Carregamento do Cisco IOS</h4>
+                    <p>Finalmente, o carregador de inicialização localiza e carrega uma imagem do software de sistema operacional <strong>Cisco IOS</strong> padrão na memória e passa o controle do switch para o IOS.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span><strong>Dica de Monitoramento:</strong> Durante a inicialização, os LEDs do painel frontal do switch piscam sequencialmente. Se houver falha no POST, o LED do sistema (SYST) ficará âmbar (laranja), indicando que o hardware encontrou um problema crítico.</span>
+        </div>
+    </div>
+</section>
+<section id="secao1-2" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-terminal"></i>
+        <span class="section-number">1.1.2</span> O Comando boot system
+    </h2>
+    
+    <div class="card">
+        <p>O switch tenta inicializar automaticamente usando informações na variável de ambiente BOOT. Se esta variável não estiver definida, o switch tentará carregar e executar o primeiro arquivo executável que encontrar. Nos Catalyst 2960 Series Switches, o arquivo de imagem normalmente está contido em um diretório que tem o mesmo nome do arquivo de imagem (excluindo a extensão de arquivo .bin).</p>
+        
+        <p>O sistema operacional IOS inicializa as interfaces usando os comandos do Cisco IOS encontrados no arquivo startup-config. O arquivo startup-config é chamado <code>config.text</code> e está localizado em flash.</p>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>No exemplo, a variável de ambiente BOOT é definida usando o comando modo de configuração <strong>boot system global</strong>. Observe que o IOS está localizado em uma pasta distinta e o caminho da pasta é especificado. Use o comando <code>show boot</code> para ver como o arquivo de inicialização do IOS atual está definido.</span>
+        </div>
+
+        <p><strong>Configuração da Variável de Inicialização:</strong></p>
+        <div class="terminal">
+<pre>S1(config)# boot system flash:/c2960-lanbasek9-mz.150-2.SE/c2960-lanbasek9-mz.150-2.SE.bin</pre>
+        </div>
+
+        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Detalhamento dos Componentes do Comando:</strong></p>
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">Comando</th>
+                    <th style="width: 60%;">Definição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>boot system</code></td>
+                    <td>O comando principal</td>
+                </tr>
+                <tr>
+                    <td><code>flash:</code></td>
+                    <td>O dispositivo de armazenamento</td>
+                </tr>
+                <tr>
+                    <td><code>c2960-lanbasek9-mz.150-2.SE/</code></td>
+                    <td>O caminho para o sistema de arquivos</td>
+                </tr>
+                <tr>
+                    <td><code>c2960-lanbasek9-mz.150-2.SE.bin</code></td>
+                    <td>O nome do arquivo IOS</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span><strong>Nota de Engenharia:</strong> Lembre-se sempre de salvar as alterações com o comando <code>copy running-config startup-config</code> para garantir que o switch aplique a nova variável BOOT na próxima inicialização.</span>
+        </div>
+    </div>
+</section>
+
+</div>
+
+<footer>
+    <p>© 2026 Cisco CCNA 2 - Switching, Routing, and Wireless Essentials | Identidade Visual Adaptada</p>
+</footer>
+
+<script>
+class SidebarMenu {
+    constructor() {
+        this.sidebar = document.getElementById('sidebar');
+        this.overlay = document.getElementById('sidebarOverlay');
+        this.openBtn = document.getElementById('openMenu');
+        this.closeBtn = document.getElementById('closeMenu');
+        this.init();
+    }
+
+    init() {
+        if (!this.sidebar) return;
+
+        if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open());
+        }
+        if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close());
+        }
+        if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close());
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+                this.close();
+            }
+        });
+
+        const links = document.querySelectorAll('.sidebar .nav-modules a');
+        links.forEach(link => {
+            link.addEventListener('click', () => this.close());
+        });
+    }
+
+    open() {
+        this.sidebar.classList.add('open');
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+        this.sidebar.classList.remove('open');
+        this.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new SidebarMenu();
+});
+</script>
+</body>
+</html>
