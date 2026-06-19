@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configuração de SSH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-dark: #0a0a0a;
+        --bg-card: #111111;
+        --bg-card-hover: #1a1a1a;
+        --text: #e0e0e0;
+        --text-dim: #888888;
+        --primary: #00ff88;
+        --primary-dark: #00cc6a;
+        --secondary: #0078d4;
+        --success: #00ff88;
+        --warning: #ffcc00;
+        --danger: #ff4444;
+        --info: #00aaff;
+        --border: #222222;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        padding-top: 65px;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Top Bar */
+      .top-bar {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.8rem 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .menu-toggle {
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+      }
+
+      .menu-toggle:hover {
+        background: var(--primary);
+        color: var(--bg-dark);
+      }
+
+      .badge-lab {
+        display: inline-flex;
+        background: rgba(0, 255, 136, 0.1);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        border: 1px solid rgba(0, 255, 136, 0.3);
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--secondary);
+        color: var(--secondary);
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-outline:hover {
+        background: var(--secondary);
+        color: var(--text);
+      }
+
+      /* Sidebar */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px;
+        background: rgba(17, 17, 17, 0.98);
+        backdrop-filter: blur(15px);
+        border-right: 1px solid var(--border);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1002;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .close-sidebar {
+        background: transparent;
+        border: none;
+        color: var(--text-dim);
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .close-sidebar:hover {
+        color: var(--danger);
+      }
+
+      .sidebar .nav-modules {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .sidebar .nav-modules li a {
+        display: block;
+        padding: 0.7rem 1rem;
+        color: var(--text-dim);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s;
+        font-size: 0.85rem;
+      }
+
+      .sidebar .nav-modules li a i {
+        margin-right: 0.75rem;
+        width: 20px;
+        color: var(--primary);
+      }
+
+      .sidebar .nav-modules li a:hover {
+        color: var(--primary);
+        background: rgba(0, 255, 136, 0.1);
+        transform: translateX(5px);
+      }
+
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1001;
+        display: none;
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+
+      /* Hero Section */
+      .hero {
+        padding: 60px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #0a0a0a 0%, #111122 100%);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+      }
+
+      /* Seções e Cards */
+      .section {
+        padding: 40px 0;
+        border-bottom: 1px solid var(--border);
+        scroll-margin-top: 80px;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-title i {
+        color: var(--primary);
+      }
+      .section-number {
+        color: var(--primary);
+        font-family: monospace;
+      }
+
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+        margin-bottom: 1.5rem;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: var(--primary);
+        background: var(--bg-card-hover);
+      }
+
+      /* Terminal */
+      .terminal {
+        background: #0d1117;
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid var(--border);
+        font-family: 'Courier New', monospace;
+        overflow-x: auto;
+        margin: 1.2rem 0;
+      }
+
+      .terminal pre {
+        margin: 0;
+        color: var(--primary);
+        font-size: 0.85rem;
+        white-space: pre;
+      }
+
+      /* Tabelas */
+      .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+      }
+
+      .table-custom th,
+      .table-custom td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .table-custom th {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* Alertas */
+      .alert {
+        padding: 1rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        border-left: 4px solid;
+        background: rgba(0, 0, 0, 0.3);
+        font-size: 0.9rem;
+      }
+      .alert-success {
+        border-left-color: var(--success);
+      }
+      .alert-danger {
+        border-left-color: var(--danger);
+      }
+      .alert-info {
+        border-left-color: var(--info);
+      }
+
+      /* Botão de Download Grande */
+      .download-zone {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(0, 120, 212, 0.05);
+        border: 2px dashed var(--secondary);
+        border-radius: 16px;
+        margin-top: 2rem;
+      }
+
+      .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--primary);
+        color: var(--bg-dark);
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+      }
+
+      .btn-download:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem 0;
+        color: var(--text-dim);
+        font-size: 0.8rem;
+        border-top: 1px solid var(--border);
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .sidebar {
+          width: 85%;
+        }
+        .table-custom {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+
+      <a href="#download" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao2-1"><i class="fas fa-table"></i> 2.1 Topologia Lógica</a>
+        </li>
+        <li>
+          <a href="#secao2-2"><i class="fas fa-shield-alt"></i> 2.2 Proteção de Senhas</a>
+        </li>
+        <li>
+          <a href="#secao2-3"><i class="fas fa-key"></i> 2.3 Ativação do SSH</a>
+        </li>
+        <li>
+          <a href="#secao2-4"><i class="fas fa-check-double"></i> 2.4 Verificação Completa</a>
+        </li>
+        <li>
+          <a href="#download"><i class="fas fa-cloud-download-alt"></i> Download do Lab</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab" style="border: 1px solid rgba(0, 255, 136, 0.3); margin-bottom: 1.5rem"
+          >Packet Tracer - Segurança Avançada</span
+        >
+        <h1>Configuração e Endurecimento do SSH</h1>
+        <p style="color: var(--text-dim)">
+          Substituição do protocolo Telnet por conexões criptografadas seguras e correção do bug de usuário depreciado.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- SEÇÃO 2.1 -->
+      <section id="secao2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">2.1</span> Tabela de Endereçamento do Escopo
+        </h2>
+        <div class="card">
+          <p>Os seguintes parâmetros de rede são utilizados para validar o acesso seguro:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP</th>
+                <th>Máscara de Sub-rede</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1</strong></td>
+                <td>VLAN 1</td>
+                <td>10.10.10.2</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>PC1</strong></td>
+                <td>NIC</td>
+                <td>10.10.10.10</td>
+                <td>255.255.255.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 2.2 -->
+      <section id="secao2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">2.2</span> Parte 1: Criptografia Local de Senhas
+        </h2>
+        <div class="card">
+          <p>Primeiro acesso via Telnet para criptografar as senhas globais que estavam armazenadas em texto claro:</p>
+          <div class="terminal">
+            <pre>
+S1> enable
+Senha: cisco
+S1# configure terminal
+
+! Ativando criptografia do arquivo running-config
+S1(config)# service password-encryption
+S1(config)# exit</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 2.3 -->
+      <section id="secao2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-key"></i>
+          <span class="section-number">2.3</span> Parte 2: Geração de Chaves RSA e Configuração de VTY
+        </h2>
+        <div class="card">
+          <p>Configuração do domínio, geração do par de chaves assimétricas e restrição total das linhas VTY para aceitarem apenas SSH:</p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-bug"></i> <strong>Aviso de Correção (100% de Conclusão):</strong> Não utilize a palavra-chave
+            <code>password</code> ao criar o usuário local. Os validadores modernos exigem o comando <code>secret</code> para evitar o erro
+            de usuário depreciado <em>(deprecated username)</em>.
+          </div>
+
+          <div class="terminal">
+            <pre>
+S1# configure terminal
+
+! Configurando domínio e chaves RSA de 1024 bits
+S1(config)# ip domain-name netacad.pka
+S1(config)# crypto key generate rsa
+! Quando solicitado o tamanho, digite: 1024
+
+! CORREÇÃO DO USERNAME: Utilizando o comando secret (obrigatório)
+S1(config)# username administrator secret cisco
+
+! Configurando as linhas Virtuais (VTY)
+S1(config)# line vty 0 15
+S1(config-line)# no password
+S1(config-line)# login local
+S1(config-line)# transport input ssh
+S1(config-line)# exit
+S1# copy running-config startup-config</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 2.4 -->
+      <section id="secao2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">2.4</span> Parte 3: Validação e Testes de Conectividade
+        </h2>
+        <div class="card">
+          <p>Para confirmar que a segurança foi implementada corretamente, execute os testes no prompt do PC1:</p>
+
+          <p style="margin-top: 1rem"><strong>1. Teste de bloqueio do Telnet (Deve falhar):</strong></p>
+          <div class="terminal">
+            <pre>
+C:\> telnet 10.10.10.2
+Trying 10.10.10.2 ...
+% Connection timed out; remote host not responding</pre
+            >
+          </div>
+
+          <p style="margin-top: 1rem"><strong>2. Teste de conexão SSH segura (Deve funcionar):</strong></p>
+          <div class="terminal">
+            <pre>
+C:\> ssh -l administrator 10.10.10.2
+Open
+Password: cisco
+
+S1></pre
+            >
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> Conexão estabelecida com sucesso usando criptografia simétrica e assimétrica de ponta a
+            ponta!
+          </div>
+        </div>
+      </section>
+
+      <!-- DOWNLOAD ZONE -->
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-shield-virus" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3 style="margin-bottom: 0.5rem">Laboratório 2 Concluído!</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Clique abaixo para baixar a topologia corrigida com o usuário SSH e as chaves criptográficas RSA geradas.
+          </p>
+          <a href="lab_ssh_concluido.pkt" download class="btn-download"> <i class="fas fa-download"></i> Baixar Arquivo .PKT Seguro </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

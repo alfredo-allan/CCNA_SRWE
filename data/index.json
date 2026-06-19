@@ -1,0 +1,187 @@
+[
+  {
+    "id": "Módulo 1-0",
+    "module": "Módulo 1",
+    "content": "Menu Cisco CCNA 2 (SRWE) Painel Central Navegação 1.0.1 Início 1.0.2 Objetivos Cisco Networking Academy | CCNA 2 Módulo 1: Configuração Básica de Dispositivos Aprenda a obter controle granular de ativos de rede configurando precisamente switches e roteadores Cisco. 1.0.1 Por que devo cursar este módulo? Bem-vindo à Configuração Básica de Dispositivos! Bem-vindo ao primeiro módulo em CCNA Switching, Routing e Wireless Essentials! Você sabe que switches e roteadores já vêm de fábrica com algumas c"
+  },
+  {
+    "id": "Módulo 1-1",
+    "module": "Módulo 1",
+    "content": "onfigurações internas básicas de funcionamento, então por que você realmente precisa aprender a configurar esses equipamentos? Imagine que você comprou um conjunto de ferrorama (um modelo de trem elétrico). Depois de montá-lo pela primeira vez, você percebe que a pista é apenas uma forma oval simples e que os vagões do trem só conseguem se mover no sentido horário. No entanto, o seu desejo original era que a pista tivesse o formato de um \"oito\" completo com um viaduto de cruzamento. Você também "
+  },
+  {
+    "id": "Módulo 1-2",
+    "module": "Módulo 1",
+    "content": "pode querer ter dois trens operando de maneira totalmente independente um do outro e movendo-se em direções opostas. Como você poderia fazer isso acontecer? Você precisaria reconfigurar fisicamente a pista e os controladores digitais. O princípio é exatamente idêntico quando lidamos com dispositivos de rede de computadores. Como administrador de infraestrutura de redes, você necessita de um controle detalhado, refinado e granular sobre cada dispositivo ativo em seu ambiente de produção. Isso sig"
+  },
+  {
+    "id": "Módulo 1-3",
+    "module": "Módulo 1",
+    "content": "nifica configurar com precisão milimétrica os switches e roteadores para que a sua topologia de rede execute exatamente o comportamento esperado. 📌 Foco Prático: Este módulo está repleto de atividades interativas de Verificador de Sintaxe (Syntax Checker) e cenários práticos no Packet Tracer para ajudá-lo a consolidar o desenvolvimento dessas competências críticas de engenharia de redes. Vamos começar! 1.0.2 O que vou aprender neste módulo? Título do Módulo: Configuração básica de dispositivos "
+  },
+  {
+    "id": "Módulo 1-4",
+    "module": "Módulo 1",
+    "content": "Objetivo do Módulo: Configure dispositivos usando as práticas recomendadas de segurança. Título do Tópico Objetivo do Tópico Configurar um switch com definições iniciais Configurar definições iniciais em um switch Cisco. Configurar portas de switch Configurar as portas do switch para atender aos requisitos de rede. Acesso remoto seguro Configurar o acesso seguro do gerenciamento em um switch. Configuração básica do roteador Definir configurações básicas em um roteador para rotear entre duas rede"
+  },
+  {
+    "id": "Módulo 1-5",
+    "module": "Módulo 1",
+    "content": "s diretamente conectadas, usando CLI. Verificar redes conectadas diretamente Verifique a conectividade entre duas redes diretamente conectadas ao um roteador. 📌 Pronto para Avançar: Ao concluir esses tópicos, você terá a fundação prática necessária para operar a camada de acesso e distribuição de uma topologia corporativa Cisco de forma segura. © 2026 Cisco Networking Academy | CCNA 2 (SRWE) - Material Didático Estruturado"
+  },
+  {
+    "id": "Módulo 2-0",
+    "module": "Módulo 2",
+    "content": "Menu Cisco CCNA 2 Painel Central Navegação 1.1 Inicialização do Switch 1.1.2 O Comando boot system 1.1.3 Alternar indicadores LED 1.1.4 Recuperando de um travamento 1.1.5 Acesso ao Gerenciamento CCNA v7 / SRWE Módulo 2: Conceitos de Switching Entendendo a infraestrutura de redes locais, operação de ativos e o ciclo de vida operacional do hardware Cisco. 1.1.1 Sequência de Inicialização do Switch Antes de configurar um switch, você precisa ativá-lo e permitir que ele passe pela sequência de inici"
+  },
+  {
+    "id": "Módulo 2-1",
+    "module": "Módulo 2",
+    "content": "alização de cinco etapas. Este tópico aborda os conceitos básicos de configuração de um switch e inclui um laboratório no final. Depois que um switch Cisco é ligado, ele passa pela seguinte sequência de inicialização em cinco etapas: Etapa 1 Power-On Self-Test (POST) Primeiro, o switch carrega um programa POST (Power-On Self-Test) armazenado na ROM. O POST verifica o subsistema da CPU. Ele testa a CPU, a DRAM e a parte do dispositivo flash que compõe o sistema de arquivos flash. Etapa 2 Software"
+  },
+  {
+    "id": "Módulo 2-2",
+    "module": "Módulo 2",
+    "content": " Carregador de Inicialização Depois, o switch carrega o software carregador de inicialização. O carregador de inicialização (boot loader) é um programa pequeno armazenado na ROM que é executado imediatamente após a conclusão bem-sucedida do POST. Etapa 3 Inicialização de Baixo Nível da CPU O carregador de inicialização executa a inicialização de baixo nível da CPU. Ele inicializa os registros da CPU, que controlam onde a memória física é mapeada, a quantidade de memória e sua velocidade. Etapa 4"
+  },
+  {
+    "id": "Módulo 2-3",
+    "module": "Módulo 2",
+    "content": " Inicialização do Sistema de Arquivos Flash O carregador de inicialização (boot loader) inicializa o sistema de arquivos da memória flash na placa do sistema. Etapa 5 Carregamento do Cisco IOS Finalmente, o carregador de inicialização localiza e carrega uma imagem do software de sistema operacional Cisco IOS padrão na memória e passa o controle do switch para o IOS. Dica de Monitoramento: Durante a inicialização, os LEDs do painel frontal do switch piscam sequencialmente. Se houver falha no POST"
+  },
+  {
+    "id": "Módulo 2-4",
+    "module": "Módulo 2",
+    "content": ", o LED do sistema (SYST) ficará âmbar (laranja), indicando que o hardware encontrou um problema crítico. 1.1.2 O Comando boot system O switch tenta inicializar automaticamente usando informações na variável de ambiente BOOT. Se esta variável não estiver definida, o switch tentará carregar e executar o primeiro arquivo executável que encontrar. Nos Catalyst 2960 Series Switches, o arquivo de imagem normalmente está contido em um diretório que tem o mesmo nome do arquivo de imagem (excluindo a ex"
+  },
+  {
+    "id": "Módulo 2-5",
+    "module": "Módulo 2",
+    "content": "tensão de arquivo .bin). O sistema operacional IOS inicializa as interfaces usando os comandos do Cisco IOS encontrados no arquivo startup-config. O arquivo startup-config é chamado config.text e está localizado em flash. No exemplo, a variável de ambiente BOOT é definida usando o comando modo de configuração boot system global. Observe que o IOS está localizado em uma pasta distinta e o caminho da pasta é especificado. Use o comando show boot para ver como o arquivo de inicialização do IOS atua"
+  },
+  {
+    "id": "Módulo 2-6",
+    "module": "Módulo 2",
+    "content": "l está definido. Configuração da Variável de Inicialização: S1(config)# boot system flash:/c2960-lanbasek9-mz.150-2.SE/c2960-lanbasek9-mz.150-2.SE.bin Detalhamento dos Componentes do Comando: Comando Definição boot system O comando principal flash: O dispositivo de armazenamento c2960-lanbasek9-mz.150-2.SE/ O caminho para o sistema de arquivos c2960-lanbasek9-mz.150-2.SE.bin O nome do arquivo IOS Nota de Engenharia: Lembre-se sempre de salvar as alterações com o comando copy running-config start"
+  },
+  {
+    "id": "Módulo 2-7",
+    "module": "Módulo 2",
+    "content": "up-config para garantir que o switch aplique a nova variável BOOT na próxima inicialização. 1.1.3 Alternar Indicadores LED Os switches Cisco Catalyst possuem várias luzes LED indicadoras de status. Você pode usar os LEDs do switch para monitorar rapidamente o desempenho e a atividade do dispositivo. Os switches de diferentes modelos e conjuntos de recursos terão LEDs diferentes, e sua colocação no painel frontal do switch também pode variar. O botão Modo (7 na figura) é usado para alternar entre"
+  },
+  {
+    "id": "Módulo 2-8",
+    "module": "Módulo 2",
+    "content": " o status da porta, porta duplex, velocidade da porta e, se suportado, o status Power over Ethernet (PoE) dos LEDs da porta (8 na figura). Esquema do Painel Frontal (Série Catalyst 2960): +-------------------------------------------------------------------------+ | CISCO [ 1 ] [ 2 ] [ 3 ] [ 4 ] | | (1) SYST * [ 5 ] [ 6 ] [ 7 ] [ 8 ] | | (2) RPS * | | (3) STAT * +---------------------------------------------+ | | (4) DUPLX * | [Porta 1] [Porta 3] [Porta 5] [Porta 7] | | | (5) SPEED * | [Porta 2] "
+  },
+  {
+    "id": "Módulo 2-9",
+    "module": "Módulo 2",
+    "content": "[Porta 4] [Porta 6] [Porta 8] | | | (6) PoE * +---------------------------------------------+ | | |===> (8) LEDs Indicadores de cada Porta | | | [MODE] (7) +---------------------------------------------+ | +-------------------------------------------------------------------------+ Pressione o botão Mode sucessivamente para mudar qual categoria de diagnóstico (de 1 a 6) os LEDs individuais das portas [8] estarão refletindo no momento. Painel de Diagnóstico dos Indicadores LED: 1 LED de Sistema (S"
+  },
+  {
+    "id": "Módulo 2-10",
+    "module": "Módulo 2",
+    "content": "YST) Mostra se o sistema está recebendo energia e está funcionando corretamente. Status do LED Significado Desligado Significa que o sistema não está ligado. Verde O sistema está funcionando normalmente. Âmbar (Laranja) O sistema está recebendo energia, mas não está funcionando corretamente. 2 LED do Sistema Redundante de Fonte (RPS) Mostra o status do sistema de alimentação reserva (Redundant Power System). Status do LED Significado Desligado O RPS está desativado ou não foi conectado corretame"
+  },
+  {
+    "id": "Módulo 2-11",
+    "module": "Módulo 2",
+    "content": "nte. Verde O RPS está conectado e pronto para fornecer energia reserva. Piscando em Verde O RPS está conectado mas não está disponível porque está fornecendo energia para outro dispositivo. Amarelo O RPS está no modo de espera (standby) ou em uma condição de falha. Piscando em Âmbar A fonte de alimentação interna do comutador (switch) falhou e o RPS está fornecendo energia de forma ativa. 3 LED de Status da Porta (STAT) Indica que o modo de status da porta está selecionado quando o LED está verd"
+  },
+  {
+    "id": "Módulo 2-12",
+    "module": "Módulo 2",
+    "content": "e. Este é o modo padrão do switch. Quando selecionado, os LEDs de porta exibirão: Status do LED da Porta Significado Desligado Não há link presente ou a porta foi desligada administrativamente (shutdown). Verde Um link físico está presente (camada 1 ativa). Piscando em Verde Há atividade de rede; a porta está enviando ou recebendo dados. Alternando Verde/Âmbar Há uma falha de link detectada na porta. Amarelo A porta está bloqueada pelo STP (Spanning Tree Protocol) para garantir que não exista ne"
+  },
+  {
+    "id": "Módulo 2-13",
+    "module": "Módulo 2",
+    "content": "nhum loop no domínio de encaminhamento (normalmente as portas permanecem nesse estado por aprox. 30 segundos após a ativação). Piscando em Âmbar A porta foi bloqueada ativamente para evitar um loop iminente no domínio de encaminhamento. 4 LED da Porta Duplex (DUPLX) Indica que o modo duplex da porta está selecionado quando o LED principal está verde. Quando selecionado, os LEDs das portas indicam: Status do LED da Porta Significado Desligado A porta está operando em modo semi-duplex (Half-Duplex"
+  },
+  {
+    "id": "Módulo 2-14",
+    "module": "Módulo 2",
+    "content": "). Verde A porta está operando em modo full-duplex. 5 LED da Porta SPEED Indica que o modo de velocidade da porta está selecionado. Quando selecionado, os LEDs de porta exibirão a taxa de transmissão operacional: Status do LED da Porta Significado Desligado A porta está operando a uma velocidade de 10 Mbps. Verde A porta está operando a uma velocidade de 100 Mbps. Piscando em Verde A porta está operando na velocidade máxima de 1000 Mbps (1 Gbps). 6 LED do Modo Power over Ethernet (PoE) Se o swit"
+  },
+  {
+    "id": "Módulo 2-15",
+    "module": "Módulo 2",
+    "content": "ch suportar fornecimento de energia por cabo de rede, este LED estará presente. Quando o modo PoE é selecionado pelo botão Mode, as cores indicam: Status do LED Principal / Porta Significado Desligado (Modo) O modo PoE não está selecionado; nenhuma porta teve energia negada ou entrou em falha. Piscando em Âmbar (Modo) O modo PoE não está selecionado, mas pelo menos uma das portas teve energia negada ou apresenta falha de PoE. Verde (Modo) O modo PoE está ativado e selecionado para exibição. Os L"
+  },
+  {
+    "id": "Módulo 2-16",
+    "module": "Módulo 2",
+    "content": "EDs das portas mudam de significado. Desligado (Na Porta) O PoE está desligado/desativado nesta porta específica. Verde (Na Porta) O PoE está ligado e fornecendo energia normalmente ao dispositivo conectado. Alternando Verde/Âmbar (Porta) O PoE foi negado nesta porta porque o fornecimento de energia demandado pelo dispositivo conectado excede a capacidade de alimentação total do switch. Piscando em Âmbar (Porta) O PoE está desligado nesta porta devido a uma condição de falha interna. Âmbar Sólid"
+  },
+  {
+    "id": "Módulo 2-17",
+    "module": "Módulo 2",
+    "content": "o (Na Porta) O fornecimento de PoE para esta porta foi desativado explicitamente. 1.1.4 Recuperando de um Travamento de Sistema O carregador de inicialização (boot loader) fornece acesso emergencial ao switch caso o sistema operacional Cisco IOS não possa ser utilizado devido a arquivos de sistema ausentes, corrompidos ou danificados. O boot loader possui uma linha de comando (CLI) própria que permite gerenciar e interagir diretamente com os arquivos armazenados na memória flash, mesmo sem o IOS"
+  },
+  {
+    "id": "Módulo 2-18",
+    "module": "Módulo 2",
+    "content": " operacional. Contexto de Recuperação: O ambiente do boot loader (prompt switch:) também é a ferramenta padrão para executar procedimentos de recuperação de senhas administrativas esquecidas ou perdidas. Procedimento de Acesso via Console: 01 Conexão Física e Emulação Conecte um PC utilizando o cabo de console à porta de console física do switch. Configure o software de emulação de terminal (como PuTTY ou Tera Term) com os parâmetros padrão de comunicação (9600 baud, 8 data bits, no parity, 1 st"
+  },
+  {
+    "id": "Módulo 2-19",
+    "module": "Módulo 2",
+    "content": "op bit, no flow control). 02 Desernegização Desconecte o cabo de alimentação principal do switch para desligá-lo completamente. 03 Interrupção do Boot Reconecte o cabo de alimentação ao switch. Dentro de uma janela máxima de 15 segundos, pressione e mantenha pressionado o botão Mode no painel frontal enquanto o LED do sistema (SYST) ainda estiver piscando em verde. 04 Liberação do Botão Continue pressionando o botão Mode de forma contínua até que o LED do sistema fique brevemente âmbar e, em seg"
+  },
+  {
+    "id": "Módulo 2-20",
+    "module": "Módulo 2",
+    "content": "uida, mude para verde sólido. Após essa transição visual, solte o botão Mode. 05 Prompt de Comando O prompt de comando especial switch: será exibido na tela do software de emulação de terminal do PC, indicando o controle ativo do boot loader. Interação e Comandos de Diagnóstico no Prompt switch: Para visualizar a lista completa de comandos disponíveis no carregador de inicialização, você pode digitar help ou ?. Por padrão, o switch busca as variáveis de boot. Para examinar o caminho configurado "
+  },
+  {
+    "id": "Módulo 2-21",
+    "module": "Módulo 2",
+    "content": "atualmente na variável de ambiente do sistema, execute o comando set. switch: set BOOT=flash:/c2960-lanbasek9-mz.122-55.SE7/c2960-lanbasek9-mz.122-55.SE7.bin (output omitted) Antes de poder ler os arquivos do dispositivo de armazenamento, é obrigatório inicializar o sistema de arquivos flash através do comando flash_init: switch: flash_init Initializing Flash... flashfs[0]: 2 files, 1 directories flashfs[0]: 0 orphaned files, 0 orphaned directories flashfs[0]: Total bytes: 32514048 flashfs[0]: B"
+  },
+  {
+    "id": "Módulo 2-22",
+    "module": "Módulo 2",
+    "content": "ytes used: 11838464 flashfs[0]: Bytes available: 20675584 flashfs[0]: flashfs fsck took 10 seconds. ...done Initializing Flash. Uma vez concluída a inicialização do file system, liste os diretórios e arquivos de imagem binária (.bin) disponíveis com o comando dir flash:: switch: dir flash: Directory of flash:/ 2 -rwx 11834846 <date> c2960-lanbasek9-mz.150-2.SE8.bin 3 -rwx 2072 <date> multiple-fs Alteração da Variável e Inicialização Forçada: Caso precise alterar a imagem de inicialização para mi"
+  },
+  {
+    "id": "Módulo 2-23",
+    "module": "Módulo 2",
+    "content": "tigar um travamento ou carregar um novo IOS estável, redefina a variável de ambiente utilizando a sintaxe de atribuição direta BOOT=flash:nome_do_arquivo.bin. Valide o novo caminho com set e realize o boot manual invocando o comando boot sem argumentos: switch: BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin switch: set BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin (output omitted) switch: boot Capacidades Operacionais do Boot Loader: Função Suportada Ação Prática no Ambiente de Linha de Comando Inici"
+  },
+  {
+    "id": "Módulo 2-24",
+    "module": "Módulo 2",
+    "content": "alização do Flash Prepara a estrutura do file system para comandos de leitura/escrita. Formatação de Arquivos Permite limpar ou estruturar partições danificadas da memória Flash. Instalação de Novo IOS Permite a cópia de novas imagens de software via conexões de console (ex: Xmodem). Variáveis de Ambiente Modifica parâmetros críticos como BOOT path-list para contingências. Recuperação de Senhas Ignora temporariamente o arquivo config.text para recuperar credenciais. 1.1.5 Acesso ao Gerenciamento"
+  },
+  {
+    "id": "Módulo 2-25",
+    "module": "Módulo 2",
+    "content": " de Switches Para preparar um switch para acesso de gerenciamento remoto, o dispositivo deve ser configurado com um endereço IP e uma máscara de sub-rede. Lembre-se de que, para gerenciar o switch a partir de uma rede remota, ele deve ser configurado adicionalmente com um gateway padrão. Esse procedimento é muito semelhante à configuração das informações de endereçamento IP em dispositivos hosts ordinários. A SVI (Switch Virtual Interface) no switch precisa receber esse endereço IP operacional. "
+  },
+  {
+    "id": "Módulo 2-26",
+    "module": "Módulo 2",
+    "content": "A SVI é uma interface virtual de camada lógica, e não uma porta física do hardware do switch. Nota de Implantação: Por padrão, a SVI do switch Catalyst vem mapeada de fábrica na VLAN 1. Um cabo de console é conectado a um PC host para que as configurações lógicas básicas iniciais da SVI possam ser injetadas pela primeira vez. Esquema de Conexão e Topologia de Gerenciamento: +-------------------+ | [ PC1 ] | +---------+---------+ | | (Cabo do Console) | +---------v---------+ +-------------------+"
+  },
+  {
+    "id": "Módulo 2-27",
+    "module": "Módulo 2",
+    "content": " | [ S1 ] |---------------------------| [ R1 ] | | Switch Catalyst | (Link de Camada 2) | Roteador | +-------------------+ +---------+---------+ SVI (VLAN 99) | IP: 172.17.99.11/24 | Gateway Padrão: IPv6: 2001:db8:acad:99::11/64 | 172.17.99.1 | 2001:db8:acad:99::1 Sintaxe CLI para Ativação da Interface SVI e Gateway (IPv4 e IPv6): S1# configure terminal S1(config)# interface vlan 99 S1(config-if)# ip address 172.17.99.11 255.255.255.0 S1(config-if)# ipv6 address 2001:db8:acad:99::11/64 S1(config"
+  },
+  {
+    "id": "Módulo 2-28",
+    "module": "Módulo 2",
+    "content": "-if)# no shutdown S1(config-if)# exit S1(config)# ip default-gateway 172.17.99.1 S1(config)# end S1# copy running-config startup-config Parâmetros Fundamentais para Acesso Remoto: Componente Finalidade e Mecânica Operacional Endereço IP / Máscara Identifica logicamente o switch dentro da sub-rede local, permitindo o tráfego IP direto. Switch Virtual Interface (SVI) Interface lógica associada a uma VLAN (ex: VLAN 1 ou VLAN 99) que atua como o host IP do switch. Gateway Padrão (Default Gateway) En"
+  },
+  {
+    "id": "Módulo 2-29",
+    "module": "Módulo 2",
+    "content": "dereço IP do roteador local. Sem ele, o switch não consegue responder a conexões SSH/Telnet originadas de sub-redes remotas. Cabo de Console Meio de acesso out-of-band essencial. Utilizado antes do switch possuir qualquer configuração IP funcional. Diretriz de Segurança: Em ambientes de produção reais, evite utilizar a VLAN 1 nativa para o gerenciamento do switch. Recomenda-se criar uma VLAN dedicada e segura (como a VLAN 99 exemplificada no diagrama) para isolar o tráfego administrativo. © 2026"
+  },
+  {
+    "id": "Módulo 2-30",
+    "module": "Módulo 2",
+    "content": " Cisco CCNA 2 - Switching, Routing, and Wireless Essentials | Identidade Visual Adaptada"
+  }
+]

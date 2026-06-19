@@ -1,582 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Cisco CCNA 2 | Módulo 1.1.1</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-
-<div class="top-bar">
-    <button class="menu-toggle" id="openMenu">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cisco CCNA 2 | Módulo 1: Configuração básica de dispositivos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
         <i class="fas fa-bars"></i>
         <span>Menu</span>
-    </button>
-    <a href="#" class="top-bar-brand">
-        <i class="fas fa-network-wired"></i> Cisco CCNA 2
-    </a>
-    <a href="#" class="btn-outline">
-        <i class="fas fa-arrow-left"></i> Voltar
-    </a>
-</div>
+      </button>
+      <a href="#" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
 
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
         <h3><i class="fas fa-compass"></i> Navegação</h3>
         <button class="close-sidebar" id="closeMenu">
-            <i class="fas fa-times"></i>
+          <i class="fas fa-times"></i>
         </button>
+      </div>
+      <ul class="nav-modules"></ul>
     </div>
-    <ul class="nav-modules">
-        <li><a href="#secao1-1"><i class="fas fa-terminal"></i> 1.1 Inicialização do Switch</a></li>
-        <li><a href="#secao1-2"><i class="fas fa-terminal"></i> 1.1.2 O Comando boot system</a></li>
-        <li><a href="#secao1-3"><i class="fas fa-lightbulb"></i> 1.1.3 Alternar indicadores LED</a></li>
-        <li><a href="#secao1-4"><i class="fas fa-shield-alt"></i> 1.1.4 Recuperando de um travamento</a></li>
-        <li><a href="#secao1-5"><i class="fas fa-network-wired"></i> 1.1.5 Acesso ao Gerenciamento</a></li>
-    </ul>
-</div>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<section class="hero">
-    <div class="badge-lab"><i class="fas fa-microchip"></i> CCNA v7 / SRWE</div>
-    <h1>Módulo 1: Conceitos de Switching</h1>
-    <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; padding: 0 1rem;">
+    <section class="hero">
+      <div class="badge-lab"><i class="fas fa-microchip"></i> CCNA v7 / SRWE</div>
+      <h1>Módulo 2: Conceitos de Switching</h1>
+      <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; padding: 0 1rem">
         Entendendo a infraestrutura de redes locais, operação de ativos e o ciclo de vida operacional do hardware Cisco.
-    </p>
-</section>
+      </p>
+    </section>
 
-<div class="container">
-    
-   <section id="secao1-1" class="section">
-    <h2 class="section-title">
-        <i class="fas fa-server"></i>
-        <span class="section-number">1.1.1</span> Sequência de Inicialização do Switch
-    </h2>
-    
-    <div class="card">
-        <p>Antes de configurar um switch, você precisa ativá-lo e permitir que ele passe pela sequência de inicialização de cinco etapas. Este tópico aborda os conceitos básicos de configuração de um switch e inclui um laboratório no final.</p>
-        
-        <p>Depois que um switch Cisco é ligado, ele passa pela seguinte sequência de inicialização em cinco etapas:</p>
+    <div class="container"></div>
 
-        <div class="boot-pipeline">
-            
-            <div class="boot-step">
-                <div class="step-num">Etapa 1</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-shield-alt"></i> Power-On Self-Test (POST)</h4>
-                    <p>Primeiro, o switch carrega um programa <strong>POST (Power-On Self-Test)</strong> armazenado na <strong>ROM</strong>. O POST verifica o subsistema da CPU. Ele testa a CPU, a <strong>DRAM</strong> e a parte do dispositivo flash que compõe o sistema de arquivos flash.</p>
-                </div>
-            </div>
+    <footer>
+      <p>© 2026 Cisco CCNA 2 - Switching, Routing, and Wireless Essentials | Identidade Visual Adaptada</p>
+    </footer>
 
-            <div class="boot-step">
-                <div class="step-num">Etapa 2</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-download"></i> Software Carregador de Inicialização</h4>
-                    <p>Depois, o switch carrega o software carregador de inicialização. O <strong>carregador de inicialização (boot loader)</strong> é um programa pequeno armazenado na ROM que é executado imediatamente após a conclusão bem-sucedida do POST.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">Etapa 3</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-microchip"></i> Inicialização de Baixo Nível da CPU</h4>
-                    <p>O carregador de inicialização executa a inicialização de baixo nível da CPU. Ele inicializa os registros da CPU, que controlam onde a memória física é mapeada, a quantidade de memória e sua velocidade.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">Etapa 4</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-folder-open"></i> Inicialização do Sistema de Arquivos Flash</h4>
-                    <p>O carregador de inicialização (boot loader) inicializa o sistema de arquivos da <strong>memória flash</strong> na placa do sistema.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">Etapa 5</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-cogs"></i> Carregamento do Cisco IOS</h4>
-                    <p>Finalmente, o carregador de inicialização localiza e carrega uma imagem do software de sistema operacional <strong>Cisco IOS</strong> padrão na memória e passa o controle do switch para o IOS.</p>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            <span><strong>Dica de Monitoramento:</strong> Durante a inicialização, os LEDs do painel frontal do switch piscam sequencialmente. Se houver falha no POST, o LED do sistema (SYST) ficará âmbar (laranja), indicando que o hardware encontrou um problema crítico.</span>
-        </div>
-    </div>
-</section>
-<section id="secao1-2" class="section">
-    <h2 class="section-title">
-        <i class="fas fa-terminal"></i>
-        <span class="section-number">1.1.2</span> O Comando boot system
-    </h2>
-    
-    <div class="card">
-        <p>O switch tenta inicializar automaticamente usando informações na variável de ambiente BOOT. Se esta variável não estiver definida, o switch tentará carregar e executar o primeiro arquivo executável que encontrar. Nos Catalyst 2960 Series Switches, o arquivo de imagem normalmente está contido em um diretório que tem o mesmo nome do arquivo de imagem (excluindo a extensão de arquivo .bin).</p>
-        
-        <p>O sistema operacional IOS inicializa as interfaces usando os comandos do Cisco IOS encontrados no arquivo startup-config. O arquivo startup-config é chamado <code>config.text</code> e está localizado em flash.</p>
-
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            <span>No exemplo, a variável de ambiente BOOT é definida usando o comando modo de configuração <strong>boot system global</strong>. Observe que o IOS está localizado em uma pasta distinta e o caminho da pasta é especificado. Use o comando <code>show boot</code> para ver como o arquivo de inicialização do IOS atual está definido.</span>
-        </div>
-
-        <p><strong>Configuração da Variável de Inicialização:</strong></p>
-        <div class="terminal">
-<pre>S1(config)# boot system flash:/c2960-lanbasek9-mz.150-2.SE/c2960-lanbasek9-mz.150-2.SE.bin</pre>
-        </div>
-
-        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Detalhamento dos Componentes do Comando:</strong></p>
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th style="width: 40%;">Comando</th>
-                    <th style="width: 60%;">Definição</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>boot system</code></td>
-                    <td>O comando principal</td>
-                </tr>
-                <tr>
-                    <td><code>flash:</code></td>
-                    <td>O dispositivo de armazenamento</td>
-                </tr>
-                <tr>
-                    <td><code>c2960-lanbasek9-mz.150-2.SE/</code></td>
-                    <td>O caminho para o sistema de arquivos</td>
-                </tr>
-                <tr>
-                    <td><code>c2960-lanbasek9-mz.150-2.SE.bin</code></td>
-                    <td>O nome do arquivo IOS</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="alert alert-warning">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span><strong>Nota de Engenharia:</strong> Lembre-se sempre de salvar as alterações com o comando <code>copy running-config startup-config</code> para garantir que o switch aplique a nova variável BOOT na próxima inicialização.</span>
-        </div>
-    </div>
-</section>
-<section id="secao1-3" class="section">
-    <h2 class="section-title">
-        <i class="fas fa-lightbulb"></i>
-        <span class="section-number">1.1.3</span> Alternar Indicadores LED
-    </h2>
-    
-    <div class="card">
-        <p>Os switches Cisco Catalyst possuem várias luzes LED indicadoras de status. Você pode usar os LEDs do switch para monitorar rapidamente o desempenho e a atividade do dispositivo. Os switches de diferentes modelos e conjuntos de recursos terão LEDs diferentes, e sua colocação no painel frontal do switch também pode variar.</p>
-        
-        <p>O <strong>botão Modo (7 na figura)</strong> é usado para alternar entre o status da porta, porta duplex, velocidade da porta e, se suportado, o status Power over Ethernet (PoE) dos LEDs da porta (8 na figura).</p>
-
-        <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>Esquema do Painel Frontal (Série Catalyst 2960):</strong></p>
-        <div class="terminal">
-<pre>+-------------------------------------------------------------------------+
-|  CISCO                                      [ 1 ] [ 2 ] [ 3 ] [ 4 ]     |
-|   (1) SYST  * [ 5 ] [ 6 ] [ 7 ] [ 8 ]     |
-|   (2) RPS   * |
-|   (3) STAT  * +---------------------------------------------+     |
-|   (4) DUPLX * |  [Porta 1]  [Porta 3]  [Porta 5]  [Porta 7] |     |
-|   (5) SPEED * |  [Porta 2]  [Porta 4]  [Porta 6]  [Porta 8] |     |
-|   (6) PoE   * +---------------------------------------------+     |
-|                     |===> (8) LEDs Indicadores de cada Porta      |     |
-|  [MODE] (7)         +---------------------------------------------+     |
-+-------------------------------------------------------------------------+</pre>
-        </div>
-
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            <span>Pressione o botão <strong>Mode</strong> sucessivamente para mudar qual categoria de diagnóstico (de 1 a 6) os LEDs individuais das portas [8] estarão refletindo no momento.</span>
-        </div>
-
-        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Painel de Diagnóstico dos Indicadores LED:</strong></p>
-        
-        <div class="card" style="border-left: 4px solid var(--primary); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">1</span> LED de Sistema (SYST)</h4>
-            <p style="margin-top: 0.5rem;">Mostra se o sistema está recebendo energia e está funcionando corretamente.</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado</b></td><td>Significa que o sistema não está ligado.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde</b></td><td>O sistema está funcionando normalmente.</td></tr>
-                    <tr><td><b style="color: var(--warning);">Âmbar (Laranja)</b></td><td>O sistema está recebendo energia, mas não está funcionando corretamente.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-left: 4px solid var(--secondary); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">2</span> LED do Sistema Redundante de Fonte (RPS)</h4>
-            <p style="margin-top: 0.5rem;">Mostra o status do sistema de alimentação reserva (Redundant Power System).</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado</b></td><td>O RPS está desativado ou não foi conectado corretamente.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde</b></td><td>O RPS está conectado e pronto para fornecer energia reserva.</td></tr>
-                    <tr><td><b style="color: var(--success); font-family: monospace;">Piscando em Verde</b></td><td>O RPS está conectado mas não está disponível porque está fornecendo energia para outro dispositivo.</td></tr>
-                    <tr><td><b style="color: var(--warning);">Amarelo</b></td><td>O RPS está no modo de espera (standby) ou em uma condição de falha.</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Piscando em Âmbar</b></td><td>A fonte de alimentação interna do comutador (switch) falhou e o RPS está fornecendo energia de forma ativa.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-left: 4px solid var(--info); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">3</span> LED de Status da Porta (STAT)</h4>
-            <p style="margin-top: 0.5rem;">Indica que o modo de status da porta está selecionado quando o LED está verde. Este é o <strong>modo padrão</strong> do switch. Quando selecionado, os LEDs de porta exibirão:</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED da Porta</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado</b></td><td>Não há link presente ou a porta foi desligada administrativamente (<code>shutdown</code>).</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde</b></td><td>Um link físico está presente (camada 1 ativa).</td></tr>
-                    <tr><td><b style="color: var(--success); font-family: monospace;">Piscando em Verde</b></td><td>Há atividade de rede; a porta está enviando ou recebendo dados.</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Alternando Verde/Âmbar</b></td><td>Há uma falha de link detectada na porta.</td></tr>
-                    <tr><td><b style="color: var(--warning);">Amarelo</b></td><td>A porta está bloqueada pelo STP (Spanning Tree Protocol) para garantir que não exista nenhum loop no domínio de encaminhamento (normalmente as portas permanecem nesse estado por aprox. 30 segundos após a ativação).</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Piscando em Âmbar</b></td><td>A porta foi bloqueada ativamente para evitar um loop iminente no domínio de encaminhamento.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-left: 4px solid var(--primary); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">4</span> LED da Porta Duplex (DUPLX)</h4>
-            <p style="margin-top: 0.5rem;">Indica que o modo duplex da porta está selecionado quando o LED principal está verde. Quando selecionado, os LEDs das portas indicam:</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED da Porta</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado</b></td><td>A porta está operando em modo <strong>semi-duplex (Half-Duplex)</strong>.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde</b></td><td>A porta está operando em modo <strong>full-duplex</strong>.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-left: 4px solid var(--secondary); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">5</span> LED da Porta SPEED</h4>
-            <p style="margin-top: 0.5rem;">Indica que o modo de velocidade da porta está selecionado. Quando selecionado, os LEDs de porta exibirão a taxa de transmissão operacional:</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED da Porta</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado</b></td><td>A porta está operando a uma velocidade de <strong>10 Mbps</strong>.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde</b></td><td>A porta está operando a uma velocidade de <strong>100 Mbps</strong>.</td></tr>
-                    <tr><td><b style="color: var(--success); font-family: monospace;">Piscando em Verde</b></td><td>A porta está operando na velocidade máxima de <strong>1000 Mbps (1 Gbps)</strong>.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-left: 4px solid var(--danger); background: rgba(0,0,0,0.2);">
-            <h4><span class="section-number">6</span> LED do Modo Power over Ethernet (PoE)</h4>
-            <p style="margin-top: 0.5rem;">Se o switch suportar fornecimento de energia por cabo de rede, este LED estará presente. Quando o modo PoE é selecionado pelo botão Mode, as cores indicam:</p>
-            <table class="table-custom">
-                <thead>
-                    <tr><th style="width: 30%;">Status do LED Principal / Porta</th><th style="width: 70%;">Significado</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b style="color: var(--text-dim);">Desligado (Modo)</b></td><td>O modo PoE não está selecionado; nenhuma porta teve energia negada ou entrou em falha.</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Piscando em Âmbar (Modo)</b></td><td>O modo PoE não está selecionado, mas pelo menos uma das portas teve energia negada ou apresenta falha de PoE.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde (Modo)</b></td><td>O modo PoE está ativado e selecionado para exibição. Os LEDs das portas mudam de significado.</td></tr>
-                    <tr><td><b style="color: var(--text-dim);">Desligado (Na Porta)</b></td><td>O PoE está desligado/desativado nesta porta específica.</td></tr>
-                    <tr><td><b style="color: var(--success);">Verde (Na Porta)</b></td><td>O PoE está ligado e fornecendo energia normalmente ao dispositivo conectado.</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Alternando Verde/Âmbar (Porta)</b></td><td>O PoE foi negado nesta porta porque o fornecimento de energia demandado pelo dispositivo conectado excede a capacidade de alimentação total do switch.</td></tr>
-                    <tr><td><b style="color: var(--warning); font-family: monospace;">Piscando em Âmbar (Porta)</b></td><td>O PoE está desligado nesta porta devido a uma condição de falha interna.</td></tr>
-                    <tr><td><b style="color: var(--warning);">Âmbar Sólido (Na Porta)</b></td><td>O fornecimento de PoE para esta porta foi desativado explicitamente.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-</section>
-<section id="secao1-4" class="section">
-    <h2 class="section-title">
-        <i class="fas fa-shield-alt"></i>
-        <span class="section-number">1.1.4</span> Recuperando de um Travamento de Sistema
-    </h2>
-    
-    <div class="card">
-        <p>O carregador de inicialização (<strong>boot loader</strong>) fornece acesso emergencial ao switch caso o sistema operacional Cisco IOS não possa ser utilizado devido a arquivos de sistema ausentes, corrompidos ou danificados. O boot loader possui uma linha de comando (CLI) própria que permite gerenciar e interagir diretamente com os arquivos armazenados na memória flash, mesmo sem o IOS operacional.</p>
-        
-        <div class="alert alert-warning">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span><strong>Contexto de Recuperação:</strong> O ambiente do boot loader (prompt <code>switch:</code>) também é a ferramenta padrão para executar procedimentos de recuperação de senhas administrativas esquecidas ou perdidas.</span>
-        </div>
-
-        <p style="margin-top: 1.5rem; margin-bottom: 1rem;"><strong>Procedimento de Acesso via Console:</strong></p>
-        
-        <div class="boot-pipeline">
-            <div class="boot-step">
-                <div class="step-num">01</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-plug"></i> Conexão Física e Emulação</h4>
-                    <p>Conecte um PC utilizando o cabo de console à porta de console física do switch. Configure o software de emulação de terminal (como PuTTY ou Tera Term) com os parâmetros padrão de comunicação (9600 baud, 8 data bits, no parity, 1 stop bit, no flow control).</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">02</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-power-off"></i> Desernegização</h4>
-                    <p>Desconecte o cabo de alimentação principal do switch para desligá-lo completamente.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">03</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-fingerprint"></i> Interrupção do Boot</h4>
-                    <p>Reconecte o cabo de alimentação ao switch. Dentro de uma janela máxima de <strong>15 segundos</strong>, pressione e mantenha pressionado o botão <strong>Mode</strong> no painel frontal enquanto o LED do sistema (SYST) ainda estiver piscando em verde.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">04</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-lightbulb"></i> Liberação do Botão</h4>
-                    <p>Continue pressionando o botão <strong>Mode</strong> de forma contínua até que o LED do sistema fique brevemente âmbar e, em seguida, mude para <strong>verde sólido</strong>. Após essa transição visual, solte o botão Mode.</p>
-                </div>
-            </div>
-
-            <div class="boot-step">
-                <div class="step-num">05</div>
-                <div class="step-content">
-                    <h4><i class="fas fa-terminal"></i> Prompt de Comando</h4>
-                    <p>O prompt de comando especial <code>switch:</code> será exibido na tela do software de emulação de terminal do PC, indicando o controle ativo do boot loader.</p>
-                </div>
-            </div>
-        </div>
-
-        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Interação e Comandos de Diagnóstico no Prompt <code>switch:</code></strong></p>
-        <p>Para visualizar a lista completa de comandos disponíveis no carregador de inicialização, você pode digitar <code>help</code> ou <code>?</code>.</p>
-
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            <span>Por padrão, o switch busca as variáveis de boot. Para examinar o caminho configurado atualmente na variável de ambiente do sistema, execute o comando <code>set</code>.</span>
-        </div>
-
-        <div class="terminal">
-<pre>switch: set
-BOOT=flash:/c2960-lanbasek9-mz.122-55.SE7/c2960-lanbasek9-mz.122-55.SE7.bin
-(output omitted)</pre>
-        </div>
-
-        <p style="margin-top: 1.5rem;">Antes de poder ler os arquivos do dispositivo de armazenamento, é obrigatório inicializar o sistema de arquivos flash através do comando <code>flash_init</code>:</p>
-
-        <div class="terminal">
-<pre>switch: flash_init
-Initializing Flash...
-flashfs[0]: 2 files, 1 directories
-flashfs[0]: 0 orphaned files, 0 orphaned directories
-flashfs[0]: Total bytes: 32514048
-flashfs[0]: Bytes used: 11838464
-flashfs[0]: Bytes available: 20675584
-flashfs[0]: flashfs fsck took 10 seconds.
-...done Initializing Flash.</pre>
-        </div>
-
-        <p style="margin-top: 1.5rem;">Uma vez concluída a inicialização do file system, liste os diretórios e arquivos de imagem binária (.bin) disponíveis com o comando <code>dir flash:</code>:</p>
-
-        <div class="terminal">
-<pre>switch: dir flash:
-Directory of flash:/
-    2  -rwx  11834846  &lt;date&gt;               c2960-lanbasek9-mz.150-2.SE8.bin
-    3  -rwx  2072      &lt;date&gt;               multiple-fs</pre>
-        </div>
-
-        <p style="margin-top: 1.5rem;"><strong>Alteração da Variável e Inicialização Forçada:</strong></p>
-        <p>Caso precise alterar a imagem de inicialização para mitigar um travamento ou carregar um novo IOS estável, redefina a variável de ambiente utilizando a sintaxe de atribuição direta <code>BOOT=flash:nome_do_arquivo.bin</code>. Valide o novo caminho com <code>set</code> e realize o boot manual invocando o comando <code>boot</code> sem argumentos:</p>
-
-        <div class="terminal">
-<pre>switch: BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin
-switch: set
-BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin
-(output omitted)
-switch: boot</pre>
-        </div>
-
-        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Capacidades Operacionais do Boot Loader:</strong></p>
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th style="width: 35%;">Função Suportada</th>
-                    <th style="width: 65%;">Ação Prática no Ambiente de Linha de Comando</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>Inicialização do Flash</code></td>
-                    <td>Prepara a estrutura do file system para comandos de leitura/escrita.</td>
-                </tr>
-                <tr>
-                    <td><code>Formatação de Arquivos</code></td>
-                    <td>Permite limpar ou estruturar partições danificadas da memória Flash.</td>
-                </tr>
-                <tr>
-                    <td><code>Instalação de Novo IOS</code></td>
-                    <td>Permite a cópia de novas imagens de software via conexões de console (ex: Xmodem).</td>
-                </tr>
-                <tr>
-                    <td><code>Variáveis de Ambiente</code></td>
-                    <td>Modifica parâmetros críticos como <code>BOOT path-list</code> para contingências.</td>
-                </tr>
-                <tr>
-                    <td><code>Recuperação de Senhas</code></td>
-                    <td>Ignora temporariamente o arquivo <code>config.text</code> para recuperar credenciais.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-<section id="secao1-5" class="section">
-    <h2 class="section-title">
-        <i class="fas fa-network-wired"></i>
-        <span class="section-number">1.1.5</span> Acesso ao Gerenciamento de Switches
-    </h2>
-    
-    <div class="card">
-        <p>Para preparar um switch para acesso de gerenciamento remoto, o dispositivo deve ser configurado com um endereço IP e uma máscara de sub-rede. Lembre-se de que, para gerenciar o switch a partir de uma rede remota, ele deve ser configurado adicionalmente com um gateway padrão. Esse procedimento é muito semelhante à configuração das informações de endereçamento IP em dispositivos hosts ordinários.</p>
-        
-        <p>A <strong>SVI (Switch Virtual Interface)</strong> no switch precisa receber esse endereço IP operacional. A SVI é uma interface virtual de camada lógica, e não uma porta física do hardware do switch.</p>
-
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            <span><strong>Nota de Implantação:</strong> Por padrão, a SVI do switch Catalyst vem mapeada de fábrica na <strong>VLAN 1</strong>. Um cabo de console é conectado a um PC host para que as configurações lógicas básicas iniciais da SVI possam ser injetadas pela primeira vez.</span>
-        </div>
-
-        <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>Esquema de Conexão e Topologia de Gerenciamento:</strong></p>
-        <div class="terminal">
-<pre>   +-------------------+
-   |      [ PC1 ]      |
-   +---------+---------+
-             |
-             | (Cabo do Console)
-             |
-   +---------v---------+                           +-------------------+
-   |      [ S1 ]       |---------------------------|      [ R1 ]       |
-   |  Switch Catalyst  |   (Link de Camada 2)      |     Roteador      |
-   +-------------------+                           +---------+---------+
-    SVI (VLAN 99)                                            |
-    IP: 172.17.99.11/24                                      | Gateway Padrão:
-    IPv6: 2001:db8:acad:99::11/64                            | 172.17.99.1
-                                                             | 2001:db8:acad:99::1</pre>
-        </div>
-
-        <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>Sintaxe CLI para Ativação da Interface SVI e Gateway (IPv4 e IPv6):</strong></p>
-        <div class="terminal">
-<pre>S1# configure terminal
-S1(config)# interface vlan 99
-S1(config-if)# ip address 172.17.99.11 255.255.255.0
-S1(config-if)# ipv6 address 2001:db8:acad:99::11/64
-S1(config-if)# no shutdown
-S1(config-if)# exit
-S1(config)# ip default-gateway 172.17.99.1
-S1(config)# end
-S1# copy running-config startup-config</pre>
-        </div>
-
-        <p style="margin-top: 2rem; margin-bottom: 0.5rem;"><strong>Parâmetros Fundamentais para Acesso Remoto:</strong></p>
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th style="width: 30%;">Componente</th>
-                    <th style="width: 70%;">Finalidade e Mecânica Operacional</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>Endereço IP / Máscara</code></td>
-                    <td>Identifica logicamente o switch dentro da sub-rede local, permitindo o tráfego IP direto.</td>
-                </tr>
-                <tr>
-                    <td><code>Switch Virtual Interface (SVI)</code></td>
-                    <td>Interface lógica associada a uma VLAN (ex: VLAN 1 ou VLAN 99) que atua como o host IP do switch.</td>
-                </tr>
-                <tr>
-                    <td><code>Gateway Padrão (Default Gateway)</code></td>
-                    <td>Endereço IP do roteador local. Sem ele, o switch não consegue responder a conexões SSH/Telnet originadas de sub-redes remotas.</td>
-                </tr>
-                <tr>
-                    <td><code>Cabo de Console</code></td>
-                    <td>Meio de acesso out-of-band essencial. Utilizado antes do switch possuir qualquer configuração IP funcional.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="alert alert-warning">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span><strong>Diretriz de Segurança:</strong> Em ambientes de produção reais, evite utilizar a VLAN 1 nativa para o gerenciamento do switch. Recomenda-se criar uma VLAN dedicada e segura (como a VLAN 99 exemplificada no diagrama) para isolar o tráfego administrativo.</span>
-        </div>
-    </div>
-</section>
-
-</div>
-
-<footer>
-    <p>© 2026 Cisco CCNA 2 - Switching, Routing, and Wireless Essentials | Identidade Visual Adaptada</p>
-</footer>
-
-<script>
-class SidebarMenu {
-    constructor() {
-        this.sidebar = document.getElementById('sidebar');
-        this.overlay = document.getElementById('sidebarOverlay');
-        this.openBtn = document.getElementById('openMenu');
-        this.closeBtn = document.getElementById('closeMenu');
-        this.init();
-    }
-
-    init() {
-        if (!this.sidebar) return;
-
-        if (this.openBtn) {
-            this.openBtn.addEventListener('click', () => this.open());
-        }
-        if (this.closeBtn) {
-            this.closeBtn.addEventListener('click', () => this.close());
-        }
-        if (this.overlay) {
-            this.overlay.addEventListener('click', () => this.close());
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
         }
 
-        document.addEventListener('keydown', (e) => {
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
-                this.close();
+              this.close()
             }
-        });
+          })
 
-        const links = document.querySelectorAll('.sidebar .nav-modules a');
-        links.forEach(link => {
-            link.addEventListener('click', () => this.close());
-        });
-    }
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
 
-    open() {
-        this.sidebar.classList.add('open');
-        this.overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
 
-    close() {
-        this.sidebar.classList.remove('open');
-        this.overlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
 
-document.addEventListener('DOMContentLoaded', () => {
-    new SidebarMenu();
-});
-</script>
-</body>
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
 </html>

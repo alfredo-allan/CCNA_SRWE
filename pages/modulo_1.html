@@ -1,196 +1,2521 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cisco CCNA 2 | Módulo 1: Configuração Básica de Dispositivos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css"> </head>
-<body>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
     <div class="top-bar">
-        <button class="menu-toggle" id="openMenu">
-            <i class="fas fa-bars"></i>
-            <span>Menu</span>
-        </button>
-        <a href="index.html" class="top-bar-brand">
-            <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE)
-        </a>
-        <a href="index.html" class="btn-outline">
-            <i class="fas fa-arrow-left"></i> Painel Central
-        </a>
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="/index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
     </div>
 
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fas fa-compass"></i> Navegação</h3>
-            <button class="close-sidebar" id="closeMenu">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <ul class="nav-modules">
-            <li><a href="#secao1-0-1"><i class="fas fa-graduation-cap"></i> 1.0.1 Início</a></li>
-            <li><a href="#secao1-0-2"><i class="fas fa-list-ul"></i> 1.0.2 Objetivos</a></li>
-        </ul>
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0-1"><i class="fas fa-graduation-cap"></i> 1.0.1 Início</a>
+        </li>
+        <li>
+          <a href="#secao1-0-2"><i class="fas fa-list-ul"></i> 1.0.2 Objetivos</a>
+        </li>
+        <li>
+          <a href="#secao1-1.1"><i class="fas fa-terminal"></i> 1.1 Inicialização do Switch</a>
+        </li>
+        <li>
+          <a href="#secao1-1.2"><i class="fas fa-terminal"></i> 1.1.2 O Comando boot system</a>
+        </li>
+        <li>
+          <a href="#secao1-1.3"><i class="fas fa-lightbulb"></i> 1.1.3 Alternar indicadores LED</a>
+        </li>
+        <li>
+          <a href="#secao1-1.4"><i class="fas fa-shield-alt"></i> 1.1.4 Recuperando de um travamento</a>
+        </li>
+        <li>
+          <a href="#secao1-1.5"><i class="fas fa-network-wired"></i> 1.1.5 Acesso ao Gerenciamento</a>
+          <a href="#secao1-1.6"> <i class="fas fa-network-wired"></i> 1.1.6 Configuração do SVI do Switch </a>
+        </li>
+        <li>
+          <a href="lab_1.html"> <i class="fas fa-network-wired"></i> 1.1.6 Configuração do SVI do Switch </a>
+        </li>
+        <li>
+          <a href="#secao1-2"> <i class="fas fa-exchange-alt"></i> 1.2.1 Comunicação duplex </a>
+        </li>
+        <li>
+          <a href="#secao1.2.2"><i class="fas fa-layer-group"></i> 1.2.2 Configurar portas na camada física</a>
+        </li>
+        <li>
+          <a href="#secao1.2.3"><i class="fas fa-toggle-on"></i> 1.2.3 MDIX Automático</a>
+        </li>
+        <li>
+          <a href="#secao1.2.4"><i class="fas fa-check-double"></i> 1.2.4 Comandos de verificação de switch</a>
+        </li>
+        <li>
+          <a href="#secao1.2.5"><i class="fas fa-search"></i> 1.2.5 Verifique a configuração da porta do switch</a>
+        </li>
+        <li>
+          <a href="#secao1.2.6"><i class="fas fa-network-wired"></i> 1.2.6 Problemas da camada de acesso à rede</a>
+        </li>
+        <li>
+          <a href="#secao1.2.7"><i class="fas fa-exclamation-triangle"></i> 1.2.7 Erros de entrada e saída de interface</a>
+        </li>
+        <li>
+          <a href="#secao1.2.8"><i class="fas fa-tools"></i> 1.2.8 Solucionando problemas da camada de acesso à rede</a>
+        </li>
+        <li>
+          <a href="#secao1.3.1"><i class="fas fa-unlock-alt"></i> 1.3.1 Operação Telnet</a>
+        </li>
+        <li>
+          <a href="#secao1.3.2"><i class="fas fa-shield-alt"></i> 1.3.2 Operação SSH</a>
+        </li>
+        <li>
+          <a href="#secao1.3.3"><i class="fas fa-key"></i> 1.3.3 Verifique se o Switch suporta SSH</a>
+        </li>
+        <li>
+          <a href="#secao1.3.4"><i class="fas fa-cogs"></i> 1.3.4 Configurar SSH</a>
+        </li>
+        <li>
+          <a href="#secao1.3.5"><i class="fas fa-server"></i> 1.3.5 Verifique se o SSH está operacional</a>
+        </li>
+        <li>
+          <a href="./lab_2.html"><i class="fas fa-laptop-code"></i> 1.3.6 Packet Tracer - Configurar SSH</a>
+        </li>
+      </ul>
     </div>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <section class="hero">
-        <div class="container">
-            <div class="badge-lab">
-                <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
-            </div>
-            <h1>Módulo 1: Configuração Básica de Dispositivos</h1>
-            <p>Aprenda a obter controle granular de ativos de rede configurando precisamente switches e roteadores Cisco.</p>
-            <div style="margin-top: 1.5rem;">
-                <i class="fas fa-server" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Switching"></i>
-                <i class="fas fa-route" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Routing"></i>
-                <i class="fas fa-wifi" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem;" title="Wireless"></i>
-            </div>
+      <div class="container">
+        <div class="badge-lab"><i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2</div>
+        <h1>Módulo 1: Configuração Básica de Dispositivos</h1>
+        <p>Aprenda a obter controle granular de ativos de rede configurando precisamente switches e roteadores Cisco.</p>
+        <div style="margin-top: 1.5rem">
+          <i class="fas fa-server" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem" title="Switching"></i>
+          <i class="fas fa-route" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem" title="Routing"></i>
+          <i class="fas fa-wifi" style="color: var(--primary); font-size: 1.5rem; margin: 0 0.5rem" title="Wireless"></i>
         </div>
+      </div>
     </section>
 
     <main class="container">
+      <section id="secao1-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">1.0.1</span> Por que devo cursar este módulo?
+        </h2>
 
-        <section id="secao1-0-1" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-graduation-cap"></i>
-                <span class="section-number">1.0.1</span> Por que devo cursar este módulo?
-            </h2>
-            
-            <div class="card">
-                <p><strong>Bem-vindo à Configuração Básica de Dispositivos!</strong></p>
-                <p>Bem-vindo ao primeiro módulo em <em>CCNA Switching, Routing e Wireless Essentials</em>! Você sabe que switches e roteadores já vêm de fábrica com algumas configurações internas básicas de funcionamento, então por que você realmente precisa aprender a configurar esses equipamentos?</p>
-                <p>Imagine que você comprou um conjunto de ferrorama (um modelo de trem elétrico). Depois de montá-lo pela primeira vez, você percebe que a pista é apenas uma forma oval simples e que os vagões do trem só conseguem se mover no sentido horário. No entanto, o seu desejo original era que a pista tivesse o formato de um "oito" completo com um viaduto de cruzamento. Você também pode querer ter dois trens operando de maneira totalmente independente um do outro e movendo-se em direções opostas.</p>
-                <p>Como você poderia fazer isso acontecer? Você precisaria reconfigurar fisicamente a pista e os controladores digitais. O princípio é exatamente idêntico quando lidamos com dispositivos de rede de computadores.</p>
-                <p>Como administrador de infraestrutura de redes, você necessita de um controle detalhado, refinado e granular sobre cada dispositivo ativo em seu ambiente de produção. Isso significa configurar com precisão milimétrica os switches e roteadores para que a sua topologia de rede execute exatamente o comportamento esperado.</p>
+        <div class="card">
+          <p><strong>Bem-vindo à Configuração Básica de Dispositivos!</strong></p>
+          <p>
+            Bem-vindo ao primeiro módulo em <em>CCNA Switching, Routing e Wireless Essentials</em>! Você sabe que switches e roteadores já
+            vêm de fábrica com algumas configurações internas básicas de funcionamento, então por que você realmente precisa aprender a
+            configurar esses equipamentos?
+          </p>
+          <p>
+            Imagine que você comprou um conjunto de ferrorama (um modelo de trem elétrico). Depois de montá-lo pela primeira vez, você
+            percebe que a pista é apenas uma forma oval simples e que os vagões do trem só conseguem se mover no sentido horário. No
+            entanto, o seu desejo original era que a pista tivesse o formato de um "oito" completo com um viaduto de cruzamento. Você também
+            pode querer ter dois trens operando de maneira totalmente independente um do outro e movendo-se em direções opostas.
+          </p>
+          <p>
+            Como você poderia fazer isso acontecer? Você precisaria reconfigurar fisicamente a pista e os controladores digitais. O
+            princípio é exatamente idêntico quando lidamos com dispositivos de rede de computadores.
+          </p>
+          <p>
+            Como administrador de infraestrutura de redes, você necessita de um controle detalhado, refinado e granular sobre cada
+            dispositivo ativo em seu ambiente de produção. Isso significa configurar com precisão milimétrica os switches e roteadores para
+            que a sua topologia de rede execute exatamente o comportamento esperado.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            <strong>📌 Foco Prático:</strong> Este módulo está repleto de atividades interativas de Verificador de Sintaxe (Syntax Checker)
+            e cenários práticos no Packet Tracer para ajudá-lo a consolidar o desenvolvimento dessas competências críticas de engenharia de
+            redes. Vamos começar!
+          </div>
+        </div>
+      </section>
+
+      <section id="secao1-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list-ul"></i>
+          <span class="section-number">1.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <p><i class="fas fa-bookmark"></i> <strong>Título do Módulo:</strong></p>
+            <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem">Configuração básica de dispositivos</p>
+          </div>
+          <div class="card">
+            <p><i class="fas fa-bullseye"></i> <strong>Objetivo do Módulo:</strong></p>
+            <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem">
+              Configure dispositivos usando as práticas recomendadas de segurança.
+            </p>
+          </div>
+        </div>
+
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Título do Tópico</th>
+              <th>Objetivo do Tópico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Configurar um switch com definições iniciais</strong></td>
+              <td>Configurar definições iniciais em um switch Cisco.</td>
+            </tr>
+            <tr>
+              <td><strong>Configurar portas de switch</strong></td>
+              <td>Configurar as portas do switch para atender aos requisitos de rede.</td>
+            </tr>
+            <tr>
+              <td><strong>Acesso remoto seguro</strong></td>
+              <td>Configurar o acesso seguro do gerenciamento em um switch.</td>
+            </tr>
+            <tr>
+              <td><strong>Configuração básica do roteador</strong></td>
+              <td>Definir configurações básicas em um roteador para rotear entre duas redes diretamente conectadas, usando CLI.</td>
+            </tr>
+            <tr>
+              <td><strong>Verificar redes conectadas diretamente</strong></td>
+              <td>Verifique a conectividade entre duas redes diretamente conectadas ao um roteador.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <strong>📌 Pronto para Avançar:</strong> Ao concluir esses tópicos, você terá a fundação prática necessária para operar a camada
+            de acesso e distribuição de uma topologia corporativa Cisco de forma segura.
+          </div>
+        </div>
+      </section>
+      <section id="secao1-1.1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">1.1.1</span> Sequência de Inicialização do Switch
+        </h2>
+
+        <div class="card">
+          <p>
+            Antes de configurar um switch, você precisa ativá-lo e permitir que ele passe pela sequência de inicialização de cinco etapas.
+            Este tópico aborda os conceitos básicos de configuração de um switch e inclui um laboratório no final.
+          </p>
+
+          <p>Depois que um switch Cisco é ligado, ele passa pela seguinte sequência de inicialização em cinco etapas:</p>
+
+          <div class="boot-pipeline">
+            <div class="boot-step">
+              <div class="step-num">Etapa 1</div>
+              <div class="step-content">
+                <h4><i class="fas fa-shield-alt"></i> Power-On Self-Test (POST)</h4>
+                <p>
+                  Primeiro, o switch carrega um programa <strong>POST (Power-On Self-Test)</strong> armazenado na <strong>ROM</strong>. O
+                  POST verifica o subsistema da CPU. Ele testa a CPU, a <strong>DRAM</strong> e a parte do dispositivo flash que compõe o
+                  sistema de arquivos flash.
+                </p>
+              </div>
             </div>
 
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i>
-                <div>
-                    <strong>📌 Foco Prático:</strong> Este módulo está repleto de atividades interativas de Verificador de Sintaxe (Syntax Checker) e cenários práticos no Packet Tracer para ajudá-lo a consolidar o desenvolvimento dessas competências críticas de engenharia de redes. Vamos começar!
-                </div>
-            </div>
-        </section>
-
-        <section id="secao1-0-2" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-list-ul"></i>
-                <span class="section-number">1.0.2</span> O que vou aprender neste módulo?
-            </h2>
-            
-            <div class="grid-2">
-                <div class="card">
-                    <p><i class="fas fa-bookmark"></i> <strong>Título do Módulo:</strong></p>
-                    <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem;">Configuração básica de dispositivos</p>
-                </div>
-                <div class="card">
-                    <p><i class="fas fa-bullseye"></i> <strong>Objetivo do Módulo:</strong></p>
-                    <p style="color: var(--text-dim); font-size: 1.1rem; padding-left: 1.5rem;">Configure dispositivos usando as práticas recomendadas de segurança.</p>
-                </div>
+            <div class="boot-step">
+              <div class="step-num">Etapa 2</div>
+              <div class="step-content">
+                <h4><i class="fas fa-download"></i> Software Carregador de Inicialização</h4>
+                <p>
+                  Depois, o switch carrega o software carregador de inicialização. O
+                  <strong>carregador de inicialização (boot loader)</strong> é um programa pequeno armazenado na ROM que é executado
+                  imediatamente após a conclusão bem-sucedida do POST.
+                </p>
+              </div>
             </div>
 
+            <div class="boot-step">
+              <div class="step-num">Etapa 3</div>
+              <div class="step-content">
+                <h4><i class="fas fa-microchip"></i> Inicialização de Baixo Nível da CPU</h4>
+                <p>
+                  O carregador de inicialização executa a inicialização de baixo nível da CPU. Ele inicializa os registros da CPU, que
+                  controlam onde a memória física é mapeada, a quantidade de memória e sua velocidade.
+                </p>
+              </div>
+            </div>
+
+            <div class="boot-step">
+              <div class="step-num">Etapa 4</div>
+              <div class="step-content">
+                <h4><i class="fas fa-folder-open"></i> Inicialização do Sistema de Arquivos Flash</h4>
+                <p>
+                  O carregador de inicialização (boot loader) inicializa o sistema de arquivos da <strong>memória flash</strong> na placa do
+                  sistema.
+                </p>
+              </div>
+            </div>
+
+            <div class="boot-step">
+              <div class="step-num">Etapa 5</div>
+              <div class="step-content">
+                <h4><i class="fas fa-cogs"></i> Carregamento do Cisco IOS</h4>
+                <p>
+                  Finalmente, o carregador de inicialização localiza e carrega uma imagem do software de sistema operacional
+                  <strong>Cisco IOS</strong> padrão na memória e passa o controle do switch para o IOS.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span
+              ><strong>Dica de Monitoramento:</strong> Durante a inicialização, os LEDs do painel frontal do switch piscam sequencialmente.
+              Se houver falha no POST, o LED do sistema (SYST) ficará âmbar (laranja), indicando que o hardware encontrou um problema
+              crítico.</span
+            >
+          </div>
+        </div>
+      </section>
+      <section id="secao1-1.2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.1.2</span> O Comando boot system
+        </h2>
+
+        <div class="card">
+          <p>
+            O switch tenta inicializar automaticamente usando informações na variável de ambiente BOOT. Se esta variável não estiver
+            definida, o switch tentará carregar e executar o primeiro arquivo executável que encontrar. Nos Catalyst 2960 Series Switches, o
+            arquivo de imagem normalmente está contido em um diretório que tem o mesmo nome do arquivo de imagem (excluindo a extensão de
+            arquivo .bin).
+          </p>
+
+          <p>
+            O sistema operacional IOS inicializa as interfaces usando os comandos do Cisco IOS encontrados no arquivo startup-config. O
+            arquivo startup-config é chamado <code>config.text</code> e está localizado em flash.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span
+              >No exemplo, a variável de ambiente BOOT é definida usando o comando modo de configuração <strong>boot system global</strong>.
+              Observe que o IOS está localizado em uma pasta distinta e o caminho da pasta é especificado. Use o comando
+              <code>show boot</code> para ver como o arquivo de inicialização do IOS atual está definido.</span
+            >
+          </div>
+
+          <p><strong>Configuração da Variável de Inicialização:</strong></p>
+          <div class="terminal">
+            <pre>S1(config)# boot system flash:/c2960-lanbasek9-mz.150-2.SE/c2960-lanbasek9-mz.150-2.SE.bin</pre>
+          </div>
+
+          <p style="margin-top: 2rem; margin-bottom: 0.5rem"><strong>Detalhamento dos Componentes do Comando:</strong></p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 40%">Comando</th>
+                <th style="width: 60%">Definição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>boot system</code></td>
+                <td>O comando principal</td>
+              </tr>
+              <tr>
+                <td><code>flash:</code></td>
+                <td>O dispositivo de armazenamento</td>
+              </tr>
+              <tr>
+                <td><code>c2960-lanbasek9-mz.150-2.SE/</code></td>
+                <td>O caminho para o sistema de arquivos</td>
+              </tr>
+              <tr>
+                <td><code>c2960-lanbasek9-mz.150-2.SE.bin</code></td>
+                <td>O nome do arquivo IOS</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span
+              ><strong>Nota de Engenharia:</strong> Lembre-se sempre de salvar as alterações com o comando
+              <code>copy running-config startup-config</code> para garantir que o switch aplique a nova variável BOOT na próxima
+              inicialização.</span
+            >
+          </div>
+        </div>
+      </section>
+      <section id="secao1-1.3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-lightbulb"></i>
+          <span class="section-number">1.1.3</span> Alternar Indicadores LED
+        </h2>
+
+        <div class="card">
+          <p>
+            Os switches Cisco Catalyst possuem várias luzes LED indicadoras de status. Você pode usar os LEDs do switch para monitorar
+            rapidamente o desempenho e a atividade do dispositivo. Os switches de diferentes modelos e conjuntos de recursos terão LEDs
+            diferentes, e sua colocação no painel frontal do switch também pode variar.
+          </p>
+
+          <p>
+            O <strong>botão Modo (7 na figura)</strong> é usado para alternar entre o status da porta, porta duplex, velocidade da porta e,
+            se suportado, o status Power over Ethernet (PoE) dos LEDs da porta (8 na figura).
+          </p>
+
+          <p style="margin-top: 1.5rem; margin-bottom: 0.5rem"><strong>Esquema do Painel Frontal (Série Catalyst 2960):</strong></p>
+          <div class="terminal">
+            <pre>
++-------------------------------------------------------------------------+
+|  CISCO                                      [ 1 ] [ 2 ] [ 3 ] [ 4 ]     |
+|   (1) SYST  * [ 5 ] [ 6 ] [ 7 ] [ 8 ]     |
+|   (2) RPS   * |
+|   (3) STAT  * +---------------------------------------------+     |
+|   (4) DUPLX * |  [Porta 1]  [Porta 3]  [Porta 5]  [Porta 7] |     |
+|   (5) SPEED * |  [Porta 2]  [Porta 4]  [Porta 6]  [Porta 8] |     |
+|   (6) PoE   * +---------------------------------------------+     |
+|                     |===> (8) LEDs Indicadores de cada Porta      |     |
+|  [MODE] (7)         +---------------------------------------------+     |
++-------------------------------------------------------------------------+</pre
+            >
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span
+              >Pressione o botão <strong>Mode</strong> sucessivamente para mudar qual categoria de diagnóstico (de 1 a 6) os LEDs
+              individuais das portas [8] estarão refletindo no momento.</span
+            >
+          </div>
+
+          <p style="margin-top: 2rem; margin-bottom: 0.5rem"><strong>Painel de Diagnóstico dos Indicadores LED:</strong></p>
+
+          <div class="card" style="border-left: 4px solid var(--primary); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">1</span> LED de Sistema (SYST)</h4>
+            <p style="margin-top: 0.5rem">Mostra se o sistema está recebendo energia e está funcionando corretamente.</p>
             <table class="table-custom">
-                <thead>
-                    <tr>
-                        <th>Título do Tópico</th>
-                        <th>Objetivo do Tópico</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Configurar um switch com definições iniciais</strong></td>
-                        <td>Configurar definições iniciais em um switch Cisco.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Configurar portas de switch</strong></td>
-                        <td>Configurar as portas do switch para atender aos requisitos de rede.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Acesso remoto seguro</strong></td>
-                        <td>Configurar o acesso seguro do gerenciamento em um switch.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Configuração básica do roteador</strong></td>
-                        <td>Definir configurações básicas em um roteador para rotear entre duas redes diretamente conectadas, usando CLI.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Verificar redes conectadas diretamente</strong></td>
-                        <td>Verifique a conectividade entre duas redes diretamente conectadas ao um roteador.</td>
-                    </tr>
-                </tbody>
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado</b></td>
+                  <td>Significa que o sistema não está ligado.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde</b></td>
+                  <td>O sistema está funcionando normalmente.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning)">Âmbar (Laranja)</b></td>
+                  <td>O sistema está recebendo energia, mas não está funcionando corretamente.</td>
+                </tr>
+              </tbody>
             </table>
+          </div>
 
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
-                <div>
-                    <strong>📌 Pronto para Avançar:</strong> Ao concluir esses tópicos, você terá a fundação prática necessária para operar a camada de acesso e distribuição de uma topologia corporativa Cisco de forma segura.
-                </div>
+          <div class="card" style="border-left: 4px solid var(--secondary); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">2</span> LED do Sistema Redundante de Fonte (RPS)</h4>
+            <p style="margin-top: 0.5rem">Mostra o status do sistema de alimentação reserva (Redundant Power System).</p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado</b></td>
+                  <td>O RPS está desativado ou não foi conectado corretamente.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde</b></td>
+                  <td>O RPS está conectado e pronto para fornecer energia reserva.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success); font-family: monospace">Piscando em Verde</b></td>
+                  <td>O RPS está conectado mas não está disponível porque está fornecendo energia para outro dispositivo.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning)">Amarelo</b></td>
+                  <td>O RPS está no modo de espera (standby) ou em uma condição de falha.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Piscando em Âmbar</b></td>
+                  <td>A fonte de alimentação interna do comutador (switch) falhou e o RPS está fornecendo energia de forma ativa.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--info); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">3</span> LED de Status da Porta (STAT)</h4>
+            <p style="margin-top: 0.5rem">
+              Indica que o modo de status da porta está selecionado quando o LED está verde. Este é o <strong>modo padrão</strong> do
+              switch. Quando selecionado, os LEDs de porta exibirão:
+            </p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED da Porta</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado</b></td>
+                  <td>Não há link presente ou a porta foi desligada administrativamente (<code>shutdown</code>).</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde</b></td>
+                  <td>Um link físico está presente (camada 1 ativa).</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success); font-family: monospace">Piscando em Verde</b></td>
+                  <td>Há atividade de rede; a porta está enviando ou recebendo dados.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Alternando Verde/Âmbar</b></td>
+                  <td>Há uma falha de link detectada na porta.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning)">Amarelo</b></td>
+                  <td>
+                    A porta está bloqueada pelo STP (Spanning Tree Protocol) para garantir que não exista nenhum loop no domínio de
+                    encaminhamento (normalmente as portas permanecem nesse estado por aprox. 30 segundos após a ativação).
+                  </td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Piscando em Âmbar</b></td>
+                  <td>A porta foi bloqueada ativamente para evitar um loop iminente no domínio de encaminhamento.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--primary); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">4</span> LED da Porta Duplex (DUPLX)</h4>
+            <p style="margin-top: 0.5rem">
+              Indica que o modo duplex da porta está selecionado quando o LED principal está verde. Quando selecionado, os LEDs das portas
+              indicam:
+            </p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED da Porta</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado</b></td>
+                  <td>A porta está operando em modo <strong>semi-duplex (Half-Duplex)</strong>.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde</b></td>
+                  <td>A porta está operando em modo <strong>full-duplex</strong>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--secondary); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">5</span> LED da Porta SPEED</h4>
+            <p style="margin-top: 0.5rem">
+              Indica que o modo de velocidade da porta está selecionado. Quando selecionado, os LEDs de porta exibirão a taxa de transmissão
+              operacional:
+            </p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED da Porta</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado</b></td>
+                  <td>A porta está operando a uma velocidade de <strong>10 Mbps</strong>.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde</b></td>
+                  <td>A porta está operando a uma velocidade de <strong>100 Mbps</strong>.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success); font-family: monospace">Piscando em Verde</b></td>
+                  <td>A porta está operando na velocidade máxima de <strong>1000 Mbps (1 Gbps)</strong>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--danger); background: rgba(0, 0, 0, 0.2)">
+            <h4><span class="section-number">6</span> LED do Modo Power over Ethernet (PoE)</h4>
+            <p style="margin-top: 0.5rem">
+              Se o switch suportar fornecimento de energia por cabo de rede, este LED estará presente. Quando o modo PoE é selecionado pelo
+              botão Mode, as cores indicam:
+            </p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Status do LED Principal / Porta</th>
+                  <th style="width: 70%">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado (Modo)</b></td>
+                  <td>O modo PoE não está selecionado; nenhuma porta teve energia negada ou entrou em falha.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Piscando em Âmbar (Modo)</b></td>
+                  <td>O modo PoE não está selecionado, mas pelo menos uma das portas teve energia negada ou apresenta falha de PoE.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde (Modo)</b></td>
+                  <td>O modo PoE está ativado e selecionado para exibição. Os LEDs das portas mudam de significado.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--text-dim)">Desligado (Na Porta)</b></td>
+                  <td>O PoE está desligado/desativado nesta porta específica.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--success)">Verde (Na Porta)</b></td>
+                  <td>O PoE está ligado e fornecendo energia normalmente ao dispositivo conectado.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Alternando Verde/Âmbar (Porta)</b></td>
+                  <td>
+                    O PoE foi negado nesta porta porque o fornecimento de energia demandado pelo dispositivo conectado excede a capacidade
+                    de alimentação total do switch.
+                  </td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning); font-family: monospace">Piscando em Âmbar (Porta)</b></td>
+                  <td>O PoE está desligado nesta porta devido a uma condição de falha interna.</td>
+                </tr>
+                <tr>
+                  <td><b style="color: var(--warning)">Âmbar Sólido (Na Porta)</b></td>
+                  <td>O fornecimento de PoE para esta porta foi desativado explicitamente.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-1.4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">1.1.4</span> Recuperando de um Travamento de Sistema
+        </h2>
+
+        <div class="card">
+          <p>
+            O carregador de inicialização (<strong>boot loader</strong>) fornece acesso emergencial ao switch caso o sistema operacional
+            Cisco IOS não possa ser utilizado devido a arquivos de sistema ausentes, corrompidos ou danificados. O boot loader possui uma
+            linha de comando (CLI) própria que permite gerenciar e interagir diretamente com os arquivos armazenados na memória flash, mesmo
+            sem o IOS operacional.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span
+              ><strong>Contexto de Recuperação:</strong> O ambiente do boot loader (prompt <code>switch:</code>) também é a ferramenta
+              padrão para executar procedimentos de recuperação de senhas administrativas esquecidas ou perdidas.</span
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem; margin-bottom: 1rem"><strong>Procedimento de Acesso via Console:</strong></p>
+
+          <div class="boot-pipeline">
+            <div class="boot-step">
+              <div class="step-num">01</div>
+              <div class="step-content">
+                <h4><i class="fas fa-plug"></i> Conexão Física e Emulação</h4>
+                <p>
+                  Conecte um PC utilizando o cabo de console à porta de console física do switch. Configure o software de emulação de
+                  terminal (como PuTTY ou Tera Term) com os parâmetros padrão de comunicação (9600 baud, 8 data bits, no parity, 1 stop bit,
+                  no flow control).
+                </p>
+              </div>
             </div>
-        </section>
 
+            <div class="boot-step">
+              <div class="step-num">02</div>
+              <div class="step-content">
+                <h4><i class="fas fa-power-off"></i> Desernegização</h4>
+                <p>Desconecte o cabo de alimentação principal do switch para desligá-lo completamente.</p>
+              </div>
+            </div>
+
+            <div class="boot-step">
+              <div class="step-num">03</div>
+              <div class="step-content">
+                <h4><i class="fas fa-fingerprint"></i> Interrupção do Boot</h4>
+                <p>
+                  Reconecte o cabo de alimentação ao switch. Dentro de uma janela máxima de <strong>15 segundos</strong>, pressione e
+                  mantenha pressionado o botão <strong>Mode</strong> no painel frontal enquanto o LED do sistema (SYST) ainda estiver
+                  piscando em verde.
+                </p>
+              </div>
+            </div>
+
+            <div class="boot-step">
+              <div class="step-num">04</div>
+              <div class="step-content">
+                <h4><i class="fas fa-lightbulb"></i> Liberação do Botão</h4>
+                <p>
+                  Continue pressionando o botão <strong>Mode</strong> de forma contínua até que o LED do sistema fique brevemente âmbar e,
+                  em seguida, mude para <strong>verde sólido</strong>. Após essa transição visual, solte o botão Mode.
+                </p>
+              </div>
+            </div>
+
+            <div class="boot-step">
+              <div class="step-num">05</div>
+              <div class="step-content">
+                <h4><i class="fas fa-terminal"></i> Prompt de Comando</h4>
+                <p>
+                  O prompt de comando especial <code>switch:</code> será exibido na tela do software de emulação de terminal do PC,
+                  indicando o controle ativo do boot loader.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 2rem; margin-bottom: 0.5rem">
+            <strong>Interação e Comandos de Diagnóstico no Prompt <code>switch:</code></strong>
+          </p>
+          <p>
+            Para visualizar a lista completa de comandos disponíveis no carregador de inicialização, você pode digitar <code>help</code> ou
+            <code>?</code>.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span
+              >Por padrão, o switch busca as variáveis de boot. Para examinar o caminho configurado atualmente na variável de ambiente do
+              sistema, execute o comando <code>set</code>.</span
+            >
+          </div>
+
+          <div class="terminal">
+            <pre>
+switch: set
+BOOT=flash:/c2960-lanbasek9-mz.122-55.SE7/c2960-lanbasek9-mz.122-55.SE7.bin
+(output omitted)</pre
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem">
+            Antes de poder ler os arquivos do dispositivo de armazenamento, é obrigatório inicializar o sistema de arquivos flash através do
+            comando <code>flash_init</code>:
+          </p>
+
+          <div class="terminal">
+            <pre>
+switch: flash_init
+Initializing Flash...
+flashfs[0]: 2 files, 1 directories
+flashfs[0]: 0 orphaned files, 0 orphaned directories
+flashfs[0]: Total bytes: 32514048
+flashfs[0]: Bytes used: 11838464
+flashfs[0]: Bytes available: 20675584
+flashfs[0]: flashfs fsck took 10 seconds.
+...done Initializing Flash.</pre
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem">
+            Uma vez concluída a inicialização do file system, liste os diretórios e arquivos de imagem binária (.bin) disponíveis com o
+            comando <code>dir flash:</code>:
+          </p>
+
+          <div class="terminal">
+            <pre>
+switch: dir flash:
+Directory of flash:/
+    2  -rwx  11834846  &lt;date&gt;               c2960-lanbasek9-mz.150-2.SE8.bin
+    3  -rwx  2072      &lt;date&gt;               multiple-fs</pre
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem"><strong>Alteração da Variável e Inicialização Forçada:</strong></p>
+          <p>
+            Caso precise alterar a imagem de inicialização para mitigar um travamento ou carregar um novo IOS estável, redefina a variável
+            de ambiente utilizando a sintaxe de atribuição direta <code>BOOT=flash:nome_do_arquivo.bin</code>. Valide o novo caminho com
+            <code>set</code> e realize o boot manual invocando o comando <code>boot</code> sem argumentos:
+          </p>
+
+          <div class="terminal">
+            <pre>
+switch: BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin
+switch: set
+BOOT=flash:c2960-lanbasek9-mz.150-2.SE8.bin
+(output omitted)
+switch: boot</pre
+            >
+          </div>
+
+          <p style="margin-top: 2rem; margin-bottom: 0.5rem"><strong>Capacidades Operacionais do Boot Loader:</strong></p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 35%">Função Suportada</th>
+                <th style="width: 65%">Ação Prática no Ambiente de Linha de Comando</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Inicialização do Flash</code></td>
+                <td>Prepara a estrutura do file system para comandos de leitura/escrita.</td>
+              </tr>
+              <tr>
+                <td><code>Formatação de Arquivos</code></td>
+                <td>Permite limpar ou estruturar partições danificadas da memória Flash.</td>
+              </tr>
+              <tr>
+                <td><code>Instalação de Novo IOS</code></td>
+                <td>Permite a cópia de novas imagens de software via conexões de console (ex: Xmodem).</td>
+              </tr>
+              <tr>
+                <td><code>Variáveis de Ambiente</code></td>
+                <td>Modifica parâmetros críticos como <code>BOOT path-list</code> para contingências.</td>
+              </tr>
+              <tr>
+                <td><code>Recuperação de Senhas</code></td>
+                <td>Ignora temporariamente o arquivo <code>config.text</code> para recuperar credenciais.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao1-1.5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">1.1.5</span> Acesso ao Gerenciamento de Switches
+        </h2>
+
+        <div class="card">
+          <p>
+            Para preparar um switch para acesso de gerenciamento remoto, o dispositivo deve ser configurado com um endereço IP e uma máscara
+            de sub-rede. Lembre-se de que, para gerenciar o switch a partir de uma rede remota, ele deve ser configurado adicionalmente com
+            um gateway padrão. Esse procedimento é muito semelhante à configuração das informações de endereçamento IP em dispositivos hosts
+            ordinários.
+          </p>
+
+          <p>
+            A <strong>SVI (Switch Virtual Interface)</strong> no switch precisa receber esse endereço IP operacional. A SVI é uma interface
+            virtual de camada lógica, e não uma porta física do hardware do switch.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span
+              ><strong>Nota de Implantação:</strong> Por padrão, a SVI do switch Catalyst vem mapeada de fábrica na <strong>VLAN 1</strong>.
+              Um cabo de console é conectado a um PC host para que as configurações lógicas básicas iniciais da SVI possam ser injetadas
+              pela primeira vez.</span
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem; margin-bottom: 0.5rem"><strong>Esquema de Conexão e Topologia de Gerenciamento:</strong></p>
+          <div class="terminal">
+            <pre>
+   +-------------------+
+   |      [ PC1 ]      |
+   +---------+---------+
+             |
+             | (Cabo do Console)
+             |
+   +---------v---------+                           +-------------------+
+   |      [ S1 ]       |---------------------------|      [ R1 ]       |
+   |  Switch Catalyst  |   (Link de Camada 2)      |     Roteador      |
+   +-------------------+                           +---------+---------+
+    SVI (VLAN 99)                                            |
+    IP: 172.17.99.11/24                                      | Gateway Padrão:
+    IPv6: 2001:db8:acad:99::11/64                            | 172.17.99.1
+                                                             | 2001:db8:acad:99::1</pre
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem; margin-bottom: 0.5rem">
+            <strong>Sintaxe CLI para Ativação da Interface SVI e Gateway (IPv4 e IPv6):</strong>
+          </p>
+          <div class="terminal">
+            <pre>
+S1# configure terminal
+S1(config)# interface vlan 99
+S1(config-if)# ip address 172.17.99.11 255.255.255.0
+S1(config-if)# ipv6 address 2001:db8:acad:99::11/64
+S1(config-if)# no shutdown
+S1(config-if)# exit
+S1(config)# ip default-gateway 172.17.99.1
+S1(config)# end
+S1# copy running-config startup-config</pre
+            >
+          </div>
+
+          <p style="margin-top: 2rem; margin-bottom: 0.5rem"><strong>Parâmetros Fundamentais para Acesso Remoto:</strong></p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 30%">Componente</th>
+                <th style="width: 70%">Finalidade e Mecânica Operacional</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Endereço IP / Máscara</code></td>
+                <td>Identifica logicamente o switch dentro da sub-rede local, permitindo o tráfego IP direto.</td>
+              </tr>
+              <tr>
+                <td><code>Switch Virtual Interface (SVI)</code></td>
+                <td>Interface lógica associada a uma VLAN (ex: VLAN 1 ou VLAN 99) que atua como o host IP do switch.</td>
+              </tr>
+              <tr>
+                <td><code>Gateway Padrão (Default Gateway)</code></td>
+                <td>
+                  Endereço IP do roteador local. Sem ele, o switch não consegue responder a conexões SSH/Telnet originadas de sub-redes
+                  remotas.
+                </td>
+              </tr>
+              <tr>
+                <td><code>Cabo de Console</code></td>
+                <td>Meio de acesso out-of-band essencial. Utilizado antes do switch possuir qualquer configuração IP funcional.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span
+              ><strong>Diretriz de Segurança:</strong> Em ambientes de produção reais, evite utilizar a VLAN 1 nativa para o gerenciamento
+              do switch. Recomenda-se criar uma VLAN dedicada e segura (como a VLAN 99 exemplificada no diagrama) para isolar o tráfego
+              administrativo.</span
+            >
+          </div>
+        </div>
+      </section>
+      <section id="secao1-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.1.6</span> Exemplo de Configuração do SVI do Switch
+        </h2>
+
+        <div class="card">
+          <p>
+            Por padrão, o switch está configurado para ter seu gerenciamento controlado pela <strong>VLAN 1</strong>. Todas as portas são
+            atribuídas à VLAN 1 por default. Por motivos de segurança, é uma prática recomendada usar uma VLAN diferente da VLAN 1 para a
+            VLAN de gerenciamento, como a <strong>VLAN 99</strong> no exemplo abaixo.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Observação:</strong> O SVI para a VLAN 99 não aparecerá como "up/up" até que a VLAN 99 seja criada e haja um dispositivo
+            conectado a uma porta de switch associada à VLAN 99.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-sliders-h"></i> Passo 1: Configurar a Interface de Gerenciamento</h3>
+          <p>
+            No modo de configuração da interface VLAN, um endereço IPv4 e uma máscara de sub-rede são aplicados ao SVI de gerenciamento do
+            switch.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Observação IPv6:</strong> O switch pode precisar ser configurado para IPv6. Por exemplo, antes de configurar o
+            endereçamento IPv6 em um Cisco Catalyst 2960 executando o IOS versão 15.0, você precisará inserir o comando de configuração
+            global <code>sdm prefer dual-ipv4-and-ipv6 default</code> e, em seguida, dar um <code>reload</code> no switch.
+          </div>
+
+          <div class="table-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Tarefa</th>
+                  <th>Comandos IOS (Modo de Configuração)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Entre no modo de configuração global.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>configure terminal</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Entre no modo de configuração da interface para SVI.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config)# <strong>interface vlan 99</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Configure o endereço IPv4 da interface de gerenciamento.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>ip address 172.17.99.11 255.255.255.0</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Configure o endereço IPv6 da interface de gerenciamento.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>ipv6 address 2001:db8:acad:99::1/64</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Ative a interface de gerenciamento.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>no shutdown</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Volte para o modo EXEC privilegiado.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>end</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Salve a configuração atual na configuração de inicialização.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>copy running-config startup-config</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-route"></i> Passo 2: Configurar o Gateway Padrão</h3>
+          <p>
+            O switch deve ser configurado com um gateway padrão se for gerenciado remotamente a partir de redes que não estão diretamente
+            conectadas.
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Observação de Gateway:</strong> Como ele receberá suas informações de gateway padrão de uma mensagem de anúncio de
+            roteador (RA), o switch não requer um gateway padrão IPv6.
+          </div>
+
+          <div class="table-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Tarefa</th>
+                  <th>Comandos IOS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Entre no modo de configuração global.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>configure terminal</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Configure o gateway padrão do switch.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config)# <strong>ip default-gateway 172.17.99.1</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Volte para o modo EXEC privilegiado.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config)# <strong>end</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Salve a configuração atual na configuração de inicialização.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>copy running-config startup-config</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-eye"></i> Passo 3: Verificar Configuração</h3>
+          <p>
+            Os comandos <code>show ip interface brief</code> e <code>show ipv6 interface brief</code> são úteis para determinar o status das
+            interfaces físicas e virtuais. A saída mostrada confirma que a interface VLAN 99 foi configurada com um endereço IPv4 e IPv6.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>Aviso de Camada 3:</strong> Um endereço IP aplicado ao SVI é apenas para acesso de gerenciamento remoto ao switch; isso
+            não permite que o switch roteie pacotes de Camada 3.
+          </div>
+
+          <div class="terminal">
+            <pre>
+S1# show ip interface brief
+Interface    IP-Address       OK? Method Status                Protocol
+Vlan99       172.17.99.11     YES manual down                  down
+(output omitted)
+
+S1# show ipv6 interface brief
+Vlan99       [down/down]
+    FE80::C27B:BCFF:FEC4:A9C1
+    2001:DB8:ACAD:99::11
+(output omitted)</pre
+            >
+          </div>
+        </div>
+      </section>
+      <section id="secao1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">1.2.1</span> Comunicação duplex
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-sliders-h"></i> Configurar portas de switch</h3>
+          <p>
+            As portas de um switch podem ser configuradas de forma independente para diferentes necessidades. Este tópico aborda como
+            configurar portas do switch, como verificar suas configurações, erros comuns e como solucionar problemas de configuração do
+            switch.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-bolt"></i> Comunicação Full-Duplex</h3>
+          <p>
+            A comunicação <strong>full-duplex</strong> aumenta a eficiência da largura de banda, permitindo que ambas as extremidades de uma
+            conexão transmitam e recebam dados simultaneamente. Isso também é conhecido como comunicação bidirecional e requer
+            microssegmentação.
+          </p>
+          <p>
+            Uma LAN microssegmentada é criada quando uma porta do switch tem apenas um dispositivo conectado e está operando no modo
+            full-duplex. Não há domínio de colisão associado a uma porta de switch operando no modo full-duplex.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-hands-helping"></i> Comunicação Half-Duplex</h3>
+          <p>
+            Ao contrário da comunicação full-duplex, a comunicação <strong>half-duplex</strong> é unidirecional. A comunicação semi-duplex
+            cria problemas de desempenho porque os dados podem fluir em apenas uma direção por vez, geralmente resultando em colisões.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-history"></i>
+            <strong>Hardware Legado:</strong> As conexões semi-duplex são normalmente vistas em hardware mais antigo, como hubs. A
+            comunicação full-duplex substituiu o half-duplex na maioria dos hardwares modernos.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-project-diagram"></i> Diagrama de Fluxo: Duplex vs Half-Duplex</h3>
+          <p class="text-dim">Comparativo visual dos métodos de transmissão de dados em portas de switches Cisco.</p>
+
+          <style>
+            .duplex-diagram-container {
+              display: flex;
+              flex-direction: column;
+              gap: 1.5rem;
+              margin: 1.5rem 0;
+            }
+            .diagram-row {
+              background: #0d1117;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 1.5rem;
+            }
+            .diagram-row-title {
+              color: var(--primary);
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 1rem;
+              text-align: center;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+            .topology-view {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 2rem;
+              position: relative;
+            }
+            .node-box {
+              background: var(--bg-card);
+              border: 2px solid var(--border);
+              border-radius: 8px;
+              padding: 0.75rem 1.2rem;
+              text-align: center;
+              min-width: 110px;
+              color: #ffffff;
+              font-weight: 500;
+            }
+            .node-box i {
+              font-size: 1.2rem;
+              margin-bottom: 0.25rem;
+              display: block;
+            }
+            .flow-arrows {
+              flex-grow: 1;
+              max-width: 300px;
+              display: flex;
+              flex-direction: column;
+              gap: 0.5rem;
+              position: relative;
+            }
+            .arrow-line {
+              height: 4px;
+              position: relative;
+              border-radius: 2px;
+            }
+            .arrow-line::after {
+              content: '';
+              position: absolute;
+              top: -4px;
+              width: 0;
+              height: 0;
+              border-style: solid;
+            }
+            .arrow-right {
+              background: var(--success);
+            }
+            .arrow-right::after {
+              right: -2px;
+              border-width: 6px 0 6px 10px;
+              border-color: transparent transparent transparent var(--success);
+            }
+            .arrow-left {
+              background: #00cc6a;
+            }
+            .arrow-left::after {
+              left: -2px;
+              border-width: 6px 10px 6px 0;
+              border-color: transparent #00cc6a transparent transparent;
+            }
+            .arrow-half {
+              background: var(--warning);
+            }
+            .arrow-half::after {
+              right: -2px;
+              border-width: 6px 0 6px 10px;
+              border-color: transparent transparent transparent var(--warning);
+            }
+            .flow-label {
+              text-align: center;
+              font-size: 0.8rem;
+              color: var(--text-dim);
+              margin-top: 0.5rem;
+              font-family: 'Inter', sans-serif;
+            }
+            @media (max-width: 576px) {
+              .topology-view {
+                gap: 0.75rem;
+              }
+              .node-box {
+                min-width: 70px;
+                font-size: 0.8rem;
+                padding: 0.5rem;
+              }
+            }
+          </style>
+
+          <div class="duplex-diagram-container">
+            <div class="diagram-row">
+              <div class="diagram-row-title">Comunicação Full-Duplex</div>
+              <div class="topology-view">
+                <div class="node-box" style="border-color: var(--primary)"><i class="fas fa-server"></i> Switch A</div>
+                <div class="flow-arrows">
+                  <div class="arrow-line arrow-right"></div>
+                  <div class="arrow-line arrow-left"></div>
+                  <div class="flow-label">Enviar E receber simultaneamente</div>
+                </div>
+                <div class="node-box" style="border-color: var(--primary)"><i class="fas fa-server"></i> Switch B</div>
+              </div>
+            </div>
+
+            <div class="diagram-row">
+              <div class="diagram-row-title" style="color: var(--warning)">Comunicação Half-Duplex</div>
+              <div class="topology-view">
+                <div class="node-box"><i class="fas fa-server"></i> Switch A</div>
+                <div class="flow-arrows">
+                  <div class="arrow-line arrow-half"></div>
+                  <div class="flow-label" style="color: var(--warning)">Enviar OU receber</div>
+                </div>
+                <div class="node-box" style="border-color: var(--danger)"><i class="fas fa-hdd"></i> Hub Antigo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-microchip"></i> Requisitos Modernos de Infraestrutura</h3>
+          <p>A evolução dos padrões de rede tornou a transmissão simultânea obrigatória para as tecnologias de alta velocidade atuais.</p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-bolt"></i>
+            <strong>Alta Performance:</strong> A Ethernet Gigabit e as NICs de 10 Gb requerem conexões full-duplex para operar. No modo
+            full-duplex, o circuito de detecção de colisão na NIC está desativado.
+          </div>
+
+          <p>
+            O full-duplex oferece <strong>100% de eficiência</strong> em ambas as direções (transmissão e recepção). Isso resulta em uma
+            duplicação do uso potencial da largura de banda declarada no link de rede.
+          </p>
+        </div>
+      </section>
+      <section id="secao1.2.2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-microchip"></i>
+          <span class="section-number">1.2.2</span> Configurar as portas de switch na camada física
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-sync-alt"></i> Configuração Padrão e Autonegociação</h3>
+          <p>
+            A configuração padrão para duplex e velocidade para portas de switch nos switches Cisco Catalyst 2960 e 3560 é automática. As
+            portas 10/100/1000 operam no modo semi-duplex ou full-duplex quando estão definidas para 10 ou 100 Mbps e operam apenas no modo
+            full-duplex quando está definido para 1000 Mbps (1 Gbps).
+          </p>
+          <p>
+            A negociação automática é útil quando as configurações de velocidade e duplex do dispositivo que se conecta à porta são
+            desconhecidas ou podem ser alteradas. Ao conectar-se a dispositivos conhecidos, como servidores, estações de trabalho dedicadas
+            ou dispositivos de rede, uma <strong>prática recomendada é definir manualmente</strong> as configurações de velocidade e duplex.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>Aviso de Mismatch (Incompatibilidade):</strong> Configurações incompatíveis para o modo duplex e a velocidade das portas
+            do switch podem causar problemas de conectividade. A falha de negociação automática cria configurações incompatíveis. Ao
+            solucionar problemas de porta do switch, é mandatório que essas configurações sejam verificadas.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-sitemap"></i> Topologia de Conexão Manual</h3>
+          <p class="text-dim">
+            As portas do switch podem ser configuradas manualmente com configurações de duplex e velocidade específicas. Exemplo de enlace
+            forçado em Full-Duplex a 100 Mbps.
+          </p>
+
+          <style>
+            /* Novo envoltório para garantir a rolagem sem quebras */
+            .topo-responsive {
+              width: 100%;
+              overflow-x: auto !important;
+              -webkit-overflow-scrolling: touch;
+              margin: 1.5rem 0;
+              padding-bottom: 0.5rem; /* Espaço para a barra de rolagem não cobrir o conteúdo */
+            }
+
+            .topo-container {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start; /* Alinha ao início para a rolagem fluir bem */
+              gap: 1rem;
+              background: #0d1117;
+              padding: 2rem 1.5rem;
+              border-radius: 12px;
+              border: 1px solid var(--border);
+              flex-wrap: nowrap !important; /* Proíbe terminantemente os dispositivos de irem para a linha de baixo */
+              min-width: 750px; /* Garante que a estrutura mantenha tamanho de rede em telas pequenas */
+            }
+
+            .topo-device {
+              background: var(--bg-card);
+              border: 2px solid var(--border);
+              border-radius: 8px;
+              padding: 0.8rem;
+              text-align: center;
+              min-width: 110px;
+              flex-shrink: 0; /* Impede que o card do dispositivo seja esmagado */
+            }
+
+            .topo-device i {
+              font-size: 1.5rem;
+              color: var(--text);
+              margin-bottom: 0.4rem;
+            }
+
+            .topo-device.active {
+              border-color: var(--primary);
+            }
+
+            .topo-device.active i {
+              color: var(--primary);
+            }
+
+            .topo-link {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              flex-grow: 1;
+              min-width: 80px; /* Mantém um espaçamento mínimo para o cabo aparecer */
+              max-width: 150px;
+              position: relative;
+              flex-shrink: 0; /* Impede que o cabo suma */
+            }
+
+            .topo-line {
+              width: 100%;
+              height: 2px;
+              background: var(--text-dim);
+            }
+
+            .topo-line.truncal {
+              background: var(--primary);
+              height: 3px;
+            }
+
+            .port-label {
+              font-family: monospace;
+              font-size: 0.75rem;
+              color: var(--text-dim);
+              margin-bottom: 2px;
+              white-space: nowrap;
+            }
+
+            .badge-config {
+              background: rgba(0, 255, 136, 0.1);
+              border: 1px solid var(--primary);
+              color: var(--primary);
+              font-size: 0.72rem;
+              padding: 0.3rem 0.4rem;
+              border-radius: 6px;
+              margin-top: 0.5rem;
+              text-align: center;
+              white-space: nowrap;
+            }
+          </style>
+
+          <div class="topo-responsive">
+            <div class="topo-container">
+              <div class="topo-device">
+                <i class="fas fa-desktop"></i>
+                <div>PC1</div>
+              </div>
+
+              <div class="topo-link">
+                <span class="port-label">F0/18</span>
+                <div class="topo-line"></div>
+              </div>
+
+              <div class="topo-device active">
+                <i class="fas fa-server"></i>
+                <div>S1</div>
+                <div class="badge-config">Modo Full-Duplex<br />100 Mbps</div>
+              </div>
+
+              <div class="topo-link">
+                <span class="port-label">F0/1</span>
+                <div class="topo-line class topo-line truncal"></div>
+                <span class="port-label">F0/1</span>
+              </div>
+
+              <div class="topo-device active">
+                <i class="fas fa-server"></i>
+                <div>S2</div>
+                <div class="badge-config">Modo Full-Duplex<br />100 Mbps</div>
+              </div>
+
+              <div class="topo-link">
+                <span class="port-label">&nbsp;</span>
+                <div class="topo-line"></div>
+              </div>
+
+              <div class="topo-device">
+                <i class="fas fa-desktop"></i>
+                <div>PC2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Guia de Comandos IOS para Configuração Manual</h3>
+          <p>
+            A tabela abaixo apresenta os comandos necessários para configurar manualmente a interface <strong>FastEthernet 0/1</strong> do
+            switch <strong>S1</strong> para operar em full-duplex a 100 Mbps. Os mesmos comandos podem ser replicados em S2.
+          </p>
+
+          <div class="table-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Tarefa</th>
+                  <th>Comandos IOS (Modo CLI)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Entre no modo de configuração global.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>configure terminal</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Entre no modo de configuração da interface.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config)# <strong>interface FastEthernet 0/1</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Configure o duplex da interface.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>duplex full</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Configure a velocidade da interface.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>speed 100</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Volte para o modo EXEC privilegiado.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1(config-if)# <strong>end</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Salve a configuração atual na inicialização.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>copy running-config startup-config</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-glass-martini-alt"></i> Interfaces de Fibra Óptica</h3>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Exceção de Hardware:</strong> Todas as portas de fibra óptica, como as portas 1000BASE-SX, operam apenas em uma
+            velocidade predefinida e são sempre full-duplex. A autonegociação não se aplica a esses meios físicos.
+          </div>
+        </div>
+      </section>
+      <section id="secao1.2.3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-toggle-on"></i>
+          <span class="section-number">1.2.3</span> MDIX Automático
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-project-diagram"></i> O que é o Auto-MDIX?</h3>
+          <p>
+            Até recentemente, certos tipos de cabo (direto ou cruzado) eram necessários ao conectar dispositivos. Conexões switch para
+            switch ou switch para roteador necessitavam do uso de diferentes cabos Ethernet.
+          </p>
+          <p>
+            O uso do recurso de <strong>cruzamento automático da interface dependente do meio (auto-MDIX)</strong> em uma interface elimina
+            esse problema. Quando o auto-MDIX está ativado, a interface detecta automaticamente o tipo de conexão de cabo necessário (direto
+            ou cruzado) e configura a conexão adequadamente.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Cenário Sem Auto-MDIX:</strong> Ao se conectar a switches sem o recurso MDIX automático, os cabos
+            <em>straight-through</em> (diretos) devem ser usados para conectar a dispositivos como servidores, estações de trabalho ou
+            roteadores. Os cabos do tipo <em>crossover</em> (cruzados) devem ser usados para conectar a outros switches ou repetidores.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-tools"></i> Requisitos para Funcionamento</h3>
+          <p>
+            Com o MDIX automático ativado, qualquer tipo de cabo pode ser usado para conectar a outros dispositivos e a interface se ajusta
+            automaticamente para uma comunicação bem-sucedida.
+          </p>
+          <p>Em switches Cisco mais recentes, o comando <code>mdix auto</code> no modo de configuração de interface habilita o recurso.</p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-shield-alt"></i>
+            <strong>Regra Crítica do IOS:</strong> Ao usar o auto-MDIX em uma interface, a velocidade (<code>speed</code>) e o duplex
+            (<code>duplex</code>) da interface devem ser configurados como <strong>auto</strong> para que o recurso funcione corretamente.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Habilitando o Auto-MDIX no Switch</h3>
+          <p class="text-dim">
+            O comando para habilitar o Auto-MDIX é emitido no modo de configuração da interface no switch, conforme mostrado abaixo:
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config-if)# <strong>mdix auto</strong></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-info-circle"></i> Observação de Hardware</h3>
+          <div class="alert alert-info">
+            <i class="fas fa-microchip"></i>
+            <strong>Disponibilidade:</strong> O recurso Auto-MDIX é ativado por padrão nos switches Catalyst 2960 e Catalyst 3560, mas não
+            está disponível nos switches Catalyst 2950 e Catalyst 3550 mais antigos.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-search"></i> Verificando o Status do Auto-MDIX</h3>
+          <p>
+            Para examinar a configuração Auto-MDIX para uma interface específica, use o comando
+            <code>show controllers ethernet-controller</code> com a palavra-chave <code>phy</code>. Para limitar a saída às linhas que fazem
+            referência ao Auto-MDIX, use o filtro <code>| include Auto-MDIX</code>. Como mostrado, a saída indica se está
+            <strong>On</strong> ou <strong>Off</strong> para o recurso.
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show controllers ethernet-controller fa0/1 phy | include MDIX</strong>
+Auto-MDIX          : On   [AdminState=1  Flags=0x00052248]</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao1.2.4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">1.2.4</span> Comandos de verificação de switch
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-search-plus"></i> Verificação e Diagnóstico do IOS</h3>
+          <p>
+            A tabela resume alguns dos comandos de verificação de switch mais úteis para validar o estado operacional, arquivos de
+            configuração, tabelas de encaminhamento e parâmetros de hardware.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Guia de Comandos Práticos de Verificação</h3>
+          <p class="text-dim">
+            Execute estes comandos a partir do modo EXEC privilegiado (<code>#</code>) para inspecionar o switch Cisco Catalyst.
+          </p>
+
+          <div class="table-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Tarefa</th>
+                  <th>Comandos IOS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Exibir o status e a configuração da interface.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show interfaces</strong> [<em>interface-id</em>]</pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir a configuração atual de inicialização.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show startup-config</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir a configuração atual em execução.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show running-config</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir informações sobre o sistema de arquivos da memória flash.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show flash</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir o status de hardware e software do sistema.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show version</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibe o histórico do comando digitado.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show history</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir informações de IP sobre uma interface.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show ip interface</strong> [<em>interface-id</em>]</pre>
+                    </div>
+                    <div class="text-dim" style="margin: 0.3rem 0; font-size: 0.8rem; text-align: center">OU</div>
+                    <div class="terminal">
+                      <pre>S1# <strong>show ipv6 interface</strong> [<em>interface-id</em>]</pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir a tabela de endereços MAC.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show mac-address-table</strong></pre>
+                    </div>
+                    <div class="text-dim" style="margin: 0.3rem 0; font-size: 0.8rem; text-align: center">OU</div>
+                    <div class="terminal">
+                      <pre>S1# <strong>show mac address-table</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-graduation-cap"></i> Dica de Exame e Operação</h3>
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Prática Recomendada:</strong> Combinar o uso do comando <code>show running-config</code> com comandos específicos como
+            <code>show ip interface brief</code> ajuda a diagnosticar rapidamente falhas físicas em portas de switches sem precisar ler todo
+            o arquivo de configuração do sistema.
+          </div>
+        </div>
+      </section>
+      <section id="secao1.2.5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-search"></i>
+          <span class="section-number">1.2.5</span> Verifique a configuração da porta do switch
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-file-alt"></i> Análise com o comando <code>show running-config</code></h3>
+          <p>
+            O comando <code>show running-config</code> pode ser usado para verificar se o switch foi configurado corretamente. A partir da
+            saída abreviada da amostra em S1, algumas informações importantes são mostradas:
+          </p>
+
+          <ul>
+            <li>A interface FastEthernet 0/18 é configurada com o gerenciamento VLAN 99.</li>
+            <li>A VLAN 99 é configurada com um endereço IPv4 172.17.99.11 255.255.255.0.</li>
+            <li>O gateway padrão está definido como 172.17.99.1.</li>
+          </ul>
+
+          <div class="terminal">
+            <pre>S1# <strong>show running-config</strong>
+Building configuration...
+Current configuration : 1466 bytes
+!
+interface FastEthernet0/18
+ switchport access vlan 99
+ switchport mode access
+!
+(output omitted)
+!
+interface Vlan99
+ ip address 172.17.99.11 255.255.255.0
+ ipv6 address 2001:DB8:ACAD:99::1/64
+!
+ip default-gateway 172.17.99.1</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-chart-bar"></i> Análise detalhada com <code>show interfaces</code></h3>
+          <p>
+            O comando <code>show interfaces</code> é outro comando comumente usado, que exibe informações de status e estatísticas nas
+            interfaces de rede do switch. O comando <code>show interfaces</code> é freqüentemente usado ao configurar e monitorar
+            dispositivos de rede.
+          </p>
+
+          <p>
+            A primeira linha da saída para o comando <code>show interfaces fastEthernet 0/18</code> indica que a interface FastEthernet 0/18
+            está <strong>up/up</strong>, o que significa que está operacional. Mais abaixo, a saída mostra que o duplex está cheio
+            (<strong>Full-duplex</strong>) e a velocidade é de <strong>100 Mbps</strong>.
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces fastEthernet 0/18</strong>
+FastEthernet0/18 is up, line protocol is up (connected)
+  Hardware is Fast Ethernet, address is 0025.83e6.9092 (bia 0025.83e6.9092)
+  MTU 1500 bytes, BW 100000 Kbit/sec, DLY 100 usec,
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full-duplex, 100Mb/s, media type is 10/100BaseTX</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao1.2.6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">1.2.6</span> Problemas da camada de acesso à rede
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-eye"></i> Diagnóstico com <code>show interfaces</code></h3>
+          <p>
+            A saída do comando <code>show interfaces</code> é útil para detectar problemas comuns de mídia. Uma das partes mais importantes
+            dessa saída é a exibição do status do protocolo de link de linha e dados, conforme mostrado no exemplo.
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces fastEthernet 0/18</strong>
+FastEthernet0/18 is up, line protocol is up (connected)
+Hardware is Fast Ethernet, address is 0025.83e6.9092 (bia 0025.83e6.9092)MTU 1500 bytes, BW 100000 Kbit/s...</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-sliders-h"></i> Entendendo os Parâmetros de Status</h3>
+          <p>A primeira linha do comando traz dois indicadores cruciais para a análise do analista de redes:</p>
+
+          <ul>
+            <li>
+              <strong>Primeiro parâmetro (FastEthernet0/18 está ativo/up):</strong> Refere-se à camada de hardware e indica se a interface
+              está recebendo um sinal de detecção de portadora.
+            </li>
+            <li>
+              <strong>Segundo parâmetro (line protocol is up):</strong> Refere-se à camada de link de dados e indica se os protocolos
+              keepalive da camada de link de dados estão sendo recebidos.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-toolbox"></i> Guia de Correção de Problemas</h3>
+          <p>Com base na saída do comando <code>show interfaces</code>, possíveis problemas podem ser corrigidos da seguinte forma:</p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-plug"></i>
+            <strong>Interface Ativa / Protocolo Inativo (up/down):</strong> Se a interface estiver ativa e o protocolo de linha estiver
+            inativo, existe um problema. Pode haver uma incompatibilidade de tipo de encapsulamento, a interface na outra extremidade pode
+            estar desativada por erro ou pode haver um problema de hardware.
+          </div>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-times-circle"></i>
+            <strong>Ambos Desligados (down/down):</strong> Se o protocolo de linha e a interface estiverem ambos desligados, um cabo não
+            está ligado ou existe algum outro problema de interface. Por exemplo, em uma conexão back-to-back, a outra extremidade da
+            conexão pode estar administrativamente inativa.
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-ban"></i>
+            <strong>Administrativamente Inativa (administratively down):</strong> Se a interface estiver administrativamente desativada, ela
+            foi desativada manualmente (o comando <code>shutdown</code> foi emitido) na configuração ativa.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-calculator"></i> Próxima Etapa: Contadores de Erro</h3>
+          <p>
+            A saída do comando <code>show interfaces</code> também exibe contadores e estatísticas para a interface examinada, permitindo
+            identificar erros de transmissão acumulados no meio físico.
+          </p>
+        </div>
+      </section>
+      <section id="secao1.2.7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span class="section-number">1.2.7</span> Erros de entrada e saída de interface
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-sign-in-alt"></i> O que são Erros de Entrada (Input Errors)?</h3>
+          <p>
+            "Erros de entrada" é a soma de todos os erros em datagramas recebidos na interface que está sendo examinada. Isso inclui
+            contagem de runts, giants, CRC, no buffer, frame, overrun e ignored. Os erros de entrada relatados do comando
+            <code>show interfaces</code> incluem o seguinte:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Frames Runt:</strong> Quadros Ethernet que são mais curtos do que o comprimento mínimo permitido de 64 bytes são
+              chamados de runts. NICs com funcionamento inadequado normalmente são a causa de quadros runt em excesso, mas sua causa também
+              se dá por colisões.
+            </li>
+            <li><strong>Giants:</strong> Os quadros Ethernet maiores que o tamanho máximo permitido são chamados gigantes.</li>
+            <li>
+              <strong>CRC errors:</strong> Nas interfaces Ethernet e serial, os erros CRC geralmente indicam um erro de mídia ou cabo. As
+              causas mais comuns incluem interferência elétrica, conexões soltas ou danificadas ou cabeamento incorreto. Se houver muitos
+              erros de CRC, há muito ruído no link, e você deve verificar o cabo. Você também deve procurar as causas do ruído e
+              eliminá-las.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-sign-out-alt"></i> O que são Erros de Saída (Output Errors)?</h3>
+          <p>
+            "Output errors" refere-se à soma de todos os erros que impediram a transmissão final de datagramas para fora da interface que
+            está sendo examinada. Os erros de saída relatados do comando <code>show interfaces</code> incluem o seguinte:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Collisions:</strong> Colisões em operações half-duplex são normais. No entanto, você jamais verá colisões em uma
+              interface configurada para a comunicação de duplex completo.
+            </li>
+            <li>
+              <strong>Late collisions:</strong> Uma colisão tardia refere-se a uma colisão que ocorre após a transmissão de 512 bits do
+              quadro. Comprimentos excessivos de cabos são a causa mais comum de colisões tardias. Outra causa comum é a configuração
+              incorreta de duplex. Por exemplo, você pode ter uma extremidade de uma conexão configurada para full-duplex e a outra para
+              half-duplex. Você veria colisões tardias na interface configurada para half-duplex. Nesse caso, você deve configurar a mesma
+              configuração duplex em ambas as extremidades. Uma rede corretamente projetada e configurada nunca deve ter colisões tardias.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Saída do IOS com os Contadores Ativos</h3>
+          <p class="text-dim">
+            Observe a análise minuciosa dos contadores estatísticos em uma interface FastEthernet. Os valores críticos foram realçados em
+            amarelo para facilitar a monitoração:
+          </p>
+
+          <style>
+            .highlight-orange {
+              color: #ff9f43;
+              font-weight: bold;
+            }
+          </style>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces fastEthernet 0/18</strong>
+FastEthernet0/18 is up, line protocol is up (connected)
+  Hardware is Fast Ethernet, address is 0025.83e6.9092 (bia 0025.83e6.9092)
+  MTU 1500 bytes, BW 100000 Kbit/sec, DLY 100 usec,
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full-duplex, 100Mb/s, media type is 10/100BaseTX
+  input flow-control is off, output flow-control is unsupported
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input never, output 00:00:01, output hang never
+  Last clearing of "show interface" counters never
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/40 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 0 bits/sec, 0 packets/sec
+     2295197 packets input, 305539992 bytes, 0 no buffer
+     Received 1925500 broadcasts (74 multicasts)
+     <span class="highlight-orange">0 runts, 0 giants</span>, 0 throttles
+     <span class="highlight-orange">3 input errors, 3 CRC, 0 frame, 0 overrun, 0 ignored</span>
+     0 watchdog, 74 multicast, 0 pause input
+     0 input packets with dribble condition detected
+     3594664 packets output, 436549843 bytes, 0 underruns
+     <span class="highlight-orange">8 output errors, 0 collisions, 10 interface resets</span>
+     0 unknown protocol drops
+     0 babbles, <span class="highlight-orange">235 late collision</span>, 0 deferred</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-table"></i> Tabela Informativa de Erros Comuns</h3>
+          <p>
+            Alguns erros de mídia não são graves o suficiente para fazer com que o circuito falhe, mas causam problemas de desempenho da
+            rede. A tabela explica alguns desses erros comuns que podem ser detectados usando o comando <code>show interfaces</code>.
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Tipo de erro</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Erros de input</strong></td>
+                <td>Número total de erros. Inclui runts, gigantes, sem buffer, CRC, quadro, sobrecarga e contagens ignoradas.</td>
+              </tr>
+              <tr>
+                <td><strong>Runts</strong></td>
+                <td>
+                  Pacotes descartados por serem menores que o mínimo tamanho do pacote para o meio. Por exemplo, qualquer pacote Ethernet
+                  que seja menos de 64 bytes é considerado um runt.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Giants</strong></td>
+                <td>
+                  Pacotes descartados porque excedem o tamanho máximo do pacote para o meio. Por exemplo, qualquer pacote Ethernet maior que
+                  1.518 bytes é considerado um gigante.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>CRC</strong></td>
+                <td>Erros CRC são gerados quando a soma de verificação calculada não é a mesma que a soma de verificação recebida.</td>
+              </tr>
+              <tr>
+                <td><strong>Erros de output</strong></td>
+                <td>Soma de todos os erros que impediram a transmissão final dos datagramas da interface que está sendo examinada.</td>
+              </tr>
+              <tr>
+                <td><strong>Colisões</strong></td>
+                <td>Número de mensagens retransmitidas devido a uma colisão Ethernet.</td>
+              </tr>
+              <tr>
+                <td><strong>Late Collisions</strong></td>
+                <td>Uma colisão que ocorre após 512 bits do quadro terem sido transmitidos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao1.2.8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">1.2.8</span> Solucionando problemas da camada de acesso à rede
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-network-wired"></i> Cenário de Falhas na Infraestrutura</h3>
+          <p>
+            A maioria dos problemas que afetam uma rede comutada são encontrados durante a implementação original. Teoricamente, depois de
+            instalada, uma rede continua a operar sem problemas. No entanto, o cabeamento fica danificado, as configurações mudam e os novos
+            dispositivos são conectados ao switch que exigem alterações na configuração do switch. É necessária manutenção contínua e
+            solução de problemas da infraestrutura de rede.
+          </p>
+          <p class="text-dim">
+            Para solucionar problemas de cenários que não envolvem conexão ou conexão ruim entre um comutador e outro dispositivo, siga o
+            processo geral baseado no comando <code>show interfaces</code>.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-times-circle" style="color: #ff4d4d"></i> Etapa A: Se a Interface Estiver Desativada (Down)</h3>
+          <p>
+            Caso o comando <code>show interfaces</code> indique que a porta não está ativa, siga os seguintes procedimentos de hardware e
+            negociação:
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-plug"></i>
+            <strong>1. Verificação Física de Cabos:</strong> Verifique se os cabos apropriados estão sendo usados. Além disso, verifique se
+            há danos no cabo e nos conectores. Se houver suspeita de um cabo defeituoso ou incorreto, substitua o cabo imediatamente.
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-tachometer-alt"></i>
+            <strong>2. Incompatibilidade de Velocidade (Speed Mismatch):</strong> Se a interface ainda estiver inativa, o problema pode ser
+            devido a uma incompatibilidade na configuração de velocidade. A velocidade de uma interface é normalmente negociada
+            automaticamente; portanto, mesmo que seja aplicada manualmente a uma interface, a interface de conexão deve negociar
+            automaticamente de acordo. <br /><br />
+            Se ocorrer incompatibilidade de velocidade em função de uma configuração incorreta ou de um problema de hardware ou software,
+            isso pode causar a inatividade da interface. <strong>Defina manualmente a mesma velocidade em ambas as extremidades</strong> de
+            conexão se houver suspeita de problema.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-check-circle" style="color: #2ecc71"></i> Etapa B: Se a Interface Estiver Ativa (Up) com Problemas</h3>
+          <p>
+            Se a interface estiver ativa, mas os problemas de conectividade ainda estiverem presentes, use os contadores estatísticos para
+            diagnosticar falhas lógicas e elétricas:
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-bolt"></i>
+            <strong>1. Análise de Ruído Elétrico e EMI:</strong> Usando o comando <code>show interfaces</code>, verifique se há indicações
+            de ruído excessivo. As indicações podem incluir um aumento nos contadores para erros de <strong>runts</strong>,
+            <strong>gigantes (giants)</strong> e <strong>CRC</strong>. Se houver ruído excessivo, primeiro encontre e remova a fonte do
+            ruído, se possível. Além disso, verifique se o cabo não excede o comprimento máximo permitido para a categoria e verifique o
+            tipo de cabo usado.
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-hands-helping"></i>
+            <strong>2. Diagnóstico de Colisões e Duplex:</strong> Se o ruído não for um problema, verifique se há colisões excessivas. Se
+            houver colisões ou colisões tardias (late collisions), verifique as configurações duplex em ambas as extremidades da conexão.
+            <br /><br />
+            Assim como a configuração de velocidade, a configuração duplex geralmente é negociada automaticamente. Caso o problema não
+            pareça ser de incompatibilidade do duplex,
+            <strong>defina manualmente o duplex para full (completo) nas duas extremidades</strong> da conexão.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-sitemap"></i> Resumo Estruturado do Processo</h3>
+          <p class="text-dim">Seguindo a lógica do IOS, o fluxo final de troubleshooting resume-se em:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Condição da Porta</th>
+                <th>Causa Provável</th>
+                <th>Ação Corretiva Recomendada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Interface DOWN</strong></td>
+                <td>Cabo danificado, pinagem errada ou falha de Speed.</td>
+                <td>Substituir cabo ou fixar velocidade manualmente nas duas pontas.</td>
+              </tr>
+              <tr>
+                <td><strong>Interface UP (Com Runts/CRC)</strong></td>
+                <td>Interferência eletromagnética (EMI) ou cabo longo demais.</td>
+                <td>Isolar fonte de ruído e validar comprimento máximo do meio.</td>
+              </tr>
+              <tr>
+                <td><strong>Interface UP (Com Late Collisions)</strong></td>
+                <td>Incompatibilidade de Duplex (Half vs Full).</td>
+                <td>Forçar configuração para <code>duplex full</code> em ambos os switches.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao1.3.1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-unlock-alt"></i>
+          <span class="section-number">1.3.1</span> Operação Telnet
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-network-wired"></i> O que é e como funciona o Telnet?</h3>
+          <p>
+            Talvez você nem sempre tenha acesso direto ao switch quando precisar configurá-lo. Você precisa ser capaz de acessá-lo
+            remotamente e é imperativo que seu acesso seja seguro. Este tópico aborda como configurar o Secure Shell (SSH) para acesso
+            remoto. Uma atividade Packet Tracer lhe dá a oportunidade de experimentar isso sozinho.
+          </p>
+          <p>
+            Já o <strong>Telnet usa a porta 23</strong>. É um protocolo mais antigo que utiliza transmissão não segura de texto sem
+            formatação da autenticação de login (nome de usuário e senha) e dos dados transmitidos entre os dispositivos de comunicação.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-shield-alt"></i> Riscos de Segurança (Texto Claro)</h3>
+          <p>
+            Por não utilizar criptografia, qualquer tráfego trafegando via Telnet pode ser facilmente interceptado e interpretado na rede.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Ameaça de Interceptação:</strong> Um ator ameaçador pode monitorar pacotes usando o <strong>Wireshark</strong>. Por
+            exemplo, na análise de tráfego realizada, o ator de ameaça capturou com sucesso o nome de usuário <code>admin</code> e a senha
+            <code>ccna</code> de uma sessão ativa do Telnet.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-spider"></i> Captura de Tráfego: Wireshark (Follow TCP Stream)</h3>
+          <p class="text-dim">
+            Abaixo está a representação lúdica da reconstrução do fluxo TCP obtida pelo atacante ao farejar a porta 23:
+          </p>
+
+          <div class="terminal" style="background-color: #f8f9fa; color: #2c3e50; border-left: 5px solid #e74c3c; font-family: monospace">
+            <span style="color: #7f8c8d"># Wireshark - Follow TCP Stream (tcp.stream eq 0)</span><br />
+            <span style="color: #2980b9">User Access Verification</span><br /><br />
+            Username:
+            <span style="color: #e74c3c; font-weight: bold; background-color: #fce4d6; padding: 2px 4px; border-radius: 3px">admin</span
+            ><br />
+            Password:
+            <span style="color: #e74c3c; font-weight: bold; background-color: #fce4d6; padding: 2px 4px; border-radius: 3px">ccna</span
+            ><br /><br />
+            S1> <span style="color: #27ae60">_</span>
+          </div>
+        </div>
+      </section>
+      <section id="secao1.3.2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">1.3.2</span> Operação SSH
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-lock"></i> O que é o Secure Shell (SSH)?</h3>
+          <p>
+            O <strong>Secure Shell (SSH) é um protocolo seguro que usa a porta 22</strong>. Ele fornece uma conexão de gerenciamento segura
+            (criptografada) para um dispositivo remoto. O SSH deve substituir o Telnet para conexões de gerenciamento. O SSH fornece
+            segurança para conexões remotas criptografando o tráfego de autenticação (nome de usuário e senha) e os dados transmitidos.
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-user-secret"></i>
+            <strong>Proteção Wireshark:</strong> Ao contrário do Telnet, se um ator de ameaça interceptar o tráfego SSH com um analisador de
+            protocolo (como o Wireshark), as informações coletadas serão ilegíveis por estarem completamente criptografadas.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-spider"></i> Captura de Tráfego: Wireshark (Fluxo SSH Criptografado)</h3>
+          <p class="text-dim">
+            Uma captura de tela do Wireshark do tráfego SSH mostra dados ilegíveis que parecem "lixo eletrônico" para qualquer
+            interceptador:
+          </p>
+
+          <div class="terminal" style="background-color: #1e1e1e; color: #a5d6a7; border-left: 5px solid #2ecc71; font-family: monospace">
+            <span style="color: #7f8c8d"># Wireshark - Encrypted SSHv2 Packet Data</span><br />
+            <span style="color: #81d4fa">Data (144 bytes)</span><br />
+            9f3a c109 d4e2 5ba9 01ff 3c4d 2a1f 65b7<br />
+            e1c8 4b92 00fa d2c1 3ba1 4f2c 88aa 09d9<br />
+            [Encrypted Packet Payload: Username and Password Unreadable]
+          </div>
+        </div>
+      </section>
+      <section id="secao1.3.3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-key"></i>
+          <span class="section-number">1.3.3</span> Verifique se o Switch suporta SSH
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-shield-virus"></i> Recursos Criptográficos e a Imagem K9</h3>
+          <p>
+            Para habilitar o SSH em um switch Catalyst 2960, o switch deve estar usando uma versão do software IOS que inclua recursos e
+            recursos criptográficos (criptografados).
+          </p>
+
+          <p>
+            Use o comando <code>show version</code> no switch para ver qual IOS o switch está executando no momento. Um nome de arquivo IOS
+            que inclui a combinação <strong>"k9"</strong> suporta recursos e recursos criptográficos (criptografados). O exemplo mostra a
+            saída do comando <code>show version</code>:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show version</strong>
+Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE7, RELEASE SOFTWARE (fc1)</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-tasks"></i> Análise do Analista de Redes</h3>
+          <div class="alert alert-info">
+            <i class="fas fa-check-circle"></i>
+            <strong>Validação Prática:</strong> Ao ler a string <code>C2960-LANBASEK9-M</code> na saída do terminal, a presença do
+            <strong>K9</strong> confirma explicitamente que este equipamento possui as bibliotecas de criptografia necessárias para gerar
+            chaves RSA e executar o servidor SSH com segurança.
+          </div>
+        </div>
+      </section>
+      <section id="secao1.3.5" class="section">
+        <div class="card">
+          <h3><i class="fas fa-shield-alt"></i> 1.3.5 Verifique se o SSH está operacional</h3>
+          <p>
+            Em um PC, um cliente SSH, como o <strong>PuTTY</strong>, é usado para se conectar a um servidor SSH. Por exemplo, suponha que o
+            seguinte esteja configurado:
+          </p>
+
+          <ul style="margin: 1.5rem 0; padding-left: 1.5rem; color: var(--text); display: flex; flex-direction: column; gap: 0.5rem">
+            <li>SSH está habilitado no switch <strong>S1</strong></li>
+            <li>Interface VLAN 99 (SVI) com endereço IPv4 <strong>172.17.99.11</strong> no switch S1</li>
+            <li>PC1 com endereço IPv4 <strong>172.17.99.21</strong></li>
+          </ul>
+
+          <p class="text-dim" style="margin-bottom: 1.5rem">
+            A figura mostra as configurações de PuTTy do PC1 para iniciar uma conexão SSH com o endereço SVI VLAN IPv4 de S1.
+          </p>
+
+          <div
+            class="topo-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1.5rem 0"
+          >
+            <div
+              style="
+                background: #0d1117;
+                padding: 2rem;
+                border-radius: 12px;
+                border: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+                min-width: 650px;
+              "
+            >
+              <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; width: 100%">
+                <div
+                  style="
+                    text-align: center;
+                    background: var(--bg-card);
+                    padding: 0.8rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    min-width: 130px;
+                  "
+                >
+                  <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; font-size: 0.9rem">PC1</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim)">172.17.99.21</div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 200px">
+                  <div style="width: 100%; height: 2px; background: var(--primary)"></div>
+                </div>
+
+                <div
+                  style="
+                    text-align: center;
+                    background: var(--bg-card);
+                    padding: 0.8rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--primary);
+                    min-width: 130px;
+                  "
+                >
+                  <i class="fas fa-server" style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; font-size: 0.9rem">S1</div>
+                  <div style="font-size: 0.75rem; color: var(--primary)">172.17.99.11</div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  background: #f0f0f0;
+                  color: #000;
+                  padding: 1rem;
+                  border-radius: 6px;
+                  width: 100%;
+                  max-width: 500px;
+                  border: 1px solid #ccc;
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.8rem;
+                    border-bottom: 1px solid #ccc;
+                    padding-bottom: 0.3rem;
+                    margin-bottom: 0.8rem;
+                    font-weight: bold;
+                    color: #333;
+                  "
+                >
+                  <i class="fas fa-window-maximize" style="margin-right: 0.3rem"></i> PuTTY Configuration
+                </div>
+                <div style="display: flex; gap: 1rem; font-size: 0.75rem">
+                  <div style="border: 1px solid #ccc; background: #fff; padding: 0.4rem; min-width: 120px; height: 150px; color: #555">
+                    <strong>Category:</strong><br />
+                    └─ Session<br />
+                    └─ Terminal<br />
+                    └─ Window<br />
+                    └─ Connection<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;└─ SSH
+                  </div>
+                  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 0.8rem">
+                    <div style="border: 1px solid #ccc; padding: 0.5rem; background: #fff; border-radius: 4px">
+                      <span style="font-weight: bold; display: block; margin-bottom: 0.3rem; color: #222"
+                        >Specify the destination you want to connect to:</span
+                      >
+                      <label style="display: inline-block; margin-right: 1rem">
+                        Host Name (or IP address):<br />
+                        <input
+                          type="text"
+                          value="172.17.99.11"
+                          readonly
+                          style="width: 140px; padding: 0.2rem; border: 1px solid #999; font-weight: bold; background: #fff; color: #000"
+                        />
+                      </label>
+                      <label style="display: inline-block">
+                        Port:<br />
+                        <input
+                          type="text"
+                          value="22"
+                          readonly
+                          style="
+                            width: 40px;
+                            padding: 0.2rem;
+                            border: 1px solid #999;
+                            text-align: center;
+                            font-weight: bold;
+                            background: #fff;
+                            color: #000;
+                          "
+                        />
+                      </label>
+                    </div>
+                    <div style="border: 1px solid #ccc; padding: 0.5rem; background: #fff; border-radius: 4px; color: #222">
+                      <span style="font-weight: bold; display: block; margin-bottom: 0.2rem">Connection type:</span>
+                      <input type="radio" disabled /> Raw &nbsp; <input type="radio" disabled /> Telnet &nbsp;
+                      <input type="radio" checked style="accent-color: #0078d4" /> <strong>SSH</strong> &nbsp;
+                      <input type="radio" disabled /> Serial
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-dim" style="margin-top: 1.5rem">
+            Uma vez estabelecido o handshake, o console do terminal solicitará as credenciais definidas de segurança (usuário administrativo
+            e senha secreta).
+          </p>
+
+          <div class="terminal-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <div class="terminal" style="margin-top: 1rem">
+              <pre>
+login as: <strong>admin</strong>
+Using keyboard-interactive authentication.
+Password: <code>&lt;senha-escondida&gt;</code>
+
+S1> <strong>enable</strong>
+Password: <code>&lt;senha-enable-escondida&gt;</code>
+S1# </pre
+              >
+            </div>
+          </div>
+
+          <p class="text-dim" style="margin-top: 1.5rem">
+            Para auditar as conexões criptografadas ativas vindas do host remoto para o switch, utilize os seguintes comandos de validação
+            EXEC:
+          </p>
+
+          <div class="table-responsive" style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch">
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th>Objetivo Operacional</th>
+                  <th>Comando de Diagnóstico IOS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Verificar o status global e a versão do motor SSH no switch.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show ip ssh</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Exibir as conexões remotas SSH atualmente estabelecidas no switch.</td>
+                  <td>
+                    <div class="terminal">
+                      <pre>S1# <strong>show ssh</strong></pre>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2026 Cisco Networking Academy | CCNA 2 (SRWE) - Material Didático Estruturado</p>
-        </div>
+      <div class="container">
+        <p>&copy; 2026 Cisco Networking Academy | CCNA 2 (SRWE) - Material Didático Estruturado</p>
+      </div>
     </footer>
 
     <script>
-        class SidebarMenu {
-            constructor() {
-                this.sidebar = document.getElementById('sidebar');
-                this.overlay = document.getElementById('sidebarOverlay');
-                this.openBtn = document.getElementById('openMenu');
-                this.closeBtn = document.getElementById('closeMenu');
-                this.init();
-            }
-
-            init() {
-                if (!this.sidebar) return;
-
-                if (this.openBtn) {
-                    this.openBtn.addEventListener('click', () => this.open());
-                }
-                if (this.closeBtn) {
-                    this.closeBtn.addEventListener('click', () => this.close());
-                }
-                if (this.overlay) {
-                    this.overlay.addEventListener('click', () => this.close());
-                }
-
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
-                        this.close();
-                    }
-                });
-
-                const links = document.querySelectorAll('.sidebar .nav-modules a');
-                links.forEach(link => {
-                    link.addEventListener('click', () => this.close());
-                });
-            }
-
-            open() {
-                this.sidebar.classList.add('open');
-                this.overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            close() {
-                this.sidebar.classList.remove('open');
-                this.overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            new SidebarMenu();
-        });
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
     </script>
-</body>
+  </body>
 </html>

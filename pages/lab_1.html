@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab Switch Básico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+
+      <div class="badge-lab" style="margin-bottom: 0; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+
+      <a href="../labs/lab_1.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-1"><i class="fas fa-table"></i> 1.1 Endereçamento</a>
+        </li>
+        <li>
+          <a href="#secao1-2"><i class="fas fa-terminal"></i> 1.2 Configuração S1</a>
+        </li>
+        <li>
+          <a href="#secao1-3"><i class="fas fa-desktop"></i> 1.3 Configuração PC-A</a>
+        </li>
+        <li>
+          <a href="#secao1-4"><i class="fas fa-check-circle"></i> 1.4 Verificação 100%</a>
+        </li>
+        <li>
+          <a href="../labs/lab_1.pka"><i class="fas fa-file-alt"></i> Download Packet Tracer</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Packet Tracer - Modo Físico</span>
+        <h1>Configuração Básica do Switch</h1>
+        <p style="color: var(--text-dim)">
+          Documentação prática contendo o passo a passo definitivo, comandos consolidados e validação de conectividade.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.1</span> Tabela de Endereçamento Lógico
+        </h2>
+        <div class="card">
+          <p>Configuração de IP e Sub-redes mapeadas para isolamento e gerência da topologia:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP / Prefixo</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1</strong></td>
+                <td>VLAN 99</td>
+                <td>192.168.1.2 /24<br />2001:db8:acad:1::2 /64</td>
+                <td>192.168.1.1</td>
+              </tr>
+              <tr>
+                <td><strong>PC-A</strong></td>
+                <td>NIC (F0)</td>
+                <td>192.168.1.10 /24<br />2001:db8:acad:1::10 /64</td>
+                <td>192.168.1.1<br />fe80::1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.2</span> Scripts de Configuração do Switch (S1)
+        </h2>
+        <div class="card">
+          <p>Comandos aplicados via terminal de console para segurança básica, criptografia e isolamento na VLAN de gerência:</p>
+
+          <div class="terminal">
+            <pre>
+Switch> enable
+Switch# configure terminal
+
+hl=pt-br
+! Definição do Nome e Segurança Global
+hostname S1
+no ip domain-lookup
+service password-encryption
+enable secret class
+
+! Mensagem de Banner MOTD
+banner motd #Unauthorized access is strictly prohibited.#
+
+! Configuração de Segurança de Linha
+line con 0
+ password cisco
+ login
+ logging synchronous
+exit
+
+line vty 0 15
+ password cisco
+ login
+exit
+
+! Criação e Atribuição da VLAN 99 de Gerência
+interface vlan 99
+ ip address 192.168.1.2 255.255.255.0
+ ipv6 address 2001:db8:acad:1::2/64
+ ipv6 address fe80::2 link-local
+ no shutdown
+exit
+
+! Mapeamento da Interface Física e Gateway
+interface GigabitEthernet1/0/6
+ switchport access vlan 99
+exit
+ip default-gateway 192.168.1.1
+
+! Salvando na NVRAM
+exit
+copy running-config startup-config</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-desktop"></i>
+          <span class="section-number">1.3</span> Configuração Crítica do Host (PC-A)
+        </h2>
+        <div class="card">
+          <p>
+            Para o correto funcionamento do laboratório e o sucesso dos testes de <code>ping</code> e <code>telnet</code>, a placa de rede
+            do PC-A deve ser alterada de <strong>DHCP</strong> para <strong>Static</strong>.
+          </p>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Deixar a placa em modo DHCP causará falha crítica de
+            comunicação (100% de perda de pacotes) devido à ausência de um servidor DHCP ativo na topologia física local.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao1-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">1.4</span> Respostas e Perguntas para Reflexão
+        </h2>
+
+        <div class="card">
+          <p style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem">
+            <i class="fas fa-question-circle"></i> 1. Por que você deve usar uma conexão de console para configurar inicialmente o switch?
+          </p>
+          <p style="margin-bottom: 1.5rem; color: var(--text-dim)">
+            <strong>Resposta:</strong> Porque um switch de fábrica vem completamente limpo, sem endereçamento IP ou configurações de rede
+            ativas. O acesso via console permite o gerenciamento direto fora de banda (out-of-band).
+          </p>
+
+          <p style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem">
+            <i class="fas fa-question-circle"></i> 2. Por que o comando 'login' é necessário nas linhas de acesso?
+          </p>
+          <p style="margin-bottom: 1.5rem; color: var(--text-dim)">
+            <strong>Resposta:</strong> Ele ativa explicitamente a autenticação na linha escolhida, forçando o sistema do Cisco IOS a
+            solicitar e checar a senha configurada quando uma tentativa de conexão ocorrer.
+          </p>
+
+          <p style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem">
+            <i class="fas fa-question-circle"></i> 3. Por que mudar a VLAN 1 padrão para um número de VLAN diferente (ex: VLAN 99)?
+          </p>
+          <p style="margin-bottom: 1.5rem; color: var(--text-dim)">
+            <strong>Resposta:</strong> Segurança estrutural. Como a VLAN 1 é associada nativamente a todas as portas por padrão, movendo os
+            IPs de gerência para a VLAN 99 isolamos o tráfego administrativo do tráfego comum dos usuários, prevenindo ataques como o
+            <em>VLAN hopping</em>.
+          </p>
+
+          <p style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem">
+            <i class="fas fa-question-circle"></i> 4. Como você pode impedir que credenciais e senhas sejam enviadas em texto limpo pela
+            rede?
+          </p>
+          <p style="color: var(--text-dim)">
+            <strong>Resposta:</strong> Localmente no switch, usamos o comando <code>service password-encryption</code>. Para o tráfego
+            remoto nas linhas VTY, substituímos o uso do protocolo <strong>Telnet</strong> pelo protocolo seguro e criptografado
+            <strong>SSH</strong> (Secure Shell).
+          </p>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3 style="margin-bottom: 0.5rem">Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe o arquivo de topologia completo (.pkt) contendo todas as conexões em cabo direto ajustadas e portas físicas ligadas
+            corretamente.
+          </p>
+          <a href="seu_arquivo_laboratorio.pkt" download class="btn-download">
+            <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

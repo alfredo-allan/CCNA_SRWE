@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CCNA: Switching, Routing, and Wireless| Central de Estudos</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/agent.css" />
+    <style>
+      /* ============================================ */
+      /* BRIEFING CCNA: Switching, Routing, and Wireless- CSS GLOBAL  */
+      /* ============================================ */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #0a0a0a;
+        color: #e0e0e0;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        scroll-behavior: smooth;
+      }
+
+      :root {
+        --bg-dark: #0a0a0a;
+        --bg-card: #111111;
+        --bg-card-hover: #1a1a1a;
+        --text: #e0e0e0;
+        --text-dim: #888888;
+        --primary: #00ff88;
+        --primary-dark: #00cc6a;
+        --secondary: #0078d4;
+        --success: #00ff88;
+        --warning: #ffcc00;
+        --danger: #ff4444;
+        --info: #00aaff;
+        --border: #222222;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* ===== NAVBAR ===== */
+      .navbar {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .navbar-brand i {
+        font-size: 1.6rem;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+      }
+
+      .btn-outline:hover {
+        background: var(--primary);
+        color: var(--bg-dark);
+      }
+
+      /* ===== HERO ===== */
+      .hero {
+        padding: 60px 0 40px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+      }
+
+      .badge-lab {
+        display: inline-block;
+        background: rgba(0, 255, 136, 0.1);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(0, 255, 136, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        color: var(--text-dim);
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      /* ===== CAMPO DE BUSCA GLOBAL ===== */
+      .search-section {
+        padding: 30px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .search-container {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+      }
+
+      .search-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .search-header i {
+        font-size: 1.8rem;
+        color: var(--primary);
+      }
+
+      .search-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .search-input-wrapper {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .search-input-wrapper input {
+        flex: 1;
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+
+      .search-input-wrapper input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+      }
+
+      .search-input-wrapper input::placeholder {
+        color: var(--text-dim);
+      }
+
+      .search-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+        color: var(--text-dim);
+      }
+
+      .search-stats span {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* Resultados da busca */
+      .search-results {
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .cybersec-loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-dim);
+      }
+
+      .cybersec-no-results {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-dim);
+      }
+
+      .cybersec-no-results i {
+        font-size: 3rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .cybersec-result-item {
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .cybersec-result-item:hover {
+        border-color: var(--primary);
+        transform: translateX(4px);
+        background: var(--bg-card-hover);
+      }
+
+      .cybersec-result-module {
+        display: inline-block;
+        background: rgba(0, 255, 136, 0.15);
+        color: var(--primary);
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+
+      .cybersec-result-title {
+        font-weight: 600;
+        margin: 0.5rem 0;
+        color: var(--text);
+      }
+
+      .cybersec-result-snippet {
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        margin-bottom: 0.5rem;
+      }
+
+      .cybersec-result-snippet mark {
+        background: rgba(0, 255, 136, 0.3);
+        color: var(--primary);
+        padding: 0.1rem 0.2rem;
+        border-radius: 4px;
+      }
+
+      .cybersec-result-meta {
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        font-family: monospace;
+      }
+
+      /* ===== CARDS DOS MÓDULOS ===== */
+      .modules-section {
+        padding: 40px 0;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-title i {
+        color: var(--primary);
+        font-size: 2rem;
+      }
+
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .module-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: var(--text);
+        display: block;
+      }
+
+      .module-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        background: var(--bg-card-hover);
+      }
+
+      .module-card i {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .module-card h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .module-card p {
+        font-size: 0.85rem;
+        color: var(--text-dim);
+      }
+
+      .module-card .module-badge {
+        display: inline-block;
+        background: rgba(0, 255, 136, 0.1);
+        color: var(--primary);
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        margin-top: 0.75rem;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        text-align: center;
+        padding: 2rem;
+        border-top: 1px solid var(--border);
+        margin-top: 2rem;
+        color: var(--text-dim);
+      }
+
+      /* ===== RESPONSIVIDADE ===== */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .container {
+          padding: 0 1rem;
+        }
+
+        .navbar .container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .modules-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .search-stats {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="navbar-brand"> <i class="fas fa-network-wired"></i> CCNA: Switching, Routing, and Wireless Essentials</a>
+        <a href="#" class="btn-outline"> <i class="fas fa-graduation-cap"></i> Central de Estudos </a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="container">
+        <div class="badge-lab"><i class="fas fa-graduation-cap"></i> Cisco CCNA 2 (SRWE)</div>
+        <h1>Central de Estudos</h1>
+        <p>Navegue pelos módulos do curso ou utilize a busca global para encontrar termos específicos em todo o conteúdo</p>
+        <div style="margin-top: 1.5rem">
+          <i class="fas fa-network-wired" style="color: var(--primary); font-size: 2rem; margin: 0 0.5rem"></i>
+          <i class="fas fa-route" style="color: var(--primary); font-size: 2rem; margin: 0 0.5rem"></i>
+          <i class="fas fa-search" style="color: var(--primary); font-size: 2rem; margin: 0 0.5rem"></i>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="search-section">
+        <div class="search-container">
+          <div class="search-header">
+            <i class="fas fa-search"></i>
+            <h2>Busca Global</h2>
+          </div>
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              id="ndgGlobalSearch"
+              placeholder="Digite pelo menos 2 caracteres... Ex: VLAN, OSPF, Port Security, STP, DHCP, Roteador"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-stats">
+            <span id="searchModulesCount">carregando módulos...</span>
+            <div>
+              <i class="fas fa-chart-line"></i>
+              <span id="searchStatsResults">0</span> resultados
+              <span id="searchStatus"><i class="fas fa-check-circle"></i> pronto</span>
+            </div>
+          </div>
+          <div id="ndgSearchResults" class="search-results">
+            <div class="cybersec-loading">
+              <i class="fas fa-search"></i>
+              <p>Digite um termo para buscar em todos os módulos</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="modules-section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          Módulos do Curso
+        </h2>
+        <div class="modules-grid">
+          <a href="pages/modulo_1.html" class="module-card">
+            <i class="fas fa-sliders-h"></i>
+            <h3>Módulo 1</h3>
+            <p>Configuração básica de dispositivos</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_2.html" class="module-card">
+            <i class="fas fa-exchange-alt"></i>
+            <h3>Módulo 2</h3>
+            <p>Conceitos de switching</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_3.html" class="module-card">
+            <i class="fas fa-layer-group"></i>
+            <h3>Módulo 3</h3>
+            <p>VLANs</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_4.html" class="module-card">
+            <i class="fas fa-route"></i>
+            <h3>Módulo 4</h3>
+            <p>Roteamento inter-VLANs</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/exame_checkpoint_switching_vlan.html" class="module-card evaluation-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Exame de Checkpoint</h3>
+            <p>Conceitos de comutação, VLANs e Exame de Roteamento Inter-VLAN</p>
+            <span class="module-badge"><i class="fas fa-tasks"></i> Avaliação</span>
+          </a>
+
+          <a href="pages/modulo_5.html" class="module-card">
+            <i class="fas fa-sitemap"></i>
+            <h3>Módulo 5</h3>
+            <p>Conceitos de STP</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_6.html" class="module-card">
+            <i class="fas fa-link"></i>
+            <h3>Módulo 6</h3>
+            <p>EtherChannel</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/exame_checkpoint_redes_redundantes.html" class="module-card evaluation-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Exame de Checkpoint</h3>
+            <p>Exame de Redes Redundantes</p>
+            <span class="module-badge"><i class="fas fa-tasks"></i> Avaliação</span>
+          </a>
+
+          <a href="pages/modulo_7.html" class="module-card">
+            <i class="fas fa-network-wired"></i>
+            <h3>Módulo 7</h3>
+            <p>DHCPv4</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_8.html" class="module-card">
+            <i class="fas fa-address-card"></i>
+            <h3>Módulo 8</h3>
+            <p>SLAAC e DHCPv6</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_9.html" class="module-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Módulo 9</h3>
+            <p>Conceitos de FHRP</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/exame_checkpoint_redes_disponiveis.html" class="module-card evaluation-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Exame de Checkpoint</h3>
+            <p>Exame de redes disponíveis e confiáveis</p>
+            <span class="module-badge"><i class="fas fa-tasks"></i> Avaliação</span>
+          </a>
+
+          <a href="pages/modulo_11.html" class="module-card">
+            <i class="fas fa-lock"></i>
+            <h3>Módulo 11</h3>
+            <p>Configuração de Segurança do Switch</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_12.html" class="module-card">
+            <i class="fas fa-wifi"></i>
+            <h3>Módulo 12</h3>
+            <p>Conceitos de Redes sem Fio (WLAN)</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_13.html" class="module-card">
+            <i class="fas fa-tools"></i>
+            <h3>Módulo 13</h3>
+            <p>Configuração WLAN</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/exame_checkpoint_seguranca_l2_wlans.html" class="module-card evaluation-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Exame de Checkpoint</h3>
+            <p>Exame de segurança L2 e WLANs</p>
+            <span class="module-badge"><i class="fas fa-tasks"></i> Avaliação</span>
+          </a>
+
+          <a href="pages/modulo_14.html" class="module-card">
+            <i class="fas fa-project-diagram"></i>
+            <h3>Módulo 14</h3>
+            <p>Conceitos de roteamento</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_15.html" class="module-card">
+            <i class="fas fa-map-signs"></i>
+            <h3>Módulo 15</h3>
+            <p>Roteamento estático de IP</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/modulo_16.html" class="module-card">
+            <i class="fas fa-tools"></i>
+            <h3>Módulo 16</h3>
+            <p>Solução de problemas de rotas estáticas e padrão</p>
+            <span class="module-badge"><i class="fas fa-check-circle"></i> Conteúdo Acadêmico</span>
+          </a>
+
+          <a href="pages/exame_checkpoint_conceitos_roteamento.html" class="module-card evaluation-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Exame de Checkpoint</h3>
+            <p>Exame de Conceitos de Roteamento e Configuração</p>
+            <span class="module-badge"><i class="fas fa-tasks"></i> Avaliação</span>
+          </a>
+
+          <a href="pages/itn_practice_packet_tracer_assessment.html" class="module-card lab-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>ITN Practice</h3>
+            <p>Packet Tracer Assessment</p>
+            <span class="module-badge"><i class="fas fa-flask"></i> Laboratório</span>
+          </a>
+
+          <a href="pages/srwe_practice_packet_tracer_part1.html" class="module-card lab-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>SRWE Practice - Part 1</h3>
+            <p>Packet Tracer Assessment - Part 1</p>
+            <span class="module-badge"><i class="fas fa-flask"></i> Laboratório</span>
+          </a>
+
+          <a href="pages/srwe_practice_packet_tracer_part2.html" class="module-card lab-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>SRWE Practice - Part 2</h3>
+            <p>Packet Tracer Assessment - Part 2</p>
+            <span class="module-badge"><i class="fas fa-flask"></i> Laboratório</span>
+          </a>
+
+          <a href="pages/exame_final_pratica_srwe.html" class="module-card evaluation-card">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>Exame Final</h3>
+            <p>Exame Final da Prática SRWE</p>
+            <span class="module-badge"><i class="fas fa-award"></i> Prática</span>
+          </a>
+
+          <a href="pages/pesquisa_fim_do_curso.html" class="module-card">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Fim do Curso</h3>
+            <p>Pesquisa de Fim do Curso</p>
+            <span class="module-badge"><i class="fas fa-info-circle"></i> Feedback</span>
+          </a>
+
+          <a href="pages/exame_final_curso_srwe.html" class="module-card evaluation-card">
+            <i class="fas fa-trophy"></i>
+            <h3>Exame Final</h3>
+            <p>Exame Final do Curso SRWE</p>
+            <span class="module-badge"><i class="fas fa-award"></i> Teórico</span>
+          </a>
+
+          <a href="pages/srwe_final_packet_tracer_assessment.html" class="module-card lab-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>SRWE Final</h3>
+            <p>Packet Tracer Assessment</p>
+            <span class="module-badge"><i class="fas fa-flask"></i> Laboratório Completo</span>
+          </a>
+
+          <a href="pages/ccna_200-301_exam_v1.1_supplemental.html" class="module-card special-card">
+            <i class="fas fa-puzzle-piece"></i>
+            <h3>CCNA 200-301 v1.1</h3>
+            <p>Supplemental Module</p>
+            <span class="module-badge"><i class="fas fa-plus-circle"></i> Conteúdo Extra</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p><i class="fas fa-network-wired"></i> CCNA: Switching, Routing, and Wireless Essentials – Central de Estudos</p>
+      <p style="font-size: 0.8rem; margin-top: 0.5rem">Conteúdo estruturado com base no currículo oficial Cisco Network Academy</p>
+    </footer>
+
+    <script src="./js/motor.js"></script>
+    <script src="./js/agent.js"></script>
+  </body>
+</html>
