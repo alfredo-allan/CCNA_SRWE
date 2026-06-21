@@ -93,6 +93,60 @@
         <li>
           <a href="./lab_2.html"><i class="fas fa-laptop-code"></i> 1.3.6 Packet Tracer - Configurar SSH</a>
         </li>
+        <li>
+          <a href="#secao1.4"><i class="fas fa-router"></i> 1.4 Configuração Básica do Roteador</a>
+        </li>
+        <li>
+          <a href="#secao1.4.2"><i class="fas fa-terminal"></i> 1.4.2 Verificador de Sintaxe - Configurações do Roteador</a>
+        </li>
+        <li>
+          <a href="#secao1.4.3"><i class="fas fa-layer-group"></i> 1.4.3 Topologia de Pilha Dupla</a>
+        </li>
+        <li>
+          <a href="#secao1.4.5"><i class="fas fa-network-wired"></i> 1.4.5 Verificador de Sintaxe - Interfaces do Roteador</a>
+        </li>
+        <li>
+          <a href="#secao1.4.6"><i class="fas fa-redo-alt"></i> 1.4.6 Interfaces de Loopback IPv4</a>
+        </li>
+        <li>
+          <a href="/pages/lab_3.html"><i class="fas fa-laptop-code"></i> 1.4.7 Packet Tracer - Configurar Interfaces de Roteador</a>
+        </li>
+        <li>
+          <a href="#secao1-5-1"><i class="fas fa-terminal"></i> 1.5.1 Comandos de Verificação</a>
+        </li>
+        <li>
+          <a href="#secao1-5-2"><i class="fas fa-code"></i> 1.5.2 Status da Interface</a>
+        </li>
+        <li>
+          <a href="#secao1-5-3"><i class="fas fa-layer-group"></i> 1.5.3 Endereços Locais e Multicast</a>
+        </li>
+        <li>
+          <a href="#secao1-5-4"><i class="fas fa-file-alt"></i> 1.5.4 Verificação de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao1-5-5"><i class="fas fa-route"></i> 1.5.5 Verificar Rotas e Conectividade</a>
+        </li>
+        <li>
+          <a href="#secao1-5-6"><i class="fas fa-filter"></i> 1.5.6 Filtrar Saída de Comandos</a>
+        </li>
+        <li>
+          <a href="#secao1-5-7"><i class="fas fa-code"></i> 1.5.7 Verificador de Sintaxe</a>
+        </li>
+        <li>
+          <a href="#secao1-5-8"><i class="fas fa-history"></i> 1.5.8 Histórico de Comandos</a>
+        </li>
+        <li>
+          <a href="#secao1-5-9"><i class="fas fa-history"></i> 1.5.9 Verificador de Histórico</a>
+        </li>
+        <li>
+          <a href="./lab_4.html"><i class="fas fa-network-wired"></i> 1.5.10 Packet Tracer - Verificar Redes</a>
+        </li>
+        <li>
+          <a href="./lab_5.html"><i class="fas fa-network-wired"></i> 1.6.1 Packet Tracer - Implementar Rede</a>
+        </li>
+        <li>
+          <a href="#secao1-6-2"><i class="fas fa-tools"></i> 1.6.2 Laboratório - Configurações Básicas</a>
+        </li>
       </ul>
     </div>
 
@@ -2455,6 +2509,1766 @@ S1# </pre
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+      <section id="secao1.4" class="section">
+        <div class="card">
+          <h3><i class="fas fa-route"></i> 1.4 Configuração Básica do Roteador</h3>
+
+          <p>
+            Até agora, este módulo cobriu apenas a configuração de switches. Se você quiser que os dispositivos finais sejam capazes de
+            enviar e receber dados fora da sua rede local (LAN), você terá que configurar os roteadores.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Convergência Cisco:</strong> Roteadores e switches Cisco têm muito em comum. Eles suportam um sistema operacional modal
+            semelhante (Cisco IOS), estruturas de comando parecidas e muitos dos mesmos comandos. Além disso, ambos os dispositivos
+            compartilham as mesmas etapas iniciais de segurança.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> 1.4.1 Definir Configurações Básicas do Roteador</h3>
+          <p class="text-dim">
+            As seguintes tarefas de configuração inicial sempre devem ser executadas em um novo roteador. Como exemplo prático, utilizaremos
+            o nome de dispositivo <strong>R1</strong>.
+          </p>
+
+          <div
+            class="terminal-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1.5rem 0"
+          >
+            <div class="terminal">
+              <pre>Router# <strong>configure terminal</strong>
+Enter configuration commands, one per line. End with CNTL/Z.
+Router(config)# <strong>hostname R1</strong>
+R1(config)# <strong>enable secret class</strong>
+R1(config)# <strong>line console 0</strong>
+R1(config-line)# <strong>password cisco</strong>
+R1(config-line)# <strong>login</strong>
+R1(config-line)# <strong>exit</strong>
+R1(config)# <strong>line vty 0 4</strong>
+R1(config-line)# <strong>password cisco</strong>
+R1(config-line)# <strong>login</strong>
+R1(config-line)# <strong>exit</strong>
+R1(config)# <strong>service password-encryption</strong>
+R1(config)# </pre>
+            </div>
+          </div>
+
+          <h3><i class="fas fa-comment-slash"></i> Configuração de Banner de Notificação</h3>
+          <p class="text-dim">
+            Configure um banner MOTD (Message of the Day) personalizado para fornecer uma notificação legal de acesso não autorizado nas
+            linhas de terminal.
+          </p>
+
+          <div
+            class="terminal-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1rem 0"
+          >
+            <div class="terminal">
+              <pre>R1(config)# <strong>banner motd #Authorized Access Only!#</strong>
+R1(config)# </pre>
+            </div>
+          </div>
+
+          <h3><i class="fas fa-save"></i> Salvando as Alterações na NVRAM</h3>
+          <p class="text-dim">
+            Após concluir as configurações básicas, salve as alterações da memória RAM (running-config) para a memória não volátil NVRAM
+            (startup-config) para que as configurações sobrevivam a reinicializações.
+          </p>
+
+          <div
+            class="terminal-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1rem 0"
+          >
+            <div class="terminal">
+              <pre>R1# <strong>copy running-config startup-config</strong>
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R1# </pre>
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-double"></i>
+            <strong>Pronto para validação:</strong> Com estas etapas executadas, o plano de controle do roteador <strong>R1</strong> está
+            devidamente identificado, protegido com senhas criptografadas e com o banner legal configurado.
+          </div>
+        </div>
+      </section>
+      <section id="secao1.4.2" class="section">
+        <div class="card">
+          <h3><i class="fas fa-code-branch"></i> 1.4.2 Verificador de Sintaxe - Configurar Configurações Básicas do Roteador</h3>
+          <p class="text-dim">
+            Pratique a configuração inicial do roteador executando os comandos IOS solicitados em resposta a cada instrução do terminal
+            interativo.
+          </p>
+
+          <div
+            class="syntax-checker-container"
+            style="background: #0d1117; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0"
+          >
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">Entre no modo de configuração global e nomeie o roteador <strong>R2</strong>.</p>
+              </div>
+              <div class="terminal" style="margin-bottom: 0.4rem">
+                <pre>Router# <strong>configure terminal</strong></pre>
+              </div>
+              <div
+                class="terminal-output"
+                style="
+                  background: rgba(255, 255, 255, 0.02);
+                  padding: 0.5rem 1rem;
+                  border-radius: 6px;
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                  color: var(--text-dim);
+                  margin-bottom: 0.4rem;
+                "
+              >
+                Enter configuration commands, one per line. End with CNTL/Z.
+              </div>
+              <div class="terminal">
+                <pre>Router(config)# <strong>hostname R2</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">Configure <strong>class</strong> como a senha secreta.</p>
+              </div>
+              <div class="terminal">
+                <pre>R2(config)# <strong>enable secret class</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">
+                  Configure <strong>cisco</strong> como a senha da linha do console e exija que os usuários efetuem login. Em seguida, saia
+                  do modo configuração de linha.
+                </p>
+              </div>
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem">
+                <pre>R2(config)# <strong>line console 0</strong></pre>
+                <pre>R2(config-line)# <strong>password cisco</strong></pre>
+                <pre>R2(config-line)# <strong>login</strong></pre>
+                <pre>R2(config-line)# <strong>exit</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">
+                  Configure <strong>cisco</strong> como a senha vty para as linhas de 0 a 4 e exija que os usuários efetuem login.
+                </p>
+              </div>
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem">
+                <pre>R2(config)# <strong>line vty 0 4</strong></pre>
+                <pre>R2(config-line)# <strong>password cisco</strong></pre>
+                <pre>R2(config-line)# <strong>login</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">Saia do modo de configuração de linha e criptografe todas as senhas de texto sem formatação.</p>
+              </div>
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem">
+                <pre>R2(config-line)# <strong>exit</strong></pre>
+                <pre>R2(config)# <strong>service password-encryption</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">
+                  Digite o banner <strong>Authorized Access Only!</strong> e use <strong>#</strong> como o caractere delimitante.
+                </p>
+              </div>
+              <div class="terminal">
+                <pre>R2(config)# <strong>banner motd #Authorized Access Only!#</strong></pre>
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0">Saia do modo de configuração global e salve a configuração atual.</p>
+              </div>
+              <div class="terminal" style="margin-bottom: 0.4rem">
+                <pre>R2(config)# <strong>exit</strong></pre>
+                <pre>R2# <strong>copy running-config startup-config</strong></pre>
+              </div>
+              <div
+                class="terminal-output"
+                style="
+                  background: rgba(255, 255, 255, 0.02);
+                  padding: 0.5rem 1rem;
+                  border-radius: 6px;
+                  font-family: monospace;
+                  font-size: 0.85rem;
+                  color: var(--text-dim);
+                "
+              >
+                Destination filename [startup-config]? <br />
+                Building configuration...<br />
+                [OK]
+              </div>
+            </div>
+
+            <div
+              class="completed-steps-message"
+              style="
+                margin-top: 1.5rem;
+                background: rgba(0, 255, 136, 0.06);
+                border: 1px solid var(--primary);
+                color: var(--primary);
+                padding: 1rem;
+                border-radius: 8px;
+                font-weight: bold;
+                text-align: center;
+                font-size: 0.95rem;
+              "
+            >
+              <i class="fas fa-check-circle" style="margin-right: 0.4rem"></i> Você configurou corretamente o R2 com as configurações
+              iniciais.
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao1.4.3" class="section">
+        <div class="card">
+          <h3><i class="fas fa-layer-group"></i> 1.4.3 Topologia de Pilha Dupla</h3>
+
+          <p>
+            Um recurso diferenciador crucial entre switches de Camada 2 e roteadores é o tipo e a complexidade das interfaces suportadas por
+            cada um. Enquanto os switches convencionais operam limitados a segmentos de LANs locais, os roteadores possuem portas
+            especializadas para interconectar diferentes sub-redes e tecnologias.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-network-wired"></i>
+            <strong>O que é Pilha Dupla (Dual-Stack)?</strong> É a implementação de rede onde os dispositivos executam simultaneamente os
+            protocolos <strong>IPv4 e IPv6</strong> nas mesmas interfaces físicas, permitindo uma transição gradual e coexistência nativa
+            entre as duas gerações de endereçamento.
+          </div>
+
+          <p class="text-dim" style="margin-bottom: 1.5rem">
+            Abaixo está o mapeamento lógico e topológico da infraestrutura em Pilha Dupla. Use a rolagem horizontal caso esteja visualizando
+            de um dispositivo móvel:
+          </p>
+
+          <div
+            class="topo-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1.5rem 0"
+          >
+            <div
+              style="
+                background: #0d1117;
+                padding: 2rem;
+                border-radius: 12px;
+                border: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                min-width: 850px;
+                font-family: monospace;
+              "
+            >
+              <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 2rem">
+                <div style="display: flex; align-items: center; gap: 1rem">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--text); font-weight: bold">PC1</span><br />
+                    <small class="text-dim">.10 / ::10</small>
+                  </div>
+                  <div style="width: 40px; height: 2px; background: #555"></div>
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem 1rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--secondary)">S1</span><br />
+                    <small style="font-size: 0.7rem; color: var(--text-dim)">192.168.10.0/24<br />2001:db8:acad:1::/64</small>
+                  </div>
+                </div>
+
+                <div style="width: 150px"></div>
+
+                <div style="display: flex; align-items: center; gap: 1rem">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem 1rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--secondary)">S3</span><br />
+                    <small style="font-size: 0.7rem; color: var(--text-dim)">10.1.1.0/24<br />2001:db8:acad:4::/64</small>
+                  </div>
+                  <div style="width: 40px; height: 2px; background: #555"></div>
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--text); font-weight: bold">PC3</span><br />
+                    <small class="text-dim">.10 / ::10</small>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; width: 100%">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 180px">
+                  <div style="width: 2px; height: 30px; background: var(--primary)"></div>
+                  <div
+                    style="
+                      background: #161b22;
+                      padding: 0.8rem;
+                      border-radius: 8px;
+                      border: 1px solid var(--primary);
+                      text-align: center;
+                      width: 100%;
+                    "
+                  >
+                    <span style="color: var(--primary); font-weight: bold; font-size: 1.1rem"><i class="fas fa-router"></i> R1</span><br />
+                    <span style="font-size: 0.7rem; color: #ff9e3b">G0/0/0: .1 / ::1</span><br />
+                    <span style="font-size: 0.7rem; color: #ff9e3b">G0/0/1: .1 / ::1</span>
+                  </div>
+                  <div style="width: 2px; height: 30px; background: var(--primary)"></div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 250px">
+                  <div style="color: #ff3e3e; font-size: 0.75rem; margin-bottom: 0.2rem; font-weight: bold">
+                    S0/1/0 &lt;--- Link WAN ---&gt; S0/1/0
+                  </div>
+                  <div style="width: 100%; height: 4px; background: #ff3e3e; position: relative"></div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; text-align: center">
+                    <strong>Sub-rede WAN:</strong><br />209.165.200.224/30<br />2001:db8:acad:3::/64
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      width: 100%;
+                      font-size: 0.75rem;
+                      color: var(--text);
+                      padding: 0 5px;
+                    "
+                  >
+                    <span>IP: .225 / ::225</span>
+                    <span>IP: .226 / ::226</span>
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; width: 180px">
+                  <div style="width: 2px; height: 30px; background: var(--primary)"></div>
+                  <div
+                    style="
+                      background: #161b22;
+                      padding: 0.8rem;
+                      border-radius: 8px;
+                      border: 1px solid var(--primary);
+                      text-align: center;
+                      width: 100%;
+                    "
+                  >
+                    <span style="color: var(--primary); font-weight: bold; font-size: 1.1rem"><i class="fas fa-router"></i> R2</span><br />
+                    <span style="font-size: 0.7rem; color: #ff9e3b">G0/0/0: .1 / ::1</span><br />
+                    <span style="font-size: 0.7rem; color: #ff9e3b">G0/0/1: .1 / ::1</span>
+                  </div>
+                  <div style="width: 2px; height: 30px; background: var(--primary)"></div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 2rem">
+                <div style="display: flex; align-items: center; gap: 1rem">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--text); font-weight: bold">PC2</span><br />
+                    <small class="text-dim">.10 / ::10</small>
+                  </div>
+                  <div style="width: 40px; height: 2px; background: #555"></div>
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem 1rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--secondary)">S2</span><br />
+                    <small style="font-size: 0.7rem; color: var(--text-dim)">192.168.11.0/24<br />2001:db8:acad:2::/64</small>
+                  </div>
+                </div>
+
+                <div style="width: 150px"></div>
+
+                <div style="display: flex; align-items: center; gap: 1rem">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem 1rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--secondary)">S4</span><br />
+                    <small style="font-size: 0.7rem; color: var(--text-dim)">10.1.2.0/24<br />2001:db8:acad:5::/64</small>
+                  </div>
+                  <div style="width: 40px; height: 2px; background: #555"></div>
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      padding: 0.5rem;
+                      border-radius: 6px;
+                      border: 1px solid var(--border);
+                      text-align: center;
+                    "
+                  >
+                    <span style="color: var(--text); font-weight: bold">PC4</span><br />
+                    <small class="text-dim">.10 / ::10</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-dim">
+            Esta topologia será usada ao longo dos próximos tópicos para demonstrar a configuração prática das interfaces de roteador em
+            ambas as camadas de rede de forma simultânea.
+          </p>
+        </div>
+      </section>
+      <section id="secao1.4.5" class="section">
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> 1.4.5 Verificador de Sintaxe - Configurar Interfaces de Roteador</h3>
+          <p class="text-dim">
+            Nesta atividade interativa, você aplicará os parâmetros de conectividade em pilha dupla (IPv4 e IPv6) nas interfaces LAN e WAN
+            do roteador <strong>R2</strong>.
+          </p>
+
+          <div
+            class="syntax-checker-container"
+            style="background: #0d1117; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0"
+          >
+            <div class="step-group" style="margin-bottom: 2rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0; font-weight: bold; color: var(--text)">Configure a interface GigabitEthernet 0/0/0:</p>
+                <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0; color: var(--text-dim); font-size: 0.85rem">
+                  <li>Entre no modo de configuração de interface usando <strong>g0/0/0</strong>.</li>
+                  <li>Defina o endereço IPv4 <strong>10.1.1.1</strong> com máscara <strong>255.255.255.0</strong>.</li>
+                  <li>Defina o endereço IPv6 <strong>2001:db8:acad:4::1/64</strong>.</li>
+                  <li>Adicione a descrição <strong>Link to LAN 3</strong>.</li>
+                  <li>Ative a interface.</li>
+                </ul>
+              </div>
+
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem">
+                <pre>R2(config)# <strong>interface g0/0/0</strong></pre>
+                <pre>R2(config-if)# <strong>ip address 10.1.1.1 255.255.255.0</strong></pre>
+                <pre>R2(config-if)# <strong>ipv6 address 2001:db8:acad:4::1/64</strong></pre>
+                <pre>R2(config-if)# <strong>description Link to LAN 3</strong></pre>
+                <pre>R2(config-if)# <strong>no shutdown</strong></pre>
+              </div>
+
+              <div
+                class="terminal-output"
+                style="
+                  background: rgba(0, 255, 136, 0.03);
+                  padding: 0.6rem 1rem;
+                  border-radius: 6px;
+                  font-family: monospace;
+                  font-size: 0.8rem;
+                  color: #51ff9a;
+                  border-left: 3px solid #2ea44f;
+                  line-height: 1.4;
+                "
+              >
+                %LINK-3-UPDOWN: Interface GigabitEthernet0/0/0, changed state to up<br />
+                %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 2rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0; font-weight: bold; color: var(--text)">Configure a interface GigabitEthernet 0/0/1:</p>
+                <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0; color: var(--text-dim); font-size: 0.85rem">
+                  <li>Altere para o modo de configuração da interface usando <strong>g0/0/1</strong>.</li>
+                  <li>Defina o endereço IPv4 <strong>10.1.2.1</strong> com máscara <strong>255.255.255.0</strong>.</li>
+                  <li>Defina o endereço IPv6 <strong>2001:db8:acad:5::1/64</strong>.</li>
+                  <li>Adicione a descrição <strong>Link to LAN 4</strong>.</li>
+                  <li>Ative a interface.</li>
+                </ul>
+              </div>
+
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem">
+                <pre>R2(config-if)# <strong>interface g0/0/1</strong></pre>
+                <pre>R2(config-if)# <strong>ip address 10.1.2.1 255.255.255.0</strong></pre>
+                <pre>R2(config-if)# <strong>ipv6 address 2001:db8:acad:5::1/64</strong></pre>
+                <pre>R2(config-if)# <strong>description Link to LAN 4</strong></pre>
+                <pre>R2(config-if)# <strong>no shutdown</strong></pre>
+              </div>
+
+              <div
+                class="terminal-output"
+                style="
+                  background: rgba(0, 255, 136, 0.03);
+                  padding: 0.6rem 1rem;
+                  border-radius: 6px;
+                  font-family: monospace;
+                  font-size: 0.8rem;
+                  color: #51ff9a;
+                  border-left: 3px solid #2ea44f;
+                  line-height: 1.4;
+                "
+              >
+                %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to up<br />
+                %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up
+              </div>
+            </div>
+
+            <div class="step-group" style="margin-bottom: 1.5rem">
+              <div
+                class="instructions"
+                style="
+                  background: rgba(0, 120, 212, 0.1);
+                  border-left: 4px solid var(--secondary);
+                  padding: 0.6rem 1rem;
+                  border-radius: 0 8px 8px 0;
+                  margin-bottom: 0.8rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <p style="margin: 0; font-weight: bold; color: var(--text)">Configure a interface Serial 0/0/0:</p>
+                <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0; color: var(--text-dim); font-size: 0.85rem">
+                  <li>Entre no modo de configuração de interface usando <strong>s0/0/0</strong>.</li>
+                  <li>Defina o endereço IPv4 WAN <strong>209.165.200.226</strong> com máscara <strong>255.255.255.252</strong>.</li>
+                  <li>Defina o endereço IPv6 WAN <strong>2001:db8:acad:3::226/64</strong>.</li>
+                  <li>Adicione a descrição <strong>Link to R1</strong>.</li>
+                  <li>Ative a interface.</li>
+                </ul>
+              </div>
+
+              <div class="terminal" style="display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem">
+                <pre>R2(config-if)# <strong>interface s0/0/0</strong></pre>
+                <pre>R2(config-if)# <strong>ip address 209.165.200.226 255.255.255.252</strong></pre>
+                <pre>R2(config-if)# <strong>ipv6 address 2001:db8:acad:3::226/64</strong></pre>
+                <pre>R2(config-if)# <strong>description Link to R1</strong></pre>
+                <pre>R2(config-if)# <strong>no shutdown</strong></pre>
+              </div>
+
+              <div
+                class="terminal-output"
+                style="
+                  background: rgba(0, 255, 136, 0.03);
+                  padding: 0.6rem 1rem;
+                  border-radius: 6px;
+                  font-family: monospace;
+                  font-size: 0.8rem;
+                  color: #51ff9a;
+                  border-left: 3px solid #2ea44f;
+                  line-height: 1.4;
+                "
+              >
+                %LINK-3-UPDOWN: Interface Serial0/0/0, changed state to up<br />
+                %LINEPROTO-5-UPDOWN: Line protocol on Interface Serial0/0/0, changed state to up
+              </div>
+            </div>
+
+            <div
+              class="completed-steps-message"
+              style="
+                margin-top: 1.5rem;
+                background: rgba(0, 255, 136, 0.06);
+                border: 1px solid var(--primary);
+                color: var(--primary);
+                padding: 1rem;
+                border-radius: 8px;
+                font-weight: bold;
+                text-align: center;
+                font-size: 0.95rem;
+              "
+            >
+              <i class="fas fa-check-circle" style="margin-right: 0.4rem"></i> Você configurou com êxito todas as interfaces do roteador R2.
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao1.4.6" class="section">
+        <div class="card">
+          <h3><i class="fas fa-infinity"></i> 1.4.6 Interfaces de Loopback IPv4</h3>
+
+          <p>
+            Outra configuração extremamente comum e fundamental em roteadores Cisco IOS é a ativação de uma
+            <strong>interface de loopback</strong>.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-microchip"></i>
+            <strong>O que é uma Loopback?</strong> É uma interface lógica, virtual e totalmente interna ao roteador. Ela não está associada
+            a nenhuma porta física e nunca será conectada a outro dispositivo. Por ser uma interface de software, ela é colocada
+            automaticamente em estado <strong>"up" (ativa)</strong> e lá permanece de forma permanente, desde que o hardware do roteador
+            esteja funcionando.
+          </div>
+
+          <p>A interface de loopback traz diversas vantagens estratégicas para a engenharia de redes:</p>
+
+          <ul style="margin: 1.5rem 0; padding-left: 1.5rem; color: var(--text); display: flex; flex-direction: column; gap: 0.6rem">
+            <li>
+              <strong>Testes e Gerenciamento:</strong> Garante que pelo menos uma interface lógica do dispositivo esteja sempre disponível
+              para acesso e gerência remota.
+            </li>
+            <li>
+              <strong>Emulação de Redes:</strong> Ideal para simular redes e sub-redes inteiras localizadas "atrás" do roteador sem gastar
+              portas físicas, facilitando o teste de protocolos de roteamento dinâmico (como OSPF e EIGRP).
+            </li>
+            <li>
+              <strong>Ambientes de Laboratório:</strong> Permite criar múltiplos caminhos e redes adicionais para fins de prática. Neste
+              currículo, ela é frequentemente empregada para <strong>simular um link de conexão com a Internet</strong>.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Configuração e Atribuição de Endereço</h3>
+          <p class="text-dim">
+            Ativar e atribuir um endereço IP a uma interface de loopback é um procedimento simples e direto. Veja a estrutura da sintaxe
+            global:
+          </p>
+
+          <div
+            class="terminal-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1rem 0"
+          >
+            <div class="terminal">
+              <pre>Router(config)# <strong>interface loopback</strong> <em>number</em>
+Router(config-if)# <strong>ip address</strong> <em>ip-address subnet-mask</em></pre>
+            </div>
+          </div>
+
+          <p class="text-dim" style="margin-top: 1.5rem">
+            Várias interfaces de loopback podem ser coexistentes no mesmo dispositivo. O endereço IPv4 de cada uma deve ser exclusivo e não
+            utilizado por nenhuma outra interface ativa. Abaixo está o exemplo real de ativação da <strong>Loopback 0</strong> no roteador
+            <strong>R1</strong>:
+          </p>
+
+          <div
+            class="terminal-responsive"
+            style="width: 100%; overflow-x: auto !important; -webkit-overflow-scrolling: touch; margin: 1rem 0"
+          >
+            <div class="terminal">
+              <pre>R1(config)# <strong>interface loopback 0</strong>
+R1(config-if)# <strong>ip address 10.0.0.1 255.255.255.0</strong>
+R1(config-if)# <strong>exit</strong>
+R1(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback0, changed state to up</pre>
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check"></i>
+            <strong>Validação Automática:</strong> Perceba que o próprio sistema operacional gera um log informando que o protocolo de linha
+            mudou para <strong>UP</strong> imediatamente após a criação, sem a necessidade de disparar o comando <code>no shutdown</code>.
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">1.5.1</span> Comandos de Verificação de Interface
+        </h2>
+
+        <div class="card">
+          <p>
+            Não há nenhum ponto em configurar o roteador, a menos que você verifique a configuração e a conectividade. Este tópico aborda os
+            comandos a serem usados para verificar as redes conectadas diretamente. Ele inclui dois Verificadores de Sintaxe e um Packet
+            Tracer.
+          </p>
+          <p style="margin-top: 0.75rem">
+            Existem vários comandos <code>show</code> que podem ser usados para verificar a operação e a configuração de uma interface. A
+            topologia a seguir é usada para demonstrar a verificação das configurações da interface do roteador.
+          </p>
+        </div>
+
+        <div class="card" style="padding: 2rem 1rem; background-color: #050505; overflow-x: auto !important">
+          <div
+            class="topologia-map"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              min-width: 920px;
+              position: relative;
+              padding: 1rem 0;
+            "
+          >
+            <div style="display: flex; flex-direction: column; gap: 4rem; width: 220px; text-align: center">
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative">
+                <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 0.5rem; border-radius: 8px; width: 90px">
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text-dim); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">PC1</div>
+                  <div style="font-family: monospace; font-size: 0.65rem; color: var(--text-dim); text-align: right; padding-right: 4px">
+                    .10<br />::10
+                  </div>
+                </div>
+                <div style="width: 2px; height: 20px; background: var(--border)"></div>
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    background: var(--bg-card);
+                    padding: 0.5rem;
+                    border-radius: 8px;
+                    width: 110px;
+                    position: relative;
+                  "
+                >
+                  <span
+                    style="
+                      font-family: monospace;
+                      font-size: 0.65rem;
+                      color: var(--warning);
+                      position: absolute;
+                      top: -35px;
+                      left: 0;
+                      right: 0;
+                      white-space: nowrap;
+                    "
+                    >192.168.10.0/24<br />2001:db8:acad:1::/64</span
+                  >
+                  <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--info); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">S1</div>
+                </div>
+                <div
+                  style="
+                    position: absolute;
+                    width: 100px;
+                    height: 1px;
+                    background: var(--border);
+                    transform: rotate(25deg);
+                    right: -85px;
+                    top: 110px;
+                    z-index: 1;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative">
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    background: var(--bg-card);
+                    padding: 0.5rem;
+                    border-radius: 8px;
+                    width: 110px;
+                    position: relative;
+                  "
+                >
+                  <span
+                    style="
+                      font-family: monospace;
+                      font-size: 0.65rem;
+                      color: var(--warning);
+                      position: absolute;
+                      top: -35px;
+                      left: 0;
+                      right: 0;
+                      white-space: nowrap;
+                    "
+                    >192.168.11.0/24<br />2001:db8:acad:2::/64</span
+                  >
+                  <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--info); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">S2</div>
+                </div>
+                <div style="width: 2px; height: 20px; background: var(--border)"></div>
+                <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 0.5rem; border-radius: 8px; width: 90px">
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text-dim); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">PC2</div>
+                  <div style="font-family: monospace; font-size: 0.65rem; color: var(--text-dim); text-align: right; padding-right: 4px">
+                    .10<br />::10
+                  </div>
+                </div>
+                <div
+                  style="
+                    position: absolute;
+                    width: 100px;
+                    height: 1px;
+                    background: var(--border);
+                    transform: rotate(-25deg);
+                    right: -85px;
+                    top: 25px;
+                    z-index: 1;
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: center; flex-grow: 1; gap: 0.5rem">
+              <div
+                style="
+                  border: 2px solid var(--border);
+                  background: var(--bg-card-hover);
+                  padding: 0.8rem;
+                  border-radius: 50%;
+                  width: 90px;
+                  height: 90px;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  position: relative;
+                  z-index: 2;
+                "
+              >
+                <i class="fas fa-server" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                <div style="font-size: 0.85rem; font-weight: 800; color: var(--text)">R1</div>
+                <span
+                  style="
+                    font-family: monospace;
+                    font-size: 0.6rem;
+                    color: var(--info);
+                    position: absolute;
+                    left: -45px;
+                    top: -5px;
+                    text-align: right;
+                  "
+                  >G0/0/0<br />.1 | ::1</span
+                >
+                <span
+                  style="
+                    font-family: monospace;
+                    font-size: 0.6rem;
+                    color: var(--info);
+                    position: absolute;
+                    left: -45px;
+                    bottom: -5px;
+                    text-align: right;
+                  "
+                  >G0/0/1<br />.1 | ::1</span
+                >
+                <span style="font-family: monospace; font-size: 0.6rem; color: var(--primary); position: absolute; right: -40px; top: 35px"
+                  >S0/1/0<br />.225 | ::225</span
+                >
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; width: 180px; position: relative">
+                <span
+                  style="
+                    font-family: monospace;
+                    font-size: 0.65rem;
+                    color: var(--primary);
+                    position: absolute;
+                    top: -35px;
+                    white-space: nowrap;
+                    text-align: center;
+                  "
+                  >209.165.200.224/30<br />2001:db8:acad:3::/64</span
+                >
+                <div style="width: 100%; height: 2px; border-top: 2px dashed var(--danger); position: relative">
+                  <span style="position: absolute; top: -11px; left: 45%; font-size: 0.7rem">⚡</span>
+                </div>
+              </div>
+
+              <div
+                style="
+                  border: 2px solid var(--border);
+                  background: var(--bg-card-hover);
+                  padding: 0.8rem;
+                  border-radius: 50%;
+                  width: 90px;
+                  height: 90px;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  position: relative;
+                  z-index: 2;
+                "
+              >
+                <i class="fas fa-server" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                <div style="font-size: 0.85rem; font-weight: 800; color: var(--text)">R2</div>
+                <span style="font-family: monospace; font-size: 0.6rem; color: var(--primary); position: absolute; left: -40px; top: 35px"
+                  >S0/1/0<br />.226 | ::226</span
+                >
+                <span style="font-family: monospace; font-size: 0.6rem; color: var(--info); position: absolute; right: -45px; top: -5px"
+                  >G0/0/0<br />.1 | ::1</span
+                >
+                <span style="font-family: monospace; font-size: 0.6rem; color: var(--info); position: absolute; right: -45px; bottom: -5px"
+                  >G0/0/1<br />.1 | ::1</span
+                >
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 4rem; width: 220px; text-align: center">
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative">
+                <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 0.5rem; border-radius: 8px; width: 90px">
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text-dim); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">PC3</div>
+                  <div style="font-family: monospace; font-size: 0.65rem; color: var(--text-dim); text-align: left; padding-left: 4px">
+                    .10<br />::10
+                  </div>
+                </div>
+                <div style="width: 2px; height: 20px; background: var(--border)"></div>
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    background: var(--bg-card);
+                    padding: 0.5rem;
+                    border-radius: 8px;
+                    width: 110px;
+                    position: relative;
+                  "
+                >
+                  <span
+                    style="
+                      font-family: monospace;
+                      font-size: 0.65rem;
+                      color: var(--warning);
+                      position: absolute;
+                      top: -35px;
+                      left: 0;
+                      right: 0;
+                      white-space: nowrap;
+                    "
+                    >10.1.1.0/24<br />2001:db8:acad:4::/64</span
+                  >
+                  <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--info); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">S3</div>
+                </div>
+                <div
+                  style="
+                    position: absolute;
+                    width: 100px;
+                    height: 1px;
+                    background: var(--border);
+                    transform: rotate(-25deg);
+                    left: -85px;
+                    top: 110px;
+                    z-index: 1;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; position: relative">
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    background: var(--bg-card);
+                    padding: 0.5rem;
+                    border-radius: 8px;
+                    width: 110px;
+                    position: relative;
+                  "
+                >
+                  <span
+                    style="
+                      font-family: monospace;
+                      font-size: 0.65rem;
+                      color: var(--warning);
+                      position: absolute;
+                      top: -35px;
+                      left: 0;
+                      right: 0;
+                      white-space: nowrap;
+                    "
+                    >10.1.2.0/24<br />2001:db8:acad:5::/64</span
+                  >
+                  <i class="fas fa-layer-group" style="font-size: 1.5rem; color: var(--info); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">S4</div>
+                </div>
+                <div style="width: 2px; height: 20px; background: var(--border)"></div>
+                <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 0.5rem; border-radius: 8px; width: 90px">
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text-dim); margin: 0"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold">PC4</div>
+                  <div style="font-family: monospace; font-size: 0.65rem; color: var(--text-dim); text-align: left; padding-left: 4px">
+                    .10<br />::10
+                  </div>
+                </div>
+                <div
+                  style="
+                    position: absolute;
+                    width: 100px;
+                    height: 1px;
+                    background: var(--border);
+                    transform: rotate(25deg);
+                    left: -85px;
+                    top: 25px;
+                    z-index: 1;
+                  "
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="alert alert-info" style="margin-top: 0">
+            <p>
+              <i class="fas fa-info-circle"></i> Os seguintes comandos são especialmente úteis para identificar rapidamente o status de uma
+              interface:
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1rem">
+            <div style="border-left: 3px solid var(--primary); padding-left: 1rem">
+              <p>
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ip interface brief</code> e
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ipv6 interface brief</code>
+              </p>
+              <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.2rem">
+                Estes exibem um resumo para todas as interfaces, incluindo o endereço IPv4 ou IPv6 da interface e o status operacional
+                atual.
+              </p>
+            </div>
+
+            <div style="border-left: 3px solid var(--primary); padding-left: 1rem">
+              <p>
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show running-config interface</code>
+                <em style="color: var(--info)">interface-id</em>
+              </p>
+              <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.2rem">
+                Indica os comandos aplicados à interface especificada.
+              </p>
+            </div>
+
+            <div style="border-left: 3px solid var(--primary); padding-left: 1rem">
+              <p>
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ip route</code> e
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ipv6 route</code>
+              </p>
+              <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.2rem">
+                Exibem o conteúdo da tabela de roteamento IPv4 ou IPv6 armazenada na RAM. No Cisco IOS 15, interfaces ativas devem aparecer
+                na tabela de roteamento com duas entradas relacionadas identificadas pelo código
+                <strong style="color: var(--warning)">'C'</strong> (Connected) ou
+                <strong style="color: var(--warning)">'L'</strong> (Local). Em versões anteriores do IOS, apenas uma única entrada com o
+                código <strong style="color: var(--warning)">'C'</strong> aparecerá.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">1.5.3</span> Verificar endereços locais e multicast de link IPv6
+        </h2>
+
+        <div class="card">
+          <p>
+            A saída do comando <code>show ip interface brief</code> exibe dois endereços IPv6 configurados por interface. Um endereço é o
+            endereço IPv6 unicast global que foi inserido manualmente. O outro endereço, que começa com <strong>FE80</strong>, é o endereço
+            unicast link-local para a interface. Um endereço link-local será automaticamente adicionado a uma interface sempre que um
+            endereço unicast global for atribuído. Uma interface de rede IPv6 é necessária para ter um endereço link-local, mas não
+            necessariamente um endereço unicast global.
+          </p>
+
+          <p style="margin-top: 0.75rem">
+            O comando <code>show ipv6 interface gigabitethernet 0/0/0</code> exibe o status da interface e todos os endereços IPv6
+            pertencentes à interface. Juntamente com o endereço local do link e o endereço unicast global, a saída inclui os endereços
+            multicast atribuídos à interface, começando com o prefixo <strong>FF02</strong>, conforme mostrado no exemplo.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>R1# <strong>show ipv6 interface gigabitethernet 0/0/0</strong>
+GigabitEthernet0/0/0 is up, line protocol is up
+  IPv6 is enabled, link-local address is FE80::7279:B3FF:FE92:3130
+  No Virtual link-local address(es):
+  Global unicast address(es):
+    2001:DB8:ACAD:1::1, subnet is 2001:DB8:ACAD:1::/64
+  Joined group address(es):
+    FF02::1
+    FF02::1:FF00:1
+    FF02::1:FF92:3130
+  MTU is 1500 bytes
+  ICMP error messages limited to one every 100 milliseconds
+  ICMP redirects are enabled
+  ICMP unreachables are sent
+  ND DAD is enabled, number of DAD attempts: 1
+  ND reachable time is 30000 milliseconds (using 30000)
+  ND advertised reachable time is 0 (unspecified)
+  ND advertised retransmit interval is 0 (unspecified)
+  ND router advertisements are sent every 200 seconds
+  ND router advertisements live for 1800 seconds
+  ND advertised default router preference is Medium</pre>
+        </div>
+
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--info)">
+            <h3 style="color: var(--info); display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem">
+              <i class="fas fa-link" style="margin: 0"></i> Link-Local (FE80::/10)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.4rem">
+              Utilizado para comunicação entre dispositivos no mesmo segmento local (mesmo domínio de broadcast). Obrigatório para o
+              funcionamento de estruturas IPv6 de vizinhança e roteamento.
+            </p>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--warning)">
+            <h3 style="color: var(--warning); display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem">
+              <i class="fas fa-broadcast-tower" style="margin: 0"></i> Joined Multicast (FF02::/16)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.4rem">
+              Endereços de grupos que a interface passou a fazer parte. <code style="color: var(--primary)">FF02::1</code> representa o
+              grupo de todos os nós IPv6 (All-Nodes), substituindo o broadcast tradicional.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">1.5.4</span> Verificação da Configuração de uma Interface
+        </h2>
+
+        <div class="card">
+          <p>
+            A saída do comando <code>show running-config interface</code> exibe os comandos atuais aplicados à interface especificada, como
+            mostrado.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>R1# <strong>show running-config interface gigabitethernet 0/0/0</strong>
+Building configuration...
+
+Current configuration : 158 bytes
+!
+interface GigabitEthernet0/0/0
+ description Link to LAN 1
+ ip address 192.168.10.1 255.255.255.0
+ negotiation auto
+ ipv6 address 2001:DB8:ACAD:1::1/64
+end
+R1#</pre>
+        </div>
+
+        <div class="card">
+          <p style="margin-bottom: 1.2rem; color: var(--text)">
+            Os dois seguintes comandos são utilizados para coletar informações mais detalhadas de interface:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1.2rem">
+            <div style="border-left: 3px solid var(--primary); padding-left: 1rem">
+              <p><code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show interfaces</code></p>
+              <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.2rem">
+                Exibe informações da interface e contagem de fluxo de pacotes para todas as interfaces no dispositivo.
+              </p>
+            </div>
+
+            <div style="border-left: 3px solid var(--primary); padding-left: 1rem">
+              <p>
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ip interface</code> e
+                <code style="color: var(--primary); font-weight: 700; font-size: 0.95rem">show ipv6 interface</code>
+              </p>
+              <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.2rem">
+                Exibe as informações relacionadas ao IPv4 e IPv6 para todas as interfaces em um roteador.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">1.5.5</span> Verificar rotas
+        </h2>
+
+        <div class="card">
+          <p>
+            A saída do comando <code>show ip route</code> e <code>show ipv6 route</code> revelam as três entradas de rede diretamente
+            conectadas e as três entradas de interface de rota de host local, conforme mostrado no exemplo. A rota do host local tem uma
+            distância administrativa de 0. Também tem uma máscara de /32 para IPv4 e uma máscara de /128 para IPv6. A rota do host local é
+            para rotas no roteador que possui o endereço IP. É usada para permitir que o roteador processe os pacotes destinados a esse IP.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>R1# <strong>show ip route</strong>
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+
+Gateway of last resort is not set
+
+      192.168.10.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.10.0/24 is directly connected, GigabitEthernet0/0/0
+L        192.168.10.1/32 is directly connected, GigabitEthernet0/0/0
+      192.168.11.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.11.0/24 is directly connected, GigabitEthernet0/0/1
+L        192.168.11.1/32 is directly connected, GigabitEthernet0/0/1
+      209.165.200.0/24 is variably subnetted, 2 subnets, 2 masks
+C        209.165.200.224/30 is directly connected, Serial0/1/0
+L        209.165.200.225/32 is directly connected, Serial0/1/0
+
+R1# <strong>show ipv6 route</strong>
+IPv6 Routing Table - default - 7 entries
+Codes: C - Connected, L - Local, S - Static, U - Per-user Static route
+
+C   2001:DB8:ACAD:1::/64 [0/0]
+     via GigabitEthernet0/0/0, directly connected
+L   2001:DB8:ACAD:1::1/128 [0/0]
+     via GigabitEthernet0/0/0, receive
+C   2001:DB8:ACAD:2::/64 [0/0]
+     via GigabitEthernet0/0/1, directly connected
+L   2001:DB8:ACAD:2::1/128 [0/0]
+     via GigabitEthernet0/0/1, receive
+C   2001:DB8:ACAD:3::/64 [0/0]
+     via Serial0/1/0, directly connected
+L   2001:DB8:ACAD:3::1/128 [0/0]
+     via Serial0/1/0, receive
+L   FF00::/8 [0/0]
+     via Null0, receive
+R1#</pre>
+        </div>
+
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--primary)">
+            <h3 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem">
+              <i class="fas fa-link" style="margin: 0"></i> Código C (Connected)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.4rem">
+              Indica que a rede está diretamente conectada. Quando a interface do roteador é configurada com um endereço unicast global e
+              está no estado "up / up", o prefixo IPv6 e o comprimento do prefixo são adicionados à tabela de roteamento como uma rota
+              conectada.
+            </p>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--info)">
+            <h3 style="color: var(--info); display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem">
+              <i class="fas fa-map-marker-alt" style="margin: 0"></i> Código L (Local)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.4rem">
+              O endereço unicast aplicado à interface também é instalado como uma rota local com um prefixo <strong>/32</strong> (IPv4) ou
+              <strong>/128</strong> (IPv6). Elas são usadas pelo roteador para processar de forma eficiente os pacotes destinados à sua
+              própria interface.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-exchange-alt" style="color: var(--primary); font-size: 1.2rem; margin: 0"></i> Teste de Conectividade da Camada
+            3
+          </h3>
+          <p style="margin-bottom: 1rem">
+            O comando <code>ping</code> para IPv6 é idêntico ao comando usado com IPv4, exceto que um endereço IPv6 é usado. Como mostrado
+            no exemplo, o comando <code>ping</code> é usado para verificar a conectividade da Camada 3 entre R1 e PC1.
+          </p>
+
+          <div class="terminal" style="margin-bottom: 0">
+            <pre>R1# <strong>ping 2001:db8:acad:1::10</strong>
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:1::10, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-filter"></i>
+          <span class="section-number">1.5.6</span> Filtrar saída do comando show
+        </h2>
+
+        <div class="card">
+          <p>
+            Por padrão, os comandos que geram várias telas de saída são pausados após 24 linhas. No final da saída pausada, o texto
+            <code>--More--</code> é exibido. Pressione <strong>Enter</strong> para exibir a próxima linha e pressione a
+            <strong>barra de espaço</strong> para exibir o próximo conjunto de linhas. Use o comando <code>terminal length</code> para
+            especificar o número de linhas a serem exibidas. Um valor de 0 (zero) impede o roteador de pausar entre as telas de saída.
+          </p>
+          <p style="margin-top: 0.75rem">
+            Outro recurso muito útil que melhora a experiência do usuário na CLI é a filtragem da saída <strong>show</strong>. Os comandos
+            de filtragem podem ser usados para exibir seções específicas de saída. Para ativar o comando de filtragem, insira um caractere
+            pipe (<code>|</code>) após o comando <strong>show</strong> e, em seguida, insira um parâmetro de filtragem e uma expressão de
+            filtragem.
+          </p>
+          <p style="margin-top: 0.75rem; color: var(--text-dim)">
+            Existem quatro parâmetros de filtragem que podem ser configurados após o tubo.
+          </p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem 1rem">
+          <div class="alert alert-info" style="margin-top: 0; margin-bottom: 1.5rem">
+            <p><i class="fas fa-mouse-pointer"></i> Clique em cada aba para saber mais sobre os comandos de filtragem.</p>
+          </div>
+
+          <div class="tabs-container">
+            <input type="radio" id="tab-section" name="cli-filter-tabs" checked style="display: none" />
+            <input type="radio" id="tab-include" name="cli-filter-tabs" style="display: none" />
+            <input type="radio" id="tab-exclude" name="cli-filter-tabs" style="display: none" />
+            <input type="radio" id="tab-begin" name="cli-filter-tabs" style="display: none" />
+
+            <div
+              class="tabs-nav"
+              style="
+                display: flex;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                background: rgba(0, 0, 0, 0.2);
+              "
+            >
+              <label for="tab-section" class="tab-btn">section</label>
+              <label for="tab-include" class="tab-btn">include</label>
+              <label for="tab-exclude" class="tab-btn">exclude</label>
+              <label for="tab-begin" class="tab-btn">begin</label>
+            </div>
+
+            <div class="tabs-content">
+              <div class="content-panel panel-section">
+                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">section</h3>
+                <p style="color: var(--text); margin-bottom: 1rem">
+                  Mostra a seção inteira que começa com a expressão de filtragem, conforme mostrado no exemplo.
+                </p>
+                <div class="terminal" style="margin: 0">
+                  <pre>R1# <strong>show running-config | section line vty</strong>
+line vty 0 4
+ password 7 110A1016141D
+ login
+ transport input all</pre>
+                </div>
+              </div>
+
+              <div class="content-panel panel-include">
+                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">include</h3>
+                <p style="color: var(--text); margin-bottom: 1rem">
+                  Inclui todas as linhas de saída que correspondem à expressão de filtragem, conforme mostrado no exemplo.
+                </p>
+                <div class="terminal" style="margin: 0">
+                  <pre>R1# <strong>show ip interface brief</strong>
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0/0   192.168.10.1    YES manual up                    up
+GigabitEthernet0/0/1   192.168.11.1    YES manual up                    up
+Serial0/1/0            209.165.200.225 YES manual up                    up
+Serial0/1/1            unassigned      YES unset  down                  down
+R1#
+R1# <strong>show ip interface brief | include up</strong>
+GigabitEthernet0/0/0   192.168.10.1    YES manual up                    up
+GigabitEthernet0/0/1   192.168.11.1    YES manual up                    up
+Serial0/1/0            209.165.200.225 YES manual up                    up</pre>
+                </div>
+              </div>
+
+              <div class="content-panel panel-exclude">
+                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">exclude</h3>
+                <p style="color: var(--text); margin-bottom: 1rem">
+                  Exclui todas as linhas de saída que correspondem à expressão de filtragem, conforme mostrado no exemplo.
+                </p>
+                <div class="terminal" style="margin: 0">
+                  <pre>R1# <strong>show ip interface brief</strong>
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0/0   192.168.10.1    YES manual up                    up
+GigabitEthernet0/0/1   192.168.11.1    YES manual up                    up
+Serial0/1/0            209.165.200.225 YES manual up                    up
+Serial0/1/1            unassigned      YES unset  down                  down
+R1#
+R1# <strong>show ip interface brief | exclude unassigned</strong>
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0/0   192.168.10.1    YES manual up                    up
+GigabitEthernet0/0/1   192.168.11.1    YES manual up                    up
+Serial0/1/0            209.165.200.225 YES manual up                    up</pre>
+                </div>
+              </div>
+
+              <div class="content-panel panel-begin">
+                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">begin</h3>
+                <p style="color: var(--text); margin-bottom: 1rem">
+                  Mostra todas as linhas de saída de um determinado ponto, começando com a linha que corresponde à expressão de filtragem,
+                  conforme mostrado no exemplo.
+                </p>
+                <div class="terminal" style="margin: 0">
+                  <pre>R1# <strong>show ip route | begin Gateway</strong>
+Gateway of last resort is not set
+      192.168.10.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.10.0/24 is directly connected, GigabitEthernet0/0/0
+L        192.168.10.1/32 is directly connected, GigabitEthernet0/0/0
+      192.168.11.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.11.0/24 is directly connected, GigabitEthernet0/0/1
+L        192.168.11.1/32 is directly connected, GigabitEthernet0/0/1
+      209.165.200.0/24 is variably subnetted, 2 subnets, 2 masks
+C        209.165.200.224/30 is directly connected, Serial0/1/0
+L        209.165.200.225/32 is directly connected, Serial0/1/0</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-success" style="margin-top: 1.5rem">
+          <p>
+            <i class="fas fa-lightbulb"></i> <strong>Observação:</strong> Os filtros de saída podem ser usados em combinação com qualquer
+            comando <strong>show</strong>.
+          </p>
+        </div>
+      </section>
+
+      <style>
+        .tab-btn {
+          flex: 1;
+          text-align: center;
+          padding: 0.6rem;
+          cursor: pointer;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text-dim);
+          transition: all 0.3s ease;
+          border-radius: 6px;
+          user-select: none;
+        }
+        .tab-btn:hover {
+          color: var(--text);
+          background: rgba(255, 255, 255, 0.05);
+        }
+        /* Painéis de conteúdo começam ocultos */
+        .content-panel {
+          display: none;
+          animation: fadeInTab 0.4s ease forwards;
+        }
+        /* Regras de Lógica de Exibição das Abas e Cores de Destaque */
+        #tab-section:checked ~ .tabs-nav label[for='tab-section'],
+        #tab-include:checked ~ .tabs-nav label[for='tab-include'],
+        #tab-exclude:checked ~ .tabs-nav label[for='tab-exclude'],
+        #tab-begin:checked ~ .tabs-nav label[for='tab-begin'] {
+          background: var(--info);
+          color: var(--bg-dark);
+        }
+        #tab-section:checked ~ .tabs-content .panel-section,
+        #tab-include:checked ~ .tabs-content .panel-include,
+        #tab-exclude:checked ~ .tabs-content .panel-exclude,
+        #tab-begin:checked ~ .tabs-content .panel-begin {
+          display: block;
+        }
+        @keyframes fadeInTab {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      </style>
+      <section id="secao1-5-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">1.5.7</span> Verificador de Sintaxe - Saída do Comando Filter Show
+        </h2>
+
+        <div class="card">
+          <p>
+            Pratique a filtragem de saídas no Cisco IOS utilizando os critérios solicitados em cada instrução de laboratório abaixo. Siga a
+            ordem dos passos para consolidar os comandos essenciais de troubleshooting.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 1]</span>
+            Digite o comando para filtrar a saída de <code>show running-config</code> para a seção 'line con'.
+          </div>
+          <div class="terminal">
+            <pre>R1# <strong>show running-config | section line con</strong>
+line con 0
+ password 7 05080F1C2243
+ transport input none</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 2]</span>
+            Digite o comando para filtrar interfaces 'down' na listagem sumarizada.
+          </div>
+          <div class="terminal">
+            <pre>R1# <strong>show ip interface brief | include down</strong>
+Serial0/1/1   unassigned   NO  unset  down  down</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 3]</span>
+            Digite o comando para excluir interfaces 'up' na listagem sumarizada.
+          </div>
+          <div class="terminal">
+            <pre>R1# <strong>show ip interface brief | exclude up</strong>
+Interface            IP-Address      OK? Method Status                Protocol
+Serial0/1/1            unassigned      NO  unset  down                  down</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 4]</span>
+            Digite o comando para filtrar a saída de <code>show running-config</code> para iniciar na palavra 'line'.
+          </div>
+          <div class="terminal">
+            <pre>R1# <strong>show running-config | begin line</strong>
+line con 0
+ password 7 05080F1C2243
+ transport input none
+ stopbits 1
+line vty 0 4
+ password 7 110A1016141D
+ login
+ transport input all</pre>
+          </div>
+        </div>
+
+        <div class="alert alert-success">
+          <p>
+            <i class="fas fa-check-circle"></i> <strong>Parabéns!</strong> Você executou com sucesso os comandos show filtrados e concluiu
+            as etapas deste Verificador de Sintaxe.
+          </p>
+        </div>
+      </section>
+      <section id="secao1-5-8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-history"></i>
+          <span class="section-number">1.5.8</span> Recurso de histórico de comandos
+        </h2>
+
+        <div class="card">
+          <p>
+            O recurso de histórico de comandos é útil porque armazena temporariamente a lista de comandos executados a serem recuperados.
+          </p>
+          <p style="margin-top: 0.75rem">
+            Para recuperar comandos no buffer do histórico, pressione <strong>Ctrl+P</strong> ou a tecla <strong>Up Arrow</strong> (Seta
+            para Cima). A saída do comando começa com o comando mais recente. Repita a sequência de teclas para lembrar dos comandos mais
+            antigos sucessivamente. Para retornar aos comandos mais recentes no buffer do histórico, pressione <strong>Ctrl+N</strong> ou a
+            tecla <strong>Down Arrow</strong> (Seta para Baixo). Repita a sequência de teclas para lembrar dos comandos mais recentes
+            sucessivamente.
+          </p>
+          <p style="margin-top: 0.75rem">
+            Por padrão, o histórico de comandos está ativo e o sistema registra as últimas 10 linhas de comando no seu buffer de histórico.
+            Use o comando <code>show history</code> no modo EXEC privilegiado para exibir o conteúdo do buffer.
+          </p>
+          <p style="margin-top: 0.75rem">
+            Também é prático aumentar o número de linhas de comando que o buffer de histórico registra durante a sessão do terminal atual
+            apenas. Use o comando <code>terminal history size</code> no modo EXEC do usuário para aumentar ou diminuir o tamanho do buffer.
+          </p>
+          <p style="margin-top: 0.75rem; color: var(--text-dim)">
+            Um exemplo dos comandos <code>terminal history size</code> e <code>show history</code> é mostrado na figura a seguir.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>R1# <strong>terminal history size 200</strong>
+R1# <strong>show history</strong>
+  show ip int brief
+  show interface g0/0/0
+  show ip route
+  show running-config
+  show history
+  terminal history size 200
+R1#</pre>
+        </div>
+
+        <div class="grid-2">
+          <div class="card" style="border-left: 3px solid var(--primary)">
+            <h3 style="font-size: 1.1rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+              <i class="fas fa-arrow-up" style="margin: 0; font-size: 1rem"></i> Voltar no Histórico
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim)">
+              Pressione
+              <kbd
+                style="
+                  background: rgba(255, 255, 255, 0.1);
+                  padding: 0.2rem 0.4rem;
+                  border-radius: 4px;
+                  font-family: monospace;
+                  color: var(--text);
+                "
+                >Ctrl + P</kbd
+              >
+              ou a tecla <strong>Seta para Cima</strong> para navegar até os comandos mais antigos já digitados.
+            </p>
+          </div>
+
+          <div class="card" style="border-left: 3px solid var(--primary)">
+            <h3 style="font-size: 1.1rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+              <i class="fas fa-arrow-down" style="margin: 0; font-size: 1rem"></i> Avançar no Histórico
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-dim)">
+              Pressione
+              <kbd
+                style="
+                  background: rgba(255, 255, 255, 0.1);
+                  padding: 0.2rem 0.4rem;
+                  border-radius: 4px;
+                  font-family: monospace;
+                  color: var(--text);
+                "
+                >Ctrl + N</kbd
+              >
+              ou a tecla <strong>Seta para Baixo</strong> para retornar aos comandos mais recentes do buffer.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao1-5-9" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">1.5.9</span> Verificador de sintaxe - Recursos do histórico de comandos
+        </h2>
+
+        <div class="card">
+          <p>
+            Pratique a gerência e visualização do buffer de histórico no Cisco IOS utilizando os critérios solicitados nas instruções de
+            laboratório abaixo. Note que estes comandos de sessão podem ser executados a partir do modo EXEC Usuário.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 1]</span>
+            Digite o comando para definir o número de linhas no histórico de comandos como 200.
+          </div>
+          <div class="terminal">
+            <pre>R1> <strong>terminal history size 200</strong></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom: 0.75rem; font-weight: 500">
+            <span style="color: var(--primary); font-family: monospace; font-weight: bold; margin-right: 0.5rem">[PASSO 2]</span>
+            Digite o comando para exibir o histórico de comandos.
+          </div>
+          <div class="terminal">
+            <pre>R1> <strong>show history</strong>
+  show running-config | section line con
+  show ip interface brief | include down
+  show ip interface brief | exclude up
+  show running-config | begin line
+  terminal history size 200
+  show history
+R1></pre>
+          </div>
+        </div>
+
+        <div class="alert alert-success">
+          <p><i class="fas fa-check-circle"></i> <strong>Parabéns!</strong> Você configurou e exibiu com êxito o histórico de comandos.</p>
         </div>
       </section>
     </main>

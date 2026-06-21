@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Verificar Redes Diretamente Conectadas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_5.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-table"></i> 1.0 Tabela Lógica</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-project-diagram"></i> 2.0 Correção Física</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-network-wired"></i> 3.0 CLI do R1 (IPv4)</a>
+        </li>
+        <li>
+          <a href="#secao4-0"><i class="fas fa-route"></i> 4.0 CLI do R2 (IPv6)</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Dual-Stack & Solução de Problemas</span>
+        <h1>Verificar Redes Diretamente Conectadas</h1>
+        <p style="color: var(--text-dim)">
+          Resolução de problemas de infraestrutura física, mapeamento de portas e ajuste em pilhas IPv4/IPv6.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.0</span> Parâmetros de Endereçamento Oficiais
+        </h2>
+        <div class="card">
+          <p>Valide as tabelas de roteamento locais de acordo com o escopo do documento:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP / Prefixo</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>R1</strong></td>
+                <td>G0/0/0<br />G0/0/1<br />S0/1/0</td>
+                <td>172.16.20.1/25<br />172.16.20.129/25<br />209.165.200.225/30</td>
+                <td>N/D<br />N/D<br />N/D</td>
+              </tr>
+              <tr>
+                <td><strong>PC1</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.10/25</td>
+                <td>172.16.20.1</td>
+              </tr>
+              <tr>
+                <td><strong>PC2</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.138/25</td>
+                <td>172.16.20.129</td>
+              </tr>
+              <tr>
+                <td><strong>R2</strong></td>
+                <td>G0/0/0<br />G0/0/1<br />S0/1/1</td>
+                <td>2001:db8:c0de:12::1/64<br />2001:db8:c0de:13::1/64<br />2001:db8:c0de:11::1/64 (fe80::2)</td>
+                <td>N/D<br />N/D<br />N/D</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">2.0</span> Resolução de Erros de Conectividade Física (Links)
+        </h2>
+        <div class="card">
+          <p>
+            O validador acusou erros em <code>Link to SW1</code> e <code>Link to SW2</code> devido a associações incorretas de portas e
+            tipos de mídia.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Ação Corretiva Necessária:</strong> Exclua os cabos conectados nas
+            interfaces GigabitEthernet0/0/0 e 0/0/1 do R1. Reconecte-os utilizando o cabo correspondente exigido pela topologia original
+            para limpar as flags vermelhas de validação.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">3.0</span> Ajustes de Interface IPv4 em R1
+        </h2>
+        <div class="card">
+          <p>Comandos executados para ativar a porta local e ajustar o IP da Serial ao escopo correto:</p>
+          <div class="terminal">
+            <pre>
+R1> enable
+Password: class
+R1# configure terminal
+R1(config)# interface GigabitEthernet0/0/0
+R1(config-if)# no shutdown
+R1(config-if)# interface Serial0/1/0
+R1(config-if)# ip address 209.165.200.225 255.255.255.252
+R1(config-if)# end
+R1# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">4.0</span> Remoção de Redes Duplicadas IPv6 em R2
+        </h2>
+        <div class="card">
+          <p>Comando obrigatório de filtragem e limpeza de sub-redes IPv6 residuais:</p>
+          <div class="terminal">
+            <pre>
+R2> enable
+Password: class
+R2# configure terminal
+R2(config)# interface GigabitEthernet0/0/1
+R2(config-if)# no ipv6 address 2001:db8:c0de:14::1/64
+R2(config-if)# ipv6 address 2001:db8:c0de:13::1/64
+R2(config-if)# end
+R2# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Topologia 100% Corrigida</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a versão com os cabos físicos e comandos totalmente alinhados ao validador do NetAcad.
+          </p>
+          <a href="../labs/lab_5.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

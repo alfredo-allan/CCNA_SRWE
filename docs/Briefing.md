@@ -1,26 +1,26 @@
-📑 BRIEFING DE IDENTIDADE VISUAL E ESTRUTURA: NDG LINUX ESSENTIALS
+📑 BRIEFING DE IDENTIDADE VISUAL E ESTRUTURA: CISCO CCNA 2 (SRWE)
 📌 VISÃO GERAL
 
-Este briefing define os padrões de design, cores, tipografia, efeitos e estrutura para renderização de conteúdo técnico (textos, comandos, estruturas de arquivos) em páginas web com a identidade visual voltada para o curso NDG Linux Essentials.
+Este briefing define os padrões de design, cores, tipografia, efeitos e estrutura para a renderização de conteúdo técnico (topologias, sintaxes de comandos Cisco IOS, saídas de console e tabelas de endereçamento) em páginas web com a identidade visual voltada para o curso Cisco CCNA 2: Switching, Routing, and Wireless Essentials (SRWE).
 
-O estilo é inspirado em sistemas operacionais modernos e terminais Linux em dark mode profissional, com ênfase máxima em legibilidade, comandos destacados, fidelidade linguística e elementos de terminal.
+O estilo é inspirado em sistemas operacionais de rede modernos, consoles de gerência Telnet/SSH e emuladores profissionais como Packet Tracer e SecureCRT em dark mode profissional, com ênfase máxima em legibilidade, comandos IOS destacados, fidelidade aos prompts CLI e elementos de infraestrutura interativos.
 🎨 PALETA DE CORES (CSS Variables)
-css
+CSS
 
 :root {
-  --bg-dark: #0a0a0a;
-  --bg-card: #111111;
-  --bg-card-hover: #1a1a1a;
-  --text: #e0e0e0;
-  --text-dim: #888888;
-  --primary: #00ff88;
-  --primary-dark: #00cc6a;
-  --secondary: #0078d4;
-  --success: #00ff88;
-  --warning: #ffcc00;
-  --danger: #ff4444;
-  --info: #00aaff;
-  --border: #222222;
+  --bg-dark: #0a0e17;          /* Fundo ultra-dark azulado de centrais de rede */
+  --bg-card: #121824;          /* Fundo dos blocos de conteúdo e cartões */
+  --bg-card-hover: #1b2436;    /* Efeito hover nos cartões */
+  --text: #e2e8f0;             /* Texto principal (Alabaster Slate) */
+  --text-dim: #718096;         /* Texto secundário desbotado */
+  --primary: #00b4d8;          /* Azul Cisco Neon (Comandos IOS, prompts e links) */
+  --primary-dark: #0077b6;     /* Azul profundo para variações de botões */
+  --secondary: #00f5d4;        /* Ciano elétrico para gradientes e estados ativos */
+  --success: #03f487;          /* Verde terminal para interfaces UP e logs de sucesso */
+  --warning: #ffb703;          /* Laranja de atenção para portas STP em Blocking ou alertas */
+  --danger: #ff4d6d;           /* Vermelho para portas Shutdown e falhas críticas */
+  --info: #90e0ef;             /* Azul claro para informativos e notas teóricas */
+  --border: #202b42;           /* Cor das bordas estruturais */
 }
 
 🔤 TIPOGRAFIA
@@ -30,10 +30,9 @@ Subtítulos (h2)	'Inter', sans-serif	2rem	700	--text + ícone --primary
 Títulos de seção (h3)	'Inter', sans-serif	1.3rem	600	--text
 Corpo do texto	'Inter', sans-serif	1rem	400	--text
 Texto secundário	'Inter', sans-serif	0.85rem	400	--text-dim
-Terminal / Código	'Courier New', monospace	0.85rem	400	--primary
-
+Terminal / CLI IOS	'Consolas', 'Courier New', monospace	0.85rem	400	--text (Comandos em strong com --secondary ou --primary)
 Efeito Gradiente para H1:
-css
+CSS
 
 background: linear-gradient(90deg, var(--primary), var(--secondary));
 -webkit-background-clip: text;
@@ -42,7 +41,7 @@ background-clip: text;
 
 🧱 ESTRUTURA DE LAYOUT
 Container:
-css
+CSS
 
 .container {
     max-width: 1200px;
@@ -51,7 +50,7 @@ css
 }
 
 Seções:
-css
+CSS
 
 .section {
     padding: 60px 0;
@@ -60,7 +59,7 @@ css
 }
 
 Título de Seção:
-css
+CSS
 
 .section-title {
     font-size: 2rem;
@@ -75,13 +74,13 @@ css
     font-size: 2rem;
 }
 .section-number {
-    color: var(--primary);
+    color: var(--secondary);
     font-family: monospace;
     font-size: 1.8rem;
 }
 
 Cards:
-css
+CSS
 
 .card {
     background: var(--bg-card);
@@ -95,6 +94,7 @@ css
     transform: translateY(-5px);
     border-color: var(--primary);
     background: var(--bg-card-hover);
+    box-shadow: 0 8px 24px rgba(0, 180, 216, 0.15);
 }
 .card i {
     font-size: 2rem;
@@ -102,68 +102,70 @@ css
     margin-bottom: 1rem;
 }
 
-💻 TERMINAL
-css
+💻 TERMINAL (Cisco CLI)
+CSS
 
 .terminal {
-    background: #0d1117;
+    background: #090d16;
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.2rem;
     border: 1px solid var(--border);
-    font-family: 'Courier New', monospace;
+    font-family: 'Consolas', 'Courier New', monospace;
     overflow-x: auto;
     margin: 1.5rem 0;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .terminal pre {
     margin: 0;
-    color: var(--primary);
+    color: #e2e8f0;
     font-size: 0.85rem;
     white-space: pre;
     word-wrap: normal;
     display: inline-block;
     min-width: 100%;
+    line-height: 1.5;
+}
+.terminal pre strong {
+    color: var(--secondary); /* Comandos digitados pelo usuário ganham destaque ciano */
 }
 
 🧭 TOP BAR E MENU LATERAL (MODERNO)
 Estrutura HTML do Top Bar e Sidebar:
-html
+HTML
 
-<!-- Top Bar - Header fixo -->
 <div class="top-bar">
     <button class="menu-toggle" id="openMenu">
-        <i class="fas fa-bars"></i>
-        <span>Menu</span>
+        <i class="fas fa-network-wired"></i>
+        <span>Console Menu</span>
     </button>
     <a href="index.html" class="top-bar-brand">
-        <i class="fab fa-linux"></i> NDG Linux Essentials
+        <i class="fas fa-server"></i> Cisco CCNA 2 (SRWE)
     </a>
     <a href="index.html" class="btn-outline">
-        <i class="fas fa-home"></i> Voltar
+        <i class="fas fa-door-open"></i> Sair do Lab
     </a>
 </div>
 
-<!-- Menu Lateral (Sidebar) -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
         <button class="close-sidebar" id="closeMenu">
             <i class="fas fa-times"></i>
         </button>
     </div>
     <ul class="nav-modules">
-        <li><a href="#secaoX-Y"><i class="fas fa-icone"></i> X.Y Título</a></li>
+        <li><a href="#secaoX-Y"><i class="fas fa-icone"></i> X.Y Título da Seção</a></li>
     </ul>
 </div>
 
-<!-- Overlay para fechar o menu -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 CSS do Top Bar e Sidebar:
-css
+CSS
 
 /* Top Bar */
 .top-bar {
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(10, 14, 23, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
   padding: 0.8rem 1rem;
@@ -211,8 +213,8 @@ css
   top: 0;
   left: 0;
   height: 100vh;
-  width: 280px;
-  background: rgba(17, 17, 17, 0.98);
+  width: 290px;
+  background: rgba(18, 24, 36, 0.98);
   backdrop-filter: blur(15px);
   border-right: 1px solid var(--border);
   transform: translateX(-100%);
@@ -272,8 +274,8 @@ css
 }
 
 .sidebar .nav-modules li a:hover {
-  color: var(--primary);
-  background: rgba(0, 255, 136, 0.1);
+  color: var(--secondary);
+  background: rgba(0, 180, 216, 0.1);
   transform: translateX(5px);
 }
 
@@ -284,7 +286,7 @@ css
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1001;
   display: none;
 }
@@ -299,7 +301,7 @@ body {
 }
 
 JavaScript para o Menu Lateral (menu.js):
-javascript
+JavaScript
 
 class SidebarMenu {
     constructor() {
@@ -353,26 +355,29 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 🦸 HERO SECTION
-css
+CSS
 
 .hero {
     padding: 80px 0;
     text-align: center;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    background: linear-gradient(135deg, #0a0e17 0%, #121c2e 100%);
+    border-bottom: 1px solid var(--border);
 }
 .badge-lab {
     display: inline-block;
-    background: rgba(0, 255, 136, 0.1);
+    background: rgba(0, 180, 216, 0.1);
     color: var(--primary);
     padding: 0.5rem 1rem;
     border-radius: 50px;
     font-size: 0.8rem;
     margin-bottom: 1.5rem;
-    border: 1px solid rgba(0, 255, 136, 0.3);
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-📊 TABELAS
-css
+📊 TABELAS DE ENDEREÇAMENTO / VLANs
+CSS
 
 .table-custom {
     width: 100%;
@@ -387,25 +392,29 @@ css
 .table-custom th {
     color: var(--primary);
     font-weight: 600;
+    background: rgba(20, 30, 49, 0.5);
+}
+.table-custom tr:hover {
+    background: rgba(255, 255, 255, 0.02);
 }
 
-⚠️ ALERTAS
-css
+⚠️ ALERTAS COM CONTEXTO DE REDE
+CSS
 
 .alert {
     padding: 1rem;
     border-radius: 12px;
     margin: 1rem 0;
     border-left: 4px solid;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(18, 24, 36, 0.6);
 }
-.alert-success { border-left-color: var(--success); }
-.alert-info { border-left-color: var(--info); }
-.alert-warning { border-left-color: var(--warning); }
-.alert-danger { border-left-color: var(--danger); }
+.alert-success { border-left-color: var(--success); } /* Syslogs operacionais / UP */
+.alert-info { border-left-color: var(--info); }       /* Conceitos teóricos/RFCs */
+.alert-warning { border-left-color: var(--warning); }   /* Inconsistências de VLAN/STP */
+.alert-danger { border-left-color: var(--danger); }     /* Interfaces Down / Falhas */
 
 📱 RESPONSIVIDADE
-css
+CSS
 
 @media (max-width: 768px) {
     .hero h1 { font-size: 2rem; }
@@ -428,82 +437,87 @@ css
     .terminal pre { font-size: 0.7rem; white-space: pre; }
 }
 
-🛠️ ÍCONES FONTAWESOME RECOMENDADOS
+🛠️ ÍCONES FONTAWESOME RECOMENDADOS (MUNDO REDES)
 Contexto	Ícone
-Linux/Sistema	fa-linux
-Terminal	fa-terminal, fa-code
-Diretórios	fa-folder-open, fa-sitemap
-Servidor	fa-server, fa-microchip
-Segurança	fa-shield-alt, fa-key
-Documentação	fa-book, fa-file-alt
-Sucesso	fa-check-circle
-Aprendizado	fa-graduation-cap, fa-lightbulb
-Menu/Navegação	fa-bars, fa-compass
-Fechar	fa-times
+Roteador / Switch / Infraestrutura	fa-server, fa-network-wired
+Modo de Linha / Console / CLI	fa-terminal, fa-code
+VLANs / Trunking / Divisão Lógica	fa-layer-group, fa-sitemap
+Segurança de Porta / SSH / ACLs	fa-shield-alt, fa-key, fa-lock
+Redundância / STP / EtherChannel	fa-layer-group, fa-link
+Documentação / Protocolos / RFCs	fa-book, fa-file-alt
+Interface UP / Sucesso	fa-check-circle, fa-toggle-on
+Dicas / Insights de Troubleshooting	fa-lightbulb, fa-tools
+Menu / Navegação Global	fa-bars, fa-compass
+Links WAN / Wireless	fa-wifi, fa-broadcast-tower
 📋 INSTRUÇÕES OBRIGATÓRIAS PARA RENDERIZAÇÃO
 
-Ao receber o conteúdo técnico original do curso, siga estritamente:
+Ao processar o conteúdo técnico do material didático oficial do CCNA 2, siga à risca as seguintes diretrizes:
 
-    TRADUÇÃO: Traduza para PT-BR com alta fidelidade, mantendo termos técnicos como kernel, shell, pipeline, root.
+    TRADUÇÃO TÉCNICA: Traduza o conteúdo explicativo perfeitamente para PT-BR, mas preserve intactos os jargões universais de redes da Cisco em inglês, como: Subnet mask, Default Gateway, Trunk, Broadcast, Handshake, Native VLAN, Port-Security, Running-config, Startup-config, Bootloader, Spanning-Tree, Loopback.
 
-    SUBSTITUIÇÃO DE IMAGENS: Nunca use imagens/fotos. Substitua por ícones FontAwesome ou arte ASCII.
+    SUBSTITUIÇÃO DE MAPAS E IMAGENS: Nunca insira capturas de tela ou imagens estáticas. Substitua mapas topológicos complexos por representações visuais interativas em HTML estruturadas por CSS/Flexbox (assim como fizemos na seção 1.4.3).
 
-    MASCOTE: Use fa-linux (pinguim/Tux) em vez de caveiras ou ícones de ameaça.
+    PROMPTS DINÂMICOS E FIÉIS À CLI: Preste atenção absoluta ao estado do prompt do Cisco IOS dentro dos blocos <div class="terminal">. Se o usuário executar um comando de alteração de contexto, as próximas linhas devem refletir rigorosamente o prompt correto do IOS:
 
-    COMANDOS: Todo comando ou saída de terminal deve ficar dentro de <div class="terminal"><pre>comando</pre></div>.
+        Modo EXEC Usuário: Router>
 
-    ALERTAS: Use as classes .alert-success, .alert-info, .alert-warning, .alert-danger com ícones correspondentes.
+        Modo EXEC Privilegiado: Router#
 
-    TOPBAR E SIDEBAR: Use obrigatoriamente a estrutura do .top-bar com .sidebar e .menu-toggle.
+        Modo de Configuração Global: Router(config)#
 
-    MENU LATERAL: Para cada seção criada, gere um <li><a href="#secaoX-Y"><i class="fas [icone]"></i> X.Y Título</a></li> para colar dentro do <ul class="nav-modules"> da sidebar.
+        Modo de Interface: Router(config-if)#
 
-    ID DAS SEÇÕES: Cada seção deve ter id="secao1-1", id="secao1-2", etc., seguindo o padrão secao{MODULO}-{SECAO}.
+        Modo de Linha: Router(config-line)#
 
-    ARQUIVOS EXTERNOS: Incluir menu.js no final de cada página e importar o CSS global.
+        Configuração de VLAN: Router(config-vlan)#
 
-ESTRUTURA DA SEÇÃO:
-html
+        Se o roteador for nomeado (ex: hostname S1 ou hostname R2), mude o prefixo imediatamente nas linhas seguintes para S1(config)# ou R2(config)#.
 
-<section id="secao1-X" class="section">
+    COMANDOS EM NEGRITO: Dentro das tags <pre>, envolva todos os comandos que devem ser obrigatoriamente digitados pelo estudante dentro de <strong>...</strong> para que se destaquem em ciano elétrico. Deixe as respostas geradas automaticamente pelo roteador (saídas de syslogs ou comandos show) em texto plano normal (--text).
+
+    ESTRUTURA DOS LINKS E SEÇÕES: Cada módulo ou subtópico deve ser encapsulado em uma tag <section> contendo um ID semântico estruturado como id="secao1-4-2", id="secao1-4-5", mapeando rigorosamente o sumário da Cisco.
+
+ESTRUTURA PADRÃO DE UMA SEÇÃO:
+HTML
+
+<section id="secao1-X-Y" class="section">
     <h2 class="section-title">
-        <i class="fas [icone]"></i>
-        <span class="section-number">1.X</span> Título Traduzido
+        <i class="fas [icone-de-rede]"></i>
+        <span class="section-number">1.X.Y</span> Título do Tópico em Redes
     </h2>
     <div class="card">
-        <p>Conteúdo traduzido...</p>
+        <p>Explicação conceitual da arquitetura ou protocolo...</p>
     </div>
 </section>
 
-PADRÃO DE PÁGINA COMPLETO:
-html
+PADRÃO DE PÁGINA COMPLETO COMPATÍVEL COM CCNA 2:
+HTML
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>NDG Linux Essentials | Título</title>
+    <title>Cisco CCNA 2 (SRWE) | Laboratório Avançado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* CSS GLOBAL COMPLETO AQUI */
+        /* INSERIR OS ESTILOS CSS DO BRIEFING REVISADO AQUI */
     </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="top-bar">...</div>
 
-<!-- SIDEBAR -->
 <div class="sidebar">...</div>
 <div class="sidebar-overlay"></div>
 
-<!-- HERO -->
-<section class="hero">...</section>
+<section class="hero">
+    <div class="badge-lab">Cisco IOS Interactive Lab</div>
+    <h1>Switching, Routing, and Wireless Essentials</h1>
+</section>
 
 <div class="container">
-    <!-- SEÇÕES -->
-</div>
+    </div>
 
 <footer>...</footer>
 
@@ -511,62 +525,26 @@ html
 </body>
 </html>
 
-✅ CHECKLIST DE QUALIDADE
+🚀 INÍCIO PARA NOVO CHAT (Prompt Pronto)
 
-    Fundo escuro consistente (#0a0a0a)
+Copie e cole o texto abaixo se precisar iniciar uma nova sessão limpa focado na qualidade que atingimos:
+Plaintext
 
-    Tradução PT-BR fiel
+🎨 Contexto: Você é um engenheiro de redes especialista em Front-End UI/UX corporativo e deve renderizar o conteúdo prático e teórico do curso oficial "Cisco CCNA 2 (SRWE)" seguindo as diretrizes exatas de design estabelecidas.
 
-    Sem imagens (tudo substituído por ícones ou ASCII)
+📌 Identidade Visual do Terminal de Redes:
+- Fundo escuro azulado #0a0e17, cartões internos #121824, bordas tecnológicas #202b42.
+- Texto principal #e2e8f0, subtextos técnicos #718096.
+- Cor primária: azul ciano elétrico #00b4d8 (prompts, links e títulos).
+- Cor secundária/Destaque de comandos digitados: #00f5d4.
+- Logs operacionais de sucesso (Interface UP): #03f487.
+- Efeito Hover nos cards: elevação suave + brilho de borda em azul.
 
-    Ícone fa-linux presente
+🛠️ Regras Inegociáveis de Execução:
+1. Traduza a teoria para PT-BR mantendo os termos universais de redes intactos (Trunk, VLAN, Spanning-Tree, etc.).
+2. Substitua qualquer imagem ou diagrama por construções de topologias em código nativo HTML/CSS responsivo com rolagem horizontal.
+3. Insira as linhas de comando rigorosamente dentro de <div class="terminal"><pre>...</pre></div> destacando o texto inserido pelo usuário com as tags <strong>...</strong>.
+4. Mantenha os prompts de comando sincronizados e fiéis ao estado real do Cisco IOS (ex: Router#, Router(config)#, Router(config-if)#).
+5. Gere de forma contígua os elementos da sidebar e do arquivo JavaScript correspondente para cada nova seção gerada.
 
-    Comandos dentro de .terminal
-
-    H1 com gradiente verde → azul
-
-    Top Bar fixa com menu toggle
-
-    Sidebar com navegação expansível
-
-    Overlay para fechar menu
-
-    menu.js incluído
-
-    Links gerados para cada seção dentro da sidebar
-
-    Responsividade testada (mobile/desktop)
-
-🚀 INÍCIO PARA NOVO CHAT
-
-Copie e cole o texto abaixo em um novo chat:
-text
-
-🎨 Contexto: Você é um especialista em front-end e deve renderizar o conteúdo do curso "NDG Linux Essentials" seguindo o briefing abaixo.
-
-📌 Identidade Visual:
-- Fundo escuro #0a0a0a, cards #111111, bordas #222222
-- Texto principal #e0e0e0, texto secundário #888888
-- Cor primária: verde neon #00ff88 (comandos, ícones, destaques)
-- Cor secundária: azul #0078d4 (gradientes)
-- Terminal: fundo #0d1117, texto #00ff88, fonte monospace
-- Hover nos cards: elevação + borda verde
-
-🛠️ Estrutura do Header (OBRIGATÓRIA):
-- Top bar fixa com botão menu toggle
-- Sidebar lateral que abre/fecha
-- Overlay para fechar o menu
-- menu.js para controle
-
-🛠️ Regras:
-1. Traduza tudo para PT-BR com fidelidade técnica
-2. Substitua imagens por ícones FontAwesome (use fa-linux como mascote)
-3. Comandos dentro de <div class="terminal"><pre>...</pre></div>
-4. Para CADA seção, gere um link <li><a href="#secaoX-Y"><i class="fas [icone]"></i> X.Y Título</a></li> para a sidebar
-5. IDs das seções: id="secao1-1", id="secao1-2", etc.
-6. Use cards, tabelas e alertas conforme necessidade
-7. Inclua menu.js no final da página
-
-📤 Aguardando conteúdo do módulo para renderização...
-
-FIM DO BRIEFING REFATORADO 🐧
+📤 Envie o conteúdo do roteiro de laboratório/módulo para iniciar a renderização no padrão profissional...

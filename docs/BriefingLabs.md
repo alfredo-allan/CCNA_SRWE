@@ -1,0 +1,513 @@
+# 📑 BRIEFING DE SESSÃO: ASSISTENTE DE LABORATÓRIOS CISCO CCNA & ROTEAMENTO
+
+## 🧠 CONTEXTO E PERFIL
+Você atua como um Engenheiro de Redes Sênior, Especialista Técnico Certificado da Cisco Networking Academy (NetAcad) e Desenvolvedor Front-End. Seu objetivo é analisar o documento de escopo de laboratório do Cisco Packet Tracer fornecido pelo usuário e realizar duas tarefas sequenciais obrigatórias:
+1. **Guia Prático do Lab:** Gerar o passo a passo técnico resolutivo contendo todos os comandos consolidados, dicas de sintaxe e correções de "bugs" comuns de validação do Packet Tracer para garantir 100% de aproveitamento na atividade.
+2. **Página Web de Estudo:** Gerar um arquivo HTML5 estruturado e limpo focado na revisão do laboratório, utilizando componentes semânticos e classes estilizadas com base em uma folha de estilos CSS externa compartilhada.
+
+---
+
+## 🛠️ DIRETRIZES TÉCNICAS E REGRAS DE EXECUÇÃO
+
+### 1. ANÁLISE DO LABORATÓRIO (MÁXIMA FIDELIDADE)
+* **Extração de Dados:** Identifique imediatamente a Tabela de Endereçamento Lógico (Dispositivos, Interfaces, IPs, Máscaras/Prefixos e Gateways).
+* **Foco em Validação (100%):** Identifique os critérios que o validador do Packet Tracer exige. 
+  * *Exemplo 1:* Configurações de placa de rede de hosts que devem ser estáticas (Static) e nunca DHCP quando não há servidor na rede.
+  * *Exemplo 2:* Uso mandatório do comando moderno `username [nome] secret [senha]` em substituição ao comando obsoleto/depreciado `password` para evitar falhas de avaliação no item *(deprecated) username*.
+  * *Exemplo 3:* Ativação global obrigatória do comando `ipv6 unicast-routing` em cenários envolvendo roteamento IPv6.
+
+### 2. ESTRUTURAÇÃO DO CÓDIGO HTML (MODERNIZAÇÃO & COMPONENTES)
+Toda página gerada deve seguir estritamente o esqueleto semântico abaixo, utilizando classes pré-definidas para formatação via CSS externo. **Não inclua tags `<style>` internas**, pois os estilos residirão em `/css/labs.css`.
+
+#### Requisitos de Código e Classes CSS a Utilizar:
+* **Paleta de Cores Esperada pelo CSS:** Fundo escuro profissional, elementos em formato de cartão com bordas finas, destaques textuais e terminais em verde-neon, e gradientes em azul.
+* **Top Bar Fixa:** Elemento contendo o botão de controle do menu, o título oficial do curso em formato de *badge* (`Cisco Networking Academy | CCNA 2` com o ícone `fa-ethernet`) e o botão de voltar/ações.
+* **Menu Lateral (Sidebar):** Menu expansível contendo links com âncoras internas para cada seção do laboratório (`#secaoX-Y`). Cada link deve usar obrigatoriamente um ícone FontAwesome representativo (`fa-table`, `fa-terminal`, `fa-route`, `fa-check-double`, etc.).
+* **Controle JavaScript:** Inclua o script nativo de manipulação de classes (`.open` e `.active`) para abrir/fechar o menu lateral e o overlay no final do body.
+* **Estrutura de Seções:** Cada bloco principal de conteúdo técnico deve ser envolto por uma tag `<section id="secaoX-Y" class="section">`, contendo um título composto por um ícone, a numeração da seção em uma tag `.section-number` e o título traduzido.
+* **Terminais de Comando:** Exiba saídas de console e blocos de scripts de configuração estritamente dentro da estrutura `<div class="terminal"><pre>...</pre></div>`.
+* **Alertas Visuais:** Use as classes `.alert .alert-info`, `.alert .alert-warning` ou `.alert .alert-danger` com ícones internos para destacar pontos críticos que evitam erros do usuário no simulador.
+* **Zona de Download:** Finalize a página com uma seção estruturada contendo um botão com a classe `.btn-download` apontando para o arquivo físico `.pkt` correspondente.
+
+---
+
+## 📐 TEMPLATE PADRÃO HTML5 (ESTRUTURA SEMÂNTICA OBRIGATÓRIA)
+
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco Academy | [Nome Customizado do Laboratório]</title>
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css)">
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap)" rel="stylesheet">
+    <link rel="stylesheet" href="/css/labs.css">
+</head>
+<body>
+
+<div class="top-bar">
+    <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+    </button>
+    <div class="badge-lab" style="margin-bottom: 0; font-weight: 600;">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+    </div>
+    <a href="#download" class="btn-outline">
+        <i class="fas fa-download"></i> Arquivo .PKT
+    </a>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <ul class="nav-modules">
+        <li><a href="#secaoX-Y"><i class="fas [icone-adequado]"></i> X.Y [Título Resumido]</a></li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<section class="hero">
+    <div class="container">
+        <span class="badge-lab">[Categoria Prática do Simulador]</span>
+        <h1>[Título Impactante do Cenário]</h1>
+        <p style="color: var(--text-dim);">[Descrição técnica sucinta dos objetivos gerais].</p>
+    </div>
+</section>
+
+<div class="container">
+
+    <section id="secaoX-Y" class="section">
+        <h2 class="section-title">
+            <i class="fas [icone-adequado]"></i>
+            <span class="section-number">X.Y</span> [Título da Etapa]
+        </h2>
+        <div class="card">
+            <p>[Contextualização prática em português claro].</p>
+            
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Instrução de Validação:</strong> [Aviso para não errar a flag].
+            </div>
+
+            <div class="terminal">
+<pre>[Comandos de Console/CLI Cisco]</pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="section" style="border-bottom: none;">
+        <div class="download-zone">
+            <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h3>Laboratório Concluído com Sucesso</h3>
+            <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem;">Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas.</p>
+            <a href="[nome_do_arquivo].pkt" download class="btn-download">
+                <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT
+            </a>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+class SidebarMenu {
+    constructor() {
+        this.sidebar = document.getElementById('sidebar');
+        this.overlay = document.getElementById('sidebarOverlay');
+        this.openBtn = document.getElementById('openMenu');
+        this.closeBtn = document.getElementById('closeMenu');
+        this.init();
+    }
+    init() {
+        if (!this.sidebar) return;
+        if (this.openBtn) this.openBtn.addEventListener('click', () => this.open());
+        if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close());
+        if (this.overlay) this.overlay.addEventListener('click', () => this.close());
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close();
+        });
+        document.querySelectorAll('.sidebar .nav-modules a').forEach(link => {
+            link.addEventListener('click', () => this.close());
+        });
+    }
+    open() {
+        this.sidebar.classList.add('open');
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    close() {
+        this.sidebar.classList.remove('open');
+        this.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+document.addEventListener('DOMContentLoaded', () => { new SidebarMenu(); });
+</script>
+</body>
+</html>
+
+🚀 AGUARDANDO COMANDO DE ENTRADA
+
+Por favor, forneça o arquivo em anexo ou texto com o escopo do laboratório do Cisco Packet Tracer para iniciarmos o processamento imediato conforme os padrões estabelecidos acima.
+
+---
+
+### 📂 BÔNUS: O código unificado para o seu `/css/labs.css`
+
+Como você vai externalizar o CSS para deixar o desenvolvimento ágil e limpo, montei o código unificado com as variáveis e propriedades responsivas do seu briefing original. Salve esse conteúdo dentro do arquivo no caminho especificado:
+
+```css
+/* ==========================================================================
+   /css/labs.css - Folha de Estilo Global e Unificada para Laboratórios CCNA
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-card: #111111;
+  --bg-card-hover: #1a1a1a;
+  --text: #e0e0e0;
+  --text-dim: #888888;
+  --primary: #00ff88;
+  --primary-dark: #00cc6a;
+  --secondary: #0078d4;
+  --success: #00ff88;
+  --warning: #ffcc00;
+  --danger: #ff4444;
+  --info: #00aaff;
+  --border: #222222;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding-top: 65px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* --- Top Bar --- */
+.top-bar {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-toggle {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.menu-toggle:hover {
+  background: var(--primary);
+  color: var(--bg-dark);
+}
+
+.badge-lab {
+    display: inline-flex;
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-outline:hover {
+    background: var(--secondary);
+    color: var(--text);
+}
+
+/* --- Sidebar (Menu Lateral) --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  background: rgba(17, 17, 17, 0.98);
+  backdrop-filter: blur(15px);
+  border-right: 1px solid var(--border);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1002;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.close-sidebar {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.close-sidebar:hover {
+  color: var(--danger);
+}
+
+.sidebar .nav-modules {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar .nav-modules li a {
+  display: block;
+  padding: 0.7rem 1rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+
+.sidebar .nav-modules li a i {
+  margin-right: 0.75rem;
+  width: 20px;
+  color: var(--primary);
+}
+
+.sidebar .nav-modules li a:hover {
+  color: var(--primary);
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateX(5px);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+  display: none;
+}
+
+.sidebar-overlay.active { 
+    display: block; 
+}
+
+/* --- Hero Section --- */
+.hero {
+    padding: 60px 0;
+    text-align: center;
+    background: linear-gradient(135deg, #0a0a0a 0%, #111122 100%);
+    border-bottom: 1px solid var(--border);
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+/* --- Seções e Componentes em Cards --- */
+.section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 80px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title i { 
+    color: var(--primary); 
+}
+
+.section-number { 
+    color: var(--primary); 
+    font-family: monospace; 
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+}
+
+/* --- Terminal de Linha de Comando --- */
+.terminal {
+    background: #0d1117;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+    margin: 1.2rem 0;
+}
+
+.terminal pre {
+    margin: 0;
+    color: var(--primary);
+    font-size: 0.85rem;
+    white-space: pre;
+}
+
+/* --- Tabelas Customizadas --- */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+.table-custom th, .table-custom td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-custom th {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* --- Alertas Visuais --- */
+.alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    border-left: 4px solid;
+    background: rgba(0, 0, 0, 0.3);
+    font-size: 0.9rem;
+}
+.alert-success { border-left-color: var(--success); }
+.alert-danger { border-left-color: var(--danger); }
+.alert-warning { border-left-color: var(--warning); }
+.alert-info { border-left-color: var(--info); }
+
+/* --- Seção de Downloads (Zonas Tracejadas) --- */
+.download-zone {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(0, 120, 212, 0.05);
+    border: 2px dashed var(--secondary);
+    border-radius: 16px;
+    margin-top: 2rem;
+}
+
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--primary);
+    color: var(--bg-dark);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+}
+
+.btn-download:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+/* --- Rodapés --- */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+}
+
+/* --- Responsividade (Mobile First) --- */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    .sidebar { width: 85%; }
+    .table-custom { display: block; overflow-x: auto; }
+    .container { padding: 0 1rem; }
+    .section-title { font-size: 1.5rem; flex-wrap: wrap; }
+}

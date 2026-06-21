@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Verificar Redes Diretamente Conectadas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_4.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-table"></i> 1.0 Tabela Lógica</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-network-wired"></i> 2.0 Correções IPv4 (R1)</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-route"></i> 3.0 Correções IPv6 (R2)</a>
+        </li>
+        <li>
+          <a href="#secao4-0"><i class="fas fa-check-double"></i> 4.0 Testes de Conectividade</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Roteamento Inter-LAN & Verificação</span>
+        <h1>Verificar Redes Diretamente Conectadas</h1>
+        <p style="color: var(--text-dim)">
+          Análise avançada de tabelas de roteamento, ajuste de interfaces administrativas e mitigação de falhas de endereçamento e máscaras
+          (/30).
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.0</span> Tabela de Endereçamento Lógico Oficial
+        </h2>
+        <div class="card">
+          <p>
+            Utilize os dados oficiais validados abaixo para garantir que nenhum dispositivo opere com parâmetros residuais do simulador:
+          </p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP / Prefixo</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>R1</strong></td>
+                <td>G0/0/0<br />G0/0/1<br />S0/1/0</td>
+                <td>172.16.20.1/25<br />172.16.20.129/25<br />209.165.200.225/30</td>
+                <td>N/D<br />N/D<br />N/D</td>
+              </tr>
+              <tr>
+                <td><strong>PC1</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.10/25</td>
+                <td>172.16.20.1</td>
+              </tr>
+              <tr>
+                <td><strong>PC2</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.138/25</td>
+                <td>172.16.20.129</td>
+              </tr>
+              <tr>
+                <td><strong>R2</strong></td>
+                <td>G0/0/0<br />G0/0/1<br />S0/1/1</td>
+                <td>2001:db8:c0de:12::1/64<br />2001:db8:c0de:13::1/64<br />2001:db8:c0de:11::1/64 (fe80::2)</td>
+                <td>N/D<br />N/D<br />N/D</td>
+              </tr>
+              <tr>
+                <td><strong>PC3</strong></td>
+                <td>NIC</td>
+                <td>2001:db8:c0de:12::a/64</td>
+                <td>fe80::2</td>
+              </tr>
+              <tr>
+                <td><strong>PC4</strong></td>
+                <td>NIC</td>
+                <td>2001:db8:c0de:13::a/64</td>
+                <td>fe80::2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">2.0</span> Resolução de Problemas no R1 (IPv4)
+        </h2>
+        <div class="card">
+          <p>
+            Tratamento da interface local que se encontra desativada administrativamente e correção imediata do desalinhamento de máscara
+            /30 detectado na interface Serial.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Instrução de Validação:</strong> O IP inicial 209.165.200.229 que constava
+            na CLI pertence a outra subrede. Ao aplicar o IP correto 209.165.200.225 com a máscara correta (255.255.255.252), o Packet
+            Tracer computará a pontuação devida.
+          </div>
+
+          <div class="terminal">
+            <pre>
+R1> enable
+Password: class
+R1# configure terminal
+
+! Ativando a interface LAN que estava em administratively down
+R1(config)# interface GigabitEthernet0/0/0
+R1(config-if)# no shutdown
+
+! Garantindo a configuração da segunda LAN
+R1(config)# interface GigabitEthernet0/0/1
+R1(config-if)# ip address 172.16.20.129 255.255.255.128
+R1(config-if)# no shutdown
+
+! CORREÇÃO DO IP/MÁSCARA DA INTERFACE SERIAL
+R1(config)# interface Serial0/1/0
+R1(config-if)# ip address 209.165.200.225 255.255.255.252
+R1(config-if)# no shutdown
+R1(config-if)# end
+R1# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">3.0</span> Resolução de Problemas no R2 (IPv6)
+        </h2>
+        <div class="card">
+          <p>
+            Como as interfaces IPv6 aceitam múltiplos endereços simultâneos, para sanar o erro de digitação do cenário, deve-se remover a
+            rede inválida explicitamente para limpar a tabela de vizinhança.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-bug"></i> <strong>Atenção ao Bug do Simulador:</strong> Caso esqueça de digitar o comando
+            <code>no ipv6 address</code>, a interface manterá ambos os IPs ativos, impedindo a validação completa do laboratório em 100%.
+          </div>
+
+          <div class="terminal">
+            <pre>
+R2> enable
+Password: class
+R2# show ipv6 interface brief
+R2# configure terminal
+R2(config)# interface GigabitEthernet0/0/1
+R2(config-if)# no ipv6 address 2001:db8:c0de:14::1/64
+R2(config-if)# ipv6 address 2001:db8:c0de:13::1/64
+R2(config-if)# no shutdown
+R2(config-if)# end
+R2# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">4.0</span> Verificação de Conectividade Finais
+        </h2>
+        <div class="card">
+          <p>
+            Após a convergência e correção do roteamento, realize os testes de ping ponta a ponta em ambas as pilhas de rede (Dual-Stack):
+          </p>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Acesse o prompt de comando (CMD) dos hosts e verifique a comunicação intra e inter-redes.
+          </div>
+          <div class="terminal">
+            <pre>
+PC1> ping 172.16.20.138
+PC3> ping 2001:db8:c0de:13::a</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Laboratório Concluído com Sucesso!</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe o arquivo físico de topologia resolvido (.pkt) contendo todas as correções de subredes aplicadas.
+          </p>
+          <a href="../labs/lab_4.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

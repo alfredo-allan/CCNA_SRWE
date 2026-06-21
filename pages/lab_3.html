@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configurar Interfaces de Roteador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+
+      <a href="#download" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao3-1"><i class="fas fa-network-wired"></i> 3.1 Tabela de Endereçamento</a>
+        </li>
+        <li>
+          <a href="#secao3-2"><i class="fas fa-route"></i> 3.2 Configuração IPv4 (R1)</a>
+        </li>
+        <li>
+          <a href="#secao3-3"><i class="fas fa-server"></i> 3.3 Configuração IPv6 (R2)</a>
+        </li>
+        <li>
+          <a href="#secao3-4"><i class="fas fa-satellite-dish"></i> 3.4 Validação de Conectividade</a>
+        </li>
+        <li>
+          <a href="#download"><i class="fas fa-cloud-download-alt"></i> Download do Lab</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab" style="border: 1px solid rgba(0, 255, 136, 0.3); margin-bottom: 1.5rem"
+          >Packet Tracer - Roteamento Estático e Dual-Stack</span
+        >
+        <h1>Configuração de Interfaces de Roteador</h1>
+        <p style="color: var(--text-dim)">
+          Ativação, endereçamento e roteamento ponta a ponta em topologias locais utilizando IPv4 e IPv6 simultâneos.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao3-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">3.1</span> Parâmetros Oficiais de Roteamento [cite: 318, 319]
+        </h2>
+        <div class="card">
+          <p>
+            O cenário opera sob uma infraestrutura de múltiplas redes locais distribuídas entre os dois roteadores principais[cite: 325,
+            326]:
+          </p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP / Prefixo</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>R1</strong></td>
+                <td>G0/0<br />G0/1<br />S0/0/0</td>
+                <td>172.16.20.1/25<br />172.16.20.129/25<br />209.165.200.225/30</td>
+                <td>N/D<br />N/D<br />N/D [cite: 320]</td>
+              </tr>
+              <tr>
+                <td><strong>PC1</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.10/25</td>
+                <td>172.16.20.1 [cite: 320]</td>
+              </tr>
+              <tr>
+                <td><strong>PC2</strong></td>
+                <td>NIC</td>
+                <td>172.16.20.138/25</td>
+                <td>172.16.20.129 [cite: 320]</td>
+              </tr>
+              <tr>
+                <td><strong>R2</strong></td>
+                <td>G0/0<br />G0/1<br />S0/0/1</td>
+                <td>2001:db8:c0de:12::1/64<br />2001:db8:c0de:13::1/64<br />2001:db8:c0de:11::1/64 (Link-Local: fe80::2)</td>
+                <td>N/D<br />N/D<br />N/A [cite: 320]</td>
+              </tr>
+              <tr>
+                <td><strong>PC3</strong></td>
+                <td>NIC</td>
+                <td>2001:db8:c0de:12::a/64</td>
+                <td>fe80::2 [cite: 320]</td>
+              </tr>
+              <tr>
+                <td><strong>PC4</strong></td>
+                <td>NIC</td>
+                <td>2001:db8:c0de:13::a/64</td>
+                <td>fe80::2 [cite: 320]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao3-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">3.2</span> Parte 1: Ativação e Endereçamento IPv4 no R1 [cite: 322]
+        </h2>
+        <div class="card">
+          <p>
+            Configuração das sub-redes das interfaces LAN do roteador R1. Lembre-se de utilizar a máscara de sub-rede correspondente ao
+            prefixo /25 (<code>255.255.255.128</code>)[cite: 320, 331]:
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-key"></i> <strong>Credenciais do R1:</strong> Senha de usuário EXEC: <code>cisco</code> | Senha EXEC
+            Privilegiado: <code>class</code>[cite: 327].
+          </div>
+
+          <div class="terminal">
+            <pre>
+R1> enable
+Senha: class
+R1# configure terminal
+
+! Configurando e subindo a Interface GigabitEthernet0/0
+R1(config)# interface GigabitEthernet0/0
+R1(config-if)# ip address 172.16.20.1 255.255.255.128
+R1(config-if)# no shutdown
+R1(config-if)# exit
+
+! Configurando e subindo a Interface GigabitEthernet0/1
+R1(config)# interface GigabitEthernet0/1
+R1(config-if)# ip address 172.16.20.129 255.255.255.128
+R1(config-if)# no shutdown
+R1(config-if)# exit
+R1# copy running-config startup-config</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">3.3</span> Parte 2: Configuração IPv6 Global e Link-Local no R2 [cite: 323, 340]
+        </h2>
+        <div class="card">
+          <p>
+            Ativação do encaminhamento de pacotes IPv6 global (mecanismo essencial) e definição dos escopos nas portas do roteador R2[cite:
+            340]:
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Atenção Obrigatória:</strong> Sem o comando
+            <code>ipv6 unicast-routing</code> no modo global, o roteador não processará as mensagens de vizinhança e os pings de teste entre
+            os computadores falharão.
+          </div>
+
+          <div class="terminal">
+            <pre>
+R2> enable
+Senha: class
+R2# configure terminal
+
+! ATIVAÇÃO GLOBAL DO ENCAMINHAMENTO IPV6 (Obrigatório)
+R2(config)# ipv6 unicast-routing
+
+! Configurando Interface GigabitEthernet0/0
+R2(config)# interface GigabitEthernet0/0
+R2(config-if)# ipv6 address 2001:db8:c0de:12::1/64
+R2(config-if)# ipv6 address fe80::2 link-local
+R2(config-if)# no shutdown
+R2(config-if)# exit
+
+! Configurando Interface GigabitEthernet0/1
+R2(config)# interface GigabitEthernet0/1
+R2(config-if)# ipv6 address 2001:db8:c0de:13::1/64
+R2(config-if)# ipv6 address fe80::2 link-local
+R2(config-if)# no shutdown
+R2(config-if)# exit
+R2# copy running-config startup-config</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-satellite-dish"></i>
+          <span class="section-number">3.4</span> Validação Prática de Conectividade [cite: 333, 343]
+        </h2>
+        <div class="card">
+          <p>
+            Após definir estaticamente as configurações lógicas nas placas de rede (NIC) de todos os computadores, abra os prompts de
+            comando para testar a comunicação inter-redes[cite: 331, 334, 341]:
+          </p>
+
+          <p style="margin-top: 1rem"><strong>No Prompt do PC1 (Teste IPv4 para PC2)[cite: 334]:</strong></p>
+          <div class="terminal">
+            <pre>
+C:\> ping 172.16.20.138
+Pinging 172.16.20.138 with 32 bytes of data:
+Reply from 172.16.20.138: bytes=32 time&lt;1ms TTL=127
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</pre
+            >
+          </div>
+
+          <p style="margin-top: 1rem"><strong>No Prompt do PC3 (Teste IPv6 para PC4)[cite: 344]:</strong></p>
+          <div class="terminal">
+            <pre>
+C:\> ping 2001:db8:c0de:13::a
+Pinging 2001:db8:c0de:13::a with 32 bytes of data:
+Reply from 2001:db8:c0de:13::a: bytes=32 time&lt;1ms TTL=127
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</pre
+            >
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> Interfaces ativas e protocolo Dual-Stack operando perfeitamente. 100% de conclusão validado
+            com sucesso!
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-project-diagram" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3 style="margin-bottom: 0.5rem">Laboratório 3 Concluído!</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Faz o download do arquivo oficial com o endereçamento dos gateways IPv4 e IPv6 aplicados a todas as interfaces.
+          </p>
+          <a href="lab_interfaces_roteador.pkt" download class="btn-download">
+            <i class="fas fa-download"></i> Baixar Arquivo .PKT Completo
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

@@ -2,10 +2,11 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <title>Cisco CCNA 2 | Módulo 1: Configuração básica de dispositivos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
     <div class="top-bar">
@@ -13,33 +14,1719 @@
         <i class="fas fa-bars"></i>
         <span>Menu</span>
       </button>
-      <a href="#" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 </a>
-      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+      <a href="index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="/index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
     </div>
 
     <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
         <button class="close-sidebar" id="closeMenu">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <ul class="nav-modules"></ul>
+      <ul class="nav-modules" id="sidebar-links">
+        <li>
+          <a href="#secao2-0-1"><i class="fas fa-compass"></i> 2.0.1 Por que devo cursar este módulo?</a>
+        </li>
+        <li>
+          <a href="#secao2-0-2"><i class="fas fa-book"></i> 2.0.2 O que vou aprender neste módulo?</a>
+        </li>
+        <li>
+          <a href="#secao2-1-1"><i class="fas fa-layer-group"></i> 2.1.1 Mudança nos conceitos de redes</a>
+        </li>
+        <li>
+          <a href="#secao2-1-2"><i class="fas fa-microchip"></i> 2.1.2 Tabela de endereços MAC do Switch</a>
+        </li>
+        <li>
+          <a href="#secao2-1-3"><i class="fas fa-graduation-cap"></i> 2.1.3 O Método de aprendizado e encaminhamento do Switch</a>
+        </li>
+        <li>
+          <a href="#secao2-1-5"><i class="fas fa-route"></i> 2.1.5 Alternando métodos de encaminhamento</a>
+        </li>
+        <li>
+          <a href="#secao2-1-6"><i class="fas fa-box-open"></i> 2.1.6 Switching Store-and-Forward</a>
+        </li>
+        <li>
+          <a href="#secao2-1-7"><i class="fas fa-bolt"></i> 2.1.7 Switching Cut-Through</a>
+        </li>
+        <li>
+          <a href="#secao2-1-8"><i class="fas fa-tools"></i> 2.1.8 Atividade - Encaminhe-o!</a>
+        </li>
+        <li>
+          <a href="#secao2-2-1"><i class="fas fa-sitemap"></i> 2.2.1 Domínios de colisão</a>
+        </li>
+        <li>
+          <a href="#secao2-2-2"><i class="fas fa-broadcast-tower"></i> 2.2.2 Domínios de transmissão</a>
+        </li>
+        <li>
+          <a href="#secao2-2-3"><i class="fas fa-compress-alt"></i> 2.2.3 Aliviando o congestionamento da rede</a>
+        </li>
+        <li>
+          <a href="#secao2-2-4"><i class="fas fa-list-alt"></i> 2.2.4 Prática do Módulo e Questionário</a>
+        </li>
+      </ul>
     </div>
+
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <section class="hero">
-      <div class="badge-lab"><i class="fas fa-microchip"></i> CCNA v7 / SRWE</div>
+      <div class="badge-lab">CCNA 2 - SRWE</div>
       <h1>Módulo 2: Conceitos de Switching</h1>
-      <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; padding: 0 1rem">
-        Entendendo a infraestrutura de redes locais, operação de ativos e o ciclo de vida operacional do hardware Cisco.
-      </p>
     </section>
 
-    <div class="container"></div>
+    <div class="container" id="main-content">
+      <section id="secao2-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-compass"></i>
+          <span class="section-number">2.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <h3>Bem-vindo ao Switching Concepts!</h3>
+          <p>
+            Você pode conectar e configure switches, isso é ótimo! Mas mesmo uma rede com a mais nova tecnologia desenvolve seus próprios
+            problemas eventualmente. Se você precisar solucionar problemas de sua rede, você precisa saber como os switches funcionam. Este
+            módulo fornece os fundamentos da operação de switches. Felizmente, a operação de comutação é fácil de entender!
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Insight de Troubleshooting:</strong> Compreender os mecanismos internos de como um switch
+          toma decisões de encaminhamento baseadas em hardware e gerencia seus buffers de memória é o primeiro passo para diagnosticar
+          falhas de performance, loops de Camada 2 e quedas de pacotes na infraestrutura.
+        </div>
+      </section>
+
+      <section id="secao2-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">2.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <p><strong>Título do módulo:</strong> Conceitos de switching</p>
+          <p><strong>Objetivo do módulo:</strong> Explicar como switches de camada 2 encaminham dados.</p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Título do Tópico</th>
+                <th>Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Encaminhamento de quadros</strong></td>
+                <td>Explicar como quadros são encaminhados em uma rede com switches.</td>
+              </tr>
+              <tr>
+                <td><strong>Domínios de switching</strong></td>
+                <td>Comparar um domínio de colisão com um domínio de broadcast.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">2.1.1</span> Mudança nos conceitos de redes
+        </h2>
+
+        <div class="card">
+          <p>
+            O conceito de switching e encaminhamento de frames é essencial para a infraestrutura de redes LAN locais. Os switches conectam
+            dispositivos finais em uma rede local e encaminham dados (quadros) de maneira inteligente entre eles.
+          </p>
+          <p>
+            Para determinar como os dados devem ser guiados pela infraestrutura de rede, o switch de Camada 2 baseia-se exclusivamente nos
+            cabeçalhos de Camada 2 (Data Link) do modelo OSI.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Conceito Fundamental:</strong> Um switch de Camada 2 toma as suas decisões de
+          encaminhamento estritamente com base nos endereços MAC (Media Access Control) de hardware e na topologia física configurada,
+          ignorando por completo os endereços IP (Camada 3) durante este processo básico.
+        </div>
+      </section>
+
+      <section id="secao2-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-microchip"></i>
+          <span class="section-number">2.1.2</span> Tabela de endereços MAC do Switch
+        </h2>
+
+        <div class="card">
+          <p>
+            Um switch é composto por circuitos integrados de aplicação específica (ASICs) e portas físicas. Para saber exatamente para onde
+            encaminhar um frame, o switch mapeia a relação entre as suas portas físicas e os endereços MAC dos hosts conectados através da
+            sua <strong>tabela de endereços MAC</strong> (também conhecida como tabela CAM - <i>Content Addressable Memory</i>).
+          </p>
+          <p>Quando o switch está recém-ligado (boot inicial), esta tabela encontra-se completamente vazia.</p>
+        </div>
+
+        <div class="card">
+          <h3>Sintaxe de Comando IOS para Diagnóstico</h3>
+          <p>
+            Para visualizar as entradas dinâmicas de hardware aprendidas pelo Switch S1 em tempo real, utilize o comando de monitorização
+            estruturado abaixo:
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+S1# <strong>show mac address-table dynamic</strong>
+          Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       ----        -----
+  10    000a.f3b1.22cc    DYNAMIC     Fa0/5
+  20    0011.921a.bc01    DYNAMIC     Fa0/12
+Total Mac Addresses for this criterion: 2</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">2.1.3</span> O Método de aprendizado e encaminhamento do Switch
+        </h2>
+
+        <div class="card">
+          <p>O processo de duas etapas a seguir é executado em todos os quadros Ethernet que entram em um switch.</p>
+        </div>
+
+        <div class="card">
+          <h3>Etapa 1. Aprenda - Examinando o Endereço MAC de Origem</h3>
+          <p>
+            Todo quadro que entra em um switch é verificado quanto ao aprendizado de novas informações. Isso é feito examinando o endereço
+            MAC de origem do quadro e o número da porta em que o quadro entrou no comutador:
+          </p>
+
+          <ul>
+            <li>
+              Se o endereço MAC de origem não existir na tabela de endereços MAC, o endereço MAC e o número da porta de entrada serão
+              adicionados à tabela.
+            </li>
+            <li>
+              Se o endereço MAC de origem existe, o switch atualiza o <i>timer</i> de atualização dessa entrada. Por padrão, a maioria dos
+              switches Ethernet mantém uma entrada na tabela por cinco minutos. Se o endereço MAC de origem existir na tabela, mas em uma
+              porta diferente, o switch tratará isso como uma nova entrada. A entrada é substituída usando o mesmo endereço MAC, mas com o
+              número de porta mais atual.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Etapa 2. Encaminhar - Examinar o endereço MAC de destino</h3>
+          <p>
+            Se o endereço MAC for um endereço <i>unicast</i>, o switch procurará uma correspondência entre o endereço MAC de destino do
+            quadro e uma entrada na respectiva tabela de endereços MAC:
+          </p>
+
+          <ul>
+            <li>Se o endereço MAC de destino estiver na tabela, ele encaminhará o quadro para fora da porta especificada.</li>
+            <li>
+              Se o endereço MAC de destino não estiver na tabela, o switch encaminhará o quadro por todas as portas, exceto a de entrada.
+              Isso é chamado de <strong>unicast desconhecido</strong>. Se o endereço MAC de destino for um endereço de <i>broadcast</i> ou
+              <i>multicast</i>, o quadro será enviado por todas as portas, exceto a de entrada.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Simulação de Configuração e CLI</h3>
+          <p>
+            Para acompanhar o tempo de expiração ativo das portas e limpar manualmente entradas inválidas durante testes de topologia,
+            utilize os comandos abaixo no modo EXEC Privilegiado:
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+S1# <strong>show mac address-table aging-time</strong>
+Global Aging Time:  300 seconds
+
+S1# <strong>clear mac address-table dynamic</strong>
+S1# <strong>show mac address-table dynamic</strong>
+          Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       ----        -----
+S1#</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-1-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">2.1.5</span> Alternando métodos de encaminhamento
+        </h2>
+
+        <div class="card">
+          <p>
+            Os switches fazem decisões de encaminhamento da Camada 2 muito rapidamente. Isso ocorre devido ao software em circuitos
+            integrados específicos de aplicativos (ASICs). Os ASICs reduzem o tempo de manipulação de quadros no dispositivo e permitem que
+            ele gerencie um número maior de quadros sem prejudicar o desempenho.
+          </p>
+          <p>Os switches de camada 2 usam um dos dois métodos para alternar quadros:</p>
+        </div>
+
+        <div class="card">
+          <h3>1. Comutação de armazenamento e encaminhamento (Store-and-Forward)</h3>
+          <p>
+            Esse método toma uma decisão de encaminhamento em um quadro após o recebimento do quadro inteiro e a verificação de erros no
+            quadro, usando um mecanismo matemático de verificação de erros conhecido como <strong>CRC (Cyclic Redundancy Check)</strong>.
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <strong>Padrão Cisco:</strong> O switching <i>store-and-forward</i> é o principal método de
+            switch LAN da Cisco porque garante um nível máximo de integridade na rede, descartando quadros corrompidos antes que eles
+            consumam banda nos links de saída.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>2. Comutação de corte (Cut-Through)</h3>
+          <p>
+            Este método inicia o processo de encaminhamento imediatamente após a determinação do endereço MAC de destino de um quadro
+            recebido e da porta de saída.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Análise Comparativa de Comutação</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Característica / Critério</th>
+                <th>Store-and-Forward</th>
+                <th>Cut-Through</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Verificação de Erros (CRC)</strong></td>
+                <td>Sim, valida o quadro completo antes de enviar.</td>
+                <td>Não, encaminha o quadro sem checar o FCS.</td>
+              </tr>
+              <tr>
+                <td><strong>Latência de Hardware</strong></td>
+                <td>Mais alta (varia conforme o tamanho do quadro).</td>
+                <td>Ultra baixa (fixa, ideal para redes HPC).</td>
+              </tr>
+              <tr>
+                <td><strong>Tratamento de Fragmentos</strong></td>
+                <td>Descarta pacotes inválidos ou com colisão.</td>
+                <td>Pode propagar quadros inválidos (<i>runt frames</i>).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Verificação do Status de Hardware e Buffers</h3>
+          <p>
+            Para diagnosticar se erros de CRC ou fragmentos inválidos estão impactando o desempenho das interfaces físicas do switch,
+            monitore as estatísticas com o comando abaixo:
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+S1# <strong>show interfaces fastethernet 0/1</strong>
+FastEthernet0/1 is up, line protocol is up (connected)
+  Hardware is Fast Ethernet, address is 0010.7a60.1501
+  MTU 1500 bytes, BW 100000 Kbit, DLY 100 usec,
+     Encapsulation ARPA, loopback not set
+     Keepalive set (10 sec)
+     Full-duplex, 100Mb/s, media type is 10/100BaseTX
+     input flow-control is off, output flow-control is unsupported
+     Output queue: 0/40 (size/max)
+     5 minute input rate 0 bits/sec, 0 packets/sec
+     5 minute output rate 0 bits/sec, 0 packets/sec
+     2134 packets input, 185322 bytes, 0 no buffer
+     Received 452 broadcasts (211 multicasts)
+     0 runts, 0 giants, 0 throttles
+     <strong>0 CRC</strong>, 0 frame, 0 overrun, 0 ignored</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-1-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-box-open"></i>
+          <span class="section-number">2.1.6</span> Switching Store-and-Forward
+        </h2>
+
+        <div class="card">
+          <p>A comutação "store-and-forward", distinguida da comutação de corte, tem as duas características primárias a seguir:</p>
+
+          <ul>
+            <li>
+              <strong>Verificação de erros</strong> - Após receber o quadro inteiro na porta de entrada, o switch compara o valor da
+              sequência de verificação de quadros (FCS) no último campo do datagrama com seus próprios cálculos de FCS. O FCS é um processo
+              de verificação de erros que ajuda a garantir que o quadro esteja livre de erros físicos e de enlace de dados. Se o quadro
+              estiver livre de erros, o switch o encaminhará. Caso contrário, o quadro é descartado.
+            </li>
+            <li>
+              <strong>Buffer automático</strong> - O processo de buffer da porta de entrada usado pelos comutadores de armazenamento e
+              encaminhamento fornece a flexibilidade para suportar qualquer combinação de velocidades Ethernet. Por exemplo, o manuseio de
+              um quadro de entrada que viaja para uma porta Ethernet de 100 Mbps que deve ser enviada a uma interface de 1 Gbps exigiria o
+              uso do método de armazenamento e encaminhamento. No caso de velocidade diferentes nas portas de ingresso e de saída, o switch
+              armazena o quadro inteiro em um buffer, computa a verificação de FCS, encaminha o quadro para o buffer da porta de saída e o
+              envia.
+            </li>
+          </ul>
+          <p>A figura abaixo ilustra como o armazenamento e encaminhamento toma uma decisão com base no quadro Ethernet.</p>
+        </div>
+
+        <style>
+          .topology-container {
+            width: 100%;
+            overflow-x: auto;
+            background: #090d16;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+          }
+          .frame-wrapper {
+            min-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            font-family: 'Consolas', monospace;
+          }
+          .osi-layers {
+            display: flex;
+            width: 100%;
+            border: 2px dashed #3a4b6e;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+          .layer-block {
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+          }
+          .layer-l2-header {
+            background: rgba(114, 46, 165, 0.3);
+            color: #c084fc;
+            width: 25%;
+            border-right: 1px solid #3a4b6e;
+          }
+          .layer-l3 {
+            background: rgba(75, 85, 99, 0.4);
+            color: #9ca3af;
+            width: 20%;
+            border-right: 1px solid #3a4b6e;
+          }
+          .layer-l4 {
+            background: rgba(75, 85, 99, 0.3);
+            color: #9ca3af;
+            width: 20%;
+            border-right: 1px solid #3a4b6e;
+          }
+          .layer-data {
+            background: rgba(75, 85, 99, 0.2);
+            color: #9ca3af;
+            width: 25%;
+            border-right: 1px solid #3a4b6e;
+          }
+          .layer-l2-trailer {
+            background: rgba(114, 46, 165, 0.3);
+            color: #c084fc;
+            width: 10%;
+          }
+
+          .pointer-lines {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5%;
+            color: var(--primary);
+            font-size: 1.2rem;
+          }
+
+          .ethernet-frame {
+            display: flex;
+            width: 100%;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          }
+          .frame-field {
+            padding: 1rem 0.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            border-right: 1px solid var(--border);
+          }
+          .frame-field:last-child {
+            border-right: none;
+          }
+          .field-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+          }
+          .field-size {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+          }
+
+          .f-preamble {
+            background: #1e293b;
+            color: #94a3b8;
+            width: 15%;
+          }
+          .f-dmac {
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--primary);
+            width: 25%;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+          }
+          .f-smac {
+            background: rgba(0, 245, 212, 0.15);
+            color: var(--secondary);
+            width: 25%;
+            border: 1px solid rgba(0, 245, 212, 0.3);
+          }
+          .f-type {
+            background: #1e1b4b;
+            color: #818cf8;
+            width: 10%;
+          }
+          .f-payload {
+            background: #111827;
+            color: #6b7280;
+            width: 15%;
+          }
+          .f-crc {
+            background: rgba(255, 77, 109, 0.15);
+            color: var(--danger);
+            width: 10%;
+            border: 1px solid rgba(255, 77, 109, 0.3);
+          }
+
+          .flow-annotation {
+            background: rgba(255, 183, 3, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            text-align: center;
+          }
+        </style>
+
+        <div class="topology-container">
+          <div class="frame-wrapper">
+            <div class="osi-layers">
+              <div class="layer-block layer-l2-header">Cabeçalho do Quadro (L2)</div>
+              <div class="layer-block layer-l3">Cabeçalho da Rede (L3)</div>
+              <div class="layer-block layer-l4">Cabeçalho de Transporte (L4)</div>
+              <div class="layer-block layer-data">Dados do Payload</div>
+              <div class="layer-block layer-l2-trailer">FCS (L2)</div>
+            </div>
+
+            <div class="pointer-lines">
+              <span><i class="fas fa-chevron-down"></i></span>
+              <span>• • • •</span>
+              <span><i class="fas fa-chevron-down"></i></span>
+            </div>
+
+            <div class="ethernet-frame">
+              <div class="frame-field f-preamble">
+                <span class="field-title">Preâmbulo</span>
+                <span class="field-size">8 Bytes</span>
+              </div>
+              <div class="frame-field f-dmac">
+                <span class="field-title"><i class="fas fa-arrow-right"></i> MAC de Destino</span>
+                <span class="field-size">6 Bytes</span>
+              </div>
+              <div class="frame-field f-smac">
+                <span class="field-title"><i class="fas fa-sign-in-alt"></i> MAC de Origem</span>
+                <span class="field-size">6 Bytes</span>
+              </div>
+              <div class="frame-field f-type">
+                <span class="field-title">Tipo</span>
+                <span class="field-size">2 Bytes</span>
+              </div>
+              <div class="frame-field f-payload">
+                <span class="field-title">Dados / Payload</span>
+                <span class="field-size">46 - 1500 Bytes</span>
+              </div>
+              <div class="frame-field f-crc">
+                <span class="field-title"><i class="fas fa-calculator"></i> Checksum (CRC)</span>
+                <span class="field-size">4 Bytes</span>
+              </div>
+            </div>
+
+            <div class="flow-annotation">
+              <i class="fas fa-microchip"></i> <strong>Mecanismo de Comutação:</strong> O switching store-and-forward implica no recebimento
+              do quadro inteiro (até aproximadamente 9.200 bytes para quadros jumbo) antes de decidir pelo encaminhamento.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Diagnóstico de Drops por Erros de CRC</h3>
+          <p>
+            Abaixo veja o comportamento do IOS indicando falhas físicas onde o switch executa o descarte de frames corrompidos detectados
+            pelo cálculo do FCS:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces counters errors</strong>
+
+Port        Align-Err    <strong>FCS-Err</strong>     Xmit-Err    Rcv-Err     UnderSize
+Fa0/1               0          <strong>42</strong>            0          42             0
+
+S1# <strong>show buffers</strong>
+Buffer counters:
+  Small buffers, 104 bytes (total 50, permanent 50):
+    50 alloc, 0 no memory, 0 max size, 0 failures
+  Big buffers, 1524 bytes (total 20, permanent 20):
+    20 alloc, 0 no memory, 0 max size, 0 failures</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-1-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-bolt"></i>
+          <span class="section-number">2.1.7</span> Switching Cut-Through
+        </h2>
+
+        <div class="card">
+          <p>
+            O método de switching <i>store-and-forward</i> elimina quadros que não passam na verificação FCS. Portanto, ele não encaminha
+            quadros inválidos.
+          </p>
+          <p>
+            Por outro lado, o método de comutação de corte pode encaminhar quadros inválidos porque nenhuma verificação FCS é executada. No
+            entanto, a comutação de corte tem a capacidade de executar a comutação rápida de quadros. Isso significa que o switch pode tomar
+            uma decisão de encaminhamento assim que procurar o endereço MAC de destino do quadro em sua tabela de endereços MAC, conforme
+            mostrado na figura.
+          </p>
+        </div>
+
+        <style>
+          .cutthrough-container {
+            width: 100%;
+            overflow-x: auto;
+            background: #090d16;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+          }
+          .ct-wrapper {
+            min-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            font-family: 'Consolas', monospace;
+          }
+          .ct-timeline {
+            display: flex;
+            width: 100%;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+          }
+          .ct-field {
+            padding: 1rem 0.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            border-right: 1px solid var(--border);
+          }
+          .ct-field:last-child {
+            border-right: none;
+          }
+
+          .ct-preamble {
+            background: #1e293b;
+            color: #94a3b8;
+            width: 15%;
+          }
+          .ct-dmac {
+            background: rgba(0, 180, 216, 0.25);
+            color: var(--primary);
+            width: 25%;
+            border: 2px solid var(--primary);
+            font-weight: bold;
+          }
+          .ct-smac {
+            background: #1e293b;
+            color: #94a3b8;
+            width: 25%;
+          }
+          .ct-type {
+            background: #1e293b;
+            color: #94a3b8;
+            width: 10%;
+          }
+          .ct-payload {
+            background: #111827;
+            color: #4b5563;
+            width: 15%;
+          }
+          .ct-crc {
+            background: #111827;
+            color: #4b5563;
+            width: 10%;
+          }
+
+          .ct-trigger {
+            background: rgba(3, 244, 135, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            text-align: center;
+            font-weight: 600;
+          }
+          .ct-trigger i {
+            margin-right: 0.5rem;
+          }
+        </style>
+
+        <div class="cutthrough-container">
+          <div class="ct-wrapper">
+            <div class="ct-timeline">
+              <div class="ct-field ct-preamble">
+                <span>Preâmbulo</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim)">8 Bytes</span>
+              </div>
+              <div class="ct-field ct-dmac">
+                <span><i class="fas fa-search font-neon"></i> MAC Destino</span>
+                <span style="font-size: 0.7rem; color: var(--info)">6 Bytes</span>
+              </div>
+              <div class="ct-field ct-smac">
+                <span>MAC Origem</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim)">6 Bytes</span>
+              </div>
+              <div class="ct-field ct-type">
+                <span>Tipo</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim)">2 Bytes</span>
+              </div>
+              <div class="ct-field ct-payload">
+                <span>Dados (Payload)</span>
+                <span style="font-size: 0.7rem; color: #374151">Não Lido</span>
+              </div>
+              <div class="ct-field ct-crc">
+                <span>FCS</span>
+                <span style="font-size: 0.7rem; color: #374151">Ignorado</span>
+              </div>
+            </div>
+
+            <div class="ct-trigger">
+              <i class="fas fa-bolt"></i> Os quadros podem começar a ser encaminhados assim que o MAC destino for recebido e processado na
+              tabela CAM.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Variações e Comportamento Operacional</h3>
+          <p>
+            O switch não precisa esperar que o restante do quadro entre na porta de ingresso para tomar sua decisão de encaminhamento.
+            Existem duas formas de operação dentro deste modo:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Fast-Forward Switching:</strong> É a forma pura do <i>cut-through</i>. Oferece o nível mais baixo de latência,
+              encaminhando o pacote imediatamente após a leitura do MAC de destino. Nenhuma verificação de integridade é feita.
+            </li>
+            <li>
+              <strong>Fragment-Free Switching:</strong> É uma forma modificada de comutação de corte. O switch só começa a encaminhar o
+              quadro depois de ler os primeiros 64 bytes do pacote (o que inclui o campo Tipo). O <i>switching</i> livre de fragmentos
+              proporciona uma verificação melhor de erros do que o <i>cut-through</i> puro, filtrando a maioria dos quadros gerados por
+              colisões (<i>runt frames</i>), com praticamente nenhum aumento na latência.
+            </li>
+          </ul>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Aviso de Performance:</strong> O método de switching <i>cut-through</i> pode
+          encaminhar quadros com erros. Se houver uma alta taxa de erros (quadros inválidos) na rede, a comutação de corte pode ter um
+          impacto negativo na largura de banda, obstruindo os links com quadros danificados e inválidos que acabarão sendo descartados
+          apenas no host de destino.
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-microchip"></i> <strong>Cenário de Uso (HPC):</strong> A velocidade menor de latência do modo switching
+          <i>cut-through</i> o torna mais adequado para aplicações de computação de alto desempenho (HPC) extremamente exigentes que
+          demandam latências de processo a processo de 10 microssegundos ou menos.
+        </div>
+
+        <div class="card">
+          <h3>Estatísticas de Fragmentos (Runts)</h3>
+          <p>
+            Se interfaces operando em modo de corte começarem a propagar muitos fragmentos pequenos devido a colisões na rede local,
+            monitore o contador de <strong>runts</strong> no IOS:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces fastethernet 0/24</strong>
+FastEthernet0/24 is up, line protocol is up (connected)
+  Hardware is Fast Ethernet, address is 0011.921a.bc18
+  Full-duplex, 100Mb/s, media type is 10/100BaseTX
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
+  5 minute input rate 1240 bits/sec, 2 packets/sec
+  5 minute output rate 980 bits/sec, 1 packets/sec
+     412051 packets input, 51203444 bytes, 0 no buffer
+     Received 1240 broadcasts (420 multicasts)
+     <strong>354 runts</strong>, 0 giants, 0 throttles
+     0 CRC, 0 frame, 0 overrun, 0 ignored</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-1-8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">2.1.8</span> Atividade - Encaminhe-o!
+        </h2>
+
+        <div class="card">
+          <p>
+            Use esta atividade para verificar sua compreensão de como um switch aprende endereços de hardware e encaminha quadros Ethernet
+            com base nas informações contidas na tabela CAM.
+          </p>
+        </div>
+
+        <style>
+          .activity-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+          }
+          .activity-topology {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            background: rgba(18, 24, 36, 0.7);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+          }
+          .hw-switch-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 280px;
+            box-shadow: 0 4px 12px rgba(0, 180, 216, 0.2);
+          }
+          .switch-ports-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-top: 0.75rem;
+          }
+          .port-jack {
+            background: #020617;
+            border: 1px solid #334155;
+            padding: 4px 2px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            color: var(--text-dim);
+            border-radius: 4px;
+          }
+          .port-jack.active-link {
+            border-color: var(--success);
+            color: var(--success);
+            box-shadow: 0 0 8px rgba(3, 244, 135, 0.3);
+          }
+          .hosts-pool {
+            display: flex;
+            gap: 1rem;
+          }
+          .host-node {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.8rem;
+          }
+          .host-node i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 0.25rem;
+          }
+          .host-mac {
+            color: var(--info);
+            font-weight: bold;
+          }
+          .activity-tables {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+          }
+          @media (max-width: 768px) {
+            .activity-tables {
+              grid-template-columns: 1fr;
+            }
+          }
+          .activity-badge {
+            background: rgba(0, 245, 212, 0.1);
+            color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+          }
+        </style>
+
+        <div class="activity-container">
+          <div class="activity-topology">
+            <div class="hw-switch-box">
+              <span style="font-size: 0.8rem; font-weight: bold; color: var(--primary)"
+                ><i class="fas fa-server"></i> Switch LAN de Camada 2</span
+              >
+              <div class="switch-ports-grid">
+                <div class="port-jack">Fa1</div>
+                <div class="port-jack">Fa2</div>
+                <div class="port-jack active-link">Fa3 (OB)</div>
+                <div class="port-jack">Fa4</div>
+                <div class="port-jack">Fa5</div>
+                <div class="port-jack">Fa6</div>
+                <div class="port-jack active-link">Fa7 (OD)</div>
+                <div class="port-jack">Fa8</div>
+                <div class="port-jack active-link">Fa9 (OE)</div>
+                <div class="port-jack">Fa10</div>
+                <div class="port-jack">Fa11</div>
+                <div class="port-jack">Fa12</div>
+              </div>
+            </div>
+
+            <div class="hosts-pool">
+              <div class="host-node">
+                <i class="fas fa-laptop"></i>
+                <span>Host PC_B</span><br />
+                <span class="host-mac">MAC: 0B</span>
+              </div>
+              <div class="host-node">
+                <i class="fas fa-laptop"></i>
+                <span>Host PC_D</span><br />
+                <span class="host-mac">MAC: 0D</span>
+              </div>
+              <div class="host-node">
+                <i class="fas fa-desktop"></i>
+                <span>Host PC_E</span><br />
+                <span class="host-mac">MAC: 0E</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-tables">
+            <div>
+              <span class="activity-badge">Quadro Ethernet Analisado</span>
+              <table class="table-custom" style="margin-top: 0.5rem">
+                <thead>
+                  <tr>
+                    <th>Destino MAC</th>
+                    <th>Origem MAC</th>
+                    <th>Tipo de Quadro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="color: var(--primary); font-weight: bold">0E</td>
+                    <td style="color: var(--secondary); font-weight: bold">0B</td>
+                    <td>UNICAST</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div>
+              <span class="activity-badge">Tabela MAC Atual do Switch (CAM)</span>
+              <table class="table-custom" style="margin-top: 0.5rem">
+                <thead>
+                  <tr>
+                    <th>Porta Física</th>
+                    <th>Endereço MAC Mapeado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fa3</td>
+                    <td>0B</td>
+                  </tr>
+                  <tr>
+                    <td>Fa7</td>
+                    <td>0D</td>
+                  </tr>
+                  <tr>
+                    <td>Fa9</td>
+                    <td>0E</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-question-circle"></i> Pergunta 1 - Para onde o switch encaminhará o quadro?</h3>
+          <p>Analisando a tabela CAM e as informações contidas no cabeçalho de Camada 2 listadas acima:</p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <strong>Resposta Correta: Porta Fa9.</strong> O switch localiza uma correspondência exata
+            para o endereço MAC de destino <span class="host-mac">0E</span> mapeado na interface física <strong>Fa9</strong>. Portanto, o
+            quadro é enviado de forma direcionada (Unicast), sem inundar as demais portas da LAN.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-question-circle"></i> Pergunta 2 - Quando o switch encaminha o quadro, quais afirmações são verdadeiras?</h3>
+
+          <div class="alert alert-info">
+            <i class="fas fa-check"></i> <strong>Afirmação Válida:</strong> O quadro é um quadro <i>unicast</i> e será enviado somente para
+            a porta específica mapeada em hardware (Fa9).
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-check"></i> <strong>Afirmação Válida de Aprendizado:</strong> A entrada do endereço MAC de origem
+            <span class="host-mac">0B</span> na porta Fa3 tem seu temporizador (<i>aging timer</i>) atualizado para 300 segundos.
+          </div>
+        </div>
+      </section>
+      <section id="secao2-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">2.2.1</span> Domínios de colisão
+        </h2>
+
+        <div class="card">
+          <p>
+            No tópico anterior, você adquiriu uma melhor compreensão do que é um switch e como ele opera. Este tópico discute como os
+            switches funcionam entre si e com outros dispositivos para eliminar colisões e reduzir o congestionamento da rede. Os termos
+            colisões e congestionamento são usados aqui da mesma forma que você usá-los no tráfego de rua.
+          </p>
+          <p>
+            Nos segmentos Ethernet baseados em hub herdados, os dispositivos de rede competiram pela mídia compartilhada. Os segmentos de
+            rede que compartilham a mesma largura de banda entre dispositivos são conhecidos como <strong>domínios de colisão</strong>.
+            Quando dois ou mais dispositivos no mesmo domínio de colisão tentam se comunicar ao mesmo tempo, ocorrerá uma colisão.
+          </p>
+          <p>
+            Se uma porta de switch Ethernet estiver operando em <strong>half-duplex</strong>, cada segmento estará em seu próprio domínio de
+            colisão. Não há domínios de colisão quando as portas do switch estão operando em <strong>full-duplex</strong>. No entanto, pode
+            haver um domínio de colisão se uma porta de switch estiver operando em half-duplex.
+          </p>
+          <p>
+            Por padrão, as portas do switch Ethernet negociam automaticamente full-duplex quando o dispositivo adjacente também pode operar
+            em full-duplex. Se a porta do switch estiver conectada a um dispositivo que opera em half-duplex, como um hub herdado, a porta
+            do switch funcionará em half-duplex. No caso de half-duplex, a porta do switch fará parte de um domínio de colisão.
+          </p>
+          <p>
+            Como mostra a figura, o full-duplex é escolhido caso os dois dispositivos tenham a capacidade junto com a largura de banda comum
+            mais alta.
+          </p>
+        </div>
+
+        <style>
+          .negotiation-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+          }
+          .neg-topology {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 24, 36, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+          }
+          .neg-node {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+          }
+          .neg-node i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+          }
+          .node-pc {
+            color: var(--info);
+          }
+          .node-sw {
+            color: var(--primary);
+          }
+          .neg-wire {
+            flex-grow: 1;
+            height: 2px;
+            background: var(--text-dim);
+            margin: 0 1.5rem;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .wire-label {
+            position: absolute;
+            top: -25px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: monospace;
+          }
+          .neg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            position: relative;
+          }
+          @media (max-width: 768px) {
+            .neg-grid {
+              grid-template-columns: 1fr;
+              gap: 1.5rem;
+            }
+          }
+          .neg-box {
+            background: rgba(18, 24, 36, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+          }
+          .neg-box-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            font-weight: 700;
+          }
+          .option-caps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+          .cap-pill {
+            padding: 0.6rem;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: monospace;
+          }
+          .cap-purple {
+            background: rgba(114, 46, 165, 0.2);
+            border: 1px solid #a855f7;
+            color: #d8b4fe;
+          }
+          .cap-teal {
+            background: rgba(0, 180, 216, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--info);
+          }
+          .neg-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warning);
+            font-size: 1.2rem;
+          }
+          @media (max-width: 768px) {
+            .neg-arrow {
+              transform: rotate(90deg);
+              margin: 0.5rem 0;
+            }
+          }
+        </style>
+
+        <div class="negotiation-container">
+          <div class="neg-topology">
+            <div class="neg-node node-pc">
+              <i class="fas fa-desktop"></i>
+              <span>PC A</span>
+            </div>
+            <div class="neg-wire">
+              <span class="wire-label">Porta 1 (Fio de Cobre Base-T)</span>
+            </div>
+            <div class="neg-node node-sw">
+              <i class="fas fa-server"></i>
+              <span>Switch S2</span>
+            </div>
+          </div>
+
+          <div class="neg-grid">
+            <div class="neg-box">
+              <div class="neg-box-title">Capacidades Duplex (PC A)</div>
+              <div class="option-caps">
+                <div class="cap-pill cap-purple">Full-Duplex</div>
+                <div class="cap-pill cap-purple" style="opacity: 0.5">Half-Duplex</div>
+              </div>
+            </div>
+
+            <div class="neg-box">
+              <div class="neg-box-title">Capacidades Duplex (S2)</div>
+              <div class="option-caps">
+                <div class="cap-pill cap-purple">Full-Duplex</div>
+                <div class="cap-pill cap-purple" style="opacity: 0.5">Half-Duplex</div>
+              </div>
+            </div>
+
+            <div class="neg-box">
+              <div class="neg-box-title">Velocidades Suportadas (PC A)</div>
+              <div class="option-caps">
+                <div class="cap-pill cap-teal">100 Mbps</div>
+                <div class="cap-pill cap-teal" style="opacity: 0.4">10 Mbps</div>
+              </div>
+            </div>
+
+            <div class="neg-box">
+              <div class="neg-box-title">Velocidades Suportadas (S2)</div>
+              <div class="option-caps">
+                <div class="cap-pill cap-teal" style="opacity: 0.4">1000 Mbps</div>
+                <div class="cap-pill cap-teal">100 Mbps</div>
+                <div class="cap-pill cap-teal" style="opacity: 0.4">10 Mbps</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem; text-align: center">
+            <i class="fas fa-handshake"></i> <strong>Resultado da Auto-Negotiation:</strong> O link será estabelecido operacionalmente em
+            <strong>100 Mbps / Full-Duplex</strong> (maior convergência comum de performance).
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Configuração Manual de Parâmetros de Link no Cisco IOS</h3>
+          <p>
+            Para evitar problemas comuns de <i>duplex mismatch</i> devido a falhas na negociação automática, configure explicitamente os
+            valores de velocidade e modo duplex na interface do switch:
+          </p>
+
+          <div class="terminal">
+            <pre>S2> <strong>enable</strong>
+S2# <strong>configure terminal</strong>
+Enter configuration commands, one per line. End with CNTL/Z.
+S2(config)# <strong>interface fastethernet 0/1</strong>
+S2(config-if)# <strong>speed 100</strong>
+S2(config-if)# <strong>duplex full</strong>
+S2(config-if)# <strong>end</strong>
+S2# <strong>show interfaces fastethernet 0/1 status</strong>
+
+Port      Name               Status       Vlan       Duplex  Speed Type
+Fa0/1     connected          in-vlan      10           <strong>full    100</strong> 10/100BaseTX</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-broadcast-tower"></i>
+          <span class="section-number">2.2.2</span> Domínios de transmissão (Broadcast Domains)
+        </h2>
+
+        <div class="card">
+          <p>
+            Um conjunto de switches interconectados forma um único domínio de broadcast. Somente um dispositivo de camada de rede, como um
+            roteador, pode dividir um domínio de broadcast de camada 2. Os roteadores são usados para segmentar domínios de broadcast, mas
+            também segmentarão um domínio de colisão.
+          </p>
+          <p>
+            Quando um dispositivo envia um broadcast de camada 2, o endereço MAC destino no quadro é definido somente com 1s binários
+            (<strong>FF:FF:FF:FF:FF:FF</strong>).
+          </p>
+          <p>
+            O domínio de broadcast de camada 2 é conhecido como domínio de broadcast MAC. O domínio de broadcast MAC consiste em todos os
+            dispositivos na LAN que recebem quadros de broadcast de um host.
+          </p>
+        </div>
+
+        <div class="card">
+          <p>
+            Quando um switch recebe um quadro de broadcast, ele encaminha o quadro por meio de cada uma de suas portas, exceto a porta de
+            ingresso na qual o quadro de broadcast foi recebido. Cada dispositivo conectado ao switch recebe uma cópia do quadro de
+            broadcast e o processa.
+          </p>
+          <p>
+            Os broadcasts às vezes são necessários para localizar inicialmente outros dispositivos e serviços de rede, mas eles também
+            reduzem a eficiência da rede. A largura de banda da rede é usada para propagar o tráfego de broadcast. Muitos broadcasts e uma
+            carga de tráfego pesada na rede podem causar congestionamentos, o que reduz a velocidade de desempenho da rede.
+          </p>
+          <p>
+            Quando dois switches estão conectados, o domínio de broadcast é aumentado. Neste caso, um quadro de broadcast é encaminhado a
+            todas as portas conectadas ao switch S1. O switch S1 está conectado ao switch S2. O quadro é propagado também a todos os
+            dispositivos conectados ao switch S2.
+          </p>
+        </div>
+
+        <style>
+          .broadcast-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+          }
+          .bc-topology {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(18, 24, 36, 0.6);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+          }
+          .bc-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 2rem;
+            flex-wrap: wrap;
+          }
+          .bc-device {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            text-align: center;
+            font-family: monospace;
+            min-width: 140px;
+            position: relative;
+          }
+          .bc-device i {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 0.4rem;
+          }
+          .dev-router {
+            border-color: var(--danger);
+            color: var(--danger);
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.15);
+          }
+          .dev-switch {
+            border-color: var(--primary);
+            color: var(--primary);
+          }
+          .dev-pc {
+            border-color: var(--text-dim);
+            color: var(--text);
+          }
+
+          .domain-zone {
+            border: 2px dashed var(--warning);
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 183, 3, 0.03);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          .zone-title {
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--warning);
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+          }
+          .bc-flood-line {
+            color: var(--warning);
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+          }
+        </style>
+
+        <div class="broadcast-container">
+          <div class="bc-topology">
+            <div class="bc-row">
+              <div class="bc-device dev-router">
+                <i class="fas fa-route"></i>
+                <span>Roteador R1</span>
+                <div style="font-size: 0.65rem; color: var(--danger); margin-top: 0.25rem">Bloqueia Broadcast</div>
+              </div>
+            </div>
+
+            <div class="bc-row" style="justify-content: space-around">
+              <div class="domain-zone">
+                <div class="zone-title"><i class="fas fa-bullhorn"></i> Domínio de Broadcast L2 (VLAN 10)</div>
+                <div class="bc-device dev-switch">
+                  <i class="fas fa-server"></i>
+                  <span>Switch S1</span>
+                </div>
+                <div class="bc-device dev-pc">
+                  <i class="fas fa-desktop"></i>
+                  <span>PC-A</span>
+                </div>
+                <div class="bc-device dev-pc">
+                  <i class="fas fa-desktop"></i>
+                  <span>PC-B</span>
+                </div>
+              </div>
+
+              <div class="bc-flood-line"><i class="fas fa-arrows-alt-h"></i></div>
+
+              <div class="domain-zone" style="border-color: var(--secondary); background: rgba(0, 245, 212, 0.03)">
+                <div class="zone-title" style="color: var(--secondary)">
+                  <i class="fas fa-bullhorn"></i> Domínio de Broadcast L2 (VLAN 20)
+                </div>
+                <div class="bc-device dev-switch" style="border-color: var(--secondary); color: var(--secondary)">
+                  <i class="fas fa-server"></i>
+                  <span>Switch S2</span>
+                </div>
+                <div class="bc-device dev-pc">
+                  <i class="fas fa-desktop"></i>
+                  <span>PC-C</span>
+                </div>
+                <div class="bc-device dev-pc">
+                  <i class="fas fa-desktop"></i>
+                  <span>PC-D</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Monitoramento de Tráfego de Broadcast no Cisco IOS</h3>
+          <p>
+            Para mensurar o impacto operacional e a quantidade de pacotes de transmissão geral acumulados nas interfaces LAN do switch,
+            execute o monitoramento abaixo:
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+S1# <strong>show interfaces fastethernet 0/1 counters</strong>
+
+Port            InOctets   InUcastPkts   <strong>InMcastPkts</strong>   <strong>InBcastPkts</strong>
+Fa0/1            4512344        120455          4312          <strong>85241</strong>
+
+Port           OutOctets  OutUcastPkts  <strong>OutMcastPkts</strong>  <strong>OutBcastPkts</strong>
+Fa0/1           18432115        340212         12940         <strong>412042</strong></pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-compress-alt"></i>
+          <span class="section-number">2.2.3</span> Aliviando o congestionamento da rede
+        </h2>
+
+        <div class="card">
+          <p>
+            Os switches de rede possuem características fundamentais que ajudam a aliviar o congestionamento em uma LAN. Essas propriedades
+            cooperam entre si para garantir que a largura de banda seja otimizada e que o atraso na entrega de pacotes seja reduzido
+            drasticamente.
+          </p>
+
+          <p>
+            A tabela a seguir detalha os recursos de hardware e software dos switches que atuam diretamente na mitigação do congestionamento
+            de rede:
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 25%">Característica</th>
+                <th>Como ajuda a aliviar o congestionamento</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Velocidades de porta rápidas</strong></td>
+                <td>
+                  Dependendo do modelo do switch, as velocidades das portas podem variar de 100 Mbps, passando por 1 Gbps (Gigabit
+                  Ethernet), até 100 Gbps ou mais. Isso permite que grandes volumes de dados trafeguem sem gargalos na mídia física.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Comutação interna rápida</strong></td>
+                <td>
+                  Os switches utilizam um barramento interno ultrarrápido ou uma matriz de memória de alto desempenho para processar e
+                  encaminhar dados de maneira quase instantânea, evitando que pacotes fiquem represados no hardware.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Buffers de memória grandes</strong></td>
+                <td>
+                  A capacidade de usar buffers de memória expandidos permite que o switch armazene temporariamente mais quadros recebidos
+                  antes de precisar descartá-los. Isso é crucial quando há surtos de tráfego vindo de links mais rápidos em direção a portas
+                  mais lentas.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Alta densidade de portas</strong></td>
+                <td>
+                  Garante que uma grande quantidade de nós (hosts) possa ser conectada diretamente ao switch de forma dedicada. Quanto mais
+                  portas dedicadas o switch possuir, menos dispositivos compartilharão o mesmo meio e menor será o congestionamento global.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <style>
+          .congestion-mitigation-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+          }
+          .cm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+          }
+          @media (max-width: 768px) {
+            .cm-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+          .cm-box {
+            background: rgba(18, 24, 36, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+          }
+          .cm-box h3 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+          .memory-buffer-pool {
+            background: var(--bg-dark);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 0.75rem;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 1rem;
+          }
+          .memory-slot {
+            width: 45px;
+            height: 30px;
+            background: rgba(0, 180, 216, 0.1);
+            border: 1px dashed var(--primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-family: monospace;
+            color: var(--info);
+          }
+          .memory-slot.filled {
+            background: rgba(3, 244, 135, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+          }
+          .port-matrix {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-top: 1rem;
+          }
+          .matrix-jack {
+            background: #020617;
+            border: 1px solid #1e293b;
+            height: 20px;
+            border-radius: 2px;
+            position: relative;
+          }
+          .matrix-jack::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            right: 4px;
+            bottom: 8px;
+            background: #334155;
+            border-radius: 1px;
+          }
+          .matrix-jack.active::before {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: calc(50% - 2px);
+            width: 4px;
+            height: 4px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 4px var(--success);
+          }
+        </style>
+
+        <div class="congestion-mitigation-container">
+          <div class="cm-grid">
+            <div class="cm-box">
+              <h3><i class="fas fa-database"></i> Buffers de Memória Dedicados</h3>
+              <p style="font-size: 0.85rem; color: var(--text-dim)">
+                Armazena temporariamente rajadas de frames para evitar o descarte prematuro de dados (Drops) quando links de saídas estão
+                temporariamente ocupados.
+              </p>
+              <div class="memory-buffer-pool">
+                <div class="memory-slot filled">Frame</div>
+                <div class="memory-slot filled">Frame</div>
+                <div class="memory-slot">Livre</div>
+                <div class="memory-slot">Livre</div>
+                <div class="memory-slot">Livre</div>
+              </div>
+            </div>
+
+            <div class="cm-box">
+              <h3><i class="fas fa-th"></i> Alta Densidade de Portas</h3>
+              <p style="font-size: 0.85rem; color: var(--text-dim)">
+                Mais conexões dedicadas ponto a ponto por switch, eliminando a necessidade de hubs e minimizando totalmente colisões
+                físicas.
+              </p>
+              <div class="port-matrix">
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack active"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack"></div>
+                <div class="matrix-jack active"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Monitorando Descartes por Saturação de Buffer</h3>
+          <p>
+            Caso o tráfego exceda temporariamente as capacidades de buffering do switch, o contador de <strong>ignored</strong> e as falhas
+            de alocação de buffer começarão a subir. Use o comando de diagnóstico de buffer do IOS:
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+S1# <strong>show interfaces fastethernet 0/1</strong>
+FastEthernet0/1 is up, line protocol is up (connected)
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
+     341205 packets input, 41204855 bytes, <strong>0 no buffer</strong>
+     Received 214 broadcasts (104 multicasts)
+     0 runts, 0 giants, 0 throttles
+     0 CRC, 0 frame, 0 overrun, <strong>0 ignored</strong>
+
+S1# <strong>show memory alloc-header</strong>
+Free memory blocks total count: 42
+Allocated memory blocks total count: 512
+Maximum historical memory block allocation leakage: 0</pre>
+          </div>
+        </div>
+      </section>
+      <section id="secao2-2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list-alt"></i>
+          <span class="section-number">2.2.4</span> Prática do Módulo e Questionário - Conceitos de Switching
+        </h2>
+
+        <div class="card">
+          <h3>O que eu aprendi neste módulo?</h3>
+          <p>
+            Antes de prosseguir para o próximo módulo, revise os conceitos estruturais consolidados sobre a operação de switches na
+            infraestrutura LAN:
+          </p>
+
+          <ul>
+            <li>
+              Os switches utilizam os endereços MAC de origem para popular dinamicamente a tabela CAM e associar os dispositivos finais às
+              suas respectivas interfaces físicas.
+            </li>
+            <li>
+              As decisões de encaminhamento de quadros (frames) são baseadas estritamente no cabeçalho de Camada 2, avaliando o endereço MAC
+              de destino.
+            </li>
+            <li>
+              O método de switching <strong>Store-and-Forward</strong> valida a integridade do quadro por completo calculando o mecanismo de
+              redundância cíclica (CRC/FCS) antes do envio, enquanto o método <strong>Cut-Through</strong> foca em latência ultra-baixa
+              iniciando o encaminhamento de forma imediata.
+            </li>
+            <li>
+              Switches limitam o escopo dos domínios de colisão porta a porta operando em <i>full-duplex</i>, mas propagam transmissões de
+              <i>broadcast</i> por todas as interfaces ativas pertencentes à mesma LAN ou VLAN lógica.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-question-circle"></i> Questão de Revisão 1</h3>
+          <p>
+            Qual método de comutação garante que quadros com erros de CRC/FCS sejam completamente descartados na porta de ingresso,
+            impedindo sua propagação pela infraestrutura?
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <strong>Resposta Correta: Store-and-Forward.</strong> Por ler todo o datagrama em memória e
+            realizar o cálculo matemático de checagem, esse é o único método que impede a passagem de quadros inválidos.
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-question-circle"></i> Questão de Revisão 2</h3>
+          <p>
+            O que acontece quando um switch recebe um quadro <i>unicast</i> cujo endereço MAC de destino não consta em sua tabela de
+            endereços MAC (CAM)?
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Resposta Correta: Inundação de Unicast Desconhecido (Unknown Unicast Flooding).</strong> O switch encaminhará o quadro
+            por todas as portas ativas do mesmo domínio de broadcast, com exceção da porta por onde o quadro originalmente entrou.
+          </div>
+        </div>
+      </section>
+    </div>
 
     <footer>
-      <p>© 2026 Cisco CCNA 2 - Switching, Routing, and Wireless Essentials | Identidade Visual Adaptada</p>
+      <div class="container" style="text-align: center; padding: 2rem 0; color: var(--text-dim); font-size: 0.85rem">
+        &copy; 2026 Cisco Networking Academy - CCNA 2 (SRWE) | Práticas Avançadas de Infraestrutura.
+      </div>
     </footer>
 
     <script>
@@ -55,15 +1742,9 @@
         init() {
           if (!this.sidebar) return
 
-          if (this.openBtn) {
-            this.openBtn.addEventListener('click', () => this.open())
-          }
-          if (this.closeBtn) {
-            this.closeBtn.addEventListener('click', () => this.close())
-          }
-          if (this.overlay) {
-            this.overlay.addEventListener('click', () => this.close())
-          }
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
 
           document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {

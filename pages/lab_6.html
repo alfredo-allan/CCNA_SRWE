@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configurações Básicas do Roteador - Modo Físico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_6.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-table"></i> 1.0 Plano Lógico</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-plug"></i> 2.0 Ativação Elétrica PTPM</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-user-shield"></i> 3.0 Correção VTY & Senhas</a>
+        </li>
+        <li>
+          <a href="#secao4-0"><i class="fas fa-network-wired"></i> 4.0 Endereçamento de Portas</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Modo Físico Avançado (PTPM)</span>
+        <h1>Configurações Básicas do Roteador</h1>
+        <p style="color: var(--text-dim)">
+          Ativação de fontes de alimentação em Rack, diagnóstico de links físicos e auditoria de credenciais locais SSH.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.0</span> Plano de Endereçamento Atualizado
+        </h2>
+        <div class="card">
+          <p>Esquema de endereçamento IP e parâmetros de gateway validados para conferência final:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP / Prefixo</th>
+                <th>Link-Local IPv6</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><strong>R1</strong></td>
+                <td>G0/0/0</td>
+                <td>192.168.0.1/24<br />2001:db8:acad::1/64</td>
+                <td>fe80::1</td>
+                <td>N/D</td>
+              </tr>
+              <tr>
+                <td>G0/0/1</td>
+                <td>192.168.1.1/24<br />2001:db8:acad:1::1/64</td>
+                <td>fe80::1</td>
+                <td>N/D</td>
+              </tr>
+              <tr>
+                <td>Loopback 0</td>
+                <td>10.0.0.1/24<br />2001:db8:acad:2::1/64</td>
+                <td>fe80::1</td>
+                <td>N/D</td>
+              </tr>
+              <tr>
+                <td><strong>PC-A</strong></td>
+                <td>NIC</td>
+                <td>192.168.1.10/24<br />2001:db8:acad:1::10/64</td>
+                <td>N/A</td>
+                <td>192.168.1.1<br />fe80::1</td>
+              </tr>
+              <tr>
+                <td><strong>Servidor</strong></td>
+                <td>Placa de rede</td>
+                <td><strong>192.168.0.10/24</strong><br />2001:db8:acad::10/64</td>
+                <td>N/A</td>
+                <td>192.168.0.1<br />fe80::1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-plug"></i>
+          <span class="section-number">2.0</span> Ativação das Fontes de Alimentação (Modo Físico)
+        </h2>
+        <div class="card">
+          <p>No modo PTPM, os ativos de rede necessitam de conexão elétrica manual para que o protocolo de linha mude para UP.</p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-bolt"></i> <strong>Ação Obrigatória:</strong> Conecte o cabo de força na parte traseira do switch
+            <code>S1</code> e ligue a chave de energia do roteador <code>R1</code>. Sem energia, os comandos <code>no shutdown</code> serão
+            ignorados pelo simulador.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-user-shield"></i>
+          <span class="section-number">3.0</span> Ajuste das Linhas VTY e Banco Local de Usuários
+        </h2>
+        <div class="card">
+          <p>Remoção de comandos de login conflitantes e reaplicação das chaves de segurança estritas de 12 caracteres:</p>
+
+          <div class="terminal">
+            <pre>
+R1> enable
+Password: $cisco!PRIV*
+R1# configure terminal
+
+! Corrigindo permissões redundantes de login nas linhas virtuais
+R1(config)# line vty 0 4
+R1(config-line)# no login
+R1(config-line)# login local
+R1(config-line)# exit
+
+! Validando os parâmetros do usuário SSH e Enable Secret
+R1(config)# security password min-length 12
+R1(config)# username SSHadmin secret 55Hadm!n2020
+R1(config)# enable secret $cisco!PRIV*
+
+R1(config)# end
+R1# copy running-config startup-config</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">4.0</span> Ativação Definitiva das Interfaces
+        </h2>
+        <div class="card">
+          <p>Após ligar os equipamentos, execute a abertura final das portas locais para sincronização dos pacotes:</p>
+          <div class="terminal">
+            <pre>
+R1(config)# interface GigabitEthernet0/0/0
+R1(config-if)# no shutdown
+
+R1(config)# interface GigabitEthernet0/0/1
+R1(config-if)# no shutdown
+R1(config-if)# end</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Topologia 100% Homologada</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe o arquivo de arquitetura definitivo contendo todas as conexões de energia e lógicas resolvidas.
+          </p>
+          <a href="../labs/lab_6.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
