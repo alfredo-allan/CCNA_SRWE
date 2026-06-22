@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules" id="sidebar-links">
+        <li>
+          <a href="#secao3-0-1"><i class="fas fa-compass"></i> 3.0.1 Por que devo cursar este módulo?</a>
+        </li>
+        <li>
+          <a href="#secao3-1-1"><i class="fas fa-layer-group"></i> 3.1.1 Definições de VLAN</a>
+        </li>
+        <li>
+          <a href="#secao3-1-2"><i class="fas fa-layer-group"></i> 3.1.2 Benefícios de um projeto de VLAN</a>
+        </li>
+        <li>
+          <a href="#secao3-1-3"><i class="fas fa-layer-group"></i> 3.1.3 Tipos de VLANs</a>
+        </li>
+        <li>
+          <a href="../pages/lab_7.html"><i class="fas fa-desktop"></i> 3.1.4 Packet Tracer - Quem ouve o broadcast?</a>
+        </li>
+        <li>
+          <a href="#secao3-2-1"><i class="fas fa-link"></i> 3.2.1 Definindo troncos de VLAN</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="badge-lab">CCNA 2 - SRWE</div>
+      <h1>Módulo 3: VLANs</h1>
+    </section>
+
+    <div class="container" id="main-content">
+      <section id="secao3-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-compass"></i>
+          <span class="section-number">3.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <h3>Bem-vindo às Virtual LANs!</h3>
+          <p>
+            Imagine gerenciar uma infraestrutura corporativa onde novos departamentos e equipes surgem a cada trimestre. Manter centenas de
+            hosts no mesmo domínio de broadcast físico gera gargalos severos de performance e expõe informações sigilosas para toda a rede
+            local.
+          </p>
+          <p>
+            As <strong>VLANs (Virtual Local Area Networks)</strong> resolvem este problema dividindo uma única rede física de switches em
+            múltiplos segmentos lógicos isolados. Este módulo aborda a configuração, gerência e o troubleshooting de VLANs e links Trunk,
+            garantindo uma rede corporativa escalável, eficiente e totalmente segura.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Visão Geral:</strong> Ao segmentar o tráfego em domínios lógicos, as transmissões de
+          broadcast de uma determinada VLAN (como requisições ARP ou DHCP) ficam restritas ao seu respectivo grupo, otimizando drasticamente
+          o uso de banda dos links da LAN.
+        </div>
+      </section>
+      <section id="secao3-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">3.1.1</span> Definições de VLAN
+        </h2>
+
+        <div class="card">
+          <p>
+            É claro que organizar sua rede em redes menores não é tão simples quanto separar parafusos e colocá-los em frascos. Mas isso
+            tornará sua rede mais fácil de gerenciar. Em uma rede comutada, as VLANs oferecem segmentação e flexibilidade organizacional. Em
+            um grupo de dispositivos em uma VLAN, os elementos comunicam-se como se estivessem conectados ao mesmo cabo. As VLANs são
+            baseadas em conexões lógicas, em vez de conexões físicas.
+          </p>
+          <p>
+            Conforme mostrado na figura, as VLANs em uma rede comutada permitem que usuários em vários departamentos (ou seja, TI, RH e
+            Vendas) se conectem à mesma rede, independentemente do switch físico que está sendo usado ou local em uma LAN do campus.
+          </p>
+        </div>
+
+        <style>
+          .vlan-fidel-311-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+          }
+          .v311-topology {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            background: rgba(18, 24, 36, 0.7);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+          }
+          .v311-switches-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 4rem;
+            flex-wrap: wrap;
+          }
+          .v311-sw-box {
+            background: linear-gradient(135deg, #1b2436 0%, #121824 100%);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            text-align: center;
+            min-width: 120px;
+            font-weight: bold;
+            color: var(--primary);
+          }
+          .v311-sw-box i {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+          }
+          .v311-hosts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 1rem;
+          }
+          @media (max-width: 768px) {
+            .v311-hosts-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+          .v311-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(10, 14, 23, 0.4);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            align-items: center;
+          }
+          .v311-column-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+            text-align: center;
+          }
+          .v311-node {
+            width: 100%;
+            max-width: 220px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+          }
+          .v311-node i {
+            font-size: 1.3rem;
+          }
+
+          /* Cores Fiéis das Três VLANs do Diagrama */
+          .color-it {
+            border-left: 4px solid var(--primary);
+            color: var(--info);
+          }
+          .color-hr {
+            border-left: 4px solid var(--danger);
+            color: #ff4d6d;
+          }
+          .color-sales {
+            border-left: 4px solid var(--warning);
+            color: var(--warning);
+          }
+
+          .v311-trunk-line {
+            height: 2px;
+            background: var(--text-dim);
+            flex-grow: 1;
+            min-width: 40px;
+          }
+        </style>
+
+        <div class="vlan-fidel-311-container">
+          <div class="v311-topology">
+            <div class="v311-switches-row">
+              <div class="v311-sw-box"><i class="fas fa-server"></i>S1</div>
+              <div class="v311-trunk-line"></div>
+              <div class="v311-sw-box"><i class="fas fa-server"></i>S2</div>
+              <div class="v311-trunk-line"></div>
+              <div class="v311-sw-box"><i class="fas fa-server"></i>S3</div>
+            </div>
+
+            <div class="v311-hosts-grid">
+              <div class="v311-column">
+                <span class="v311-column-title" style="color: var(--primary)">VLAN 10</span>
+                <div class="v311-node color-it">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC1</span><br /><small>Técnicos TI</small></div>
+                </div>
+                <div class="v311-node color-it">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC4</span><br /><small>Técnicos TI</small></div>
+                </div>
+              </div>
+
+              <div class="v311-column">
+                <span class="v311-column-title" style="color: var(--danger)">VLAN 20</span>
+                <div class="v311-node color-hr">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC2</span><br /><small>Rec. Humanos</small></div>
+                </div>
+                <div class="v311-node color-hr">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC5</span><br /><small>Rec. Humanos</small></div>
+                </div>
+              </div>
+
+              <div class="v311-column">
+                <span class="v311-column-title" style="color: var(--warning)">VLAN 30</span>
+                <div class="v311-node color-sales">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC3</span><br /><small>Depto Vendas</small></div>
+                </div>
+                <div class="v311-node color-sales">
+                  <i class="fas fa-desktop"></i>
+                  <div><span>PC6</span><br /><small>Depto Vendas</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            As VLANs permitem que um administrator segmente redes com base em fatores como função, equipe de projeto ou aplicação, sem
+            considerar o local físico do usuário ou dispositivo. Cada VLAN é considerada uma rede lógica separada. Os dispositivos em uma
+            VLAN atuam como se estivessem em sua própria rede independente, mesmo que compartilhem uma infraestrutura comum com outras
+            VLANs. Qualquer porta do switch pode pertencer a uma VLAN.
+          </p>
+          <p>
+            Pacotes de unicast, broadcast e multicast são encaminhados e inundados apenas para dispositivos finais na VLAN onde os pacotes
+            são fornecidos. Os pacotes destinados aos dispositivos que não pertencem a VLANs devem ser roteados por um dispositivo que
+            permita roteamento.
+          </p>
+          <p>
+            Várias sub-redes IP podem existir em uma rede comutada, sem o uso de várias VLANs. Entretanto, os dispositivos estarão no mesmo
+            domínio de transmissão de Camada 2. Isso significa que todas as transmissões de Camada 2, como uma solicitação ARP, serão
+            recebidas por todos os dispositivos na rede comutada, mesmo pelas pessoas que não devem receber a transmissão.
+          </p>
+          <p>
+            Uma VLAN é um domínio de broadcast que pode abranger vários segmentos de LAN físicos. As VLANs melhoram o desempenho da rede,
+            separando grandes domínios de transmissão em domínios menores. Se um dispositivo em uma VLAN envia um quadro Ethernet de
+            transmissão, todos os dispositivos na VLAN recebem o quadro, mas os dispositivos em outras VLANs não.
+          </p>
+          <p>
+            Usando VLANs, os administradores de rede podem implementar políticas de acesso e segurança de acordo com grupos específicos de
+            usuários. Cada porta de switch pode be atribuída a apenas uma VLAN (exceto para uma porta conectada a um telefone IP ou a outro
+            switch).
+          </p>
+        </div>
+      </section>
+      <section id="secao3-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">3.1.2</span> Benefícios de um projeto de VLAN
+        </h2>
+
+        <div class="card">
+          <p>
+            Cada VLAN em uma rede comutada corresponde a uma rede IP. Portanto, o projeto da VLAN deve levar em consideração a implementação
+            de um esquema de endereçamento de rede hierárquico. Endereçamento de rede hierárquico significa que os números de rede IP são
+            aplicados a segmentos de rede ou VLANs de uma forma que leva a rede como um todo em consideração. Os blocos de endereços de rede
+            contíguos são reservados para dispositivos e configurados neles em uma área específica da rede, como mostra a figura.
+          </p>
+        </div>
+
+        <style>
+          .vlan-benefits-312-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+          }
+          .v312-topology {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(18, 24, 36, 0.7);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+          }
+          .v312-router-box {
+            background: linear-gradient(135deg, #24141b 0%, #170d11 100%);
+            border: 2px solid var(--danger);
+            border-radius: 50% / 12px;
+            padding: 0.75rem 2rem;
+            text-align: center;
+            font-weight: bold;
+            color: var(--danger);
+            font-family: monospace;
+          }
+          .v312-router-box i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+          }
+          .v312-line {
+            width: 2px;
+            height: 30px;
+            background: var(--text-dim);
+          }
+          .v312-switch-box {
+            background: linear-gradient(135deg, #1b2436 0%, #121824 100%);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 0.75rem 2rem;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+          }
+          .v312-switch-box i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+          }
+
+          .v312-display-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 1rem;
+          }
+          @media (max-width: 768px) {
+            .v312-display-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+          .v312-segment {
+            background: rgba(10, 14, 23, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+          .v312-segment i {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .v312-badge {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            width: 100%;
+          }
+          .badge-it {
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--info);
+            border: 1px solid var(--primary);
+          }
+          .badge-hr {
+            background: rgba(255, 77, 109, 0.15);
+            color: #ff4d6d;
+            border: 1px solid var(--danger);
+          }
+          .badge-sales {
+            background: rgba(255, 183, 3, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+          }
+
+          .v312-ip-info {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text);
+            background: var(--bg-dark);
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            width: 100%;
+          }
+        </style>
+
+        <div class="vlan-benefits-312-container">
+          <div class="v312-topology">
+            <div class="v312-router-box"><i class="fas fa-route"></i> R1 (Core Router)</div>
+            <div class="v312-line"></div>
+            <div class="v312-switch-box"><i class="fas fa-server"></i> Switch Catalyst</div>
+            <div class="v312-display-grid">
+              <div class="v312-segment" style="border-top: 3px solid var(--primary)">
+                <i class="fas fa-laptop-code" style="color: var(--primary)"></i>
+                <div class="v312-badge badge-it">VLAN 10 - Faculdade</div>
+                <div class="v312-ip-info">
+                  <strong>Sub-rede IP:</strong><br />
+                  172.17.10.0/24
+                </div>
+              </div>
+              <div class="v312-segment" style="border-top: 3px solid var(--danger)">
+                <i class="fas fa-users" style="color: var(--danger)"></i>
+                <div class="v312-badge badge-hr">VLAN 20 - Student</div>
+                <div class="v312-ip-info">
+                  <strong>Sub-rede IP:</strong><br />
+                  172.17.20.0/24
+                </div>
+              </div>
+              <div class="v312-segment" style="border-top: 3px solid var(--warning)">
+                <i class="fas fa-comments-dollar" style="color: var(--warning)"></i>
+                <div class="v312-badge badge-sales">VLAN 30 - Convidado</div>
+                <div class="v312-ip-info">
+                  <strong>Sub-rede IP:</strong><br />
+                  172.17.30.0/24
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Análise dos Benefícios das VLANs</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 30%">Benefícios</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Domínios de transmissão menores</strong></td>
+                <td>
+                  <ul>
+                    <li>Dividir uma rede em VLANs reduz o número de dispositivos no domínio de transmissão.</li>
+                    <li>
+                      Na figura, há seis computadores na rede, mas apenas três domínios de transmissão (ou seja, Faculdade, Estudante e
+                      Convidado).
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Mais segurança</strong></td>
+                <td>
+                  <ul>
+                    <li>Somente usuários na mesma VLAN podem se comunicar juntos.</li>
+                    <li>
+                      Na figura, o tráfego de rede do corpo docente na VLAN 10 é completamente separado e protegido de usuários em outras
+                      VLANs.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Maior eficiência de TI</strong></td>
+                <td>
+                  <ul>
+                    <li>
+                      As VLANs simplificam o gerenciamento de rede porque os usuários com rede semelhante podem ser configurados na mesma
+                      VLAN.
+                    </li>
+                    <li>As VLANs podem ser nomeadas para facilitar a identificação.</li>
+                    <li>Na figura, VLAN 10 foi nomeada “Faculdade”, VLAN 20 “Student”, e VLAN 30 “Convidado.”</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Custo reduzido</strong></td>
+                <td>
+                  As VLANs reduzem a necessidade de atualizações de rede dispendiosas e usam a largura de banda e uplinks existentes de
+                  forma mais eficiente, resultando em redução de custo.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Melhor desempenho</strong></td>
+                <td>Domínios de difusão menores reduzem o tráfego desnecessário na rede e aumentam o desempenho.</td>
+              </tr>
+              <tr>
+                <td><strong>Projeto e gerenciamento de aplicativos mais simples</strong></td>
+                <td>
+                  <ul>
+                    <li>As VLANs agregam usuários e dispositivos de rede para oferecer suporte a negócios ou requisitos geográficos.</li>
+                    <li>
+                      Ter funções separadas torna o gerenciamento de um projeto ou trabalhar com uma aplicação especializada mais fácil; um
+                      exemplo de tal aplicação é uma plataforma de desenvolvimento de e-learning para o corpo docente.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao3-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">3.1.3</span> Tipos de VLANs
+        </h2>
+
+        <div class="card">
+          <p>
+            As VLANs são usadas por diferentes razões em redes modernas. Alguns tipos de VLAN são definidos por classes de tráfego. Outros
+            tipos de VLANs são definidos pela função específica que servem.
+          </p>
+        </div>
+
+        <style>
+          .vlan-types-313-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+          }
+          .v313-topology {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(18, 24, 36, 0.7);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+          }
+          .v313-switch-visual {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+            max-width: 750px;
+            box-shadow: 0 4px 12px rgba(0, 180, 216, 0.2);
+          }
+          .v313-ports-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+          }
+          @media (max-width: 576px) {
+            .v313-ports-display {
+              grid-template-columns: 1fr;
+            }
+          }
+          .v313-port-card {
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+          }
+          .v313-port-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+          }
+          .v313-desc {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+          }
+          .p-data {
+            border-top: 3px solid var(--info);
+            color: var(--info);
+          }
+          .p-default {
+            border-top: 3px solid var(--text-dim);
+            color: var(--text);
+          }
+          .p-native {
+            border-top: 3px solid var(--secondary);
+            color: var(--secondary);
+          }
+          .p-mgmt {
+            border-top: 3px solid var(--danger);
+            color: #ff4d6d;
+          }
+        </style>
+
+        <div class="vlan-types-313-container">
+          <div class="v313-topology">
+            <div class="v313-switch-visual">
+              <span style="font-size: 0.85rem; font-weight: bold; color: var(--primary)"
+                ><i class="fas fa-server"></i> Switch de Acesso LAN</span
+              >
+
+              <div class="v313-ports-display">
+                <div class="v313-port-card p-data">
+                  <div class="v313-port-title">VLAN de Dados</div>
+                  <i class="fas fa-laptop" style="font-size: 1.2rem; margin: 0.25rem 0"></i>
+                  <div class="v313-desc">Tráfego gerado pelo usuário (E-mail / Web)</div>
+                </div>
+
+                <div class="v313-port-card p-default">
+                  <div class="v313-port-title">VLAN Padrão</div>
+                  <i class="fas fa-id-card-alt" style="font-size: 1.2rem; margin: 0.25rem 0"></i>
+                  <div class="v313-desc">VLAN 1 (Todas as portas no boot inicial)</div>
+                </div>
+
+                <div class="v313-port-card p-native">
+                  <div class="v313-port-title">VLAN Nativa</div>
+                  <i class="fas fa-exchange-alt" style="font-size: 1.2rem; margin: 0.25rem 0"></i>
+                  <div class="v313-desc">Tráfego sem etiqueta (Untagged) no Tronco</div>
+                </div>
+
+                <div class="v313-port-card p-mgmt">
+                  <div class="v313-port-title">VLAN de Gerência</div>
+                  <i class="fas fa-user-shield" style="font-size: 1.2rem; margin: 0.25rem 0"></i>
+                  <div class="v313-desc">Acesso SSH/VTY remoto do Administrador</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Definições Corporativas de VLANs</h3>
+          <p>Para estruturar uma rede convergente seguindo as recomendações da Cisco, compreenda as atribuições lógicas abaixo:</p>
+
+          <ul>
+            <li>
+              <strong>VLAN de Dados:</strong> Uma VLAN de dados é uma VLAN configurada para transportar tráfego gerado pelo usuário. Uma
+              VLAN que transporta tráfego de voz ou tráfego de gerenciamento não seria uma VLAN de dados. É comum separar o tráfego de voz e
+              gerenciamento dos dados do usuário. Às vezes, uma VLAN de dados é chamada de VLAN de usuário.
+            </li>
+            <li>
+              <strong>VLAN Padrão:</strong> Todos as portas do switch tornam-se parte da VLAN padrão após o boot inicial do switch. Colocar
+              todas as portas do switch na VLAN padrão faz com que todas elas façam parte do mesmo domínio de transmissão. Nos switches
+              Cisco, a VLAN padrão é a VLAN 1.
+            </li>
+            <li>
+              <strong>VLAN Nativa:</strong> Uma VLAN nativa é atribuída a uma porta de tronco 802.1Q. As portas de tronco suportam tráfego
+              associado a mais de uma VLAN (tráfego etiquetado), bem como tráfego que não vem de uma VLAN (tráfego não etiquetado). A porta
+              de tronco coloca o tráfego não etiquetado na VLAN nativa, que por padrão é a VLAN 1.
+            </li>
+            <li>
+              <strong>VLAN de Gerência:</strong> Uma VLAN de gerência é qualquer VLAN configurada para acessar os recursos de gerenciamento
+              de um switch. A VLAN 1 serve como a VLAN de gerência por padrão. Para criar a VLAN de gerência, a interface virtual do switch
+              (SVI) dessa VLAN recebe um endereço IP e uma máscara de sub-rede, permitindo conexões via HTTP, Telnet, SSH ou SNMP.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section id="secao3-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-link"></i>
+          <span class="section-number">3.2.1</span> Definindo troncos de VLAN
+        </h2>
+
+        <div class="card">
+          <p>
+            As VLANs não seriam muito úteis sem troncos de VLAN. Os troncos VLAN permitem que todo o tráfego de VLAN se propague entre
+            switches. Isso permite que dispositivos conectados a switches diferentes, mas na mesma VLAN se comuniquem sem passar por um
+            roteador.
+          </p>
+          <p>
+            Um tronco é um link ponto a ponto entre dois dispositivos de rede que carregam mais de uma VLAN. Um tronco de VLAN estende as
+            VLANs por toda a rede. A Cisco suporta IEEE 802.1Q para coordenar troncos em interfaces Fast Ethernet, Gigabit Ethernet e
+            Ethernet de 10 Gigabit.
+          </p>
+          <p>
+            Um tronco de VLAN não pertence a uma VLAN específica. Em vez disso, é um canal para várias VLANs entre switches e roteadores. Um
+            tronco também pode ser usado entre um dispositivo de rede e um servidor ou outro dispositivo equipado com uma NIC compatível com
+            802.1Q apropriada. Por padrão, em um switch Cisco Catalyst, todas as VLANs são suportadas em uma porta de tronco.
+          </p>
+          <p>
+            Na figura, os links destacados entre os comutadores S1 e S2 e S1 e S3 são configurados para transmitir tráfego proveniente das
+            VLANs 10, 20, 30 e 99 (ou seja, VLAN nativa) através da rede. Essa rede não poderia funcionar sem troncos de VLAN.
+          </p>
+        </div>
+
+        <style>
+          .vlan-trunk-321-container {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+          }
+          .v321-topology {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(18, 24, 36, 0.7);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+          }
+          .v321-core-row {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+          }
+          .v321-sw-center {
+            background: linear-gradient(135deg, #1b2436 0%, #121824 100%);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+          }
+          .v321-sw-center i {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+          }
+
+          .v321-trunk-distribution {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            gap: 2rem;
+            margin: 1rem 0;
+            position: relative;
+          }
+          .v321-trunk-pipe {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            position: relative;
+          }
+          .v321-pipe-line {
+            height: 6px;
+            width: 80%;
+            background: linear-gradient(90deg, #ff4d6d, #00b4d8, #ffb703, #a855f7);
+            border-radius: 3px;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.4);
+          }
+          .v321-pipe-text {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+          }
+
+          .v321-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            gap: 4rem;
+          }
+          @media (max-width: 768px) {
+            .v321-bottom-row {
+              flex-direction: column;
+              align-items: center;
+              gap: 2rem;
+            }
+            .v321-trunk-distribution {
+              flex-direction: column;
+              align-items: center;
+              gap: 1rem;
+            }
+            .v321-pipe-line {
+              width: 6px;
+              height: 40px;
+            }
+          }
+          .v321-sw-sub {
+            background: linear-gradient(135deg, #1b2436 0%, #121824 100%);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            color: var(--text);
+            min-width: 120px;
+          }
+          .v321-sw-sub i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+          }
+
+          .v321-allowed-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.7rem;
+            font-family: monospace;
+            text-align: center;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            width: 100%;
+          }
+          .v321-allowed-box strong {
+            color: var(--warning);
+          }
+        </style>
+
+        <div class="vlan-trunk-321-container">
+          <div class="v321-topology">
+            <div class="v321-core-row">
+              <div class="v321-sw-center"><i class="fas fa-server"></i>S1 (Core Switch)</div>
+            </div>
+
+            <div class="v321-trunk-distribution">
+              <div class="v321-trunk-pipe">
+                <div class="v321-pipe-line"></div>
+                <span class="v321-pipe-text"><i class="fas fa-bolt"></i> Link Trunk 802.1Q</span>
+                <div class="v321-allowed-box">VLANs Permitidas: <strong>10, 20, 30, 99</strong></div>
+              </div>
+              <div class="v321-trunk-pipe">
+                <div class="v321-pipe-line"></div>
+                <span class="v321-pipe-text"><i class="fas fa-bolt"></i> Link Trunk 802.1Q</span>
+                <div class="v321-allowed-box">VLANs Permitidas: <strong>10, 20, 30, 99</strong></div>
+              </div>
+            </div>
+
+            <div class="v321-bottom-row">
+              <div class="v321-sw-sub"><i class="fas fa-server"></i>S2</div>
+              <div class="v321-sw-sub"><i class="fas fa-server"></i>S3</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="container" style="text-align: center; padding: 2rem 0; color: var(--text-dim); font-size: 0.85rem">
+        &copy; 2026 Cisco Networking Academy - CCNA 2 (SRWE) | Práticas Avançadas de Infraestrutura.
+      </div>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

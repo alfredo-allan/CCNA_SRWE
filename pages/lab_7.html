@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Quem Ouve o Broadcast? (VLANs)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_7.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-project-diagram"></i> 1.0 Conceito de VLAN</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-flask"></i> 2.0 Roteiro de Simulação</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-comments"></i> 3.0 Respostas de Reflexão</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Modo Simulação & Domínios de Rede</span>
+        <h1>Quem Ouve o Broadcast?</h1>
+        <p style="color: var(--text-dim)">
+          Análise de comportamento de quadros de transmissão geral, isolamento lógico de portas e segmentação por Virtual LANs.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">1.0</span> Segmentação por Domínio de Broadcast
+        </h2>
+        <div class="card">
+          <p>
+            Diferente de uma rede local (LAN) convencional onde um pacote enviado para <code>255.255.255.255</code> inunda todas as portas
+            do switch, a implementação de VLANs restringe o tráfego gerado aos membros do mesmo grupo lógico.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> <strong>Nota de Engenharia:</strong> As VLANs quebram um grande domínio de broadcast em
+            múltiplos domínios menores, melhorando consideravelmente a performance da rede (redução de overhead de processamento nas placas
+            de rede) e aumentando a segurança geral.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-flask"></i>
+          <span class="section-number">2.0</span> Criação e Captura de PDU Complexo
+        </h2>
+        <div class="card">
+          <p>Passos para configurar e executar o cenário de auditoria visual de pacotes no ambiente de testes:</p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Instrução de Filtro:</strong> Antes de disparar a PDU, lembre-se de limpar
+            os filtros de eventos visíveis e manter selecionado apenas o protocolo <strong>ICMP</strong>, para que a timeline exiba apenas
+            as interações de teste desejadas.
+          </div>
+
+          <div class="terminal">
+            <pre>
+1. Mude o Packet Tracer para o modo 'Simulation' (Shift + S).
+2. Clique em 'Edit Filters' e marque exclusivamente o protocolo 'ICMP'.
+3. Selecione a ferramenta 'Add Complex PDU' (Envelope aberto na barra lateral).
+4. Clique no computador 'PC0' para abrir o menu de propriedades do pacote.
+5. Preencha os campos obrigatoriamente da seguinte forma:
+   - Destination IP Address: 255.255.255.255
+   - Sequence Number: 1
+   - Select Application: PING
+6. Clique em 'Create PDU' e avance os steps no botão 'Capture / Forward'.</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-comments"></i>
+          <span class="section-number">3.0</span> Respostas Oficiais de Revisão Técnica
+        </h2>
+        <div class="card">
+          <p>
+            Gabarito estruturado focado na análise do fluxo do tráfego observado durante as transmissões na topologia preenchida do switch
+            Catalyst 2960:
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <strong>Broadcast nas VLANs 10, 20 e 30:</strong> O pacote de transmissão geral originado
+            por qualquer computador será recebido
+            <strong>única e exclusivamente pelos hosts configurados dentro daquela mesma VLAN</strong>. O switch descarta o pacote nas
+            portas associadas a outros IDs de VLAN.
+          </div>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-times-circle"></i> <strong>Comunicação Inter-VLAN:</strong> Um quadro enviado diretamente da VLAN 10 para a
+            VLAN 30 será <strong>completamente descartado</strong>. Para haver comunicação entre redes lógicas distintas, é obrigatória a
+            presença de um dispositivo roteador (Camada 3).
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-bullseye"></i> <strong>Domínios Físicos e Lógicos:</strong> <br />&bull; Cada porta física operando em
+            Full-Duplex representa <strong>1 domínio de colisão</strong> isolado. <br />&bull; Cada agrupamento virtual (VLAN) representa
+            <strong>1 domínio de broadcast</strong> isolado.
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Cenário de Simulação Homologado</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial (.pkt) contendo a tabela de eventos e o mapeamento de tráfego ICMP pronto.
+          </p>
+          <a href="../labs/lab_7.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
