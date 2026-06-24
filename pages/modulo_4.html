@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 4: Roteamento Inter-VLANs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao4-0-1"><i class="fas fa-lightbulb"></i> 4.0.1 Introdução ao Módulo</a>
+        </li>
+        <li>
+          <a href="#secao4-0-2"><i class="fas fa-book"></i> 4.0.2 Objetivos de Aprendizado</a>
+        </li>
+        <li>
+          <a href="#secao4-1-1"><i class="fas fa-layer-group"></i> 4.1.1 O que é roteamento entre VLANs?</a>
+        </li>
+        <li>
+          <a href="#secao4-1-2"><i class="fas fa-server"></i> 4.1.2 Roteamento entre VLANs Legadas</a>
+        </li>
+        <li>
+          <a href="#secao4-1-3"><i class="fas fa-layer-group"></i> 4.1.3 Router-on-a-Stick</a>
+        </li>
+        <li>
+          <a href="#secao4-1-4"><i class="fas fa-layer-group"></i> 4.1.4 Switch de Camada 3</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="badge-lab">Módulo 4</div>
+      <h1>Roteamento Inter-VLANs</h1>
+    </section>
+
+    <main class="container">
+      <section id="secao4-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-lightbulb"></i>
+          <span class="section-number">4.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <h3><i class="fas fa-door-open" style="font-size: 1.3rem; margin-right: 0.5rem"></i> Bem-vindo ao roteamento entre VLANs!</h3>
+          <p>
+            Agora você sabe como segmentar e organizar sua rede em <strong>VLANs</strong>. Os hosts podem se comunicar com outros hosts na
+            mesma <strong>VLAN</strong>, eliminando o problema de hosts enviando mensagens de <strong>Broadcast</strong> para todos os
+            outros dispositivos da rede e consumindo a largura de banda necessária.
+          </p>
+
+          <p>
+            Mas e se um host em uma <strong>VLAN</strong> precisar se comunicar com um host em uma <strong>VLAN</strong> diferente? Se você
+            for um administrador de rede, você sabe que as pessoas vão querer se comunicar com outras pessoas fora da sua rede. É aqui que o
+            roteamento entre <strong>VLAN</strong> pode ajudá-lo.
+          </p>
+
+          <div class="alert alert-info">
+            <p>
+              <strong><i class="fas fa-info-circle"></i> Arquitetura de Rede:</strong> O roteamento entre <strong>VLAN</strong> usa um
+              dispositivo de <strong>Camada 3</strong>, como um roteador ou um switch de <strong>Camada 3</strong> (Multilayer Switch).
+              Vamos pegar sua experiência em <strong>VLAN</strong> e combiná-la com suas habilidades de camada de rede para colocá-las à
+              prova!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">4.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <p style="margin-bottom: 1.5rem">
+            <strong>Objetivo do Módulo:</strong> Solucionar problemas de roteamento entre <strong>VLANs</strong> nos dispositivos de
+            <strong>Camada 3</strong>.
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Título do Tópico</th>
+                <th>Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Operação de roteamento entre VLANs</strong></td>
+                <td>Descrever as opções de configuração do roteamento entre <strong>VLANs</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>Roteamento de router-on-a-stick entre VLANs</strong></td>
+                <td>Configurar roteamento <strong>router-on-a-stick</strong> entre <strong>VLANs</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>Roteamento Inter-VLAN em um Switch de Camada 3</strong></td>
+                <td>Configurar o roteamento entre <strong>VLANs</strong> usando switching de <strong>Camada 3</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>Solucionar problemas de roteamento entre VLANs</strong></td>
+                <td>Solucionar problemas comuns de configuração entre <strong>VLANs</strong>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao4-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">4.1.1</span> O que é roteamento entre VLANs?
+        </h2>
+
+        <div class="card">
+          <p>
+            As <strong>VLANs</strong> são usadas para segmentar redes de <strong>Camada 2</strong> comutadas por uma variedade de razões.
+            Independentemente do motivo, os hosts em uma <strong>VLAN</strong> não podem se comunicar com hosts em outra
+            <strong>VLAN</strong>, a menos que haja um roteador ou um switch de <strong>Camada 3</strong> para fornecer serviços de
+            roteamento.
+          </p>
+
+          <p>
+            O roteamento entre <strong>VLANs</strong> (<em>Inter-VLAN Routing</em>) é o processo de encaminhamento de tráfego de rede de uma
+            <strong>VLAN</strong> para outra <strong>VLAN</strong>.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.1rem; color: var(--text)">
+            <i class="fas fa-list-ul" style="font-size: 1.1rem; margin-right: 0.5rem"></i> Existem três opções de roteamento entre VLANs:
+          </h3>
+
+          <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 1rem">
+            <li style="padding-left: 1.5rem; position: relative">
+              <span style="position: absolute; left: 0; color: var(--danger); font-weight: bold">&bull;</span>
+              <strong>Roteamento Inter-VLAN herdado (Legacy):</strong> Esta é uma solução legada. Não escala bem.
+            </li>
+            <li style="padding-left: 1.5rem; position: relative">
+              <span style="position: absolute; left: 0; color: var(--warning); font-weight: bold">&bull;</span>
+              <strong>Router-on-a-stick:</strong> Esta é uma solução aceitável para uma rede de pequeno a médio porte.
+            </li>
+            <li style="padding-left: 1.5rem; position: relative">
+              <span style="position: absolute; left: 0; color: var(--success); font-weight: bold">&bull;</span>
+              <strong>Switch de Camada 3 usando SVIs (Switched Virtual Interfaces):</strong> Esta é a solução mais escalável para
+              organizações de médio a grande porte.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section id="secao4-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">4.1.2</span> Roteamento entre VLANs legadas
+        </h2>
+
+        <div class="card">
+          <p>
+            A primeira solução de roteamento entre <strong>VLANs</strong> dependia do uso de um roteador com várias interfaces Ethernet
+            físicas. Cada interface do roteador era conectada a uma porta de switch em <strong>VLANs</strong> diferentes. As interfaces do
+            roteador serviram como <strong>Default Gateways</strong> para os hosts locais na sub-rede de cada <strong>VLAN</strong>.
+          </p>
+
+          <p>
+            Por exemplo, consulte a topologia abaixo em que o roteador <strong>R1</strong> possui duas interfaces físicas conectadas ao
+            switch <strong>S1</strong>.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.1rem; color: var(--text)">
+            <i class="fas fa-network-wired" style="color: var(--primary)"></i> Topologia de Rede: Roteamento Legado (Legacy Inter-VLAN)
+          </h3>
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 800px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.5rem">
+              <div
+                style="
+                  background: var(--bg-card);
+                  border: 2px solid var(--primary);
+                  border-radius: 50%;
+                  width: 90px;
+                  height: 90px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+                "
+              >
+                <i class="fas fa-route" style="font-size: 1.8rem; color: var(--primary); margin: 0"></i>
+                <span style="font-weight: bold; color: var(--text); font-size: 0.85rem">R1</span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 260px; height: 60px; position: relative">
+                <div style="width: 2px; height: 100%; background: var(--border); position: absolute; left: 20px"></div>
+                <div style="position: absolute; left: -100px; top: 10px; font-size: 0.75rem; text-align: right; color: var(--text-dim)">
+                  <span style="color: var(--primary)">G0/0/0</span><br />192.168.10.1/24
+                </div>
+
+                <div style="width: 2px; height: 100%; background: var(--border); position: absolute; right: 20px"></div>
+                <div style="position: absolute; right: -100px; top: 10px; font-size: 0.75rem; text-align: left; color: var(--text-dim)">
+                  <span style="color: var(--primary)">G0/0/1</span><br />192.168.20.1/24
+                </div>
+              </div>
+
+              <div
+                style="
+                  position: relative;
+                  width: 340px;
+                  background: var(--bg-card);
+                  border: 1px solid var(--primary);
+                  border-radius: 8px;
+                  padding: 0.8rem;
+                  text-align: center;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 45px;
+                    font-size: 0.75rem;
+                    color: var(--secondary);
+                    margin-bottom: 0.3rem;
+                  "
+                >
+                  <span>F0/1</span>
+                  <span>F0/12</span>
+                </div>
+                <div
+                  style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.4rem 0; margin: 0.4rem 0"
+                >
+                  <i
+                    class="fas fa-server"
+                    style="font-size: 1.4rem; color: var(--primary); vertical-align: middle; margin-right: 0.5rem"
+                  ></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 0.9rem; vertical-align: middle">S1 (Switch Layer 2)</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 25px;
+                    font-size: 0.75rem;
+                    color: var(--secondary);
+                    margin-top: 0.3rem;
+                  "
+                >
+                  <span>F0/11</span>
+                  <span>F0/24</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 500px; height: 50px; position: relative">
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    left: 80px;
+                    transform: rotate(30deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    right: 80px;
+                    transform: rotate(-30deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 660px">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.8rem;
+                    width: 220px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text); margin-bottom: 0.4rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC1</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem">192.168.10.10/24</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 180, 216, 0.15);
+                      color: var(--primary);
+                      font-size: 0.7rem;
+                      padding: 0.1rem 0.5rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 10
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.8rem;
+                    width: 220px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text); margin-bottom: 0.4rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC2</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem">192.168.20.10/24</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 245, 212, 0.15);
+                      color: var(--secondary);
+                      font-size: 0.7rem;
+                      padding: 0.1rem 0.5rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 20
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-bottom: 1rem">
+            A tabela de endereços MAC (<em>MAC Address Table</em>) do switch <strong>S1</strong> é preenchida dinamicamente da seguinte
+            forma com base no mapeamento físico:
+          </p>
+
+          <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; display: flex; flex-direction: column; gap: 0.75rem">
+            <li style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-link" style="color: var(--success); font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0"></i>
+              <span
+                >A porta <strong>Fa0/1</strong> está associada à <strong>VLAN 10</strong> e conecta-se à interface
+                <strong>G0/0/0</strong> de <strong>R1</strong>.</span
+              >
+            </li>
+            <li style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-link" style="color: var(--success); font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0"></i>
+              <span>A porta <strong>Fa0/11</strong> está associada à <strong>VLAN 10</strong> e conecta-se ao <strong>PC1</strong>.</span>
+            </li>
+            <li style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-link" style="color: var(--primary); font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0"></i>
+              <span
+                >A porta <strong>Fa0/12</strong> está associada à <strong>VLAN 20</strong> e conecta-se à interface
+                <strong>G0/0/1</strong> de <strong>R1</strong>.</span
+              >
+            </li>
+            <li style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-link" style="color: var(--primary); font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0"></i>
+              <span>A porta <strong>Fa0/24</strong> está associada à <strong>VLAN 20</strong> e conecta-se ao <strong>PC2</strong>.</span>
+            </li>
+          </ul>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-table" style="color: var(--success)"></i> MAC Address table for S1
+          </h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Porta</th>
+                <th>Endereço MAC</th>
+                <th>VLAN</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F0/1</strong></td>
+                <td><span style="font-family: monospace; color: var(--text-dim)">R1 G0/0/0 MAC</span></td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td><strong>F0/11</strong></td>
+                <td><span style="font-family: monospace; color: var(--text-dim)">PC1 MAC</span></td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td><strong>F0/12</strong></td>
+                <td><span style="font-family: monospace; color: var(--text-dim)">R1 G0/0/1 MAC</span></td>
+                <td>20</td>
+              </tr>
+              <tr>
+                <td><strong>F0/24</strong></td>
+                <td><span style="font-family: monospace; color: var(--text-dim)">PC2 MAC</span></td>
+                <td>20</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p style="margin-top: 1.5rem">
+            Quando o <strong>PC1</strong> envia um pacote para o <strong>PC2</strong> em outra rede, ele o encaminha para o seu
+            <strong>Default Gateway</strong> <span style="font-family: monospace; color: var(--primary)">192.168.10.1</span>. O roteador
+            <strong>R1</strong> recebe o pacote em sua interface física <strong>G0/0/0</strong>, examina o endereço IP de destino do pacote
+            e realiza o roteamento, encaminhando o pacote para fora de sua interface física <strong>G0/0/1</strong> em direção à porta
+            <strong>F0/12</strong> (pertencente à <strong>VLAN 20</strong>) no switch <strong>S1</strong>. Por fim, o switch
+            <strong>S1</strong> encaminha o quadro para o <strong>PC2</strong>.
+          </p>
+
+          <div class="alert alert-danger" style="margin-top: 1.5rem">
+            <p>
+              <strong><i class="fas fa-exclamation-triangle"></i> Limitação Crítica de Escabilidade:</strong> O roteamento entre VLANs
+              legado funciona, mas possui uma limitação severa: <strong>não é escalável</strong>. Como os roteadores possuem um número
+              restrito de interfaces físicas, a exigência de uma interface física exclusiva por VLAN esgota rapidamente a capacidade de
+              hardware do equipamento.
+            </p>
+            <p style="margin-top: 0.5rem; margin-bottom: 0">
+              Neste cenário, se houvesse seis ou mais VLANs separadas para interconexão, seriam necessárias seis interfaces físicas
+              distintas no roteador para atender ao tráfego.
+            </p>
+          </div>
+
+          <div class="alert alert-warning" style="margin-top: 1rem">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Observação Histórica:</strong> Este método legado de roteamento baseado em interfaces
+              físicas dedicadas caiu em desuso nas redes comutadas modernas, sendo abordado neste material estritamente para fins didáticos
+              e conceituais.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">4.1.3</span> Roteamento de router-on-a-stick entre VLANs
+        </h2>
+
+        <div class="card">
+          <p>
+            O método de roteamento entre <strong>VLANs</strong> “<strong>router-on-a-stick</strong>” supera a limitação do modelo legado.
+            Ele requer <strong>apenas uma interface Ethernet física</strong> para rotear o tráfego entre várias
+            <strong>VLANs</strong> distintas em uma rede.
+          </p>
+
+          <p>
+            Uma interface Ethernet do roteador Cisco IOS é configurada como um link de <strong>Trunk</strong> 802.1Q e conectada a uma porta
+            em modo <strong>Trunk</strong> em um switch de <strong>Camada 2</strong>. Especificamente, a interface do roteador é dividida
+            logicamente usando <strong>Subinterfaces</strong> para identificar as <strong>VLANs</strong> roteáveis.
+          </p>
+
+          <p>
+            As <strong>Subinterfaces</strong> são interfaces virtuais baseadas em software, onde cada uma está associada a uma única
+            interface física. Elas são configuradas independentemente com um endereço IP e encapsulamento de
+            <strong>VLAN</strong> correspondente à sua sub-rede, facilitando o roteamento lógico.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-play-circle" style="color: var(--secondary)"></i> Simulador de Fluxo de Dados: Router-on-a-Stick
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              position: relative;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div
+              style="
+                min-width: 850px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-family: monospace;
+                gap: 1.5rem;
+                position: relative;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1.5rem">
+                <div
+                  style="
+                    background: rgba(18, 24, 36, 0.9);
+                    border: 1px solid var(--border);
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.75rem;
+                  "
+                >
+                  <span style="color: var(--primary); font-weight: bold">R1 Subinterfaces:</span><br />
+                  • G0/0/0.10 <span style="color: var(--secondary)">(VLAN 10)</span><br />
+                  • G0/0/0.30 <span style="color: var(--secondary)">(VLAN 30)</span>
+                </div>
+
+                <div
+                  id="router-r1"
+                  style="
+                    background: var(--bg-card);
+                    border: 2px solid var(--primary);
+                    border-radius: 50%;
+                    width: 80px;
+                    height: 80px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                  "
+                >
+                  <i class="fas fa-route" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 0.8rem">R1</span>
+                </div>
+              </div>
+
+              <div
+                style="
+                  width: 2px;
+                  height: 80px;
+                  background: linear-gradient(to bottom, var(--primary), var(--secondary));
+                  position: relative;
+                "
+              >
+                <div
+                  id="packet"
+                  style="
+                    position: absolute;
+                    top: 0;
+                    left: -6px;
+                    width: 14px;
+                    height: 14px;
+                    background: var(--warning);
+                    border-radius: 50%;
+                    display: none;
+                    box-shadow: 0 0 10px var(--warning);
+                    z-index: 10;
+                  "
+                ></div>
+                <span style="position: absolute; left: 10px; top: 30%; font-size: 0.75rem; color: var(--text-dim); white-space: nowrap">
+                  <span style="color: var(--secondary); font-weight: bold">Trunk (802.1Q)</span><br />Interface Física G0/0/0
+                </span>
+              </div>
+
+              <div
+                id="switch-s1"
+                style="
+                  width: 240px;
+                  background: var(--bg-card);
+                  border: 1px solid var(--primary);
+                  border-radius: 8px;
+                  padding: 0.8rem;
+                  text-align: center;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                  transition: all 0.3s;
+                "
+              >
+                <div style="font-size: 0.7rem; color: var(--secondary); margin-bottom: 0.2rem">Porta F0/1 (Trunk)</div>
+                <div style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.3rem 0">
+                  <i
+                    class="fas fa-server"
+                    style="font-size: 1.3rem; color: var(--primary); vertical-align: middle; margin-right: 0.5rem"
+                  ></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 0.85rem; vertical-align: middle">S1 (Switch L2)</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 15px;
+                    font-size: 0.7rem;
+                    color: var(--secondary);
+                    margin-top: 0.2rem;
+                  "
+                >
+                  <span>Porta F0/11</span>
+                  <span>Porta F0/23</span>
+                </div>
+              </div>
+
+              <div
+                style="display: flex; justify-content: space-between; width: 600px; height: 40px; position: relative; margin-top: -1.5rem"
+              >
+                <div
+                  style="
+                    width: 2px;
+                    height: 45px;
+                    background: var(--border);
+                    position: absolute;
+                    left: 60px;
+                    transform: rotate(45deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 45px;
+                    background: var(--border);
+                    position: absolute;
+                    right: 60px;
+                    transform: rotate(-45deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 750px">
+                <div
+                  id="host-pc1"
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 220px;
+                    text-align: center;
+                    transition: all 0.3s;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.3rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.8rem">PC1 (Origem)</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">IP: 172.17.10.21</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 180, 216, 0.15);
+                      color: var(--primary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.3rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 10
+                  </div>
+                </div>
+
+                <div
+                  id="host-pc3"
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 220px;
+                    text-align: center;
+                    transition: all 0.3s;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.3rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.8rem">PC3 (Destino)</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">IP: 172.17.30.23</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 245, 212, 0.15);
+                      color: var(--secondary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.3rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 30
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem">
+                <button
+                  type="button"
+                  onclick="startRoasAnimation()"
+                  style="
+                    background: transparent;
+                    border: 1px solid var(--primary);
+                    color: var(--primary);
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-family: monospace;
+                    font-size: 0.85rem;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="
+                    this.style.background = 'var(--primary)'
+                    this.style.color = 'var(--bg-dark)'
+                  "
+                  onmouseout="
+                    this.style.background = 'transparent'
+                    this.style.color = 'var(--primary)'
+                  "
+                >
+                  <i class="fas fa-play"></i> Simular Encaminhamento
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Como demonstrado na simulação interativa, quando o <strong>PC1</strong> na <strong>VLAN 10</strong> se comunica com o
+            <strong>PC3</strong> na <strong>VLAN 30</strong>, o fluxo ocorre da seguinte forma:
+          </p>
+
+          <ul style="list-style: none; padding: 0; margin: 1.5rem 0; display: flex; flex-direction: column; gap: 0.75rem">
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-arrow-circle-right" style="color: var(--primary); font-size: 1rem; margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                ><strong>R1</strong> recebe o tráfego <em>Unicast</em> devidamente marcado (tag 802.1Q) pela <strong>VLAN 10</strong> por
+                meio de sua interface física de entrada.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-arrow-circle-right" style="color: var(--primary); font-size: 1rem; margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                >O roteador direciona internamente o pacote para a subinterface lógica correspondente, analisa o endereço IP de destino e
+                toma a decisão de roteamento de <strong>Camada 3</strong>.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-arrow-circle-right" style="color: var(--secondary); font-size: 1rem; margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                >Os dados são encapsulados novamente com a nova tag da <strong>VLAN 30</strong> e devolvidos pela mesma interface física em
+                direção ao switch.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-arrow-circle-right" style="color: var(--success); font-size: 1rem; margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                >O switch <strong>S1</strong> (ou <strong>S2</strong> conforme a malha de distribuição) remove a marca (<em>untag</em>) da
+                <strong>VLAN</strong> do quadro e entrega o tráfego limpo ao host de destino na porta de acesso
+                <strong>F0/23</strong>.</span
+              >
+            </li>
+          </ul>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem">
+            <p style="margin: 0">
+              <strong><i class="fas fa-info-circle"></i> Limitação de Engenharia de Redes:</strong> O método
+              <strong>Router-on-a-stick</strong> é recomendado e perfeitamente aceitável para redes de pequeno e médio porte, porém ele não
+              escala de forma eficiente ao ultrapassar a marca de aproximadamente <strong>50 VLANs</strong> devido à contenção e disputa de
+              largura de banda na mesma interface física comum.
+            </p>
+          </div>
+        </div>
+
+        <script>
+          function startRoasAnimation() {
+            const pkt = document.getElementById('packet')
+            const pc1 = document.getElementById('host-pc1')
+            const pc3 = document.getElementById('host-pc3')
+            const r1 = document.getElementById('router-r1')
+            const s1 = document.getElementById('switch-s1')
+
+            if (!pkt) return
+
+            // Reset de estilos iniciais
+            pkt.style.display = 'block'
+            pkt.style.background = 'var(--warning)'
+            pkt.style.boxShadow = '0 0 10px var(--warning)'
+            pc1.style.borderColor = 'var(--warning)'
+            pc3.style.borderColor = 'var(--border)'
+            r1.style.borderColor = 'var(--primary)'
+            s1.style.borderColor = 'var(--primary)'
+
+            // Passo 1: PC1 envia para o Switch (Efeito visual de borda)
+            setTimeout(() => {
+              pc1.style.borderColor = 'var(--border)'
+              s1.style.borderColor = 'var(--warning)'
+            }, 800)
+
+            // Passo 2: Pacote sobe do Switch para o Roteador R1
+            setTimeout(() => {
+              s1.style.borderColor = 'var(--primary)'
+              pkt.style.top = '80px'
+              pkt.style.transition = 'top 1s linear'
+            }, 1400)
+
+            // Passo 3: Roteador processa e altera a cor do pacote para representar nova marcação VLAN
+            setTimeout(() => {
+              r1.style.borderColor = 'var(--secondary)'
+              pkt.style.background = 'var(--success)'
+              pkt.style.boxShadow = '0 0 10px var(--success)'
+            }, 2500)
+
+            // Passo 4: Pacote desce do Roteador para o Switch
+            setTimeout(() => {
+              pkt.style.top = '0px'
+              pkt.style.transition = 'top 1s linear'
+            }, 3200)
+
+            // Passo 5: Switch recebe o pacote e encaminha para o destino PC3
+            setTimeout(() => {
+              s1.style.borderColor = 'var(--success)'
+              pkt.style.display = 'none'
+            }, 4300)
+
+            // Passo 6: PC3 recebe o pacote limpo
+            setTimeout(() => {
+              s1.style.borderColor = 'var(--primary)'
+              r1.style.borderColor = 'var(--primary)'
+              pc3.style.borderColor = 'var(--success)'
+            }, 4900)
+          }
+        </script>
+      </section>
+      <section id="secao4-1-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">4.1.4</span> Roteamento Inter-VLAN em um Switch de Camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            O método moderno e de alta performance para a execução de roteamento entre <strong>VLANs</strong> consiste no uso de
+            <strong>Switches de Camada 3</strong> através de <strong>SVIs</strong> (<em>Switched Virtual Interfaces</em>).
+          </p>
+
+          <div class="alert alert-info" style="margin: 1.5rem 0">
+            <p>
+              <strong><i class="fas fa-info-circle"></i> Definição de Hardware:</strong> Um switch de <strong>Camada 3</strong> também é
+              amplamente conhecido como <em>Multilayer Switch</em> (Switch Multicamada), pois possui a capacidade nativa de operar tanto na
+              <strong>Camada 2</strong> (comutação por endereço MAC) quanto na <strong>Camada 3</strong> (roteamento por endereço IP).
+            </p>
+          </div>
+
+          <p>
+            As <strong>SVIs</strong> criadas para o roteamento entre redes são configuradas exatamente da mesma maneira que a tradicional
+            interface de <strong>VLAN</strong> de gerência. Embora seja uma estrutura totalmente virtualizada em software, a
+            <strong>SVI</strong> desempenha rigorosamente as mesmas funções de gateway que uma interface física de roteador executaria,
+            provendo o processamento e encaminhamento de pacotes para todas as portas lógicas associadas àquela respectiva
+            <strong>VLAN</strong>.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-sitemap" style="color: var(--primary)"></i> Arquitetura Logística: Interfaces SVIs em Switches Multicamada
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 800px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.5rem">
+              <div
+                style="
+                  position: relative;
+                  width: 380px;
+                  background: var(--bg-card);
+                  border: 2px solid var(--secondary);
+                  border-radius: 8px;
+                  padding: 1.2rem;
+                  text-align: center;
+                  box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
+                "
+              >
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; gap: 10px">
+                  <div
+                    style="
+                      background: rgba(0, 180, 216, 0.1);
+                      border: 1px solid var(--primary);
+                      padding: 0.4rem;
+                      border-radius: 6px;
+                      font-size: 0.75rem;
+                      text-align: left;
+                      flex: 1;
+                    "
+                  >
+                    <strong style="color: var(--primary)">SVI Interface</strong><br />VLAN 10<br />IP: 10.1.10.1
+                  </div>
+                  <div
+                    style="
+                      background: rgba(0, 245, 212, 0.1);
+                      border: 1px solid var(--secondary);
+                      padding: 0.4rem;
+                      border-radius: 6px;
+                      font-size: 0.75rem;
+                      text-align: left;
+                      flex: 1;
+                    "
+                  >
+                    <strong style="color: var(--secondary)">SVI Interface</strong><br />VLAN 20<br />IP: 10.1.20.1
+                  </div>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 0.6rem">
+                  <i
+                    class="fas fa-layer-group"
+                    style="font-size: 1.6rem; color: var(--secondary); vertical-align: middle; margin-right: 0.5rem"
+                  ></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 0.95rem; vertical-align: middle"
+                    >Switch de Camada 3 (Multilayer)</span
+                  >
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 450px; height: 40px; position: relative">
+                <div
+                  style="
+                    width: 2px;
+                    height: 50px;
+                    background: var(--border);
+                    position: absolute;
+                    left: 60px;
+                    transform: rotate(35deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 50px;
+                    background: var(--border);
+                    position: absolute;
+                    right: 60px;
+                    transform: rotate(-35deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 700px">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; width: 300px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 1px solid var(--border);
+                      border-radius: 6px;
+                      padding: 0.5rem;
+                      width: 180px;
+                      text-align: center;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary); font-size: 1.1rem; margin-right: 0.4rem"></i>
+                    <span style="color: var(--text); font-size: 0.8rem; font-weight: bold">Switch Acesso</span>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(0, 180, 216, 0.05);
+                      border: 1px dashed var(--primary);
+                      border-radius: 50% / 40%;
+                      padding: 1rem;
+                      width: 220px;
+                      text-align: center;
+                    "
+                  >
+                    <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.2rem"></i>
+                    <div style="font-size: 0.8rem; color: var(--text); font-weight: bold">VLAN 10</div>
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; width: 300px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 1px solid var(--border);
+                      border-radius: 6px;
+                      padding: 0.5rem;
+                      width: 180px;
+                      text-align: center;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary); font-size: 1.1rem; margin-right: 0.4rem"></i>
+                    <span style="color: var(--text); font-size: 0.8rem; font-weight: bold">Switch Acesso</span>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(0, 245, 212, 0.05);
+                      border: 1px dashed var(--secondary);
+                      border-radius: 50% / 40%;
+                      padding: 1rem;
+                      width: 220px;
+                      text-align: center;
+                    "
+                  >
+                    <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.2rem"></i>
+                    <div style="font-size: 0.8rem; color: var(--text); font-weight: bold">VLAN 20</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.2rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-chart-line" style="color: var(--success)"></i> Vantagens da Arquitetura Multicamada
+          </h3>
+
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem">
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-bolt"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Altíssima Performance:</strong> São substancialmente mais velozes que o modelo <strong>Router-on-a-stick</strong>,
+                pois todo o tráfego é comutado e roteado diretamente por hardware via circuitos integrados específicos (ASICs).</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-compress-alt"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Otimização de Infraestrutura:</strong> Elimina por completo a necessidade de cabos ou links físicos externos
+                interligando o switch central ao roteador para realizar o tráfego inter-VLAN.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-link"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Escalabilidade de Banda:</strong> Não ficam limitados às restrições de uma única interface comum, possibilitando a
+                agregação de links de <strong>Trunk</strong> através de agrupamentos <strong>EtherChannel</strong> na
+                <strong>Camada 2</strong> para expandir a largura de banda.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-tachometer-alt"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><span
+                  ><strong>Latência Reduzida:</strong> A latência de transmissão é drasticamente inferior, visto que os pacotes de dados não
+                  precisam deixar o chassi do switch principal para serem roteados em sub-redes distintas.</span
+                ></span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-university"
+                style="color: var(--primary); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Padrão de Mercado:</strong> Constituem a topologia de escolha mais comum para a implementação do núcleo
+                (Core/Distribution) de redes locais corporativas e redes de campus (LAN).</span
+              >
+            </li>
+          </ul>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-dollar-sign"></i> Fator de Custo:</strong> A principal contrapartida no mapeamento desse design de
+              redes reside exclusivamente no custo financeiro dos equipamentos, uma vez que Switches de <strong>Camada 3</strong> robustos
+              apresentam um valor de aquisição mais elevado comparados aos switches convencionais.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container" style="text-align: center; padding: 2rem 0; color: var(--text-dim); font-size: 0.85rem">
+        <p>&copy; 2026 - Ambiente de Simulação Cisco CCNA 2 (SRWE) | Terminal Switch/Router Dedicado</p>
+      </div>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

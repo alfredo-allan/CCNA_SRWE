@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Investigação de Implementação de VLAN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_8.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo PKA </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-table"></i> 1.0 Tabela de Endereçamento</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-flask"></i> 2.0 Fluxo ARP sem VLANs</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-exchange-alt"></i> 3.0 Tráfego Contido por VLAN</a>
+        </li>
+        <li>
+          <a href="#secao4-0"><i class="fas fa-check-double"></i> 4.0 Respostas de Reflexão</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Simulação & Otimização de Broadcast</span>
+        <h1>Investigação de Implementação de VLAN</h1>
+        <p style="color: var(--text-dim)">
+          Análise do comportamento de pacotes ARP e ICMP através de domínios de broadcast divididos por Virtual LANs e encapsulamento
+          802.1Q.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.0</span> Tabela de Configuração Lógica da Infraestrutura
+        </h2>
+        <div class="card">
+          <p>Mapeamento de sub-redes e IDs de VLANs para auditoria estática dos pacotes capturados:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface / VLAN</th>
+                <th>Endereço IP</th>
+                <th>Máscara de Sub-rede</th>
+                <th>Gateway Padrão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1 / S2 / S3</strong></td>
+                <td>VLAN 99</td>
+                <td>172.17.99.31 a .33</td>
+                <td>255.255.255.0</td>
+                <td>N/D</td>
+              </tr>
+              <tr>
+                <td><strong>PC1 / PC4</strong></td>
+                <td>VLAN 10</td>
+                <td>172.17.10.21 / .24</td>
+                <td>255.255.255.0</td>
+                <td>172.17.10.1</td>
+              </tr>
+              <tr>
+                <td><strong>PC2 / PC5</strong></td>
+                <td>VLAN 20</td>
+                <td>172.17.20.22 / .25</td>
+                <td>255.255.255.0</td>
+                <td>172.17.20.1</td>
+              </tr>
+              <tr>
+                <td><strong>PC3 / PC6</strong></td>
+                <td>VLAN 30</td>
+                <td>172.17.30.23 / .26</td>
+                <td>255.255.255.0</td>
+                <td>172.17.30.1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-flask"></i>
+          <span class="section-number">2.0</span> Comportamento Inicial do Tráfego ARP (Sem VLANs)
+        </h2>
+        <div class="card">
+          <p>No estado inicial de fábrica (todas as portas pertencendo à VLAN 1 padrão), o tráfego ARP sofre inundação sistêmica.</p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Observação de Simulação:</strong> Ao disparar a PDU do Cenário 0, o pacote ARP do PC1 é replicado por todas as portas
+            físicas de S2, S1 e S3, gerando overhead desnecessário nos hosts das outras redes.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exchange-alt"></i>
+          <span class="section-number">3.0</span> Contenção de Tráfego de Inundação com VLANs Ativas
+        </h2>
+        <div class="card">
+          <p>Comandos recomendados para forçar o reset e a leitura correta das tabelas de VLANs gravadas no simulador:</p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-sync-alt"></i>
+            <strong>Instrução de Validação:</strong> Se o simulador travar o tráfego após mudar os modos, execute a limpeza do arquivo
+            <code>vlan.dat</code> na flash dos switches e dê o comando <code>reload</code> para forçar a sincronização de troncos.
+          </div>
+
+          <div class="terminal">
+            <pre>
+S1# delete flash:vlan.dat
+Delete filename [vlan.dat]?
+Delete flash:vlan.dat? [confirm]
+
+S1# reload
+Proceed with reload? [confirm]
+! Dica: Use o botão 'Fast Forward Time' na barra amarela inferior para
+acelerar o link físico.</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">4.0</span> Gabarito Técnico de Revisão
+        </h2>
+        <div class="card">
+          <p>Análise estruturada das respostas exigidas pelo roteiro de avaliação da Cisco NetAcad:</p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-shield-alt"></i>
+            <strong>Isolamento de Broadcast:</strong> Com as VLANs operando, os broadcasts gerados pelas sub-redes 10, 20 e 30 ficam
+            <strong>estritamente restritos aos seus respectivos IDs</strong>. O tráfego cruza os links de tronco (Trunks) marcados com tags
+            802.1Q, mas só é entregue aos hosts correspondentes.
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-vector-square"></i>
+            <strong>Conceito de Domínios:</strong> <br />&bull; <strong>Domínio de Colisão:</strong> Cada porta de switch Full-Duplex isola
+            de forma independente as colisões elétricas. <br />&bull; <strong>Domínio de Broadcast:</strong> Cada VLAN criada cria uma
+            barreira lógica de software contra inundações ARP/DHCP.
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Cenário de Investigação Homologado</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe o arquivo de topologia resolvido (PKA) contendo a árvore de simulação do tráfego ARP/ICMP configurada.
+          </p>
+          <a href="../labs/lab_8.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKA </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

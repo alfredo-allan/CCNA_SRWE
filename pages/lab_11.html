@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Packet Tracer: Implementar VLANs e Entroncamento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <span class="badge-lab" style="background: #2ec4b6; color: #fff; margin-bottom: 0; font-weight: 700">
+        <i class="fas fa-check-circle"></i> 100% Concluído
+      </span>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#downloads"><i class="fas fa-download"></i> 1.0 Links para Download</a>
+        </li>
+        <li>
+          <a href="#escopo-cli"><i class="fas fa-terminal"></i> 2.0 Escopo de Execução CLI</a>
+        </li>
+        <li>
+          <a href="#glossario"><i class="fas fa-book"></i> 3.0 Glossário de Termos</a>
+        </li>
+        <li>
+          <a href="#casos-uso"><i class="fas fa-briefcase"></i> 4.0 Casos de Uso Real</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Laboratório 12</span>
+        <h1>Implementação de VLANs e Entroncamento Avançado</h1>
+        <p style="color: var(--text-dim)">
+          Segregação lógica de tráfego, entroncamento estático seguro, negociação via DTP e provisionamento de qualidade de serviço (QoS)
+          para VLAN de Voz.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="downloads" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-download"></i>
+          <span class="section-number">1.0</span> Arquivos do Projeto Concluído
+        </h2>
+        <div class="card">
+          <p>
+            Faça o download da topologia oficial do Packet Tracer com o gabarito totalmente preenchido, testado e validado com 100% de
+            aproveitamento:
+          </p>
+          <div style="margin-top: 1.5rem">
+            <a
+              src="../labs/lab_11.pka"
+              target="_blank"
+              class="badge-lab"
+              style="
+                background: var(--primary);
+                color: #000;
+                padding: 0.75rem 1.5rem;
+                font-weight: 700;
+                text-decoration: none;
+                border-radius: 6px;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-external-link-alt"></i> Baixar Lab 12 Concluído (.PKA)
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="escopo-cli" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">2.0</span> Escopo de Execução da CLI (Linha por Linha)
+        </h2>
+
+        <div class="card" style="margin-bottom: 2rem">
+          <h3>2.1 Switch Central SWA (Core / Distribuição)</h3>
+          <p>
+            Responsável por concentrar e criar a base de dados de VLANs, amarrar o entroncamento estático seguro com o SWB e negociar
+            dinamicamente o link com o SWC via DTP.
+          </p>
+
+          <div class="terminal">
+            <pre>SWA> <strong>enable</strong>
+<span class="comment">! Entra no modo de privilégio administrativo (Modo EXEC Privilegiado).</span>
+
+SWA# <strong>configure terminal</strong>
+<span class="comment">! Abre o modo de configuração global do switch.</span>
+
+SWA(config)# <strong>vlan 10</strong>
+SWA(config-vlan)# <strong>name Admin</strong>
+SWA(config-vlan)# <strong>vlan 20</strong>
+SWA(config-vlan)# <strong>name Contas</strong>
+SWA(config-vlan)# <strong>vlan 30</strong>
+SWA(config-vlan)# <strong>name HR</strong>
+SWA(config-vlan)# <strong>vlan 40</strong>
+SWA(config-vlan)# <strong>name Voz</strong>
+SWA(config-vlan)# <strong>vlan 99</strong>
+SWA(config-vlan)# <strong>name Gerenciamento</strong>
+SWA(config-vlan)# <strong>vlan 100</strong>
+SWA(config-vlan)# <strong>name Nativa</strong>
+SWA(config-vlan)# <strong>exit</strong>
+<span class="comment">! Cria as VLANs lógicas e define os nomes estritos exigidos pelo validador.</span>
+
+SWA(config)# <strong>interface GigabitEthernet0/1</strong>
+<span class="comment">! Entra na interface conectada diretamente ao switch SWB.</span>
+
+SWA(config-if)# <strong>switchport mode trunk</strong>
+<span class="comment">! Força a porta a operar permanentemente como um link de Tronco (Trunk).</span>
+
+SWA(config-if)# <strong>switchport trunk native vlan 100</strong>
+<span class="comment">! Altera a VLAN nativa do padrão (VLAN 1) para a VLAN 100, evitando falhas de segurança.</span>
+
+SWA(config-if)# <strong>switchport nonegotiate</strong>
+<span class="comment">! Desliga o envio de frames DTP, impedindo que a porta aceite negociações externas.</span>
+SWA(config-if)# <strong>exit</strong>
+
+SWA(config)# <strong>interface GigabitEthernet0/2</strong>
+<span class="comment">! Entra na interface conectada diretamente ao switch SWC.</span>
+
+SWA(config-if)# <strong>switchport mode dynamic desirable</strong>
+<span class="comment">! Define a porta para negociar ativamente com o SWC, forçando a subida do tronco automático.</span>
+
+SWA(config-if)# <strong>switchport trunk native vlan 100</strong>
+<span class="comment">! Alinha a VLAN nativa 100 para que corresponda a toda a malha de troncos.</span>
+SWA(config-if)# <strong>exit</strong>
+
+SWA(config)# <strong>interface vlan 99</strong>
+<span class="comment">! Cria a Switched Virtual Interface (SVI) para administração.</span>
+
+SWA(config-if)# <strong>ip address 192.168.99.252 255.255.255.0</strong>
+<span class="comment">! Atribui o endereço IP de gerência e máscara de sub-rede do SWA.</span>
+
+SWA(config-if)# <strong>no shutdown</strong>
+<span class="comment">! Ativa eletricamente a interface virtual.</span>
+SWA(config-if)# <strong>end</strong>
+
+SWA# <strong>write memory</strong>
+<span class="comment">! Salva permanentemente todas as configurações na NVRAM do aparelho.</span></pre>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem">
+          <h3>2.2 Switch SWB (Acesso / Hosts 1, 2 e 3)</h3>
+          <p>
+            Mapeia os computadores locais diretamente em suas respectivas VLANs e fixa o entroncamento estático seguro na porta de uplink.
+          </p>
+
+          <div class="terminal">
+            <pre>SWB> <strong>enable</strong>
+SWB# <strong>configure terminal</strong>
+
+<span class="comment">! [Criação idêntica de VLANs 10, 20, 30, 40, 99 e 100 com seus respectivos nomes]</span>
+
+SWB(config)# <strong>interface FastEthernet0/1</strong>
+SWB(config-if)# <strong>switchport mode access</strong>
+SWB(config-if)# <strong>switchport access vlan 10</strong>
+<span class="comment">! Configura a porta do PC1 como modo de acesso e a vincula exclusivamente à VLAN 10 (Admin).</span>
+
+SWB(config)# <strong>interface FastEthernet0/2</strong>
+SWB(config-if)# <strong>switchport mode access</strong>
+SWB(config-if)# <strong>switchport access vlan 20</strong>
+<span class="comment">! Configura a porta do PC2 como modo de acesso e a vincula à VLAN 20 (Contas).</span>
+
+SWB(config)# <strong>interface FastEthernet0/3</strong>
+SWB(config-if)# <strong>switchport mode access</strong>
+SWB(config-if)# <strong>switchport access vlan 30</strong>
+<span class="comment">! Configura a porta do PC3 como modo de acesso e a vincula à VLAN 30 (HR).</span>
+SWB(config-if)# <strong>exit</strong>
+
+SWB(config)# <strong>interface GigabitEthernet0/1</strong>
+<span class="comment">! Entra na interface de uplink que vai para o SWA.</span>
+
+SWB(config-if)# <strong>switchport mode trunk</strong>
+SWB(config-if)# <strong>switchport trunk native vlan 100</strong>
+SWB(config-if)# <strong>switchport nonegotiate</strong>
+<span class="comment">! Replica as mesmas configurações de Trunk fixo e Hardening aplicadas na outra ponta do cabo no SWA.</span>
+SWB(config-if)# <strong>exit</strong>
+
+SWB(config)# <strong>interface vlan 99</strong>
+SWB(config-if)# <strong>ip address 192.168.99.253 255.255.255.0</strong>
+SWB(config-if)# <strong>no shutdown</strong>
+SWB(config-if)# <strong>end</strong>
+SWB# <strong>write memory</strong></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>2.3 Switch SWC (Acesso / Hosts 4, 5, 6 e Telefone IP)</h3>
+          <p>
+            Executa a inserção dos computadores de dados, ativa o encapsulamento simultâneo de voz com QoS na porta F0/4 e responde ao DTP
+            dinâmico do Core.
+          </p>
+
+          <div class="terminal">
+            <pre>SWC> <strong>enable</strong>
+SWC# <strong>configure terminal</strong>
+
+<span class="comment">! [Criação idêntica de VLANs 10, 20, 30, 40, 99 e 100 com seus respectivos nomes]</span>
+
+SWC(config)# <strong>interface FastEthernet0/1</strong>
+SWC(config-if)# <strong>switchport mode access</strong>
+SWC(config-if)# <strong>switchport access vlan 10</strong>
+
+SWC(config)# <strong>interface FastEthernet0/2</strong>
+SWC(config-if)# <strong>switchport mode access</strong>
+SWC(config-if)# <strong>switchport access vlan 20</strong>
+
+SWC(config)# <strong>interface FastEthernet0/4</strong>
+<span class="comment">! Entra na porta física onde estão conectados o Telefone IP e o PC de dados simultaneamente.</span>
+
+SWC(config-if)# <strong>switchport mode access</strong>
+SWC(config-if)# <strong>switchport access vlan 10</strong>
+<span class="comment">! Determina a VLAN 10 (Admin) para processar os pacotes normais de dados da máquina.</span>
+
+SWC(config-if)# <strong>switchport voice vlan 40</strong>
+<span class="comment">! Ativa a marcação de QoS, separando os frames de áudio do telefone para a VLAN 40 (Voz).</span>
+SWC(config-if)# <strong>exit</strong>
+
+SWC(config)# <strong>interface GigabitEthernet0/2</strong>
+<span class="comment">! Entra na interface conectada ao cabo vindo da porta G0/2 do SWA.</span>
+
+<span class="comment">! Nota: Esta interface permanece com o DTP padrão ("dynamic auto"). Ao receber as 
+! solicitações da ponta "dynamic desirable" do SWA, elas fecham o Trunk de forma automatizada.</span>
+SWC(config-if)# <strong>switchport trunk native vlan 100</strong>
+<span class="comment">! Alinha a VLAN nativa do link dinâmico para a VLAN 100.</span>
+SWC(config-if)# <strong>exit</strong>
+
+SWC(config)# <strong>interface vlan 99</strong>
+SWC(config-if)# <strong>ip address 192.168.99.254 255.255.255.0</strong>
+SWC(config-if)# <strong>no shutdown</strong>
+SWC(config-if)# <strong>end</strong>
+SWC# <strong>write memory</strong></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="glossario" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">3.0</span> Glossário de Engenharia de Redes (Explicado para Leigos)
+        </h2>
+        <div class="card">
+          <p>
+            Se um switch de fábrica funciona como um grande salão de festas aberto onde todos se escutam ao mesmo tempo, as configurações
+            aplicadas criam divisórias acústicas e corredores privados inteligentes:
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 30%">Conceito Técnico</th>
+                <th>Analogia e Significado Prático</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>VLAN (Virtual LAN)</strong></td>
+                <td>
+                  Dividir um switch físico em vários switches digitais isolados. É colocar paredes de drywall no salão de festas para que
+                  uma reunião de negócios não escute a música do aniversário ao lado.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Link de Tronco (Trunk)</strong></td>
+                <td>
+                  Uma super-estrada digital em um único cabo que consegue carregar o tráfego de todas as divisórias (VLANs) ao mesmo tempo
+                  entre switches, sem misturar os dados.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>DTP (Dynamic Trunking Protocol)</strong></td>
+                <td>
+                  O protocolo de conversação que permite a duas portas de switches decidirem sozinhas, via cabo, se devem virar uma rua
+                  comum (Acesso) ou uma super-estrada (Trunk).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Dynamic Desirable</strong></td>
+                <td>
+                  O modo "proativo" de negociação. A porta do switch fica ativamente chamando o switch vizinho do outro lado do cabo,
+                  dizendo: <em>"Ei, vamos virar um Trunk agora?"</em>.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Switchport Nonegotiate</strong></td>
+                <td>
+                  Uma trava rígida de segurança. Você ordena para a porta do switch:
+                  <em>"Você é um Trunk fixo, não converse com ninguém de fora e ignore qualquer tentativa de negociação"</em>.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>VLAN de Voz (Voice VLAN)</strong></td>
+                <td>
+                  Uma faixa de ambulância exclusiva na avenida. Ela separa o tráfego dos Telefones IP (telefones de mesa ligados à internet)
+                  para que a voz passe com prioridade e nunca trave ou fique robotizada.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>SVI (Switched Virtual Interface)</strong></td>
+                <td>
+                  Uma porta digital invisível onde colocamos um endereço IP dentro do switch, permitindo que o administrador acesse o painel
+                  de controle do aparelho à distância, sem precisar ir até o rack físico.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="casos-uso" class="section" style="border-bottom: none">
+        <h2 class="section-title">
+          <i class="fas fa-briefcase"></i>
+          <span class="section-number">4.0</span> Aplicação e Impacto no Mercado Corporativo
+        </h2>
+
+        <div class="card">
+          <div class="alert alert-info">
+            <i class="fas fa-shield-alt"></i> <strong>Caso 1: Proteção e Isolamento de Setores (VLANs Admin, Contas, HR)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Em uma empresa, os computadores da recepção (VLAN 10), do financeiro (VLAN 20) e do RH (VLAN 30) compartilham o mesmo switch
+              físico. Sem a configuração de VLANs, se uma secretária abrir um anexo com vírus na recepção, o malware se espalharia
+              instantaneamente pelos computadores da diretoria e do financeiro. Com as VLANs estritas, os setores operam em bolhas de
+              segurança isoladas: se um setor for comprometido, os outros continuam intactos.
+            </p>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; border-left-color: #2ec4b6">
+            <i class="fas fa-phone-alt" style="color: #2ec4b6"></i>
+            <strong>Caso 2: Convergência de Telefonia Corporativa Sem Quedas (Voice VLAN 40)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Na mesa de um funcionário corporativo, chega apenas um cabo de rede da parede que se conecta ao Telefone IP, e do telefone sai
+              outro cabo para o computador. Sem a VLAN de Voz, se o funcionário iniciar o download de um arquivo pesado no computador, o
+              tráfego de internet esmagaria os pacotes de áudio, fazendo a chamada cair. A Voice VLAN cria uma fila prioritária no switch
+              para o telefone, garantindo ligações estáveis mesmo sob uso severo de banda.
+            </p>
+          </div>
+
+          <div class="alert alert-danger" style="margin-top: 1.5rem">
+            <i class="fas fa-user-shield"></i> <strong>Caso 3: Hardening e Proteção contra Espionagem Industrial (Nonegotiate)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Links de tronco padrão que usam negociação dinâmica (DTP) ativa abrem uma brecha crítica de segurança. Um atacante físico
+              poderia desconectar o cabo de um computador comum e plugar uma máquina modificada para simular um switch corporativo. O switch
+              real seria enganado pelo DTP e abriria uma super-estrada (Trunk), vazando os dados de todos os setores (ataque conhecido como
+              <em>VLAN Hopping</em>). O comando <code>switchport nonegotiate</code> blinda o canal contra isso.
+            </p>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; border-left-color: #ff9f1c">
+            <i class="fas fa-network-wired" style="color: #ff9f1c"></i>
+            <strong>Caso 4: Provisionamento Ágil de Novos Blocos (Dynamic Desirable)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Ao expandir a infraestrutura para um novo galpão ou andar de estoque, um switch novo é instalado de fábrica (SWC) com as
+              portas em modo automático padrão. Em vez de o engenheiro se deslocar fisicamente até o local isolado para configurar as portas
+              de interconexão, o switch principal (SWA) toma a iniciativa através do modo <code>dynamic desirable</code>. Assim que o cabo é
+              conectado, o switch core propõe o fechamento do tronco e a nova estrutura é integrada de forma automatizada.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Relatório Técnico de Engenharia de Redes.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

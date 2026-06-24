@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configurando Enlaces de Tronco (802.1Q)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_9.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKA </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-0"><i class="fas fa-table"></i> 1.0 Mapeamento de Portas</a>
+        </li>
+        <li>
+          <a href="#secao2-0"><i class="fas fa-code-branch"></i> 2.0 Tronco Central S1</a>
+        </li>
+        <li>
+          <a href="#secao3-0"><i class="fas fa-exclamation-circle"></i> 3.0 Resolução de Mismatch</a>
+        </li>
+        <li>
+          <a href="#secao4-0"><i class="fas fa-tasks"></i> 4.0 Comandos de Verificação</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Encapsulamento 802.1Q & DTP</span>
+        <h1>Configurando Enlaces de Tronco</h1>
+        <p style="color: var(--text-dim)">
+          Agrupamento multi-vlan em uplinks físicos, padronização de VLANs nativas e mitigação de erros de Syslog CDP.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.0</span> Tabela de Interfaces e Distribuição de VLANs
+        </h2>
+        <div class="card">
+          <p>Esquema lógico para auditoria de encapsulamento e mapeamento de portas de acesso nos switches de borda:</p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface de Trunk</th>
+                <th>VLAN Nativa</th>
+                <th>Hosts Associados</th>
+                <th>Sub-rede IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1 (Core)</strong></td>
+                <td>G0/1 e G0/2</td>
+                <td>VLAN 99</td>
+                <td>Interface de Gerência (.31)</td>
+                <td>172.17.99.0/24</td>
+              </tr>
+              <tr>
+                <td><strong>S2 (Acesso)</strong></td>
+                <td>G0/1</td>
+                <td>VLAN 99</td>
+                <td>PC1 (V10), PC2 (V20), PC3 (V30)</td>
+                <td>172.17.0.0/24</td>
+              </tr>
+              <tr>
+                <td><strong>S3 (Acesso)</strong></td>
+                <td>G0/2</td>
+                <td>VLAN 99</td>
+                <td>PC4 (V10), PC5 (V20), PC6 (V30)</td>
+                <td>172.17.0.0/24</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao2-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-code-branch"></i>
+          <span class="section-number">2.0</span> Ativação de Trunking e Tagging no Switch S1
+        </h2>
+        <div class="card">
+          <p>
+            Configuração dos canais de distribuição para permitir que múltiplas VLANs compartilhem o mesmo meio físico através de tags
+            802.1Q:
+          </p>
+
+          <div class="terminal">
+            <pre>
+S1> enable
+S1# configure terminal
+S1(config)# interface GigabitEthernet0/1
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk native vlan 99
+
+S1(config)# interface GigabitEthernet0/2
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk native vlan 99
+S1(config-if)# end
+S1# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-circle"></i>
+          <span class="section-number">3.0</span> Resolução do Erro Native VLAN Mismatch (S2 & S3)
+        </h2>
+        <div class="card">
+          <p>
+            O protocolo Cisco Discovery Protocol (CDP) acusará inconsistência de tráfego sem tag enquanto as duas pontas do enlace não
+            utilizarem o mesmo ID nativo.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-bug"></i> <strong>Análise de Syslog:</strong> O erro de mismatch bloqueia temporariamente o tráfego de controle
+            na VLAN nativa. Aplique a padronização para a VLAN 99 nos switches periféricos para cessar os alertas.
+          </div>
+
+          <div class="terminal">
+            <pre>
+! --- PARAMETRIZAÇÃO DO SWITCH S2 ---
+S2(config)# interface GigabitEthernet0/1
+S2(config-if)# switchport mode trunk
+S2(config-if)# switchport trunk native vlan 99
+
+! --- PARAMETRIZAÇÃO DO SWITCH S3 ---
+S3(config)# interface GigabitEthernet0/2
+S3(config-if)# switchport mode trunk
+S3(config-if)# switchport trunk native vlan 99</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tasks"></i>
+          <span class="section-number">4.0</span> Auditoria de Estados dos Troncos
+        </h2>
+        <div class="card">
+          <p>
+            Comandos essenciais para validar se o entroncamento foi fechado com sucesso e verificar quais IDs lógicos estão autorizados a
+            transitar:
+          </p>
+          <div class="terminal">
+            <pre>
+S1# show interfaces trunk
+S1# show interface gigabitEthernet 0/1 switchport</pre
+            >
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <strong>Validação Concluída:</strong> A saída correta exibirá o modo como <code>on</code> ou
+            <code>desirable</code> (DTP) e o encapsulamento definido estritamente como <code>802.1q</code>.
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Topologia de Trunking Concluída</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe o arquivo físico (.PKA) totalmente configurado e sem erros residuais de VLAN nativa.
+          </p>
+          <a href="../labs/lab_9.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKA </a>
+        </div>
+      </section>
+      <section id="secao3-5-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exchange-alt"></i>
+          <span class="section-number">3.5.1</span> Introdução ao DTP
+        </h2>
+
+        <div class="card">
+          <p>
+            Alguns switches Cisco têm um protocolo proprietário que permite negociar automaticamente o entroncamento com um dispositivo
+            vizinho. Esse protocolo é chamado <strong>DTP (Dynamic Trunking Protocol)</strong>. O DTP pode acelerar o processo de
+            configuração de um administrador de rede.
+          </p>
+          <p>
+            As interfaces de tronco Ethernet suportam diferentes modos de entroncamento. Uma interface pode ser definida como entroncamento
+            ou não-entroncamento, ou para negociar entroncamento com a interface do vizinho. A negociação de tronco é gerenciada pelo DTP,
+            que opera somente ponto a ponto, entre dispositivos de rede.
+          </p>
+          <p>
+            O DTP é ativado automaticamente nos switches Cisco Catalyst das séries 2960 e 3560. Ele gerencia a negociação de tronco apenas
+            se a porta do switch vizinho estiver configurada em um modo de tronco com suporte para DTP. Os switches de outros fornecedores
+            não oferecem suporte a esse protocolo.
+          </p>
+        </div>
+
+        <div class="alert alert-danger" style="margin-top: 1.5rem; margin-bottom: 1.5rem">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Cuidado (Caution):</strong> Alguns dispositivos de internetworking podem
+          encaminhar quadros DTP incorretamente, o que pode causar configurações incorretas. Para evitar isso, desative o DTP nas interfaces
+          de switch Cisco conectadas a dispositivos que não suportam o protocolo.
+        </div>
+
+        <div class="card">
+          <h3>Desativando o DTP (Nonegotiate)</h3>
+          <p>A configuração DTP padrão para switches Cisco Catalyst 2960 e 3560 é o modo <strong>dynamic auto</strong>.</p>
+          <p>
+            Para habilitar o entroncamento de um switch Cisco para um dispositivo que não suporta DTP, utilize o comando
+            <code>switchport mode trunk</code> em conjunto com o comando de configuração de interface <code>switchport nonegotiate</code>.
+            Isso faz com que a interface se torne um tronco fixo, mas <strong>interrompe a geração e o envio de quadros DTP</strong>:
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config)# <strong>interface fa0/1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>switchport nonegotiate</strong></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Reativando o Protocolo de Entroncamento Dinâmico</h3>
+          <p>
+            Para restabelecer a negociação automática e reativar o protocolo de entroncamento dinâmico (DTP), remova a diretiva de
+            não-negociação limpando a linha de comando da interface:
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config-if)# <strong>no switchport nonegotiate</strong></pre>
+          </div>
+          <p style="margin-top: 1rem; margin-bottom: 0">
+            Isso permitirá que a interface volte a enviar e processar os quadros DTP para sincronizar o estado do link automaticamente com o
+            switch remoto.
+          </p>
+        </div>
+      </section>
+      <section id="secao3-5-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sliders-h"></i>
+          <span class="section-number">3.5.2</span> Modos de interface negociados
+        </h2>
+
+        <div class="card">
+          <p>
+            O comando <strong>switchport mode</strong> possui opções adicionais para negociar dinamicamente o modo operacional de Camada 2
+            (acesso ou tronco) da interface física com o switch vizinho. A sintaxe de configuração completa do comando é a seguinte:
+          </p>
+          <div class="terminal-line" style="margin-bottom: 0">
+            Switch(config-if)# <strong>switchport mode { access | dynamic { auto | desirable } | trunk }</strong>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Modos Operacionais e Comportamentos do DTP</h3>
+          <p>Abaixo estão descritas as quatro opções disponíveis e o comportamento de hardware correspondente para cada uma delas:</p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 30%">Modo de Configuração</th>
+                <th>Comportamento Operacional da Interface</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong><code>access</code></strong>
+                </td>
+                <td>
+                  Coloca a interface no modo de acesso permanente não-tronco. A interface negocia para se converter em um link de acesso
+                  comum, mesmo que o vizinho queira entroncar.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong><code>dynamic auto</code></strong>
+                </td>
+                <td>
+                  Torna a interface capaz de converter o link em um tronco se a interface vizinha estiver configurada para o modo tronco ou
+                  desejável (<i>desirable</i>). Este é o padrão em switches mais novos. A porta apenas escuta, ela não inicia a negociação
+                  ativamente.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong><code>dynamic desirable</code></strong>
+                </td>
+                <td>
+                  Faz com que a interface tente ativamente converter o link em um tronco. A porta envia quadros DTP de forma ativa e
+                  solicita à interface vizinha que mude para o modo tronco.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong><code>trunk</code></strong>
+                </td>
+                <td>
+                  Coloca a interface no modo de entroncamento permanente. Mesmo que a porta vizinha não concorde, a interface força o modo
+                  de tronco e continua a enviar quadros DTP periódicos.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-ban"></i> Interrompendo a Negociação Atômica do DTP</h3>
+          <p>
+            Use o comando de configuração de interface <strong>switchport nonegotiate</strong> para interromper de forma definitiva a
+            negociação DTP. Sob essa diretiva, o switch para de gerar frames de sincronização dinâmica nesta interface.
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config)# <strong>interface fa0/1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>switchport nonegotiate</strong></pre>
+          </div>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem; margin-bottom: 0">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Regras de Aplicação Estritas:</strong> Você pode usar o comando
+            <code>switchport nonegotiate</code> somente quando o modo de porta de comutação (<i>switchport mode</i>) da interface for
+            explicitamente definido como <strong>access</strong> ou <strong>trunk</strong>. Tentativas de aplicar a não-negociação em portas
+            configuradas como <i>dynamic auto</i> ou <i>dynamic desirable</i> resultarão em erro de sintaxe. Você deve configurar
+            manualmente a interface vizinha como tronco para estabelecer a conectividade.
+          </div>
+        </div>
+      </section>
+      <section id="secao3-5-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">3.5.3</span> Resultados de uma configuração de DTP
+        </h2>
+
+        <div class="card">
+          <p>
+            A tabela abaixo ilustra os resultados combinatórios das opções de configuração do protocolo <strong>DTP</strong> quando
+            definidas nas extremidades opostas de um link local interconectando duas portas de switches Cisco Catalyst 2960.
+          </p>
+          <p>
+            Como diretriz de arquitetura de redes,
+            <strong>a melhor prática é configurar links de tronco estaticamente sempre que possível</strong> e desabilitar o DTP para
+            mitigar vulnerabilidades de segurança e falhas de negociação.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Matriz de Sincronização Lógica do Link</h3>
+          <p>
+            Cruze a configuração do <strong>Switch Local</strong> com o modo do <strong>Switch Remoto</strong> para determinar o estado
+            operacional resultante da linha de transmissão:
+          </p>
+
+          <table class="table-custom text-center">
+            <thead>
+              <tr>
+                <th style="width: 20%; text-align: left">Switch Local \ Remoto</th>
+                <th>Dynamic Auto</th>
+                <th>Dynamic Desirable</th>
+                <th>Trunk</th>
+                <th>Access</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: left"><strong>Dynamic Auto</strong></td>
+                <td><span class="badge badge-access">Access</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-access">Access</span></td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Dynamic Desirable</strong></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-access">Access</span></td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Trunk</strong></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-trunk">Trunk</span></td>
+                <td><span class="badge badge-error">Incompatível (Erro)</span></td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Access</strong></td>
+                <td><span class="badge badge-access">Access</span></td>
+                <td><span class="badge badge-access">Access</span></td>
+                <td><span class="badge badge-error">Incompatível (Erro)</span></td>
+                <td><span class="badge badge-access">Access</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <style>
+            .text-center th,
+            .text-center td {
+              text-align: center !important;
+            }
+            .badge {
+              display: inline-block;
+              padding: 4px 10px;
+              border-radius: 4px;
+              font-size: 0.75rem;
+              font-weight: bold;
+              font-family: monospace;
+            }
+            .badge-trunk {
+              background-color: rgba(114, 9, 183, 0.15);
+              border: 1px solid #7209b7;
+              color: #b5179e;
+            }
+            .badge-access {
+              background-color: rgba(67, 170, 139, 0.15);
+              border: 1px solid #43aa8b;
+              color: #4cc9f0;
+            }
+            .badge-error {
+              background-color: rgba(239, 71, 111, 0.15);
+              border: 1px solid #ef476f;
+              color: #ef476f;
+            }
+          </style>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-microscope"></i> Entendendo a Lógica da Matriz</h3>
+          <p>A negociação bem-sucedida de um tronco depende do envio de requisições ou da concordância explícita mútua:</p>
+          <ul>
+            <li>
+              <strong>Dynamic Auto + Dynamic Auto = Access:</strong> Como ambas as pontas estão configuradas no modo passivo (apenas escutam
+              e esperam uma solicitação), nenhuma delas toma a iniciativa de enviar um quadro de controle DTP requisitando o entroncamento.
+              O link se consolida como acesso padrão.
+            </li>
+            <li>
+              <strong>Dynamic Desirable + Dynamic Auto = Trunk:</strong> O modo desejável toma a iniciativa de enviar ativamente pacotes
+              DTP. Ao receber a proposta, a porta em modo <i>auto</i> aceita a transição, estabelecendo o tronco de forma dinâmica.
+            </li>
+            <li>
+              <strong>Trunk + Access = Erro Lógico:</strong> Enquanto um lado força o encapsulamento de tags 802.1Q e aguarda frames
+              multiplexados, o outro ignora os cabeçalhos extras e trata o canal de forma plana. Isso resulta em tráfego descartado e
+              inconsistência operacional na topologia.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section id="secao3-5-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">3.5.4</span> Verificando o modo de DTP
+        </h2>
+
+        <div class="card">
+          <p>
+            O modo DTP padrão de uma interface depende diretamente da versão do Cisco IOS Software e da plataforma de hardware utilizada no
+            comutador. Para determinar o estado operacional e o modo de negociação atual do protocolo, execute o comando de diagnóstico
+            <strong>show dtp interface</strong> <em>interface-id</em>.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Saída do Comando de Diagnóstico DTP no Switch S1</h3>
+          <p>Abaixo está detalhado o mapeamento de variáveis internas da máquina de estados do protocolo obtido via CLI:</p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show dtp interface fa0/1</strong>
+DTP information for FastEthernet0/1:
+TOS/TAS/TNS: ACCESS/AUTO/ACCESS
+TOT/TAT/TNT: NATIVE/NEGOTIATE/NATIVE
+Neighbor address 1: C80084AEF101
+Neighbor address 2: 000000000000
+Hello timer expiration (sec/state): 11/RUNNING
+Access timer expiration (sec/state): never/STOPPED
+Negotiation timer expiration (sec/state): never/STOPPED
+Multidrop timer expiration (sec/state): never/STOPPED
+FSM state: S2:ACCESS
+# times multi & trunk 0
+Enabled: yes
+In STP: no</pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Entendendo as Siglas da Saída (TOS/TAS/TNS)</h3>
+          <p>A linha <code>TOS/TAS/TNS</code> e a linha <code>TOT/TAT/TNT</code> resumem o status lógico da interface física:</p>
+          <ul>
+            <li>
+              <strong>TOS (Type Operational Status):</strong> Exibe o estado operacional atual da porta de rede (neste caso, operando como
+              <strong>ACCESS</strong>).
+            </li>
+            <li>
+              <strong>TAS (Type Administrative Status):</strong> Exibe o modo administrativo configurado na interface (neste caso,
+              <strong>AUTO</strong>, indicando <i>dynamic auto</i>).
+            </li>
+            <li>
+              <strong>TNS (Type Neighbor Status):</strong> Exibe o status detectado no switch vizinho conectado à outra ponta do link.
+            </li>
+            <li>
+              <strong>FSM state (Finite State Machine):</strong> Identifica a fase atual da Máquina de Estados Finitos do protocolo (neste
+              caso, estabilizada em <strong>S2:ACCESS</strong>).
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i class="fas fa-shield-alt"></i> Diretrizes de Endurecimento (Hardening) e Segurança</h3>
+          <div class="alert alert-info" style="margin: 0">
+            <i class="fas fa-info-circle"></i> <strong>Observação (Melhor Prática Geral):</strong> Em ambientes de produção corporativos, a
+            recomendação de segurança padrão é configurar os links de tronco estaticamente usando os comandos
+            <strong>switchport mode trunk</strong> e <strong>switchport nonegotiate</strong>.
+            <p style="margin-top: 0.5rem; margin-bottom: 0">
+              Da mesma forma, em portas destinadas a computadores de usuários finais (onde o entroncamento não é desejado), a porta deve ser
+              explicitamente travada com o comando <code>switchport mode access</code> para desativar o DTP e blindar o switch contra
+              ataques de infiltração por salto de VLAN (<i>VLAN Hopping</i>).
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

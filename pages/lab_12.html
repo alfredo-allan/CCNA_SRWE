@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Packet Tracer: Implementar VLANs e Entroncamento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <span class="badge-lab" style="background: #2ec4b6; color: #fff; margin-bottom: 0; font-weight: 700">
+        <i class="fas fa-check-circle"></i> 100% Concluído
+      </span>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="../labs/lab_12.pkt"><i class="fas fa-download"></i> 1.0 Links para Download</a>
+        </li>
+        <li>
+          <a href="#topologia"><i class="fas fa-network-wired"></i> 2.0 Topologia e Cabos</a>
+        </li>
+        <li>
+          <a href="#escopo-cli"><i class="fas fa-terminal"></i> 3.0 Escopo de Execução CLI</a>
+        </li>
+        <li>
+          <a href="#glossario"><i class="fas fa-book"></i> 4.0 Glossário de Termos</a>
+        </li>
+        <li>
+          <a href="#casos-uso"><i class="fas fa-briefcase"></i> 5.0 Casos de Uso Real</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Laboratório 13</span>
+        <h1>Implementação Segura de VLANs, Tronco 802.1Q e ParkingLot</h1>
+        <p style="color: var(--text-dim)">
+          Segregação lógica de departamentos, endereçamento de SVIs múltiplas, mitigação de vulnerabilidades com VLAN de mitigação e poda de
+          tráfego de tronco.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="downloads" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-download"></i>
+          <span class="section-number">1.0</span> Arquivos do Projeto Concluído
+        </h2>
+        <div class="card">
+          <p>
+            Faz o download da topologia oficial do Packet Tracer com o gabarito totalmente preenchido, testado e validado com 100% de
+            aproveitamento:
+          </p>
+          <div style="margin-top: 1.5rem">
+            <a
+              href="https://www.netacad.com/portal/learning/ccna-v7/packet-tracer-implement-vlans-and-trunking"
+              target="_blank"
+              class="badge-lab"
+              style="
+                background: var(--primary);
+                color: #000;
+                padding: 0.75rem 1.5rem;
+                font-weight: 700;
+                text-decoration: none;
+                border-radius: 6px;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-external-link-alt"></i> Baixar Lab 13 Concluído (.PKA)
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="topologia" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">2.0</span> Especificação da Topologia Física e Endereçamento
+        </h2>
+        <div class="card">
+          <p>Mapeamento rigoroso de conexões, interfaces físicas e parâmetros de Camada 3 configurados nos hosts e ativos de rede:</p>
+
+          <table class="table-custom" style="margin-top: 1rem">
+            <thead>
+              <tr>
+                <th>Origem (Dispositivo)</th>
+                <th>Porta de Saída</th>
+                <th>Destino (Dispositivo)</th>
+                <th>Porta de Entrada</th>
+                <th>Tipo de Cabo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1</strong></td>
+                <td>FastEthernet0/1</td>
+                <td><strong>S2</strong></td>
+                <td>FastEthernet0/1</td>
+                <td>Cruzado de Cobre (Cross-Over)</td>
+              </tr>
+              <tr>
+                <td><strong>PC-A</strong></td>
+                <td>NIC (FastEthernet0)</td>
+                <td><strong>S1</strong></td>
+                <td>FastEthernet0/6</td>
+                <td>Direto de Cobre (Straight-Through)</td>
+              </tr>
+              <tr>
+                <td><strong>PC-B</strong></td>
+                <td>NIC (FastEthernet0)</td>
+                <td><strong>S2</strong></td>
+                <td>FastEthernet0/18</td>
+                <td>Direto de Cobre (Straight-Through)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem">Tabela de Endereçamento IPs Lógicos</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Equipamento</th>
+                <th>Interface / VLAN</th>
+                <th>Endereço IP</th>
+                <th>Máscara de Sub-rede</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><strong>S1</strong></td>
+                <td>VLAN 10 (Gerenciamento)</td>
+                <td>192.168.10.11</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td>VLAN 20 (Vendas)</td>
+                <td>192.168.20.11</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td>VLAN 30 (Operações)</td>
+                <td>192.168.30.11</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>S2</strong></td>
+                <td>VLAN 10 (Gerenciamento)</td>
+                <td>192.168.10.12</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>PC-A</strong></td>
+                <td>NIC Física</td>
+                <td>192.168.20.13</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>PC-B</strong></td>
+                <td>NIC Física</td>
+                <td>192.168.30.13</td>
+                <td>255.255.255.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="escopo-cli" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">3.0</span> Roteiro de Execução na CLI (Comandos Comentados)
+        </h2>
+
+        <div class="card" style="margin-bottom: 2rem">
+          <h3>3.1 Configuração Avançada no Switch S1</h3>
+          <p>
+            Aplica os parâmetros globais de segurança, provisiona as sub-redes virtuais, isola as interfaces não utilizadas na VLAN de
+            descarte e amarra o Tronco com poda de tráfego.
+          </p>
+
+          <div class="terminal">
+            <pre>S1> <strong>enable</strong>
+<span class="comment">! Concede acesso ao modo EXEC Privilegiado de administração.</span>
+
+S1# <strong>configure terminal</strong>
+<span class="comment">! Transiciona o terminal para o modo de configuração global.</span>
+
+S1(config)# <strong>hostname S1</strong>
+<span class="comment">! Define a identidade do switch na topologia.</span>
+
+S1(config)# <strong>no ip domain-lookup</strong>
+<span class="comment">! Previne que o switch tente traduzir comandos errados via DNS, evitando o travamento da CLI.</span>
+
+S1(config)# <strong>enable secret class</strong>
+<span class="comment">! Aplica encriptação forte do tipo hash para proteger a entrada no modo enable.</span>
+
+S1(config)# <strong>line console 0</strong>
+S1(config-line)# <strong>password cisco</strong>
+S1(config-line)# <strong>login</strong>
+S1(config-line)# <strong>exit</strong>
+<span class="comment">! Blinda a porta física de console local exigindo autenticação.</span>
+
+S1(config)# <strong>line vty 0 15</strong>
+S1(config-line)# <strong>password cisco</strong>
+S1(config-line)# <strong>login</strong>
+S1(config-line)# <strong>exit</strong>
+<span class="comment">! Ativa e protege com senha as 16 linhas lógicas para conexões de rede remotas.</span>
+
+S1(config)# <strong>service password-encryption</strong>
+<span class="comment">! Transforma as senhas armazenadas de texto simples para formato criptografado no arquivo de configuração.</span>
+
+S1(config)# <strong>banner motd "ACESSO NAO AUTORIZADO E PROIBIDO!"</strong>
+<span class="comment">! Exibe um aviso de segurança jurídico restritivo no momento do logon.</span>
+
+<span class="comment">! --- BANCO DE DADOS DE VLANS (CRIÇÃO) ---</span>
+S1(config)# <strong>vlan 10</strong>
+S1(config-vlan)# <strong>name Gerenciamento</strong>
+S1(config-vlan)# <strong>vlan 20</strong>
+S1(config-vlan)# <strong>name Vendas</strong>
+S1(config-vlan)# <strong>vlan 30</strong>
+S1(config-vlan)# <strong>name Operacoes</strong>
+S1(config-vlan)# <strong>vlan 999</strong>
+S1(config-vlan)# <strong>name ParkingLot</strong>
+S1(config-vlan)# <strong>vlan 1000</strong>
+S1(config-vlan)# <strong>name Nativa</strong>
+S1(config-vlan)# <strong>exit</strong>
+<span class="comment">! Cria as tabelas de ID e associa os nomes exatos do gabarito.</span>
+
+<span class="comment">! --- CONFIGURAÇÃO DE SVIs (INTERFACES VIRTUAIS) ---</span>
+S1(config)# <strong>interface vlan 10</strong>
+S1(config-if)# <strong>ip address 192.168.10.11 255.255.255.0</strong>
+S1(config-if)# <strong>no shutdown</strong>
+
+S1(config)# <strong>interface vlan 20</strong>
+S1(config-if)# <strong>ip address 192.168.20.11 255.255.255.0</strong>
+S1(config-if)# <strong>no shutdown</strong>
+
+S1(config)# <strong>interface vlan 30</strong>
+S1(config-if)# <strong>ip address 192.168.30.11 255.255.255.0</strong>
+S1(config-if)# <strong>no shutdown</strong>
+S1(config-if)# <strong>exit</strong>
+<span class="comment">! Configura e ativa as três instâncias IPs administrativas solicitadas para o S1.</span>
+
+<span class="comment">! --- MAPEAMENTO DE PORTAS DE ACESSO ---</span>
+S1(config)# <strong>interface FastEthernet0/6</strong>
+S1(config-if)# <strong>switchport mode access</strong>
+S1(config-if)# <strong>switchport access vlan 20</strong>
+S1(config-if)# <strong>exit</strong>
+<span class="comment">! Fixa a interface do PC-A no modo de acesso atrelado à rede de Vendas (VLAN 20).</span>
+
+<span class="comment">! --- MITIGAÇÃO DE SEGURANÇA (PARKING LOT) ---</span>
+S1(config)# <strong>interface range FastEthernet0/2 - 5, FastEthernet0/7 - 24, GigabitEthernet0/1 - 2</strong>
+S1(config-if-range)# <strong>switchport mode access</strong>
+S1(config-if-range)# <strong>switchport access vlan 999</strong>
+S1(config-if-range)# <strong>shutdown</strong>
+S1(config-if-range)# <strong>exit</strong>
+<span class="comment">! Agruda todas as 22 portas inativas do S1, move para o "buraco negro" da VLAN 999 e desliga a energia delas.</span>
+
+<span class="comment">! --- ESTRUTURAÇÃO DO TRONCO 802.1Q SEGURO ---</span>
+S1(config)# <strong>interface FastEthernet0/1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+<span class="comment">! Força o cabo de uplink com o S2 a operar estritamente como Trunking fixo.</span>
+
+S1(config-if)# <strong>switchport trunk native vlan 1000</strong>
+<span class="comment">! Modifica a VLAN nativa para a VLAN 1000 isolada, impedindo ataques de injeção de pacotes.</span>
+
+S1(config-if)# <strong>switchport trunk allowed vlan 10,20,30,1000</strong>
+<span class="comment">! Poda de tráfego: Bloqueia a transmissão de qualquer outra VLAN (incluindo a 999 e a 1) pelo tronco.</span>
+S1(config-if)# <strong>exit</strong>
+S1(config)# <strong>end</strong>
+
+S1# <strong>write memory</strong>
+<span class="comment">! Persiste os dados lógicos na memória não-volátil (NVRAM).</span></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>3.2 Configuração Avançada no Switch S2</h3>
+          <p>
+            Aplica as mesmas diretivas globais de segurança, associa a interface de acesso do PC-B e replica a higienização de portas e
+            configurações do tronco.
+          </p>
+
+          <div class="terminal">
+            <pre>S2> <strong>enable</strong>
+S2# <strong>configure terminal</strong>
+
+S2(config)# <strong>hostname S2</strong>
+S2(config)# <strong>no ip domain-lookup</strong>
+S2(config)# <strong>enable secret class</strong>
+
+<span class="comment">! [Linhas de console, vty, encriptação de senhas e banner aplicados de forma idêntica ao S1]</span>
+
+<span class="comment">! --- BANCO DE DADOS DE VLANS (CRIÇÃO) ---</span>
+S2(config)# <strong>vlan 10</strong>
+S2(config-vlan)# <strong>name Gerenciamento</strong>
+S2(config-vlan)# <strong>vlan 20</strong>
+S2(config-vlan)# <strong>name Vendas</strong>
+S2(config-vlan)# <strong>name Operacoes</strong>
+S2(config-vlan)# <strong>vlan 999</strong>
+S2(config-vlan)# <strong>name ParkingLot</strong>
+S2(config-vlan)# <strong>vlan 1000</strong>
+S2(config-vlan)# <strong>name Nativa</strong>
+S2(config-vlan)# <strong>exit</strong>
+
+<span class="comment">! --- CONFIGURAÇÃO DE SVI DE GERÊNCIA NO S2 ---</span>
+S2(config)# <strong>interface vlan 10</strong>
+S2(config-if)# <strong>ip address 192.168.10.12 255.255.255.0</strong>
+S2(config-if)# <strong>no shutdown</strong>
+S2(config-if)# <strong>exit</strong>
+
+<span class="comment">! --- MAPEAMENTO DE PORTA DE ACESSO ---</span>
+S2(config)# <strong>interface FastEthernet0/18</strong>
+S2(config-if)# <strong>switchport mode access</strong>
+S2(config-if)# <strong>switchport access vlan 30</strong>
+S2(config-if)# <strong>exit</strong>
+<span class="comment">! Vincula a interface do PC-B na rede de Operações (VLAN 30).</span>
+
+<span class="comment">! --- MITIGAÇÃO DE SEGURANÇA (PARKING LOT) ---</span>
+S2(config)# <strong>interface range FastEthernet0/2 - 17, FastEthernet0/19 - 24, GigabitEthernet0/1 - 2</strong>
+S2(config-if-range)# <strong>switchport mode access</strong>
+S2(config-if-range)# <strong>switchport access vlan 999</strong>
+S2(config-if-range)# <strong>shutdown</strong>
+S2(config-if-range)# <strong>exit</strong>
+<span class="comment">! Isola e desliga administrativamente as 22 portas ociosas do switch S2.</span>
+
+<span class="comment">! --- ESTRUTURAÇÃO DO TRONCO 802.1Q SEGURO ---</span>
+S2(config)# <strong>interface FastEthernet0/1</strong>
+S2(config-if)# <strong>switchport mode trunk</strong>
+S2(config-if)# <strong>switchport trunk native vlan 1000</strong>
+S2(config-if)# <strong>switchport trunk allowed vlan 10,20,30,1000</strong>
+S2(config-if)# <strong>exit</strong>
+S2(config)# <strong>end</strong>
+
+S2# <strong>write memory</strong></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="glossario" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">4.0</span> Glossário de Conceitos de Segurança de Redes
+        </h2>
+        <div class="card">
+          <p>
+            Entende a terminologia avançada de engenharia utilizada para mitigar ataques e estruturar a arquitetura lógica deste cenário:
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 35%">Termo de Engenharia</th>
+                <th>Analogia Didática e Significado Prático</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Parking Lot (VLAN de Mitigação)</strong></td>
+                <td>
+                  Um "quarto escuro blindado". É uma VLAN isolada criada unicamente para prender as portas do switch que não estão a ser
+                  usadas, garantindo que se alguém plugar um cabo nelas por maldade, não terá acesso a nenhum dado da empresa.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Poda de Tronco (Allowed VLAN List)</strong></td>
+                <td>
+                  Um "filtro de portaria". Por padrão, um cabo de tronco deixa passar dados de todas as redes. A lista de permissões atua
+                  limitando o cabo a carregar estritamente as VLANs autorizadas, descartando o resto para economizar banda e segurança.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>VLAN Nativa Estrita (VLAN 1000)</strong></td>
+                <td>
+                  Um canal de descarte de frames sem etiqueta. Mudar a VLAN nativa da padrão (VLAN 1) para um ID exclusivo (VLAN 1000) serve
+                  para neutralizar técnicas de invasão onde o hacker injeta etiquetas falsas para pular de rede.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Shutdown Administrativo</strong></td>
+                <td>
+                  Cortar a eletricidade da tomada. Desativar o comando de energia impede que loops acidentais aconteçam e barra intrusões
+                  físicas nas tomadas de rede espalhadas pelo prédio.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>SVI Múltipla</strong></td>
+                <td>
+                  Criar portas de administração independentes para sub-redes isoladas, permitindo que a equipa de suporte consiga gerenciar
+                  o ativo de diferentes pontos de acesso lógicos.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="casos-uso" class="section" style="border-bottom: none">
+        <h2 class="section-title">
+          <i class="fas fa-briefcase"></i>
+          <span class="section-number">5.0</span> Casos de Uso no Ambiente Corporativo (Humanizado)
+        </h2>
+
+        <div class="card">
+          <div class="alert alert-danger">
+            <i class="fas fa-user-shield"></i>
+            <strong>Caso 1: Proteção Física de Escritórios contra Intrusos (Parking Lot & Shutdown)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Imagina uma empresa onde existem tomadas de rede vazias nas paredes das salas de reunião e corredores públicos. Se um
+              visitante mal-intencionado ou um invasor plugar o seu próprio portátil numa dessas tomadas, ele estaria imediatamente dentro
+              da rede interna da empresa se as portas estivessem ativas. Ao mover todas as portas vazias para o
+              <strong>ParkingLot (VLAN 999)</strong> e aplicar o comando <strong>shutdown</strong>, essas tomadas tornam-se "mortas". O
+              invasor não recebe sinal de rede e fica completamente isolado, sem chance de capturar informações confidenciais.
+            </p>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; border-left-color: #ff9f1c">
+            <i class="fas fa-traffic-light" style="color: #ff9f1c"></i>
+            <strong>Caso 2: Otimização de Performance e Controle de Tráfego (Allowed VLAN List)</strong>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55">
+              Numa grande organização com centenas de computadores, existem tráfegos automáticos pesados que as máquinas enviam
+              constantemente para descobrir impressoras e servidores (chamados broadcasts). Se o cabo de tronco que interliga os switches
+              não tiver restrições, esse "ruído de fundo" de todas as redes viaja por toda a infraestrutura desnecessariamente, deixando os
+              links lentos. Ao aplicar a <strong>poda de tronco (allowed vlan)</strong>, nós definimos regras claras: pelo cabo principal só
+              passa o que for estritamente vital. O ruído das portas isoladas do estoque ou de testes fica bloqueado, otimizando a
+              velocidade da internet e dos sistemas.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Documentação Avançada de Engenharia de Segurança de Redes.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
