@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação de Rede - Laboratório 15</title>
+    <link rel="stylesheet" href="../css/labs.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="badge-lab"><i class="fas fa-shield-alt"></i> Laboratório 15 Concluído (100%)</div>
+      <a href="../labs/lab_15.pkt" class="btn-outline"> <i class="fas fa-download"></i> Baixar Projeto .PKA </a>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <h1>Segurança de Portas e Troncos Avançados</h1>
+        <p>Configuração de Roteamento Inter-VLAN em Topologia Multi-Switch com Isolamento de Portas e Tratamento de Tráfego Nativo</p>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-layer-group"></i> O Caso Real: Explicando para um Leigo</h2>
+        <p>
+          No laboratório anterior, lidamos com apenas um switch. Agora a empresa cresceu! Temos dois prédios representados por dois switches
+          (<strong>S1 e S2</strong>) conectados entre si por uma avenida principal (o cabo de Tronco na porta F0/1)[cite: 319]. Temos
+          funcionários do setor de <strong>Gerenciamento (VLAN 3)</strong> no primeiro prédio e funcionários de
+          <strong>Operações (VLAN 4)</strong> no segundo prédio.
+        </p>
+
+        <p>
+          Para garantir que a rede seja indestrutível e extremamente segura, aplicamos duas regras essenciais do mundo real neste projeto:
+        </p>
+        <ul>
+          <li>
+            <strong>VLAN de Descarte (ParkingLot):</strong> Sabe aquelas tomadas de rede espalhadas nas paredes das salas de reunião ou
+            corredores que ninguém está usando? Se um invasor plugar um computador ali, ele não terá acesso a nada. Nós pegamos todas as
+            portas vazias e as trancamos digitalmente em um "estacionamento isolado" (VLAN 7), deixando-as completamente desligadas.
+          </li>
+          <li>
+            <strong>VLAN Nativa Independente:</strong> Equipamentos de rede conversam entre si o tempo todo enviando dados administrativos
+            automáticos sem etiqueta de identificação. Para evitar que criminosos tentem mascarar pacotes maliciosos nessas mensagens limpas
+            (ataque de Salto de VLAN), criamos uma estrada isolada e exclusiva chamada VLAN 8 (Nativa) para organizar esse tráfego de
+            controle[cite: 331, 425].
+          </li>
+        </ul>
+
+        <div class="alert alert-success">
+          <strong>Resultado Prático:</strong> Mesmo estando em switches e prédios físicos totalmente diferentes, o PC-A consegue enviar
+          dados confidenciais para o PC-B de forma segura, passando pela validação de segurança do Roteador R1[cite: 319, 448].
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-map"></i> Tabela de Endereçamento Lógico</h2>
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Dispositivo</th>
+              <th>Interface / VLAN</th>
+              <th>Endereço IP</th>
+              <th>Máscara de Sub-rede</th>
+              <th>Gateway Padrão</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>R1</strong></td>
+              <td>G0/0/1.3 (Subinterface)</td>
+              <td>192.168.3.1</td>
+              <td>255.255.255.0</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>R1</strong></td>
+              <td>G0/0/1.4 (Subinterface)</td>
+              <td>192.168.4.1</td>
+              <td>255.255.255.0</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>R1</strong></td>
+              <td>G0/0/1.8 (Nativa)</td>
+              <td>Sem IP (Segurança)</td>
+              <td>N/D</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>S1</strong></td>
+              <td>VLAN 3 (Gerenciamento)</td>
+              <td>192.168.3.11</td>
+              <td>255.255.255.0</td>
+              <td>192.168.3.1</td>
+            </tr>
+            <tr>
+              <td><strong>S2</strong></td>
+              <td>VLAN 3 (Gerenciamento)</td>
+              <td>192.168.3.12</td>
+              <td>255.255.255.0</td>
+              <td>192.168.3.1</td>
+            </tr>
+            <tr>
+              <td><strong>PC-A</strong></td>
+              <td>NIC (Placa de Rede)</td>
+              <td>192.168.3.3</td>
+              <td>255.255.255.0</td>
+              <td>192.168.3.1</td>
+            </tr>
+            <tr>
+              <td><strong>PC-B</strong></td>
+              <td>NIC (Placa de Rede)</td>
+              <td>192.168.4.3</td>
+              <td>255.255.255.0</td>
+              <td>192.168.4.1</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-code-branch"></i> Manual de Execução (Causa, Efeito e Objetivo)</h2>
+
+        <div class="card">
+          <h3>1. Criando e Identificando as VLANs</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# vlan 3&#10;S1(config-vlan)# name Gerenciamento&#10;S1(config-vlan)# vlan 7&#10;S1(config-vlan)# name ParkingLot</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Informa ao chip de processamento interno do switch que estas partições numéricas agora existem
+            oficialmente e possuem propósitos definidos (Gerenciamento e Quarentena de Segurança)[cite: 331, 409].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> O switch fica pronto para começar a receber cabos nessas respectivas categorias, organizando o
+            mapa lógico interno da empresa[cite: 414].
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Quarentena e Desativação de Portas Mortas</h3>
+          <p><strong>O comando faz isso (Exemplo aplicado no S1):</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# interface range fa0/2 - 4, fa0/7 - 24, g0/1 - 2&#10;S1(config-if-range)# switchport mode access&#10;S1(config-if-range)# switchport access vlan 7&#10;S1(config-if-range)# shutdown</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Mitiga riscos de intrusão física. Selecionamos de uma só vez todas as portas que estão sobrando nos
+            switches, jogamos dentro de uma rede sem saída (VLAN 7) e cortamos a eletricidade física delas com o <code>shutdown</code>.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Segurança absoluta contra ataques locais. Se um funcionário mal-intencionado plugar um
+            dispositivo não autorizado em uma dessas portas vazias, a placa de rede dele sequer acenderá a luz de sinal[cite: 411].
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>3. Configuração do Tronco Seguro Inter-Switch (F0/1)</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# interface fa0/1&#10;S1(config-if)# switchport mode trunk&#10;S1(config-if)# switchport trunk native vlan 8&#10;S1(config-if)# switchport trunk allowed vlan 3,4,8</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Transforma o cabo de interconexão entre S1 e S2 em uma superestrada flexível. O comando
+            <code>native vlan 8</code> move o tráfego sem etiqueta para longe da VLAN 1 padrão por motivos de segurança, e o
+            <code>allowed</code> garante que apenas os pacotes autorizados da empresa passem por essa via pública[cite: 424, 425, 427].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Tráfego otimizado, limpo e protegido contra pacotes invasores que tentam burlar o isolamento das
+            VLANs.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>4. Configuração das Subinterfaces Inteligentes no Roteador</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+R1(config)# interface g0/0/1.3&#10;R1(config-subif)# encapsulation dot1Q 3&#10;R1(config-subif)# ip address 192.168.3.1 255.255.255.0&#10;R1(config-subif)# exit&#10;&#10;R1(config)# interface g0/0/1.8&#10;R1(config-subif)# encapsulation dot1Q 8 native</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Fatiamos a interface física <code>g0/0/1</code> do roteador em portas virtuais de controle. O comando
+            <code>encapsulation dot1Q</code> ativa a leitura de etiquetas carimbadas de rede. No caso da subinterface <code>.8</code>,
+            declaramos o termo <code>native</code> para que o roteador saiba processar as mensagens automáticas sem etiquetas que os
+            switches geram entre si[cite: 435, 436].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> O roteador passa a ler instantaneamente as etiquetas dos pacotes, encaminhando cada tráfego
+            exatamente para o seu destino correto na rede local[cite: 352].
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-book"></i> Glossário de Termos Técnicos</h2>
+        <div class="card">
+          <ul>
+            <li>
+              <strong>Tagamento (VLAN Tagging):</strong> É o ato de colocar um carimbo digital (etiqueta 802.1Q) no cabeçalho do pacote de
+              dados[cite: 349, 435]. Serve para o roteador ler o número da etiqueta e saber de qual setor aquele dado pertence.
+            </li>
+            <li>
+              <strong>VLAN Nativa:</strong> É a rede definida para acolher os pacotes legítimos que viajam pela rede <em>sem</em> carimbo
+              nenhum[cite: 425]. Funciona como a "caixa de achados e perdidos" do roteador para evitar o descarte de tráfegos
+              administrativos importantes[cite: 436].
+            </li>
+            <li>
+              <strong>ParkingLot (VLAN de Descarte):</strong> Uma prática de hardening e segurança de infraestrutura[cite: 344]. Consiste em
+              mover portas sobressalentes para uma rede inativa e desligada para que fiquem totalmente inutilizáveis por terceiros[cite:
+              411].
+            </li>
+            <li>
+              <strong>Interface Virtual de Switch (SVI):</strong> Uma porta lógica (como a <code>interface vlan 3</code>) criada para
+              atribuir um IP ao switch de camada 2[cite: 410]. Permite que a equipe de TI gerencie o switch por acesso remoto sem precisar
+              ir fisicamente até a sala de servidores[cite: 410].
+            </li>
+            <li>
+              <strong>Interface de Linha de Comando (CLI):</strong> O terminal em modo texto utilizado pelos engenheiros de rede para
+              aplicar as configurações e códigos diretamente no sistema operacional do dispositivo (Cisco IOS)[cite: 356].
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="download-zone">
+        <h2>Pronto para validar o laboratório?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+          Faça o download do arquivo de topologia e veja os testes de comandos como o <code>tracert</code> e <code>ping</code> operando com
+          sucesso absoluto[cite: 448, 451].
+        </p>
+        <a href="../labs/lab_15.pkt" class="btn-download" download> <i class="fas fa-file-archive"></i> Baixar Arquivo Prático (.PKA) </a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 - Central de Documentação Técnica e Infraestrutura de Redes.</p>
+    </footer>
+  </body>
+</html>

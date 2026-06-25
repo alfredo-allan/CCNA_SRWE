@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação de Laboratório - Router-on-a-Stick</title>
+    <link rel="stylesheet" href="../css/labs.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="badge-lab"><i class="fas fa-network-wired"></i> Laboratório 14 Concluído</div>
+      <a href="../labs/lab_14.pka" class="btn-outline"> <i class="fas fa-file-download"></i> Arquivo .PKA </a>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <h1>Roteamento Inter-VLAN: Router-on-a-Stick</h1>
+        <p>Documentação técnica e prática de isolamento e comunicação de redes com Cisco Packet Tracer</p>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-user-friends"></i> Entendendo o Lab de Forma Simples</h2>
+        <p>
+          Imagine um prédio comercial onde o <strong>Departamento de Compras (VLAN 10)</strong> e o
+          <strong>Departamento de Vendas (VLAN 30)</strong> trabalham[cite: 15]. Por segurança e organização, eles não devem ouvir as
+          conversas um do outro. Isso é o que o Switch faz: ele cria paredes invisíveis separando-os[cite: 11].
+        </p>
+        <p>
+          Porém, em algum momento, o pessoal de Compras precisa enviar uma nota fiscal para o pessoal de Vendas. Como as paredes são
+          intransponíveis, eles precisam de um <strong>mediador (o Roteador R1)</strong>[cite: 73]. O roteador funciona como um
+          recepcionista em uma sala central com duas portas. Ele recebe o pacote de um lado, confere as regras e o entrega formalmente do
+          outro lado[cite: 11].
+        </p>
+
+        <div class="alert alert-info">
+          <strong>Caso de Uso Real:</strong> Empresas utilizam essa estrutura para separar a rede dos computadores dos funcionários da rede
+          de Wi-Fi dos clientes visitantes. Os clientes navegam na internet de forma isolada, sem conseguir acessar os servidores internos e
+          arquivos confidenciais da empresa.
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-table"></i> Tabela de Endereçamento</h2>
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Dispositivo</th>
+              <th>Interface</th>
+              <th>Endereço IPv4</th>
+              <th>Máscara de Sub-rede</th>
+              <th>Gateway Padrão</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>R1</strong></td>
+              <td>G0/0.10</td>
+              <td>172.17.10.1</td>
+              <td>255.255.255.0</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>R1</strong></td>
+              <td>G0/0.30</td>
+              <td>172.17.30.1</td>
+              <td>255.255.255.0</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>PC1</strong></td>
+              <td>NIC</td>
+              <td>172.17.10.10</td>
+              <td>255.255.255.0</td>
+              <td>172.17.10.1</td>
+            </tr>
+            <tr>
+              <td><strong>PC3</strong></td>
+              <td>NIC</td>
+              <td>172.17.30.10</td>
+              <td>255.255.255.0</td>
+              <td>172.17.30.1</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-terminal"></i> Configuração Prática (Comando, Por que e Resultado)</h2>
+
+        <div class="card">
+          <h3>1. Criando as Redes Isoladas no Switch S1</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# vlan 10&#10;S1(config-vlan)# name VLAN0010&#10;S1(config-vlan)# vlan 30&#10;S1(config-vlan)# name VLAN0030</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Precisamos segmentar o switch físico para que ele entenda que existem dois grupos digitais distintos e
+            separados na empresa[cite: 11, 15].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Duas VLANs mapeadas na memória do switch prontas para receber seus respectivos
+            computadores[cite: 15, 20].
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Vinculando os Computadores às suas VLANs</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# interface fa0/11&#10;S1(config-if)# switchport access vlan 10&#10;S1(config-if)# interface fa0/6&#10;S1(config-if)# switchport access vlan 30</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Diz ao switch exatamente qual cabo físico pertence a qual departamento[cite: 17]. Ligamos a porta do
+            PC1 na rede 10 e a do PC3 na rede 30[cite: 18, 19].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Isolamento total. Se você rodar um <code>ping</code> entre eles agora, eles não vão se
+            comunicar, pois estão trancados em suas próprias redes[cite: 47, 49].
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>3. Fatiando a Interface do Roteador (Subinterfaces)</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+R1(config)# interface g0/0.10&#10;R1(config-subif)# encapsulation dot1Q 10&#10;R1(config-subif)# ip address 172.17.10.1 255.255.255.0</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Como só temos um cabo físico saindo do roteador para o switch, dividimos essa interface física em
+            "interfaces virtuais" (fatias)[cite: 61, 73]. O comando <code>encapsulation dot1Q 10</code> instrui o roteador a colocar uma
+            etiqueta de identificação em cada pacote de dados que trafegar ali, carimbando que ele pertence à VLAN 10[cite: 53].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> O roteador agora possui um braço virtual dentro da VLAN 10 operando como o portão de saída
+            (Gateway) dela[cite: 53, 54]. (O mesmo procedimento foi repetido para a interface <code>g0/0.30</code>) [cite: 58].
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>4. Abrindo a Estrada Principal (Modo Trunk)</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>S1(config)# interface g0/1&#10;S1(config-if)# switchport mode trunk</pre>
+          </div>
+          <p>
+            <strong>Por que:</strong> Portas normais de switch só transportam dados de uma única rede. Configurar a porta conectada ao
+            roteador como <strong>Trunk (Tronco)</strong> transforma essa conexão em uma avenida expressa que permite a passagem de dados
+            com as etiquetas de qualquer VLAN configurada[cite: 73, 74].
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Os dados carimbados do PC1 viajam pelo tronco até o Roteador, que remove o carimbo da VLAN 10,
+            processa, coloca o carimbo da VLAN 30 e os envia de volta pelo mesmo cabo até o PC3[cite: 73, 79]. Conectividade restabelecida
+            com sucesso e laboratório 100% operacional[cite: 79]!
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-book"></i> Glossário Técnico</h2>
+        <div class="card">
+          <ul>
+            <li>
+              <strong>VLAN (Virtual Local Area Network):</strong> É a tecnologia que permite dividir um switch físico em vários "switches
+              virtuais" independentes. Serve para fins de segurança e organização de tráfego.
+            </li>
+            <li>
+              <strong>Router-on-a-Stick:</strong> Um método de roteamento onde um único roteador físico faz o meio de campo entre várias
+              redes utilizando apenas um cabo físico conectado a um switch.
+            </li>
+            <li>
+              <strong>Subinterface:</strong> Uma divisão lógica baseada em software aplicada em uma interface física de um roteador. É como
+              dividir um HD físico em partições C: e D:.
+            </li>
+            <li>
+              <strong>Encapsulamento 802.1Q (Dot1Q):</strong> O protocolo padrão da indústria que adiciona uma "etiqueta" (tag) no cabeçalho
+              do pacote de dados para indicar a qual VLAN aquele tráfego pertence.
+            </li>
+            <li>
+              <strong>Porta de Tronco (Trunk):</strong> Uma interface de rede configurada para carregar simultaneamente dados vindos de
+              múltiplas VLANs diferentes.
+            </li>
+            <li>
+              <strong>Gateway Padrão:</strong> O endereço do roteador. É a "porta de saída" da rede local. Sempre que um computador quer
+              conversar com outro que está fora da sua rede própria, ele envia o pacote obrigatoriamente para o Gateway.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="download-zone">
+        <h2>Pronto para praticar?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+          Baixe o arquivo de simulação do Packet Tracer e veja a mágica do roteamento Inter-VLAN acontecer em tempo real.
+        </p>
+        <a href="../labs/lab_14.pka" class="btn-download" download>
+          <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo do Laboratório (.PKA)
+        </a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 - Documentação de Infraestrutura de Redes. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>

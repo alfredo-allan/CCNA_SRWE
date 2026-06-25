@@ -44,6 +44,63 @@
         <li>
           <a href="#secao4-1-4"><i class="fas fa-layer-group"></i> 4.1.4 Switch de Camada 3</a>
         </li>
+        <li>
+          <a href="#secao4-2-1"><i class="fas fa-network-wired"></i> 4.2.1 Cenário Router-on-a-Stick</a>
+        </li>
+        <li>
+          <a href="#secao4-2-3"><i class="fas fa-terminal"></i> 4.2.3 Configuração de VLAN e Trunk no S2</a>
+        </li>
+        <li>
+          <a href="#secao4-2-4"><i class="fas fa-code"></i> 4.2.4 Configuração da Subinterface R1</a>
+        </li>
+        <li>
+          <a href="#secao4-2-5"><i class="fas fa-check-circle"></i> 4.2.5 Verificar Conectividade do Lab</a>
+        </li>
+        <li>
+          <a href="../pages/lab_14.html"><i class="fas fa-tools"></i> 4.2.7 Packet Tracer - Configurar Roteamento Router-on-a-Stick</a>
+        </li>
+        <li>
+          <a href="../pages/lab_15.html"><i class="fas fa-tools"></i> 4.2.8 Laboratório - Configurar Roteamento Router-on-a-Stick</a>
+        </li>
+        <li>
+          <a href="#secao4-3-1"><i class="fas fa-layer-group"></i> 4.3.1 Roteamento Inter-VLAN em Switch L3</a>
+        </li>
+        <li>
+          <a href="#secao4-3-2"><i class="fas fa-sitemap"></i> 4.3.2 Cenário de Switch de Camada 3</a>
+        </li>
+        <li>
+          <a href="#secao4-3-3"><i class="fas fa-terminal"></i> 4.3.3 Configuração de Switch de Camada 3</a>
+        </li>
+        <li>
+          <a href="#secao4-3-4"><i class="fas fa-check-circle"></i> 4.3.4 Verificação no Switch de Camada 3</a>
+        </li>
+        <li>
+          <a href="#secao4-3-6"><i class="fas fa-sitemap"></i> 4.3.6 Cenário de Roteamento em Switch L3</a>
+        </li>
+        <li>
+          <a href="#secao4-3-7"><i class="fas fa-terminal"></i> 4.3.7 Configuração de Roteamento no Switch L3</a>
+        </li>
+        <li>
+          <a href="../pages/lab_16.html"><i class="fas fa-tools"></i> 4.2.8 Laboratório - Configurar Roteamento Router-on-a-Stick</a>
+        </li>
+        <li>
+          <a href="#secao4-4-1"><i class="fas fa-tools"></i> 4.4.1 Problemas Comuns Entre VLANs</a>
+        </li>
+        <li>
+          <a href="#secao4-4-2"><i class="fas fa-search"></i> 4.4.2 Pesquisa de Defeitos no Cenário</a>
+        </li>
+        <li>
+          <a href="#secao4-4-3"><i class="fas fa-unlink"></i> 4.4.3 VLANs Ausentes</a>
+        </li>
+        <li>
+          <a href="#secao4-4-4"><i class="fas fa-door-open"></i> 4.4.4 Problemas de Porta de Acesso</a>
+        </li>
+        <li>
+          <a href="#secao4-4-6"><i class="fas fa-link"></i> 4.4.6 Problemas de Entroncamento (Trunk)</a>
+        </li>
+        <li>
+          <a href="../pages/lab_17.html"><i class="fas fa-tools"></i> 4.3.8 Packet Tracer - Configurar Roteamento Inter-VLAN na Camada 3</a>
+        </li>
       </ul>
     </div>
 
@@ -1091,6 +1148,2748 @@
               <strong><i class="fas fa-dollar-sign"></i> Fator de Custo:</strong> A principal contrapartida no mapeamento desse design de
               redes reside exclusivamente no custo financeiro dos equipamentos, uma vez que Switches de <strong>Camada 3</strong> robustos
               apresentam um valor de aquisição mais elevado comparados aos switches convencionais.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">4.2.1</span> Cenário Router-on-a-Stick
+        </h2>
+
+        <div class="card">
+          <p>
+            No tópico anterior, três maneiras diferentes de criar roteamento entre redes foram listadas. Este tópico detalha como configurar
+            o modelo <strong>Router-on-a-stick</strong>. Como visto na topologia, o roteador não fica centralizado fisicamente no meio da
+            infraestrutura, mas conectado na borda por um único cabo físico — daí a origem do termo técnico.
+          </p>
+
+          <p>
+            No cenário apresentado, a interface <strong>GigabitEthernet 0/0/1</strong> de <strong>R1</strong> está diretamente conectada à
+            porta <strong>FastEthernet 0/5</strong> do switch <strong>S1</strong>. A porta <strong>FastEthernet 0/1</strong> do switch
+            <strong>S1</strong> interliga-se à porta <strong>FastEthernet 0/1</strong> do switch <strong>S2</strong>. Ambos os caminhos
+            atuam estritamente como <strong>Links de Trunk</strong>, necessários para carregar as tags das múltiplas <strong>VLANs</strong>.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-sitemap" style="color: var(--primary)"></i> Infraestrutura Física e Lógica: Router-on-a-Stick
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 850px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.2rem">
+              <div
+                style="
+                  background: var(--bg-dark);
+                  border: 2px solid var(--primary);
+                  border-radius: 50%;
+                  width: 85px;
+                  height: 85px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+                "
+              >
+                <i class="fas fa-route" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                <span style="font-weight: bold; color: var(--text); font-size: 0.85rem">R1</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim)">G0/0/1</span>
+              </div>
+
+              <div style="width: 4px; height: 50px; background: #ff7b00; position: relative; box-shadow: 0 0 5px rgba(255, 123, 0, 0.5)">
+                <span
+                  style="
+                    position: absolute;
+                    left: 12px;
+                    top: 30%;
+                    font-size: 0.75rem;
+                    color: #ff7b00;
+                    white-space: nowrap;
+                    font-weight: bold;
+                  "
+                  >Link de Trunk</span
+                >
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 550px; align-items: center">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    width: 180px;
+                    padding: 0.8rem;
+                    text-align: center;
+                    position: relative;
+                  "
+                >
+                  <span style="position: absolute; top: -20px; left: 10px; font-size: 0.7rem; color: var(--secondary)">F0/5</span>
+                  <span style="position: absolute; right: -25px; top: 40%; font-size: 0.7rem; color: var(--secondary)">F0/1</span>
+                  <i class="fas fa-server" style="color: var(--primary); font-size: 1.3rem; margin-bottom: 0.2rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">S1</div>
+                  <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem">IP: 192.168.99.2/24</div>
+                  <span style="font-size: 0.65rem; color: var(--text-dim)">F0/6 (Acesso)</span>
+                </div>
+
+                <div
+                  style="
+                    flex-grow: 1;
+                    height: 4px;
+                    background: #ff7b00;
+                    position: relative;
+                    margin: 0 -5px;
+                    box-shadow: 0 0 5px rgba(255, 123, 0, 0.4);
+                  "
+                >
+                  <span
+                    style="
+                      position: absolute;
+                      top: -20px;
+                      left: 25%;
+                      font-size: 0.75rem;
+                      color: #ff7b00;
+                      font-weight: bold;
+                      white-space: nowrap;
+                    "
+                    >Link de Trunk</span
+                  >
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    width: 180px;
+                    padding: 0.8rem;
+                    text-align: center;
+                    position: relative;
+                  "
+                >
+                  <span style="position: absolute; left: -30px; top: 40%; font-size: 0.7rem; color: var(--secondary)">F0/1</span>
+                  <i class="fas fa-server" style="color: var(--primary); font-size: 1.3rem; margin-bottom: 0.2rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">S2</div>
+                  <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem">IP: 192.168.99.3/24</div>
+                  <span style="font-size: 0.65rem; color: var(--text-dim)">F0/18 (Acesso)</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 450px; height: 35px; position: relative">
+                <div style="width: 2px; height: 100%; background: var(--border); position: absolute; left: 30px"></div>
+                <div style="width: 2px; height: 100%; background: var(--border); position: absolute; right: 30px"></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 650px">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 240px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC1</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">IP: 192.168.10.10/24</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">GW: 192.168.10.1</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 180, 216, 0.15);
+                      color: var(--primary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 10
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 240px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC2</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">IP: 192.168.20.10/24</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">GW: 192.168.20.1</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 245, 212, 0.15);
+                      color: var(--secondary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 20
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Para prover o mapeamento lógico e permitir o tráfego inter-VLAN, a interface física <strong>G0/0/1</strong> do roteador é
+            dividida logicamente em <strong>Subinterfaces</strong> virtuais dedicadas. Abaixo, encontra-se a arquitetura de endereçamento do
+            roteador e o provisionamento de portas dos switches:
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-table" style="color: var(--primary)"></i> Router R1 Subinterfaces & VLAN Mapping
+          </h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Subinterface R1</th>
+                <th>VLAN Associada</th>
+                <th>Endereço IP / Subnet Mask</th>
+                <th>Função da Infraestrutura</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>G0/0/1.10</strong></td>
+                <td>VLAN 10</td>
+                <td><span style="font-family: monospace">192.168.10.1/24</span></td>
+                <td>Gateway Padrão para os hosts da VLAN 10 (ex: PC1)</td>
+              </tr>
+              <tr>
+                <td><strong>G0/0/1.20</strong></td>
+                <td>VLAN 20</td>
+                <td><span style="font-family: monospace">192.168.20.1/24</span></td>
+                <td>Gateway Padrão para os hosts da VLAN 20 (ex: PC2)</td>
+              </tr>
+              <tr>
+                <td><strong>G0/0/1.99</strong></td>
+                <td>VLAN 99</td>
+                <td><span style="font-family: monospace">192.168.99.1/24</span></td>
+                <td>VLAN Nativa e Interface de Gerência de S1/S2</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin-bottom: 0.5rem">
+              <strong><i class="fas fa-exclamation-triangle"></i> Status Atual do Laboratório:</strong> Admita que <strong>R1</strong>,
+              <strong>S1</strong> e <strong>S2</strong> possuem apenas as configurações básicas estruturadas em seus arquivos de
+              inicialização.
+            </p>
+            <p style="margin-bottom: 0.5rem">
+              <i class="fas fa-times-circle" style="color: var(--danger); margin-right: 0.4rem"></i> Atualmente, o <strong>PC1</strong> e o
+              <strong>PC2</strong> <strong>não conseguem disparar pacotes ICMP (ping) entre si</strong>, devido ao isolamento de suas
+              sub-redes lógicas de Camada 2.
+            </p>
+            <p style="margin-bottom: 0">
+              <i class="fas fa-info-circle" style="color: var(--info); margin-right: 0.4rem"></i> Exclusivamente os switches
+              <strong>S1</strong> e <strong>S2</strong> realizam a comunicação direta entre si, porém permanecem completamente inacessíveis
+              para o <strong>PC1</strong> e o <strong>PC2</strong> até que as configurações de <strong>Trunking</strong> e subinterfaces
+              lógicas de roteamento sejam plenamente ativadas no roteador.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">4.2.2</span> VLAN S1 e configuração de entroncamento
+        </h2>
+
+        <div class="card">
+          <p>
+            Para habilitar a comunicação lógica no cenário de <strong>Router-on-a-Stick</strong>, o switch <strong>S1</strong> deve ser
+            devidamente configurado com o mapeamento de suas redes virtuais, interfaces lógicas de gerenciamento e portas operacionais.
+            Conclua as etapas a seguir para realizar o provisionamento do switch:
+          </p>
+
+          <div style="margin: 2rem 0 1.5rem 0">
+            <style>
+              .tabs-container {
+                display: flex;
+                flex-wrap: wrap;
+                background: #070a12;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+              }
+              .tab-radio {
+                display: none;
+              }
+              .tab-label {
+                flex: 1;
+                min-width: 140px;
+                padding: 1rem;
+                text-align: center;
+                cursor: pointer;
+                background: rgba(18, 24, 36, 0.4);
+                color: var(--text-dim);
+                font-size: 0.85rem;
+                font-weight: 600;
+                border-bottom: 2px solid transparent;
+                transition: all 0.3s;
+                border-right: 1px solid var(--border);
+              }
+              .tab-label:last-of-type {
+                border-right: none;
+              }
+              .tab-content {
+                width: 100%;
+                padding: 1.5rem;
+                background: var(--bg-card);
+                display: none;
+                border-top: 1px solid var(--border);
+              }
+              /* Lógica de Ativação das Abas */
+              #tab1:checked ~ .tabs-container #label1,
+              #tab2:checked ~ .tabs-container #label2,
+              #tab3:checked ~ .tabs-container #label3,
+              #tab4:checked ~ .tabs-container #label4 {
+                background: var(--bg-card);
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+              }
+              #tab1:checked ~ .tabs-container #content1,
+              #tab2:checked ~ .tabs-container #content2,
+              #tab3:checked ~ .tabs-container #content3,
+              #tab4:checked ~ .tabs-container #content4 {
+                display: block;
+              }
+            </style>
+
+            <input type="radio" name="sw-tabs" id="tab1" class="tab-radio" checked />
+            <input type="radio" name="sw-tabs" id="tab2" class="tab-radio" />
+            <input type="radio" name="sw-tabs" id="tab3" class="tab-radio" />
+            <input type="radio" name="sw-tabs" id="tab4" class="tab-radio" />
+
+            <div class="tabs-container">
+              <label for="tab1" id="label1" class="tab-label"><i class="fas fa-layer-group"></i> 1. Crie as VLANs</label>
+              <label for="tab2" id="label2" class="tab-label"><i class="fas fa-tools"></i> 2. Interface SVI</label>
+              <label for="tab3" id="label3" class="tab-label"><i class="fas fa-door-open"></i> 3. Portas Acesso</label>
+              <label for="tab4" id="label4" class="tab-label"><i class="fas fa-link"></i> 4. Links Trunk</label>
+
+              <div id="content1" class="tab-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 1: Crie e nomeie as VLANs</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Primeiro, as VLANs são criadas e devidamente nomeadas no banco de dados local. Lembre-se de que as VLANs só são
+                  consolidadas operacionalmente no switch após sair do modo de subconfiguração de VLAN.
+                </p>
+
+                <div class="terminal">
+                  <pre>S1(config)# <strong>vlan 10</strong>
+S1(config-vlan)# <strong>name LAN10</strong>
+S1(config-vlan)# <strong>exit</strong>
+S1(config)# <strong>vlan 20</strong>
+S1(config-vlan)# <strong>name LAN20</strong>
+S1(config-vlan)# <strong>exit</strong>
+S1(config)# <strong>vlan 99</strong>
+S1(config-vlan)# <strong>name Management</strong>
+S1(config-vlan)# <strong>exit</strong>
+S1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="content2" class="tab-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 2: Crie a interface de gerenciamento</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Em seguida, a interface virtual comutada (SVI) de gerenciamento é inicializada na VLAN 99, definindo o endereço IP local
+                  do switch e seu respectivo gateway apontando para o roteador R1.
+                </p>
+
+                <div class="terminal">
+                  <pre>S1(config)# <strong>interface vlan 99</strong>
+S1(config-if)# <strong>ip address 192.168.99.2 255.255.255.0</strong>
+S1(config-if)# <strong>no shut</strong>
+S1(config-if)# <strong>exit</strong>
+S1(config)# <strong>ip default-gateway 192.168.99.1</strong>
+S1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="content3" class="tab-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 3: Configure as portas de acesso</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Na sequência, a porta FastEthernet 0/6 que conecta ao PC1 é configurada para operar estritamente em modo de acesso e
+                  associada à VLAN 10. Admita que o PC1 já foi provisionado com o endereço IP e gateway correspondentes.
+                </p>
+
+                <div class="terminal">
+                  <pre>S1(config)# <strong>interface fa0/6</strong>
+S1(config-if)# <strong>switchport mode access</strong>
+S1(config-if)# <strong>switchport access vlan 10</strong>
+S1(config-if)# <strong>no shut</strong>
+S1(config-if)# <strong>exit</strong>
+S1(config)#</pre>
+                </div>
+                <div class="alert alert-info" style="margin-top: 1rem; margin-bottom: 0">
+                  <p style="margin: 0">
+                    <strong><i class="fas fa-lightbulb"></i> Nota de Configuração:</strong> O mesmo procedimento deve ser adotado no switch
+                    <strong>S2</strong> para associar sua respectiva interface de acesso (Fa0/18) à <strong>VLAN 20</strong> (PC2).
+                  </p>
+                </div>
+              </div>
+
+              <div id="content4" class="tab-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">
+                  Etapa 4: Configure as portas de entroncamento (Trunk)
+                </h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Finalmente, as portas vinculadas à interconexão de infraestrutura são configuradas como troncos. A interface Fa0/1
+                  conecta-se ao switch S2 e a interface Fa0/5 conecta-se à interface física do roteador R1.
+                </p>
+
+                <div class="terminal">
+                  <pre>S1(config)# <strong>interface fa0/1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>no shut</strong>
+S1(config-if)# <strong>exit</strong>
+S1(config)# <strong>interface fa0/5</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>no shut</strong>
+S1(config-if)# <strong>end</strong></pre>
+                </div>
+
+                <div class="terminal" style="background: #04060a; border-color: rgba(3, 244, 135, 0.2)">
+                  <pre style="color: var(--success)">
+*Mar 1 00:23:43.093: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+*Mar 1 00:23:44.511: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/5, changed state to up</pre
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">4.2.3</span> VLAN S2 e configuração de entroncamento
+        </h2>
+
+        <div class="card">
+          <p>
+            A especificação de parâmetros operacionais e o provisionamento do switch <strong>S2</strong> são amplamente semelhantes aos
+            executados no switch <strong>S1</strong>. As mesmas <strong>VLANs</strong> de dados e de gerência são inicializadas, mapeando a
+            interface de acesso local correspondente e ativando o link de infraestrutura com o switch vizinho.
+          </p>
+
+          <p>
+            Abaixo, encontra-se o script CLI completo extraído do console IOS de <strong>S2</strong> para consolidação e provisionamento do
+            laboratório:
+          </p>
+
+          <div class="terminal">
+            <pre>S2(config)# <strong>vlan 10</strong>
+S2(config-vlan)# <strong>name LAN10</strong>
+S2(config-vlan)# <strong>exit</strong>
+S2(config)# <strong>vlan 20</strong>
+S2(config-vlan)# <strong>name LAN20</strong>
+S2(config-vlan)# <strong>exit</strong>
+S2(config)# <strong>vlan 99</strong>
+S2(config-vlan)# <strong>name Management</strong>
+S2(config-vlan)# <strong>exit</strong>
+S2(config)#
+S2(config)# <strong>interface vlan 99</strong>
+S2(config-if)# <strong>ip address 192.168.99.3 255.255.255.0</strong>
+S2(config-if)# <strong>no shut</strong>
+S2(config-if)# <strong>exit</strong>
+S2(config)# <strong>ip default-gateway 192.168.99.1</strong>
+S2(config)# <strong>interface fa0/18</strong>
+S2(config-if)# <strong>switchport mode access</strong>
+S2(config-if)# <strong>switchport access vlan 20</strong>
+S2(config-if)# <strong>no shut</strong>
+S2(config-if)# <strong>exit</strong>
+S2(config)# <strong>interface fa0/1</strong>
+S2(config-if)# <strong>switchport mode trunk</strong>
+S2(config-if)# <strong>no shut</strong>
+S2(config-if)# <strong>exit</strong>
+S2(config-if)# <strong>end</strong></pre>
+          </div>
+
+          <div class="terminal" style="background: #04060a; border-color: rgba(3, 244, 135, 0.2); margin-top: -1rem">
+            <pre style="color: var(--success); font-size: 0.82rem">
+*Mar  1 00:23:52.137: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up</pre
+            >
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin-bottom: 0.5rem">
+              <strong><i class="fas fa-lightbulb"></i> Análise de Infraestrutura:</strong> Observe os seguintes pontos fundamentais que
+              garantem a consistência lógica do link de <strong>Trunk</strong>:
+            </p>
+            <ul
+              style="
+                list-style: none;
+                padding-left: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+                font-size: 0.9rem;
+                color: var(--text);
+              "
+            >
+              <li style="display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-check-circle" style="color: var(--success); font-size: 0.85rem; width: 15px; text-shrink: 0"></i>
+                <span
+                  >O endereço IP da interface <strong>SVI</strong> de <strong>S2</strong> (<span
+                    style="font-family: monospace; color: var(--primary)"
+                    >192.168.99.3</span
+                  >) pertence à mesma sub-rede da interface de gerência de <strong>S1</strong>.</span
+                >
+              </li>
+              <li style="display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-check-circle" style="color: var(--success); font-size: 0.85rem; width: 15px; text-shrink: 0"></i>
+                <span
+                  >A porta local <strong>Fa0/18</strong> está operando em modo de acesso dedicada para a <strong>VLAN 20</strong>, onde o
+                  host final <strong>PC2</strong> está conectado.</span
+                >
+              </li>
+              <li style="display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-check-circle" style="color: var(--success); font-size: 0.85rem; width: 15px; text-shrink: 0"></i>
+                <span
+                  >A porta de infraestrutura <strong>Fa0/1</strong> foi forçada ao modo <strong>Trunk</strong>, espelhando a configuração da
+                  outra extremidade e restabelecendo o protocolo de linha com sucesso.</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-code"></i>
+          <span class="section-number">4.2.4</span> Configuração da subinterface R1
+        </h2>
+
+        <div class="card">
+          <p>
+            O método <strong>Router-on-a-stick</strong> exige a criação de uma subinterface lógica para cada <strong>VLAN</strong> que
+            necessite ser roteada na infraestrutura.
+          </p>
+
+          <p>
+            Uma subinterface é instanciada utilizando o comando de contexto global
+            <span style="font-family: monospace; color: var(--primary)">interface interface_id subinterface_id</span>. A sintaxe consiste em
+            especificar a interface física, seguida por um ponto (".") e o identificador numérico da subinterface. Embora o Cisco IOS
+            permita qualquer valor, a boa prática de engenharia de redes dita que o número da subinterface coincida rigorosamente com o ID
+            da <strong>VLAN</strong> correspondente.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 1rem 0; font-size: 1.1rem; color: var(--text)">
+            <i class="fas fa-tools" style="color: var(--primary)"></i> Comandos Obrigatórios por Subinterface
+          </h3>
+          <p>Cada subinterface criada requer a execução mandatória de dois comandos estruturais:</p>
+
+          <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem">
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-angle-right" style="color: var(--secondary); margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                ><span style="font-family: monospace; color: var(--primary)">encapsulation dot1q vlan_id [native]</span> — Vincula o escopo
+                lógico da subinterface ao tráfego encapsulado sob o padrão <strong>IEEE 802.1Q</strong> da respectiva <strong>VLAN</strong>.
+                A palavra-chave opcional <span style="font-family: monospace; color: var(--secondary)">native</span> é parametrizada
+                estritamente para redefinir a <strong>Native VLAN</strong> caso ela difira da VLAN padrão (VLAN 1).</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.4">
+              <i class="fas fa-angle-right" style="color: var(--secondary); margin-top: 0.2rem; flex-shrink: 0"></i>
+              <span
+                ><span style="font-family: monospace; color: var(--primary)">ip address ip-address subnet-mask</span> — Define o
+                endereçamento IPv4 lógico do gateway. Esta entidade atuará como o <strong>Default Gateway</strong> para todos os hosts
+                pertencentes àquela área de difusão de Camada 2.</span
+              >
+            </li>
+          </ul>
+
+          <div class="alert alert-warning" style="margin: 1.5rem 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-exclamation-triangle"></i> Regra de Roteamento IP:</strong> Repita este procedimento sistematicamente
+              para cada sub-rede. Cada subinterface ativa deve, obrigatoriamente, possuir um endereço IP contido em uma
+              <strong>sub-rede exclusiva e que não se sobreponha</strong> a nenhuma outra tabela de roteamento local.
+            </p>
+          </div>
+
+          <p>
+            Após concluir a parametrização das entidades virtuais, a <strong>interface física principal deve ser ativada</strong> com o
+            comando <span style="font-family: monospace; color: var(--secondary)">no shutdown</span>. Por herança de estado, se a interface
+            física de hardware permanecer desativada (<em>shutdown</em>), todas as subinterfaces de software vinculadas a ela cairão
+            imediatamente.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--secondary)"></i> Console de Roteamento Cisco IOS (R1)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Configuração detalhada das subinterfaces lógicas de <strong>R1</strong> associadas às VLANs 10, 20 e 99:
+          </p>
+
+          <div class="terminal">
+            <pre>R1(config)# <strong>interface G0/0/1.10</strong>
+R1(config-subif)# <strong>description Default Gateway for VLAN 10</strong>
+R1(config-subif)# <strong>encapsulation dot1Q 10</strong>
+R1(config-subif)# <strong>ip address 192.168.10.1 255.255.255.0</strong>
+R1(config-subif)# <strong>exit</strong>
+R1(config)#
+R1(config)# <strong>interface G0/0/1.20</strong>
+R1(config-subif)# <strong>description Default Gateway for VLAN 20</strong>
+R1(config-subif)# <strong>encapsulation dot1Q 20</strong>
+R1(config-subif)# <strong>ip address 192.168.20.1 255.255.255.0</strong>
+R1(config-subif)# <strong>exit</strong>
+R1(config)#
+R1(config)# <strong>interface G0/0/1.99</strong>
+R1(config-subif)# <strong>description Default Gateway for VLAN 99</strong>
+R1(config-subif)# <strong>encapsulation dot1Q 99</strong>
+R1(config-subif)# <strong>ip address 192.168.99.1 255.255.255.0</strong>
+R1(config-subif)# <strong>exit</strong>
+R1(config)#
+R1(config)# <strong>interface G0/0/1</strong>
+R1(config-if)# <strong>description Trunk link to S1</strong>
+R1(config-if)# <strong>no shutdown</strong>
+R1(config-if)# <strong>end</strong>
+R1#</pre>
+          </div>
+
+          <div class="terminal" style="background: #04060a; border-color: rgba(3, 244, 135, 0.2); margin-top: -1rem">
+            <pre style="color: var(--success); font-size: 0.82rem">
+*Sep 15 19:08:47.015: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to down
+*Sep 15 19:08:50.071: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to up
+*Sep 15 19:08:51.071: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up</pre
+            >
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">4.2.5</span> Verificar a conectividade entre PC1 e PC2
+        </h2>
+
+        <div class="card">
+          <p>
+            A implementação da arquitetura <strong>Router-on-a-stick</strong> é considerada concluída após as portas de
+            <strong>Trunking</strong> dos switches e as subinterfaces lógicas do roteador estarem plenamente operacionalizadas. A validação
+            fim a fim do ambiente deve ser efetuada a partir dos hosts finais, do roteador e dos switches de acesso.
+          </p>
+
+          <p>
+            Em um host, o método recomendado para validar o roteamento lógico com sub-redes contidas em outras
+            <strong>VLANs</strong> consiste no disparo de pacotes ICMP via comando
+            <span style="font-family: monospace; color: var(--primary)">ping</span>. Antes de iniciar os testes de conectividade de rede,
+            constitui uma boa prática inspecionar os parâmetros de rede locais utilizando o utilitário de prompt de comando do Windows
+            <span style="font-family: monospace; color: var(--primary)">ipconfig</span>.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--primary)"></i> Prompt de Comando do Windows (PC1)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Validação inicial das propriedades lógicas de rede configuradas na estação de trabalho:
+          </p>
+
+          <div class="terminal">
+            <pre>
+C:\Users\PC1> <strong>ipconfig</strong>
+
+Windows IP Configuration
+
+Ethernet adapter Ethernet0:
+   Connection-specific DNS Suffix . :
+   Link-local IPv6 Address . . . . . : fe80::5c43:ee7c:2959:da68%6
+   IPv4 Address. . . . . . . . . . . : 192.168.10.10
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.10.1
+
+C:\Users\PC1></pre
+            >
+          </div>
+
+          <p style="margin: 1.5rem 0 1rem 0">
+            A saída gerada pelo sistema operacional confirma a atribuição correta do endereço IPv4 e do
+            <strong>Default Gateway</strong> apontando para a subinterface do roteador. Na sequência, utiliza-se o comando
+            <span style="font-family: monospace; color: var(--secondary)">ping</span> para atestar a comunicação com o host remoto
+            localizado em outra sub-rede (PC2) e com os switches de gerenciamento.
+          </p>
+
+          <div class="terminal" style="margin-top: 1rem">
+            <pre>C:\Users\PC1> <strong>ping 192.168.20.10</strong>
+
+Pinging 192.168.20.10 with 32 bytes of data:
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+
+Ping statistics for 192.168.20.10:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\Users\PC1> <strong>ping 192.168.99.2</strong>
+
+Pinging 192.168.99.2 with 32 bytes of data:
+Request timed out.
+Request timed out.
+Reply from 192.168.99.2: bytes=32 time=2ms TTL=254
+Reply from 192.168.99.2: bytes=32 time=1ms TTL=254
+
+Ping statistics for 192.168.99.2:
+    Packets: Sent = 4, Received = 2, Lost = 2 (50% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 1ms, Maximum = 2ms, Average = 1ms
+
+C:\Users\PC1></pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem">
+            <p>
+              <strong><i class="fas fa-check-circle"></i> Sucesso na Verificação:</strong> A resposta positiva oriunda do endereço de
+              destino ratifica com êxito que o roteamento entre sub-redes e o entroncamento do link estão plenamente funcionais no cenário
+              de laboratório.
+            </p>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Insight de Troubleshooting:</strong> Observe que os dois primeiros disparos de
+              pacotes destinados à interface de gerenciamento do switch S1 (<span style="font-family: monospace; color: var(--primary)"
+                >192.168.99.2</span
+              >) resultaram em falha (<em>Request timed out</em>). Esse comportamento é estritamente normal em redes Cisco e decorre do
+              tempo de convergência necessário para o protocolo ARP (<em>Address Resolution Protocol</em>) resolver o mapeamento de
+              endereços físicos MAC ao longo do novo salto lógico criado pelo roteador.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-2-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">4.2.6</span> Verificação de roteamento entre VLANs do roteador no stick
+        </h2>
+
+        <div class="card">
+          <p>
+            Além de realizar testes de conectividade fim a fim com pacotes ICMP, a suite de comandos
+            <span style="font-family: monospace; color: var(--primary)">show</span> do Cisco IOS constitui a base fundamental para auditar,
+            verificar e realizar o <strong>Troubleshooting</strong> de inconsistências lógicas no modelo <strong>Router-on-a-stick</strong>.
+          </p>
+
+          <p>
+            Clique nas abas abaixo para inspecionar os outputs reais do console do roteador <strong>R1</strong> e do switch
+            <strong>S1</strong> utilizados para validar a topologia:
+          </p>
+
+          <div style="margin: 2rem 0 1.5rem 0">
+            <style>
+              .verify-tabs {
+                display: flex;
+                flex-wrap: wrap;
+                background: #070a12;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+              }
+              .v-radio {
+                display: none;
+              }
+              .v-label {
+                flex: 1;
+                min-width: 180px;
+                padding: 1rem;
+                text-align: center;
+                cursor: pointer;
+                background: rgba(18, 24, 36, 0.4);
+                color: var(--text-dim);
+                font-size: 0.85rem;
+                font-weight: 600;
+                border-bottom: 2px solid transparent;
+                transition: all 0.3s;
+                border-right: 1px solid var(--border);
+              }
+              .v-label:last-of-type {
+                border-right: none;
+              }
+              .v-content {
+                width: 100%;
+                padding: 1.5rem;
+                background: var(--bg-card);
+                display: none;
+                border-top: 1px solid var(--border);
+              }
+              /* LÓGICA DE ALTERNÂNCIA CORRIGIDA (Sincronizada com os IDs dos conteúdos) */
+              #vtab1:checked ~ .verify-tabs #vlabel1,
+              #vtab2:checked ~ .verify-tabs #vlabel2,
+              #vtab3:checked ~ .verify-tabs #vlabel3,
+              #vtab4:checked ~ .verify-tabs #vlabel4 {
+                background: var(--bg-card);
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+              }
+              #vtab1:checked ~ .verify-tabs #vcontent1,
+              #vtab2:checked ~ .verify-tabs #vcontent2,
+              #vtab3:checked ~ .verify-tabs #vcontent3,
+              #vtab4:checked ~ .verify-tabs #vcontent4 {
+                display: block;
+              }
+            </style>
+
+            <input type="radio" name="verify-commands" id="vtab1" class="v-radio" checked />
+            <input type="radio" name="verify-commands" id="vtab2" class="v-radio" />
+            <input type="radio" name="verify-commands" id="vtab3" class="v-radio" />
+            <input type="radio" name="verify-commands" id="vtab4" class="v-radio" />
+
+            <div class="verify-tabs">
+              <label for="vtab1" id="vlabel1" class="v-label"><i class="fas fa-route"></i> show ip route</label>
+              <label for="vtab2" id="vlabel2" class="v-label"><i class="fas fa-network-wired"></i> show ip interface brief</label>
+              <label for="vtab3" id="vlabel3" class="v-label"><i class="fas fa-sliders-h"></i> show interfaces</label>
+              <label for="vtab4" id="vlabel4" class="v-label"><i class="fas fa-link"></i> show interfaces trunk</label>
+
+              <div id="vcontent1" class="v-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Comando: show ip route</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Valida se as redes associadas às subinterfaces lógicas estão devidamente injetadas e ativas na tabela de roteamento global
+                  IPv4 do roteador como redes diretamente conectadas (C).
+                </p>
+
+                <div class="terminal">
+                  <pre>R1# <strong>show ip route</strong>
+<span style="color: var(--text-dim); font-size: 0.8rem;">Code-block truncated for readability (Codes: C - connected, L - local...)</span>
+
+      192.168.10.0/24 is subnetted, 1 subnets
+C        192.168.10.0 is directly connected, GigabitEthernet0/0/1.10
+L        192.168.10.1/32 is directly connected, GigabitEthernet0/0/1.10
+      192.168.20.0/24 is subnetted, 1 subnets
+C        192.168.20.0 is directly connected, GigabitEthernet0/0/1.20
+L        192.168.20.1/32 is directly connected, GigabitEthernet0/0/1.20
+      192.168.99.0/24 is subnetted, 1 subnets
+C        192.168.99.0 is directly connected, GigabitEthernet0/0/1.99
+L        192.168.99.1/32 is directly connected, GigabitEthernet0/0/1.99
+R1#</pre>
+                </div>
+              </div>
+
+              <div id="vcontent2" class="v-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Comando: show ip interface brief</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Inspeciona em resumo o status operacional (Status) e o protocolo de linha (Protocol) de todas as subinterfaces
+                  configuradas em R1. Ambas as colunas devem exibir "up".
+                </p>
+
+                <div class="terminal">
+                  <pre>R1# <strong>show ip interface brief</strong>
+Interface              IP-Address      OK? Method Status                Protocol
+Embedded-Service-Engine0/0 unassigned  YES unset  administratively down down
+GigabitEthernet0/0/0   unassigned      YES unset  administratively down down
+GigabitEthernet0/0/1   unassigned      YES unset  up                    up
+GigabitEthernet0/0/1.10 192.168.10.1   YES manual up                    up
+GigabitEthernet0/0/1.20 192.168.20.1   YES manual up                    up
+GigabitEthernet0/0/1.99 192.168.99.1   YES manual up                    up
+R1#</pre>
+                </div>
+              </div>
+
+              <div id="vcontent3" class="v-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Comando: show interfaces</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Exibe as estatísticas completas de hardware e software das subinterfaces. Permite checar se o ID de encapsulamento
+                  <strong>802.1Q</strong> está casado corretamente com a respectiva VLAN de dados.
+                </p>
+
+                <div class="terminal">
+                  <pre>R1# <strong>show interfaces gigabitEthernet 0/0/1.10</strong>
+GigabitEthernet0/0/1.10 is up, line protocol is up 
+  Hardware is Intel PCH, address is a0e0.af83.6f31 (bia a0e0.af83.6f31)
+  Description: Default Gateway for VLAN 10
+  Internet address is 192.168.10.1/24
+  Broadcast address is 255.255.255.255
+  Encapsulation 802.1Q Virtual LAN, Vlan ID  10.
+  ARP type: ARPA, ARP Timeout 04:00:00, 
+  Keepalive not supported</pre>
+                </div>
+              </div>
+
+              <div id="vcontent4" class="v-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Comando do Switch: show interfaces trunk</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  <strong>Executado em S1:</strong> Certifica se a porta interligada ao roteador (Fa0/5) convergiu para o modo de
+                  entroncamento (trunking) e quais VLANs têm permissão para trafegar pelo meio físico.
+                </p>
+
+                <div class="terminal">
+                  <pre>S1# <strong>show interfaces trunk</strong>
+
+Port        Mode             Encapsulation  Status        Native vlan
+Fa0/1       on               802.1q         trunking      1
+Fa0/5       on               802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/1       1-4094
+Fa0/5       1-4094
+
+Port        Vlans allowed and active in management domain
+Fa0/1       1,10,20,99
+Fa0/5       1,10,20,99
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/1       1,10,20,99
+Fa0/5       1,10,20,99
+S1#</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p>
+              <strong><i class="fas fa-lightbulb"></i> Diretriz de Engenharia para Diagnóstico:</strong> Ao analisar saídas ou coletar dados
+              para resolução de falhas estruturais, verifique prioritariamente se:
+            </p>
+            <ul
+              style="
+                list-style: none;
+                padding-left: 0;
+                margin-top: 0.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+                font-size: 0.9rem;
+                color: var(--text);
+              "
+            >
+              <li style="display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-arrow-alt-circle-right" style="color: var(--danger); font-size: 0.85rem; width: 15px; flex-shrink: 0"></i>
+                <span
+                  >O identificador numérico mapeado no comando
+                  <span style="font-family: monospace; color: var(--primary)">encapsulation dot1q [vlan_id]</span> de R1 confere
+                  perfeitamente com a VLAN associada às portas de acesso do switch. Um descasamento impede a entrega dos pacotes.</span
+                >
+              </li>
+              <li style="display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-arrow-alt-circle-right" style="color: var(--danger); font-size: 0.85rem; width: 15px; flex-shrink: 0"></i>
+                <span
+                  >A interface física de hardware (GigabitEthernet 0/0/1) foi ativada com
+                  <span style="font-family: monospace; color: var(--secondary)">no shutdown</span>. Se o status físico estiver "down", todas
+                  as subinterfaces virtuais estarão indisponíveis por consequência.</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">4.3.1</span> Roteamento Inter-VLAN do switch da camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            Redes corporativas modernas raramente utilizam o modelo <strong>Router-on-a-stick</strong> em seus escopos centrais, uma vez que
+            ele não é dimensionado facilmente para atender a grandes requisitos de carga. Em infraestruturas de grande porte, os engenheiros
+            e administradores de rede utilizam <strong>Switches de Camada 3</strong> de forma nativa para arquitetar o roteamento entre as
+            <strong>VLANs</strong>.
+          </p>
+
+          <p>
+            Embora a implementação de um <strong>Router-on-a-stick</strong> seja simples de estruturar em organizações de pequeno a médio
+            porte, uma grande corporação demanda um método substancialmente mais rápido, robusto e escalável para interconectar suas
+            sub-redes lógicas.
+          </p>
+
+          <p>
+            As redes locais (LANs) de campus utilizam switches de <strong>Camada 3</strong> no núcleo e na distribuição para prover essa
+            comutação de pacotes em altíssima velocidade. Esses dispositivos realizam o
+            <strong>encaminhamento baseado em hardware</strong> através de circuitos integrados de aplicação específica (ASICs), atingindo
+            taxas de transferência de pacotes consideravelmente mais elevadas do que os roteadores tradicionais baseados em software. Por
+            essa razão, os switches de <strong>Camada 3</strong> são comumente implementados nos armários de fiação (<em>Racks/IDFs</em>) da
+            camada de distribuição corporativa.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-cogs" style="color: var(--secondary)"></i> Recursos de Engenharia de um Switch de Camada 3
+          </h3>
+
+          <ul style="list-style: none; padding: 0; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem">
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-shipping-fast"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Roteamento via SVIs:</strong> Capacidade nativa de encaminhar pacotes de uma <strong>VLAN</strong> para outra de
+                forma transparente utilizando múltiplas <strong>Interfaces Virtuais Comutadas (SVIs)</strong> operando em paralelo.</span
+              >
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; line-height: 1.5">
+              <i
+                class="fas fa-exchange-alt"
+                style="color: var(--success); font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; margin-top: 0.1rem"
+              ></i>
+              <span
+                ><strong>Portas Roteadas (Routed Ports):</strong> Permite converter uma porta física de comutação de
+                <strong>Camada 2</strong> em uma interface pura de <strong>Camada 3</strong> desativando suas propriedades de switchport.
+                Uma <strong>Porta Roteada</strong> comporta-se exatamente como uma interface física de um roteador Cisco IOS, aceitando a
+                atribuição direta de um endereço IP.</span
+              >
+            </li>
+          </ul>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin-bottom: 0.5rem">
+              <strong><i class="fas fa-info-circle"></i> Provisionamento de Gateways:</strong> Para viabilizar o roteamento lógico, o Switch
+              de <strong>Camada 3</strong> faz uso das <strong>SVIs</strong>. Elas são instanciadas na console por meio do exato comando de
+              contexto de configuração global <span style="font-family: monospace; color: var(--primary)">interface vlan vlan-id</span>, o
+              mesmo utilizado para erguer a tradicional interface de gerência em switches de Camada 2.
+            </p>
+            <p style="margin-bottom: 0">
+              A diferença crucial na arquitetura reside no fato de que uma
+              <strong>SVI de Camada 3 deve ser obrigatoriamente instanciada para cada uma das VLANs roteáveis</strong> da rede, atuando
+              diretamente como o gateway padrão das estações terminais.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">4.3.2</span> Cenário de switch de camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            No cenário apresentado, o switch de <strong>Camada 3</strong>, designado como <strong>D1</strong> (Switch de Distribuição
+            Multicamada), está diretamente conectado a dois hosts finais situados em <strong>VLANs</strong> e sub-redes IP totalmente
+            distintas.
+          </p>
+
+          <p>
+            O <strong>PC1</strong> pertence à <strong>VLAN 10</strong>, enquanto o <strong>PC2</strong> foi mapeado para a
+            <strong>VLAN 20</strong>. O switch de <strong>Camada 3</strong> atuará como o ponto central de convergência, provendo de forma
+            nativa e integrada os serviços de roteamento lógico (inter-VLAN) para ambos os hosts finais, eliminando a dependência de um
+            roteador externo de borda.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-network-wired" style="color: var(--primary)"></i> Topologia Física e Mapeamento de SVIs (D1)
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 800px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.5rem">
+              <div
+                style="
+                  position: relative;
+                  width: 360px;
+                  background: var(--bg-card);
+                  border: 2px solid var(--secondary);
+                  border-radius: 8px;
+                  padding: 1rem;
+                  text-align: center;
+                  box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
+                "
+              >
+                <div
+                  style="
+                    font-weight: bold;
+                    color: var(--secondary);
+                    font-size: 0.75rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Switch Layer 3
+                </div>
+                <div
+                  style="
+                    border-top: 1px solid var(--border);
+                    border-bottom: 1px solid var(--border);
+                    padding: 0.5rem 0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <i
+                    class="fas fa-layer-group"
+                    style="font-size: 1.6rem; color: var(--primary); vertical-align: middle; margin-right: 0.5rem"
+                  ></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 1rem; vertical-align: middle">D1</span>
+                </div>
+                <div style="display: flex; gap: 8px; font-size: 0.7rem; text-align: left">
+                  <div
+                    style="
+                      background: rgba(0, 180, 216, 0.08);
+                      padding: 0.3rem;
+                      border-radius: 4px;
+                      flex: 1;
+                      border-left: 3px solid var(--primary);
+                    "
+                  >
+                    <span style="color: var(--primary); font-weight: bold">SVI vlan 10</span><br />11.1.10.1/24
+                  </div>
+                  <div
+                    style="
+                      background: rgba(0, 245, 212, 0.08);
+                      padding: 0.3rem;
+                      border-radius: 4px;
+                      flex: 1;
+                      border-left: 3px solid var(--secondary);
+                    "
+                  >
+                    <span style="color: var(--secondary); font-weight: bold">SVI vlan 20</span><br />11.1.20.1/24
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 460px; height: 40px; position: relative">
+                <div
+                  style="
+                    width: 2px;
+                    height: 50px;
+                    background: var(--border);
+                    position: absolute;
+                    left: 40px;
+                    transform: rotate(35deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 50px;
+                    background: var(--border);
+                    position: absolute;
+                    right: 40px;
+                    transform: rotate(-35deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 680px">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.8rem;
+                    width: 240px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.3rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC1</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">IP: 11.1.10.10/24</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">Gateway: 11.1.10.1</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 180, 216, 0.15);
+                      color: var(--primary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.5rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 10
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.8rem;
+                    width: 240px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.3rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC2</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">IP: 11.1.20.10/24</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim)">Gateway: 11.1.20.1</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 245, 212, 0.15);
+                      color: var(--secondary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.5rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 20
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-table" style="color: var(--primary)"></i> Tabela de Endereçamento e Parâmetros Lógicos
+          </h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface / SVI</th>
+                <th>VLAN Associada</th>
+                <th>Endereço IP Local</th>
+                <th>Subnet Mask</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="2"><strong>D1 (Switch L3)</strong></td>
+                <td>Vlan 10</td>
+                <td>VLAN 10 (LAN10)</td>
+                <td><span style="font-family: monospace">11.1.10.1</span></td>
+                <td><span style="font-family: monospace">255.255.255.0</span></td>
+              </tr>
+              <tr>
+                <td>Vlan 20</td>
+                <td>VLAN 20 (LAN20)</td>
+                <td><span style="font-family: monospace">11.1.20.1</span></td>
+                <td><span style="font-family: monospace">255.255.255.0</span></td>
+              </tr>
+              <tr>
+                <td><strong>PC1</strong></td>
+                <td>NIC Física</td>
+                <td>VLAN 10 (Acesso)</td>
+                <td><span style="font-family: monospace">11.1.10.10</span></td>
+                <td><span style="font-family: monospace">255.255.255.0</span></td>
+              </tr>
+              <tr>
+                <td><strong>PC2</strong></td>
+                <td>NIC Física</td>
+                <td>VLAN 20 (Acesso)</td>
+                <td><span style="font-family: monospace">11.1.20.10</span></td>
+                <td><span style="font-family: monospace">255.255.255.0</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Premissa Operacional:</strong> Os pacotes originados no
+              <strong>PC1</strong> destinados ao escopo IP do <strong>PC2</strong> serão encaminhados internamente através do barramento de
+              hardware do switch multicamada utilizando as <strong>SVIs</strong> mapeadas acima como os respectivos
+              <em>Default Gateways</em> dos hosts de acesso. No próximo tópico, detalharemos o passo a passo CLI para ativar essas
+              interfaces virtuais de Camada 3.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">4.3.3</span> Configuração do switch da camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            A parametrização de um Switch de <strong>Camada 3</strong> (Multilayer Switch) para realizar o tráfego lógico inter-VLAN exige a
+            execução sequencial de etapas de infraestrutura lógicas e físicas. Conclua as etapas a seguir para configurar o switch
+            multicamada (admita que o host de simulação refere-se ao switch **D1** do cenário):
+          </p>
+
+          <div style="margin: 2rem 0 1.5rem 0">
+            <style>
+              .l3-tabs {
+                display: flex;
+                flex-wrap: wrap;
+                background: #070a12;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+              }
+              .l3-radio {
+                display: none;
+              }
+              .l3-label {
+                flex: 1;
+                min-width: 160px;
+                padding: 1rem;
+                text-align: center;
+                cursor: pointer;
+                background: rgba(18, 24, 36, 0.4);
+                color: var(--text-dim);
+                font-size: 0.85rem;
+                font-weight: 600;
+                border-bottom: 2px solid transparent;
+                transition: all 0.3s;
+                border-right: 1px solid var(--border);
+              }
+              .l3-label:last-of-type {
+                border-right: none;
+              }
+              .l3-content {
+                width: 100%;
+                padding: 1.5rem;
+                background: var(--bg-card);
+                display: none;
+                border-top: 1px solid var(--border);
+              }
+              /* Lógica de controle CSS */
+              #l3tab1:checked ~ .l3-tabs #l3label1,
+              #l3tab2:checked ~ .l3-tabs #l3label2,
+              #l3tab3:checked ~ .l3-tabs #l3label3,
+              #l3tab4:checked ~ .l3-tabs #l3label4 {
+                background: var(--bg-card);
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+              }
+              #l3tab1:checked ~ .l3-tabs #l3content1,
+              #l3tab2:checked ~ .l3-tabs #l3content2,
+              #l3tab3:checked ~ .l3-tabs #l3content3,
+              #l3tab4:checked ~ .l3-tabs #l3content4 {
+                display: block;
+              }
+            </style>
+
+            <input type="radio" name="l3-config-steps" id="l3tab1" class="l3-radio" checked />
+            <input type="radio" name="l3-config-steps" id="l3tab2" class="l3-radio" />
+            <input type="radio" name="l3-config-steps" id="l3tab3" class="l3-radio" />
+            <input type="radio" name="l3-config-steps" id="l3tab4" class="l3-radio" />
+
+            <div class="l3-tabs">
+              <label for="l3tab1" id="l3label1" class="l3-label"><i class="fas fa-layer-group"></i> 1. Criar VLANs</label>
+              <label for="l3tab2" id="l3label2" class="l3-label"><i class="fas fa-tools"></i> 2. Configurar SVIs</label>
+              <label for="l3tab3" id="l3label3" class="l3-label"><i class="fas fa-door-open"></i> 3. Portas Acesso</label>
+              <label for="l3tab4" id="l3label4" class="l3-label"><i class="fas fa-route"></i> 4. Roteamento IP</label>
+
+              <div id="l3content1" class="l3-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 1: Crie as VLANs</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Inicialize e nomeie as VLANs correspondentes no banco de dados local do switch de Camada 3.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>vlan 10</strong>
+D1(config-vlan)# <strong>name LAN10</strong>
+D1(config-vlan)# <strong>exit</strong>
+D1(config)# <strong>vlan 20</strong>
+D1(config-vlan)# <strong>name LAN20</strong>
+D1(config-vlan)# <strong>exit</strong>
+D1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="l3content2" class="l3-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 2: Crie as interfaces VLAN SVI</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Instancie e configure os endereços IPv4 para cada <strong>SVI</strong>. Esses endereços atuarão diretamente como os
+                  gateways de Camada 3 para as respectivas sub-redes.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>interface vlan 10</strong>
+D1(config-if)# <strong>ip address 10.1.10.1 255.255.255.0</strong>
+D1(config-if)# <strong>no shutdown</strong>
+D1(config-if)# <strong>exit</strong>
+D1(config)# <strong>interface vlan 20</strong>
+D1(config-if)# <strong>ip address 10.1.20.1 255.255.255.0</strong>
+D1(config-if)# <strong>no shutdown</strong>
+D1(config-if)# <strong>exit</strong>
+D1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="l3content3" class="l3-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 3: Configure as portas de acesso</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Associe as interfaces físicas às suas respectivas VLANs lógicas de acesso. No cenário, a interface FastEthernet 0/6
+                  conecta-se ao PC1 e a interface FastEthernet 0/11 conecta-se ao PC2.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>interface f0/6</strong>
+D1(config-if)# <strong>switchport mode access</strong>
+D1(config-if)# <strong>switchport access vlan 10</strong>
+D1(config-if)# <strong>exit</strong>
+D1(config)# <strong>interface f0/11</strong>
+D1(config-if)# <strong>switchport mode access</strong>
+D1(config-if)# <strong>switchport access vlan 20</strong>
+D1(config-if)# <strong>exit</strong>
+D1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="l3content4" class="tab-content l3-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 4: Habilite o roteamento IP</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  <strong>Etapa Crítica:</strong> Por padrão, os switches multicamada operam com sua tabela de roteamento desativada de
+                  fábrica (comportando-se apenas como Layer 2). É obrigatório executar o comando
+                  <span style="font-family: monospace; color: var(--secondary)">ip routing</span> no modo de configuração global para ativar
+                  o mecanismo de encaminhamento de pacotes em hardware.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>ip routing</strong>
+D1(config)# <strong>end</strong>
+D1#</pre>
+                </div>
+
+                <div class="alert alert-success" style="margin-top: 1rem; margin-bottom: 0">
+                  <p style="margin: 0">
+                    <strong><i class="fas fa-check-circle"></i> Verificação Concluída:</strong> Após a ativação do comando
+                    <span style="font-family: monospace">ip routing</span>, o switch multicamada D1 passará a processar os cabeçalhos de
+                    Camada 3 e os hosts PC1 e PC2 conseguirão realizar pings mútuos com sucesso através de suas respectivas SVIs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">4.3.4</span> Verificação de roteamento interVLAN de switch de camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            O roteamento entre <strong>VLANs</strong> utilizando um switch de <strong>Camada 3</strong> apresenta um fluxo de implementação
+            muito mais simples e direto do que as etapas exigidas no método tradicional <strong>Router-on-a-stick</strong>. Após a conclusão
+            das parametrizações globais de hardware e software, a validação da topologia pode ser verificada testando a conectividade fim a
+            fim entre os hosts situados em redes distintas.
+          </p>
+
+          <p>
+            Em uma estação de trabalho, ateste a comunicação lógica disparando pacotes ICMP para o host remoto por meio do comando
+            <span style="font-family: monospace; color: var(--primary)">ping</span>. Como protocolo de monitoramento e auditoria de redes,
+            constitui uma excelente diretriz validar preliminarmente as propriedades de rede locais utilizando o utilitário de prompt de
+            comando do Windows <span style="font-family: monospace; color: var(--primary)">ipconfig</span>. A saída gerada em console
+            confirmará o endereço IPv4 ativo e o <strong>Default Gateway</strong> do <strong>PC1</strong>.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--primary)"></i> Prompt de Comando do Windows (PC1)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Validação da consistência dos parâmetros IP atribuídos à interface de rede local:
+          </p>
+
+          <div class="terminal">
+            <pre>
+C:\Users\PC1> <strong>ipconfig</strong>
+
+Windows IP Configuration
+
+Ethernet adapter Ethernet0:
+   Connection-specific DNS Suffix . :
+   Link-local IPv6 Address . . . . . : fe80::a0b1:33ff:feac:4071%4
+   IPv4 Address. . . . . . . . . . . : 10.1.10.10
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 10.1.10.1
+
+C:\Users\PC1></pre
+            >
+          </div>
+
+          <p style="margin: 1.5rem 0 1rem 0">
+            Com o gateway padrão apontando de forma correta para o IP da interface virtual <strong>SVI Vlan 10</strong> do switch
+            multicamada, realiza-se o teste de conectividade direcionado ao <strong>PC2</strong>, cujo endereço IP pertence à sub-rede da
+            <strong>VLAN 20</strong>.
+          </p>
+
+          <div class="terminal" style="margin-top: 1rem">
+            <pre>C:\Users\PC1> <strong>ping 10.1.20.10</strong>
+
+Pinging 10.1.20.10 with 32 bytes of data:
+Request timed out.
+Reply from 10.1.20.10: bytes=32 time&lt;1ms TTL=63
+Reply from 10.1.20.10: bytes=32 time&lt;1ms TTL=63
+Reply from 10.1.20.10: bytes=32 time&lt;1ms TTL=63
+
+Ping statistics for 10.1.20.10:
+    Packets: Sent = 4, Received = 3, Lost = 1 (25% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\Users\PC1></pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem">
+            <p>
+              <strong><i class="fas fa-check-circle"></i> Encaminhamento via Hardware Confirmado:</strong> O retorno positivo do tráfego
+              unicast prova que a tabela de roteamento de hardware (FIB/CEF) do switch de <strong>Camada 3</strong> processou o cabeçalho IP
+              e realizou a comutação de pacotes entre os domínios de broadcast com absoluto sucesso.
+            </p>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Análise de Linha de Base:</strong> Assim como visto em outros cenários práticos, o
+              primeiro pacote descartado (<em>Request timed out</em>) reflete o exato instante em que o switch multicamada pausa a
+              transmissão para disparar uma requisição <strong>ARP</strong> (<em>Address Resolution Protocol</em>). O switch mapeia o
+              endereço MAC físico associado ao IP <span style="font-family: monospace; color: var(--primary)">10.1.20.10</span> para
+              preencher sua tabela de vizinhança antes de consolidar os fluxos subsequentes por hardware.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">4.3.6</span> Cenário de roteamento em um switch de camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            No cenário apresentado, o switch de <strong>Camada 3</strong> (<strong>D1</strong>) configurado nas etapas anteriores está
+            fisicamente interconectado ao roteador de borda <strong>R1</strong>. Ambos os ativos de infraestrutura operam de forma integrada
+            sob o mesmo domínio de roteamento dinâmico baseado no protocolo <strong>OSPF</strong> (<em>Open Shortest Path First</em>).
+          </p>
+
+          <p>
+            Considere que o roteamento entre as <strong>VLANs 10 e 20</strong> (através de suas respectivas <strong>SVIs</strong>) foi
+            implementado com absoluto sucesso no switch multicamada. A interface física <strong>G0/0/1</strong> do roteador
+            <strong>R1</strong> também se encontra devidamente parametrizada e ativa. Além disso, o processo do <strong>OSPF</strong> em
+            <strong>R1</strong> está configurado para anunciar ativamente suas duas redes locais de saída para a malha:
+            <span style="font-family: monospace; color: var(--primary)">10.10.10.0/24</span> e
+            <span style="font-family: monospace; color: var(--primary)">10.20.20.0/24</span>.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-network-wired" style="color: var(--primary)"></i> Infraestrutura de Roteamento Dinâmico: OSPF Core Link
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 850px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.2rem">
+              <div style="display: flex; align-items: center; gap: 2rem; width: 600px; justify-content: center">
+                <div
+                  style="
+                    background: rgba(255, 183, 3, 0.08);
+                    border: 1px dashed var(--warning);
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.75rem;
+                  "
+                >
+                  <span style="color: var(--warning); font-weight: bold">Redes Anunciadas por R1:</span><br />
+                  • 10.10.10.0/24<br />
+                  • 10.20.20.0/24
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-dark);
+                    border: 2px solid var(--primary);
+                    border-radius: 50%;
+                    width: 85px;
+                    height: 85px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+                  "
+                >
+                  <i class="fas fa-route" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 0.85rem">R1</span>
+                  <span style="font-size: 0.7rem; color: var(--text-dim)">G0/0/1</span>
+                </div>
+              </div>
+
+              <div
+                style="width: 4px; height: 60px; background: var(--success); position: relative; box-shadow: 0 0 5px rgba(3, 244, 133, 0.3)"
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 15px;
+                    top: 30%;
+                    font-size: 0.75rem;
+                    color: var(--success);
+                    white-space: nowrap;
+                    font-weight: bold;
+                  "
+                >
+                  <i class="fas fa-project-diagram"></i> Adjacência OSPF (Área 0)
+                </span>
+                <span
+                  style="
+                    position: absolute;
+                    right: 15px;
+                    top: 30%;
+                    font-size: 0.75rem;
+                    color: var(--text-dim);
+                    white-space: nowrap;
+                    text-align: right;
+                  "
+                >
+                  Sub-rede de Trânsito Point-to-Point
+                </span>
+              </div>
+
+              <div
+                style="
+                  position: relative;
+                  width: 380px;
+                  background: var(--bg-card);
+                  border: 2px solid var(--secondary);
+                  border-radius: 8px;
+                  padding: 1.2rem;
+                  text-align: center;
+                  box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
+                "
+              >
+                <div style="font-size: 0.7rem; color: var(--secondary); margin-bottom: 0.3rem">Interface Routed Port G0/1</div>
+                <div
+                  style="
+                    border-top: 1px solid var(--border);
+                    border-bottom: 1px solid var(--border);
+                    padding: 0.5rem 0;
+                    margin-bottom: 0.6rem;
+                  "
+                >
+                  <i
+                    class="fas fa-layer-group"
+                    style="font-size: 1.5rem; color: var(--primary); vertical-align: middle; margin-right: 0.5rem"
+                  ></i>
+                  <span style="font-weight: bold; color: var(--text); font-size: 1rem; vertical-align: middle">D1 (Switch Layer 3)</span>
+                </div>
+                <div style="display: flex; gap: 8px; font-size: 0.7rem; text-align: left">
+                  <div style="background: rgba(0, 180, 216, 0.08); padding: 0.3rem; border-radius: 4px; flex: 1">
+                    <span style="color: var(--primary); font-weight: bold">SVI 10:</span> 11.1.10.1/24
+                  </div>
+                  <div style="background: rgba(0, 245, 212, 0.08); padding: 0.3rem; border-radius: 4px; flex: 1">
+                    <span style="color: var(--secondary); font-weight: bold">SVI 20:</span> 11.1.20.1/24
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 450px; height: 35px; position: relative">
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    left: 20px;
+                    transform: rotate(25deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    right: 20px;
+                    transform: rotate(-25deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 650px">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 6px;
+                    padding: 0.5rem;
+                    width: 220px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.2rem"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold; color: var(--text)">PC1 (VLAN 10)</div>
+                  <div style="font-size: 0.65rem; color: var(--text-dim)">Rede: 11.1.10.0/24</div>
+                </div>
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 6px;
+                    padding: 0.5rem;
+                    width: 220px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.2rem"></i>
+                  <div style="font-size: 0.8rem; font-weight: bold; color: var(--text)">PC2 (VLAN 20)</div>
+                  <div style="font-size: 0.65rem; color: var(--text-dim)">Rede: 11.1.20.0/24</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem">
+            <p>
+              <strong><i class="fas fa-info-circle"></i> Diretriz Curricular Oficial:</strong> A arquitetura de funcionamento do protocolo
+              <strong>OSPF</strong> constitui um escopo tecnológico denso e avançado, mapeado detalhadamente no próximo módulo do curso
+              (CCNA 3 - ENSA).
+            </p>
+            <p style="margin-top: 0.5rem; margin-bottom: 0">
+              Desta forma, dentro deste capítulo do CCNA 2, os scripts de configuração do processo OSPF
+              <strong>serão fornecidos integralmente prontos</strong> em todos os laboratórios práticos, roteiros e avaliações didáticas.
+              Não há necessidade de o estudante despender esforços para compreender ou dominar a mecânica interna do protocolo para ativar o
+              roteamento dinâmico no switch de Camada 3 neste momento.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-3-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">4.3.7</span> Configuração de roteamento em um switch de camada 3
+        </h2>
+
+        <div class="card">
+          <p>
+            Para integrar o switch multicamada <strong>D1</strong> ao restante da infraestrutura corporativa e permitir a troca de tabelas
+            de rotas com o roteador de borda <strong>R1</strong>, é necessário estabelecer um enlace de Camada 3 e configurar um protocolo
+            de roteamento dinâmico.
+          </p>
+
+          <p>
+            Conclua as etapas a seguir para configurar e verificar o roteamento dinâmico <strong>OSPF</strong> no switch multicamada
+            <strong>D1</strong>:
+          </p>
+
+          <div style="margin: 2rem 0 1.5rem 0">
+            <style>
+              .l3-route-tabs {
+                display: flex;
+                flex-wrap: wrap;
+                background: #070a12;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+              }
+              .l3r-radio {
+                display: none;
+              }
+              .l3r-label {
+                flex: 1;
+                min-width: 140px;
+                padding: 1rem;
+                text-align: center;
+                cursor: pointer;
+                background: rgba(18, 24, 36, 0.4);
+                color: var(--text-dim);
+                font-size: 0.85rem;
+                font-weight: 600;
+                border-bottom: 2px solid transparent;
+                transition: all 0.3s;
+                border-right: 1px solid var(--border);
+              }
+              .l3r-label:last-of-type {
+                border-right: none;
+              }
+              .l3r-content {
+                width: 100%;
+                padding: 1.5rem;
+                background: var(--bg-card);
+                display: none;
+                border-top: 1px solid var(--border);
+              }
+              /* Lógica de controle e alternância CSS */
+              #l3rtab1:checked ~ .l3-route-tabs #l3rlabel1,
+              #l3rtab2:checked ~ .l3-route-tabs #l3rlabel2,
+              #l3rtab3:checked ~ .l3-route-tabs #l3rlabel3,
+              #l3rtab4:checked ~ .l3-route-tabs #l3rlabel4,
+              #l3rtab5:checked ~ .l3-route-tabs #l3rlabel5 {
+                background: var(--bg-card);
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+              }
+              #l3rtab1:checked ~ .l3-route-tabs #l3rcontent1,
+              #l3rtab2:checked ~ .l3-route-tabs #l3rcontent2,
+              #l3rtab3:checked ~ .l3-route-tabs #l3rcontent3,
+              #l3rtab4:checked ~ .l3-route-tabs #l3rcontent4,
+              #l3rtab5:checked ~ .l3-route-tabs #l3rcontent5 {
+                display: block;
+              }
+            </style>
+
+            <input type="radio" name="l3-route-steps" id="l3rtab1" class="l3r-radio" checked />
+            <input type="radio" name="l3-route-steps" id="l3rtab2" class="l3r-radio" />
+            <input type="radio" name="l3-route-steps" id="l3rtab3" class="l3r-radio" />
+            <input type="radio" name="l3-route-steps" id="l3rtab4" class="l3r-radio" />
+            <input type="radio" name="l3-route-steps" id="l3rtab5" class="l3r-radio" />
+
+            <div class="l3-route-tabs">
+              <label for="l3rtab1" id="l3rlabel1" class="l3r-label">1. Porta Roteada</label>
+              <label for="l3rtab2" id="l3rlabel2" class="l3r-label">2. Ativar Roteamento</label>
+              <label for="l3rtab3" id="l3rlabel3" class="l3r-label">3. OSPF Config</label>
+              <label for="l3rtab4" id="l3rlabel4" class="l3r-label">4. Verificar Rotas</label>
+              <label for="l3rtab5" id="l3rlabel5" class="l3r-label">5. Conectividade</label>
+
+              <div id="l3rcontent1" class="l3r-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 1: Configure a porta roteada</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Converta a porta física de interconexão para Camada 3 utilizando o comando
+                  <span style="font-family: monospace; color: var(--primary)">no switchport</span> e atribua o endereço IP correspondente ao
+                  link ponto a ponto com R1.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>interface gigabitethernet 0/1</strong>
+D1(config-if)# <strong>no switchport</strong>
+D1(config-if)# <strong>ip address 10.10.10.1 255.255.255.252</strong>
+D1(config-if)# <strong>no shutdown</strong>
+D1(config-if)# <strong>exit</strong>
+D1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="l3rcontent2" class="l3r-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 2: Ative o roteamento IP</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Garanta que o switch multicamada está habilitado globalmente para processar e encaminhar pacotes de Camada 3.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>ip routing</strong>
+D1(config)#</pre>
+                </div>
+              </div>
+
+              <div id="l3rcontent3" class="l3r-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">
+                  Etapa 3: Configurar o protocolo de roteamento OSPF
+                </h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Configure o processo OSPF para anunciar as redes internas das SVIs e a rede do link ponto a ponto de trânsito.
+                </p>
+
+                <div class="terminal">
+                  <pre>D1(config)# <strong>router ospf 10</strong>
+D1(config-router)# <strong>network 10.10.10.0 0.0.0.3 area 0</strong>
+D1(config-router)# <strong>network 11.1.10.0 0.0.0.255 area 0</strong>
+D1(config-router)# <strong>network 11.1.20.0 0.0.0.255 area 0</strong>
+D1(config-router)# <strong>end</strong>
+D1#</pre>
+                </div>
+
+                <div class="terminal" style="background: #04060a; border-color: rgba(3, 244, 135, 0.2); margin-top: -1rem">
+                  <pre style="color: var(--success); font-size: 0.82rem">
+*Jun 25 12:39:56.241: %OSPF-5-ADJCHG: Process 10, Nbr 10.20.20.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done</pre
+                  >
+                </div>
+              </div>
+
+              <div id="l3rcontent4" class="l3r-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">
+                  Etapa 4: Verifique a tabela de roteamento no switch
+                </h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  Execute o comando para garantir que D1 está aprendendo as rotas remotas anunciadas por R1 via protocolo dinâmico
+                  (indicadas pelo código <strong>O</strong> do OSPF).
+                </p>
+
+                <div class="terminal">
+                  <pre>D1# <strong>show ip route</strong>
+<span style="color: var(--text-dim); font-size: 0.8rem;">Codes: C - connected, L - local, O - OSPF, IA - OSPF inter area...</span>
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 3 subnets, 2 masks
+C        10.10.10.0/30 is directly connected, GigabitEthernet0/1
+L        10.10.10.1/32 is directly connected, GigabitEthernet0/1
+O        10.20.20.0/24 [110/2] via 10.10.10.2, 00:01:14, GigabitEthernet0/1
+      11.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
+C        11.1.10.0/24 is directly connected, Vlan10
+L        11.1.10.1/32 is directly connected, Vlan10
+C        11.1.20.0/24 is directly connected, Vlan20
+L        11.1.20.1/32 is directly connected, Vlan20
+D1#</pre>
+                </div>
+              </div>
+
+              <div id="l3rcontent5" class="l3r-content">
+                <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem">Etapa 5: Verifique a conectividade fim a fim</h3>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+                  A partir do terminal do <strong>PC1</strong> (VLAN 10), realize um disparo ICMP direcionado ao endereço IP da interface
+                  remota de testes controlada por R1 para certificar o funcionamento pleno do ambiente.
+                </p>
+
+                <div class="terminal">
+                  <pre>C:\Users\PC1> <strong>ping 10.20.20.254</strong>
+
+Pinging 10.20.20.254 with 32 bytes of data:
+Reply from 10.20.20.254: bytes=32 time=1ms TTL=62
+Reply from 10.20.20.254: bytes=32 time&lt;1ms TTL=62
+Reply from 10.20.20.254: bytes=32 time&lt;1ms TTL=62
+Reply from 10.20.20.254: bytes=32 time&lt;1ms TTL=62
+
+Ping statistics for 10.20.20.254:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\Users\PC1></pre>
+                </div>
+
+                <div class="alert alert-success" style="margin-top: 1rem; margin-bottom: 0">
+                  <p style="margin: 0">
+                    <strong><i class="fas fa-check-circle"></i> Convergência Completa:</strong> A taxa de 0% de perda nos pacotes atesta que
+                    o tráfego passou com sucesso pela SVI do switch <strong>D1</strong>, foi roteado através da porta de Camada 3 (G0/1),
+                    trafegou pela adjacência <strong>OSPF Area 0</strong> e alcançou com êxito os domínios de destino sob o controle de
+                    <strong>R1</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">4.4.1</span> Problemas comuns entre VLAN
+        </h2>
+
+        <div class="card">
+          <p>
+            Até o presente estágio, compreende-se que, além de provisionar e realizar a auditoria dos ativos, o engenheiro de infraestrutura
+            deve estar plenamente capacitado para conduzir rotinas de <strong>Troubleshooting</strong>. Este tópico aborda as principais
+            falhas e problemas comuns de rede associados ao escopo do roteamento lógico (inter-VLAN).
+          </p>
+
+          <p>
+            Existe uma série de variáveis e inconsistências que podem impedir o correto funcionamento de um ambiente inter-VLAN. Todos esses
+            fatores geram sintomas diretamente relacionados a falhas críticas de conectividade. Diante de um cenário de indisponibilidade,
+            valide prioritariamente a <strong>Camada Física (Layer 1)</strong> do modelo OSI para descartar cenários de cabos corrompidos,
+            mal encaixados ou conectados de forma errônea nas portas dos equipamentos.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-table" style="color: var(--danger)"></i> Vetores de Falha Comuns em Roteamento Inter-VLAN
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Caso as conexões físicas estejam em conformidade com o diagrama técnico, utilize a matriz abaixo para guiar a identificação de
+            anomalias lógicas na rede:
+          </p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 25%">Categoria do Problema</th>
+                <th style="width: 40%">Causa Provável da Falha</th>
+                <th style="width: 35%">Ação Preventiva / Comando de Diagnóstico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--danger)">VLANs Ausentes</strong></td>
+                <td>As VLANs de dados não foram criadas no banco de dados local do switch ou foram excluídas inadvertidamente.</td>
+                <td>
+                  Execute o comando <span style="font-family: monospace; color: var(--primary)">show vlan brief</span> no switch para checar
+                  a existência e o status das redes criadas.
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--danger)">Problemas de Porta de Acesso</strong></td>
+                <td>
+                  A porta do switch conectada ao host final está associada à VLAN errada ou não foi configurada explicitamente em modo de
+                  acesso.
+                </td>
+                <td>
+                  Verifique o mapeamento físico e de software através do comando
+                  <span style="font-family: monospace; color: var(--primary)">show interfaces switchport</span>.
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--danger)">Inconsistências de Trunking</strong></td>
+                <td>
+                  As portas de infraestrutura inter-switch ou o link conectado ao roteador não foram forçados como tronco, gerando falhas de
+                  tags 802.1Q.
+                </td>
+                <td>
+                  Audite o estado do entroncamento utilizando o comando
+                  <span style="font-family: monospace; color: var(--primary)">show interfaces trunk</span> no switch.
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--danger)">Erros de Subinterface / SVI</strong></td>
+                <td>
+                  O ID da VLAN no comando de encapsulamento dot1Q está incorreto, ou os endereços IP/máscaras de sub-rede estão trocados no
+                  roteador.
+                </td>
+                <td>
+                  Inspecione a tabela lógica via
+                  <span style="font-family: monospace; color: var(--primary)">show ip interface brief</span> e valide as amarrações do
+                  encapsulamento.
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--danger)">Configurações de Host Incorretas</strong></td>
+                <td>
+                  Os PCs finais estão configurados com endereços IP fora do escopo da sub-rede correspondente ou apontando para um Default
+                  Gateway inexistente.
+                </td>
+                <td>
+                  Utilize o comando <span style="font-family: monospace; color: var(--primary)">ipconfig</span> no Windows para auditar a
+                  consistência lógica das estações de trabalho.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-warning" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Metodologia Sistemática de Resolução:</strong> Ao se deparar com erros no
+              laboratório, evite alterar configurações de maneira aleatória. Adote a abordagem <em>Bottom-Up</em> (de baixo para cima):
+              valide cabos e portas (Camada 1), certifique o tráfego de quadros e tags de VLAN no switch (Camada 2), e por fim confira os
+              parâmetros lógicos de sub-redes e gateways no roteador ou switch Multicamada (Camada 3).
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-search"></i>
+          <span class="section-number">4.4.2</span> Pesquise defeitos o cenário de roteamento entre VLAN
+        </h2>
+
+        <div class="card">
+          <p>
+            A partir deste cenário prático, os erros de configuração e os sintomas mais críticos de problemas de roteamento entre
+            <strong>VLANs</strong> serão abordados com base em uma topologia de linha de base fixa.
+          </p>
+
+          <p>
+            A topologia de referência apresentada a seguir será o modelo estrutural para a reprodução, análise sintática e isolamento de
+            todas as anomalias e falhas de conectividade simuladas neste capítulo do laboratório.
+          </p>
+
+          <h3 style="margin: 2rem 0 1rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-sitemap" style="color: var(--primary)"></i> Topologia Base de Testes e Troubleshooting (RoAS)
+          </h3>
+
+          <div
+            style="
+              width: 100%;
+              overflow-x: auto;
+              background: #070a12;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 2.5rem 1rem;
+              margin: 1.5rem 0;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 850px; display: flex; flex-direction: column; align-items: center; font-family: monospace; gap: 1.2rem">
+              <div
+                style="
+                  background: var(--bg-dark);
+                  border: 2px solid var(--primary);
+                  border-radius: 50%;
+                  width: 85px;
+                  height: 85px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+                "
+              >
+                <i class="fas fa-route" style="font-size: 1.6rem; color: var(--primary); margin: 0"></i>
+                <span style="font-weight: bold; color: var(--text); font-size: 0.85rem">R1</span>
+                <span style="font-size: 0.7rem; color: var(--text-dim)">G0/0/1</span>
+              </div>
+
+              <div style="width: 4px; height: 45px; background: #ff7b00; position: relative">
+                <span
+                  style="
+                    position: absolute;
+                    left: 12px;
+                    top: 20%;
+                    font-size: 0.75rem;
+                    color: #ff7b00;
+                    white-space: nowrap;
+                    font-weight: bold;
+                  "
+                  >Link de Trunk</span
+                >
+              </div>
+
+              <div
+                style="
+                  background: var(--bg-card);
+                  border: 1px solid var(--border);
+                  border-radius: 8px;
+                  width: 220px;
+                  padding: 0.8rem;
+                  text-align: center;
+                  position: relative;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                "
+              >
+                <span style="position: absolute; top: -20px; left: 42%; font-size: 0.7rem; color: var(--secondary)">F0/5</span>
+                <i class="fas fa-server" style="color: var(--primary); font-size: 1.3rem; margin-bottom: 0.2rem"></i>
+                <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">S1 (Switch L2)</div>
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.65rem; color: var(--secondary)">
+                  <span>F0/11</span>
+                  <span>F0/24</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 450px; height: 35px; position: relative">
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    left: 40px;
+                    transform: rotate(20deg);
+                    transform-origin: top;
+                  "
+                ></div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 100%;
+                    background: var(--border);
+                    position: absolute;
+                    right: 40px;
+                    transform: rotate(-20deg);
+                    transform-origin: top;
+                  "
+                ></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; width: 700px">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 260px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC1</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">Sub-rede IP: 192.168.10.0/24</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 180, 216, 0.15);
+                      color: var(--primary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 10
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.7rem;
+                    width: 260px;
+                    text-align: center;
+                  "
+                >
+                  <i class="fas fa-desktop" style="font-size: 1.2rem; color: var(--text); margin-bottom: 0.3rem"></i>
+                  <div style="font-weight: bold; color: var(--text); font-size: 0.85rem">PC2</div>
+                  <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">Sub-rede IP: 192.168.20.0/24</div>
+                  <div
+                    style="
+                      display: inline-block;
+                      background: rgba(0, 245, 212, 0.15);
+                      color: var(--secondary);
+                      font-size: 0.65rem;
+                      padding: 0.1rem 0.4rem;
+                      border-radius: 4px;
+                      margin-top: 0.4rem;
+                      font-weight: bold;
+                    "
+                  >
+                    VLAN 20
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 1.5rem">
+            Nas próximas seções práticas, este laboratório simulará falhas induzidas em camadas distintas para exercitar a perícia técnica e
+            as ferramentas de console. Os testes cobrirão exaustivamente as seguintes categorias de erro sintático e lógico:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 0.95rem;
+                background: rgba(255, 77, 109, 0.05);
+                border: 1px solid rgba(255, 77, 109, 0.15);
+                padding: 0.8rem;
+                border-radius: 8px;
+              "
+            >
+              <i
+                class="fas fa-exclamation-circle"
+                style="color: var(--danger); font-size: 1.1rem; width: 20px; text-align: center; flex-shrink: 0"
+              ></i>
+              <span
+                ><strong>Erros de Endereçamento IP de Host:</strong> Parametrizações incorretas de máscaras de rede ou gateways configurados
+                nos PCs, impossibilitando a saída do tráfego local.</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 0.95rem;
+                background: rgba(255, 183, 3, 0.05);
+                border: 1px solid rgba(255, 183, 3, 0.15);
+                padding: 0.8rem;
+                border-radius: 8px;
+              "
+            >
+              <i
+                class="fas fa-unlink"
+                style="color: var(--warning); font-size: 1.1rem; width: 20px; text-align: center; flex-shrink: 0"
+              ></i>
+              <span
+                ><strong>VLANs Excluídas ou Inexistentes:</strong> Portas vinculadas a redes virtuais que foram removidas do Switch,
+                derrubando o protocolo de linha.</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 0.95rem;
+                background: rgba(0, 180, 216, 0.05);
+                border: 1px solid rgba(0, 180, 216, 0.15);
+                padding: 0.8rem;
+                border-radius: 8px;
+              "
+            >
+              <i
+                class="fas fa-code-branch"
+                style="color: var(--primary); font-size: 1.1rem; width: 20px; text-align: center; flex-shrink: 0"
+              ></i>
+              <span
+                ><strong>Falhas de Encapsulamento de Tronco:</strong> Interfaces de trânsito operando por engano em modo de acesso comum ou
+                com descasamento de tag 802.1Q.</span
+              >
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-bottom: 0; margin-top: 1.5rem">
+            <p style="margin: 0">
+              <strong><i class="fas fa-lightbulb"></i> Fluxo de Análise:</strong> Mantenha em mente os parâmetros corretos de documentação
+              apresentados no diagrama acima para identificar imediatamente quais linhas de configuração de console divergem do
+              comportamento esperado padrão nas tarefas subsequentes.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-unlink"></i>
+          <span class="section-number">4.4.3</span> VLANs ausentes
+        </h2>
+
+        <div class="card">
+          <p>
+            Um problema crítico de conectividade lógica inter-VLAN pode ser diretamente causado por uma <strong>VLAN ausente</strong>. Uma
+            rede virtual pode estar ausente do escopo operacional da infraestrutura por três motivos principais: se ela nunca foi
+            efetivamente instanciada, se foi excluída acidentalmente do banco de dados local do switch, ou se não foi explicitamente
+            permitida na lista de tráfego do link de <strong>Trunk</strong>.
+          </p>
+
+          <p>
+            Por exemplo, considere o cenário em que o <strong>PC1</strong> tenta estabelecer comunicação, estando associado à porta
+            FastEthernet 0/11. Ao auditar o status das redes comutadas utilizando o comando
+            <span style="font-family: monospace; color: var(--primary)">show vlan brief</span>, as saídas em console revelam o seguinte
+            comportamento lógico:
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--secondary)"></i> Console do Switch S1 (Cenário de Falha)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Investigação inicial do banco de dados de VLANs lógicas de S1:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show vlan brief</strong>
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/18, Fa0/19, Fa0/20, Fa0/21
+                                                Fa0/22, Fa0/23, Gi0/1, Gi0/2
+20   LAN20                            active    Fa0/24
+99   Management                       active    
+1002 fddi-default                     act/unsupported 
+1003 token-ring-default               act/unsupported 
+1004 fddinet-default                  act/unsupported 
+1005 trnet-default                    act/unsupported 
+S1#</pre>
+          </div>
+
+          <div class="alert alert-danger" style="margin: 1.5rem 0">
+            <p>
+              <strong><i class="fas fa-bug"></i> Diagnóstico de Anomalia Lógica:</strong> Analisando atentamente o output do console acima,
+              constata-se que a <strong>VLAN 10 não consta na lista</strong> do banco de dados. Como a VLAN 10 foi completamente removida ou
+              não criada, a porta <strong>Fa0/11</strong> conectada ao PC1 perde a capacidade de encaminhar quadros e entra em estado de
+              inatividade lógica (inativa/apagada das tabelas dinâmicas), interrompendo de imediato o tráfego com o gateway.
+            </p>
+          </div>
+
+          <p style="margin-bottom: 1rem">
+            Para solucionar este defeito e restaurar o protocolo de transporte inter-VLAN, o administrador deve acessar o modo de
+            configuração global do switch <strong>S1</strong> e reestabelecer explicitamente a entidade de Camada 2.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-tools" style="color: var(--success)"></i> Console do Switch S1 (Procedimento de Correção)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Restauração da rede virtual ausente e verificação de retorno operacional:
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config)# <strong>vlan 10</strong>
+S1(config-vlan)# <strong>name LAN10</strong>
+S1(config-vlan)# <strong>exit</strong>
+S1(config)# <strong>end</strong>
+S1# <strong>show vlan brief</strong>
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/18, Fa0/19, Fa0/20, Fa0/21
+                                                Fa0/22, Fa0/23, Gi0/1, Gi0/2
+10   LAN10                            active    Fa0/11
+20   LAN20                            active    Fa0/24
+99   Management                       active    
+<span style="color: var(--text-dim); font-size: 0.8rem;">[... output truncated for brevity ...]</span>
+S1#</pre>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-desktop" style="color: var(--primary)"></i> Prompt de Comando (PC1 - Validação Pós-Correção)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Validação do restabelecimento do tráfego unicast em direção ao gateway padrão (<span style="font-family: monospace"
+              >192.168.10.1</span
+            >) controlado pelo roteador R1:
+          </p>
+
+          <div class="terminal">
+            <pre>C:\Users\PC1> <strong>ping 192.168.10.1</strong>
+
+Pinging 192.168.10.1 with 32 bytes of data:
+Reply from 192.168.10.1: bytes=32 time=1ms TTL=255
+Reply from 192.168.10.1: bytes=32 time&lt;1ms TTL=255
+Reply from 192.168.10.1: bytes=32 time&lt;1ms TTL=255
+Reply from 192.168.10.1: bytes=32 time&lt;1ms TTL=255
+
+Ping statistics for 192.168.10.1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\Users\PC1></pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-check-circle"></i> Conectividade Restaurada:</strong> Assim que a <strong>VLAN 10</strong> foi
+              recriada no software do switch, a porta <strong>Fa0/11</strong> foi automaticamente reativada e vinculada de forma dinâmica ao
+              seu domínio correto. Os testes de eco ICMP confirmam que o host final recuperou o acesso pleno ao seu gateway padrão de Camada
+              3.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-door-open"></i>
+          <span class="section-number">4.4.4</span> Problemas de porta de acesso
+        </h2>
+
+        <div class="card">
+          <p>
+            Outro erro clássico de configuração que interrompe o roteamento inter-VLAN ocorre quando uma porta de acesso do switch é
+            associada a uma <strong>VLAN incorreta</strong>, ou quando a interface física do roteador foi configurada na sub-rede errada.
+            Esse tipo de falha impede que o tráfego do host alcance seu respectivo <strong>Default Gateway</strong>.
+          </p>
+
+          <p>
+            Por exemplo, considere que um erro de digitação tenha ocorrido e a porta <strong>Fa0/11</strong> (conectada ao PC1) tenha sido
+            associada erroneamente à <strong>VLAN 4</strong>, em vez da VLAN 10. O PC1 foi configurado corretamente com o IP
+            <span style="font-family: monospace; color: var(--primary)">192.168.10.10</span> e mascara
+            <span style="font-family: monospace">255.255.255.0</span>.
+          </p>
+
+          <div class="alert alert-danger" style="margin: 1.5rem 0">
+            <p>
+              <strong><i class="fas fa-bug"></i> Sintoma de Falha:</strong> Como a porta do switch foi vinculada a uma VLAN isolada e sem
+              gateway correspondente no roteador, qualquer tentativa de comunicação originada no PC1 resultará em falha imediata por
+              timeout.
+            </p>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--secondary)"></i> Console do Switch S1 (Auditoria e Diagnóstico)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Utilização do comando <span style="font-family: monospace; color: var(--primary)">show interfaces switchport</span> para
+            rastrear e diagnosticar o mapeamento lógico da porta:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces fa0/11 switchport</strong>
+Name: Fa0/11
+Switchport: Enabled
+Administrative Mode: static access
+Operational Mode: static access
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: native
+Negotiation of Trunking: Off
+Access Mode VLAN: 4 (VLAN0004)
+Trunking Native Mode VLAN: 1 (default)
+Administrative Native VLAN tagging: enabled
+Voice VLAN: none
+<span style="color: var(--text-dim); font-size: 0.8rem;">[... output truncated for brevity ...]</span>
+S1#</pre>
+          </div>
+
+          <p style="margin: 1.5rem 0 1rem 0">
+            A auditoria revela claramente o erro na linha:
+            <span style="font-family: monospace; color: var(--danger)">Access Mode VLAN: 4 (VLAN0004)</span>. Para reverter a falha,
+            reatribua a interface de acesso à sua respectiva rede virtual correspondente.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-tools" style="color: var(--success)"></i> Console do Switch S1 (Procedimento de Correção)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">Mapeamento definitivo da interface para a VLAN 10:</p>
+
+          <div class="terminal">
+            <pre>S1(config)# <strong>interface fa0/11</strong>
+S1(config-if)# <strong>switchport access vlan 10</strong>
+S1(config-if)# <strong>end</strong>
+S1#</pre>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-desktop" style="color: var(--primary)"></i> Prompt de Comando (PC1 - Validação Fim a Fim)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            O teste de disparo ICMP direcionado ao PC2 (<span style="font-family: monospace">192.168.20.10</span>) valida o restabelecimento
+            do tráfego através da nova adjacência:
+          </p>
+
+          <div class="terminal">
+            <pre>C:\Users\PC1> <strong>ping 192.168.20.10</strong>
+
+Pinging 192.168.20.10 with 32 bytes of data:
+Reply from 192.168.20.10: bytes=32 time=1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+
+Ping statistics for 192.168.20.10:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\Users\PC1></pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-check-circle"></i> Conectividade Restabelecida:</strong> Ao corrigir a porta de acesso e vinculá-la à
+              <strong>VLAN 10</strong>, o PC1 voltou a pertencer ao mesmo domínio de broadcast da subinterface
+              <span style="font-family: monospace">G0/0/1.10</span> de R1. Os pacotes agora alcançam o gateway com sucesso e são devidamente
+              roteados para a VLAN 20 por hardware.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span class="section-number">4.4.5</span> Problemas de configuração de IP do host
+        </h2>
+
+        <div class="card">
+          <p>
+            Outro vetor de falha extremamente comum em ambientes inter-VLAN decorre de erros de parametrização manual ou de escopo DHCP nos
+            próprios hosts finais. Para que um dispositivo consiga encaminhar pacotes para outra sub-rede, ele deve estar configurado com um
+            endereço IPv4 contido no range correto de sua VLAN e apontar estritamente para o endereço da subinterface ou SVI correspondente
+            do gateway.
+          </p>
+
+          <p>
+            Por exemplo, considere que o técnico tenha configurado por engano o endereço IP incorreto no <strong>PC1</strong> (<span
+              style="font-family: monospace; color: var(--danger)"
+              >192.168.20.10</span
+            >), que pertence à sub-rede da VLAN 20, mantendo o computador conectado fisicamente à porta Fa0/11, que está associada à
+            <strong>VLAN 10</strong>.
+          </p>
+
+          <div class="alert alert-danger" style="margin: 1.5rem 0">
+            <p>
+              <strong><i class="fas fa-bug"></i> Sintoma do Problema:</strong> Nesse cenário de descasamento de sub-rede, o PC1 não
+              conseguirá sequer se comunicar com seu gateway padrão <span style="font-family: monospace">192.168.10.1</span>, pois
+              interpretará que o gateway está em outra rede lógica, resultando em falhas de timeout generalizadas em qualquer teste de ping.
+            </p>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--secondary)"></i> Ferramentas de Auditoria e Diagnóstico de Endereçamento
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Para diagnosticar este tipo de anomalia a partir do prompt de comando do host afetado, utiliza-se o comando
+            <span style="font-family: monospace; color: var(--primary)">ipconfig</span>:
+          </p>
+
+          <div class="terminal">
+            <pre>C:\Users\PC1> <strong>ipconfig</strong>
+
+Windows IP Configuration
+
+Ethernet adapter Ethernet0:
+   Connection-specific DNS Suffix . : 
+   Link-local IPv6 Address . . . . . : fe80::5c43:ee7c:2959:da68%6
+   IPv4 Address. . . . . . . . . . . : 192.168.20.10 <span style="color: var(--danger); font-weight: bold;">&lt;-- Erro: IP da sub-rede errada (VLAN 20)</span>
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.10.1 <span style="color: var(--warning); font-weight: bold;">&lt;-- Gateway inacessível nesta sub-rede</span>
+
+C:\Users\PC1></pre>
+          </div>
+
+          <p style="margin: 1.5rem 0 1rem 0">
+            A saída evidencia que o host tenta alcançar um gateway fora do seu escopo de máscara local. Para corrigir o problema,
+            restabeleça os parâmetros IP corretos de Camada 3 na placa de rede (NIC) do dispositivo final para que ele case perfeitamente
+            com a infraestrutura.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-tools" style="color: var(--success)"></i> Procedimento de Retificação (PC1)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Alteração das propriedades TCP/IP para os valores legítimos da VLAN 10:
+          </p>
+
+          <div class="terminal" style="background: #090f1a; border-color: var(--success)">
+            <pre
+              style="color: var(--text)"
+            >C:\Users\PC1> <span style="color: var(--text-dim);">[Configurando Interface via Painel de Controle ou Escopo DHCP]</span>
+• Novo Endereço IPv4: <strong>192.168.10.10</strong>
+• Máscara de Sub-rede: <strong>255.255.255.0</strong>
+• Gateway Padrão:     <strong>192.168.10.1</strong></pre>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-check-circle" style="color: var(--primary)"></i> Validação de Conectividade Fim a Fim
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            O restabelecimento do tráfego unicast inter-VLAN em direção ao PC2 (<span style="font-family: monospace">192.168.20.10</span>)
+            ratifica o sucesso do ajuste técnico:
+          </p>
+
+          <div class="terminal">
+            <pre>C:\Users\PC1> <strong>ping 192.168.20.10</strong>
+
+Pinging 192.168.20.10 with 32 bytes of data:
+Reply from 192.168.20.10: bytes=32 time=1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+Reply from 192.168.20.10: bytes=32 time&lt;1ms TTL=127
+
+Ping statistics for 192.168.20.10:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\Users\PC1></pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-check-circle"></i> Correção Consolidada:</strong> Ao alinhar o endereçamento IP do host com o domínio
+              de broadcast da porta física do switch, o PC1 recuperou a capacidade de se comunicar com a subinterface
+              <span style="font-family: monospace">G0/0/1.10</span> do roteador, normalizando o fluxo de pacotes através do link de tronco.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="secao4-4-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-link"></i>
+          <span class="section-number">4.4.6</span> Problemas de entroncamento
+        </h2>
+
+        <div class="card">
+          <p>
+            Um dos cenários mais complexos de falha em topologias <strong>Router-on-a-stick</strong> envolve a má configuração dos links de
+            infraestrutura (Trunk). Se a porta de interconexão do switch que se liga à interface do roteador não estiver operando
+            explicitamente em modo tronco, os quadros marcados com as tags <strong>IEEE 802.1Q</strong> não serão processados, interrompendo
+            totalmente a comunicação lógica entre as redes virtuais.
+          </p>
+
+          <p>
+            Por exemplo, suponha um cenário de falha em que a porta <strong>Fa0/5</strong> do switch <strong>S1</strong> foi configurada
+            acidentalmente ou permaneceu por padrão em modo de acesso comum (<em>access</em>), enquanto o roteador
+            <strong>R1</strong> espera receber tráfego multiplexado em suas subinterfaces virtuais.
+          </p>
+
+          <div class="alert alert-danger" style="margin: 1.5rem 0">
+            <p>
+              <strong><i class="fas fa-bug"></i> Sintoma da Falha:</strong> Diante desse descasamento de modo operacional de Camada 2,
+              qualquer tentativa de ping disparada pelo <strong>PC1</strong> em direção ao seu próprio gateway (<span
+                style="font-family: monospace"
+                >192.168.10.1</span
+              >) ou em direção ao <strong>PC2</strong> falhará por timeout, pois o switch descartará ou desempacotará incorretamente as tags
+              de identificação de VLAN.
+            </p>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-terminal" style="color: var(--secondary)"></i> Console do Switch S1 (Auditoria de Trunking)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            A verificação inicial com o comando
+            <span style="font-family: monospace; color: var(--primary)">show interfaces trunk</span> retorna um espaço em branco, indicando
+            que nenhuma interface física está atuando como tronco ativo. Para entender o motivo, inspeciona-se a porta específica de uplink:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces trunk</strong>
+<span style="color: var(--text-dim); font-size: 0.82rem;">!--- [Nenhum output é retornado: indica ausência de troncos ativos] ---</span>
+S1# 
+S1# <strong>show interfaces fa0/5 switchport</strong>
+Name: Fa0/5
+Switchport: Enabled
+Administrative Mode: static access <span style="color: var(--danger); font-weight: bold;">&lt;-- Erro: configurado incorretamente como acesso</span>
+Operational Mode: static access
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: native
+Negotiation of Trunking: Off
+Access Mode VLAN: 1 (default)
+<span style="color: var(--text-dim); font-size: 0.8rem;">[... output truncated for brevity ...]</span>
+S1#</pre>
+          </div>
+
+          <p style="margin: 1.5rem 0 1rem 0">
+            A auditoria confirma a falha estrutural: o modo administrativo da interface Fa0/5 está travado em
+            <span style="font-family: monospace; color: var(--danger)">static access</span>. Para mitigar o problema, reconfigure a porta de
+            modo a forçar o entroncamento dinâmico ou estático.
+          </p>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-tools" style="color: var(--success)"></i> Console do Switch S1 (Procedimento de Correção)
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Ativação explícita do protocolo de entroncamento na interface Fa0/5:
+          </p>
+
+          <div class="terminal">
+            <pre>S1(config)# <strong>interface fa0/5</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>end</strong>
+S1#</pre>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-check-circle" style="color: var(--primary)"></i> Confirmação do Estado Operacional
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 1rem">
+            Ao reexecutar o comando de auditoria, a interface deve agora figurar com o status de
+            <span style="font-family: monospace; color: var(--success)">trunking</span>:
+          </p>
+
+          <div class="terminal">
+            <pre>S1# <strong>show interfaces trunk</strong>
+Port        Mode             Encapsulation  Status        Native vlan
+Fa0/5       on               802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/5       1-4094</pre>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem; margin-bottom: 0">
+            <p style="margin: 0">
+              <strong><i class="fas fa-check-circle"></i> Tráfego Normalizado:</strong> Com o link estabelecido em modo
+              <strong>Trunk</strong>, os quadros Ethernet encapsulados com tags das VLANs 10 e 20 conseguem fluir livremente em direção às
+              subinterfaces lógicas de <strong>R1</strong>. O emparelhamento de Camada 2 é restabelecido e a conectividade inter-VLAN entre
+              as sub-redes volta a operar em sua capacidade máxima de hardware.
             </p>
           </div>
         </div>

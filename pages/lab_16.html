@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação de Rede - Laboratório 16 Oficial</title>
+    <link rel="stylesheet" href="../css/labs.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="badge-lab"><i class="fas fa-medal"></i> Lab 16 - Certificado 100% Concluído</div>
+      <a href="../labs/lab_16.pka" class="btn-outline"> <i class="fas fa-download"></i> Download .PKA </a>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <h1>Comutação de Camada 3 (Layer 3 Switching)</h1>
+        <p>Esboço Técnico e Resolução de Problemas: Roteamento Inter-VLAN Híbrido, Alocação de Memória SDM e Alinhamento de Troncos</p>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-users"></i> Entendendo a Tecnologia</h2>
+        <p>
+          Imagine uma grande universidade dividida em três prédios principais: os Funcionários (VLAN 10), os Alunos (VLAN 20) e os
+          Professores (VLAN 30). Antes, para que um aluno enviasse um e-mail para um professor, os dados precisavam sair do campus da
+          faculdade por um cabo, passar por um roteador externo lento na rua e voltar. Isso gerava uma fila de espera enorme.
+        </p>
+
+        <p>
+          Nesse laboratório, nós instalamos um <strong>Switch Multicamada (MLS)</strong> no topo da rede. Ele funciona como um complexo
+          central de elevadores expressos dentro da própria estrutura. Agora, quando as redes locais se comunicam, o próprio switch central
+          traduz e distribui os dados internamente na velocidade da luz, sem precisar queimar conexões externas.
+        </p>
+
+        <p>
+          Adicionalmente, nós implementamos o protocolo do futuro, o **IPv6**, e interconectamos a rede à internet externa configurando
+          rotas de saída de emergência para manter toda a operação integrada de forma impecável.
+        </p>
+
+        <div class="alert alert-success">
+          <strong>Resultado do Esboço Técnico:</strong> Atividade validada com 100% de aproveitamento. Todos os testes de ping e tabelas de
+          rotas IPv4/IPv6 encontram-se operando sem nenhuma perda de pacotes.
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Tabela Lógica de Endereçamento Oficial</h2>
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Interface / Dispositivo</th>
+              <th>Setor Cadastrado</th>
+              <th>Gateway IPv4</th>
+              <th>Prefixo IPv6 Administrado</th>
+              <th>VLAN Nativa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MLS - Vlan 10</strong></td>
+              <td>Staff (Funcionários)</td>
+              <td>192.168.10.254/24</td>
+              <td>2001:db8:acad:10::1/64</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>MLS - Vlan 20</strong></td>
+              <td>Student (Estudantes)</td>
+              <td>192.168.20.254/24</td>
+              <td>2001:db8:acad:20::1/64</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>MLS - Vlan 30</strong></td>
+              <td>Faculty (Professores)</td>
+              <td>192.168.30.254/24</td>
+              <td>2001:db8:acad:30::1/64</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>MLS - Vlan 99</strong></td>
+              <td>Management (Gerenciamento)</td>
+              <td>192.168.99.254/24</td>
+              <td>N/D</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td><strong>S1 - interface g0/1</strong></td>
+              <td>Tronco de Uplink (Link MLS)</td>
+              <td>N/D</td>
+              <td>N/D</td>
+              <td><span style="color: var(--warning)">VLAN 99</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-history"></i> Linha do Tempo e Resolução de Problemas (Causa e Efeito)</h2>
+
+        <div class="card">
+          <h3>1. Tratamento do Erro: % Interface VLan does not exist</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>MLS(config)# vlan 10&#10;MLS(config-vlan)# name Staff&#10;MLS(config-vlan)# interface vlan 10</pre>
+          </div>
+          <p>
+            <strong>Por que:</strong> Ao tentar colocar um endereço IP na porta virtual de software, o switch rejeitava a linha. Isso
+            acontece porque o sistema operacional exige que a ID numérica da VLAN seja criada no banco de dados local primeiro. Sem esse
+            mapeamento na tabela física do equipamento, a SVI lógica não consegue subir.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> As portas virtuais são ativadas com sucesso, emitindo o alerta de
+            <code>changed state to up</code>.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Tratamento do Erro: % IPv6 routing not enabled</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>MLS(config)# sdm prefer dual-ipv4-and-ipv6 default&#10;MLS# reload&#10;MLS(config)# ipv6 unicast-routing</pre>
+          </div>
+          <p>
+            <strong>Por que:</strong> Ao tentar programar as redes IPv6, o switch bloqueava o comando. Dispositivos de Camada 3 vêm de
+            fábrica com a memória RAM programada apenas para ler IPv4. Foi necessário redefinir a tabela física de hardware do chip (SDM
+            Template), reiniciar o dispositivo para aplicar a nova estrutura e aí sim ligar o motor global de roteamento IPv6.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> O switch passa a operar em modo Dual-Stack, povoando perfeitamente a tabela de rotas
+            hexadecimais.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>3. Alinhamento de Troncos e Resolução do Native VLAN Mismatch</h3>
+          <p><strong>O comando faz isso no Switch S1:</strong></p>
+          <div class="terminal">
+            <pre>
+S1(config)# interface gig0/1&#10;S1(config-if)# switchport mode trunk&#10;S1(config-if)# switchport trunk native vlan 99</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Havia um erro onde o switch de acesso e o switch de núcleo tentavam conversar usando estradas
+            administrativas diferentes na porta de Tronco (um usava a VLAN 1 e o outro a VLAN 99). Mover a porta Trunk para a VLAN Nativa 99
+            resolveu o conflito de comunicação.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Sincronismo total de tráfego administrativo entre os equipamentos de rede, zerando os erros do
+            relatório do Packet Tracer.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>4. Rota de Último Recurso para a Internet Externa</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>MLS(config)# ip route 0.0.0.0 0.0.0.0 209.165.200.226</pre>
+          </div>
+          <p>
+            <strong>Por que:</strong> O switch Multicamada conhece todas as redes internas por estar diretamente conectado a eles, mas ele
+            não sabe como chegar na internet externa. Os curingas <code>0.0.0.0 0.0.0.0</code> ensinam ao switch que qualquer destino
+            desconhecido deve ser despachado para o IP do Roteador de Borda R1.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Conectividade externa completa estabelecida para todas as sub-redes locais, batendo os 100% de
+            conclusão do projeto.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-book"></i> Glossário Técnico do Ecossistema</h2>
+        <div class="card">
+          <ul>
+            <li>
+              <strong>Switch Multicamada (MLS):</strong> Um dispositivo central capaz de comutar dados lendo endereços físicos MAC (Camada
+              2) e processar o roteamento de pacotes via endereços IP (Camada 3) de forma simultânea direto nos seus chips integrados.
+            </li>
+            <li>
+              <strong>SVI (Switch Virtual Interface):</strong> Portas de rede totalmente baseadas em software configuradas dentro do switch
+              para servirem de Gateway Padrão (porta de saída) para os computadores locais.
+            </li>
+            <li>
+              <strong>SDM Template (Switch Database Manager):</strong> O gerenciador de recursos do sistema que define como a memória do
+              switch será dividida entre tabelas de endereços e protocolos de roteamento.
+            </li>
+            <li>
+              <strong>VLAN Nativa:</strong> Uma rede designada para carregar tráfegos administrativos que viajam pelos cabos de tronco sem
+              nenhuma etiqueta de identificação digital. Ambas as pontas do cabo precisam usar a mesma ID para evitar falhas.
+            </li>
+            <li>
+              <strong>Rota Estática Padrão:</strong> Uma regra de encaminhamento que direciona todo e qualquer tráfego com destino
+              desconhecido em direção ao gateway da operadora de internet.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="download-zone">
+        <h2>Pronto para praticar com o gabarito oficial?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+          Faça o download do arquivo de simulação corrigido, com 100% de conclusão e suporte total a IPv4 e IPv6 configurado.
+        </p>
+        <a href="../labs/lab_16.pka" class="btn-download" download>
+          <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo Prático (.PKA)
+        </a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 - Central de Documentação Técnico e Arquitetura de Redes Corporativas.</p>
+    </footer>
+  </body>
+</html>

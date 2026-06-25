@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação de Rede - Resolução de Problemas Lab 17</title>
+    <link rel="stylesheet" href="../css/labs.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="badge-lab"><i class="fas fa-tools"></i> Lab 17 - Relatório de Troubleshooting e Auditoria</div>
+      <a href="../labs/lab_17.pka" class="btn-outline"> <i class="fas fa-file-download"></i> Baixar Arquivo .PKA Anexado </a>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <h1>Pesquisa de Defeitos em Roteamento Inter-VLAN</h1>
+        <p>
+          Esboço Técnico de Auditoria: Resolução de Conflitos de Tags 802.1Q, Ativação de Subinterfaces e Alinhamento de Portas de Acesso
+        </p>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i> Entendendo as Falhas de Forma Simples (Para Leigos)</h2>
+        <p>
+          Imagine uma estrutura de rede corporativa dividida em dois departamentos isolados para garantir a segurança dos dados: o setor de
+          <strong>Faculty/Staff (VLAN 10)</strong> e o setor de <strong>Guest (VLAN 30)</strong>. Para permitir que essas áreas troquem
+          informações de forma controlada, existe um único roteador central na empresa agindo como o agente de triagem de correspondências
+          (arquitetura conhecida como <i>Router-on-a-Stick</i>).
+        </p>
+
+        <p>
+          Durante o processo de auditoria desse laboratório, descobrimos que a rede foi entregue com três erros humanos graves de
+          configuração na CLI que paralisaram completamente a comunicação interna:
+        </p>
+        <ul>
+          <li>
+            <strong>Guichê Desativado por Software:</strong> A subinterface lúdica da VLAN 10 estava desligada administrativamente
+            (<i>down</i>), bloqueando a entrada e saída de dados de metade da empresa.
+          </li>
+          <li>
+            <strong>Caixas Postais Trocadas:</strong> O administrador inverteu as tags digitais de identificação. Os pacotes vindo da VLAN
+            10 recebiam o ID da VLAN 30, e os dados da VLAN 30 eram lidos como se fossem da VLAN 10. O roteador ficava confuso e descartava
+            o tráfego.
+          </li>
+          <li>
+            <strong>Bloqueio de Conflito de ID:</strong> Ao tentar reconfigurar as tags diretamente no terminal, o sistema operacional da
+            Cisco aplicava uma trava de hardware. O IOS impede que duas portas virtuais usem o mesmo código de identificação (VID) de VLAN
+            simultaneamente para evitar loops. Foi necessária uma técnica de limpeza para liberar a memória física do chassi.
+          </li>
+        </ul>
+
+        <div class="alert alert-success">
+          <strong>Status Atual da Atividade:</strong> 75% Concluído. O motor de roteamento do R1 foi totalmente reconfigurado e as
+          subinterfaces encontram-se em estado operacional (Up/Up). O alinhamento final das portas de acesso do switch S1 será revisado em
+          laboratório físico escolar com apoio acadêmico.
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-table"></i> Tabela Lógica de Endereçamento Oficinal</h2>
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Dispositivo</th>
+              <th>Interface / Subinterface</th>
+              <th>Endereço IP</th>
+              <th>Máscara de Sub-rede</th>
+              <th>VLAN Vinculada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>R1 (Roteador)</strong></td>
+              <td>GigabitEthernet0/1.10</td>
+              <td>172.17.10.1</td>
+              <td>255.255.255.0</td>
+              <td>VLAN 10 (Faculty/Staff)</td>
+            </tr>
+            <tr>
+              <td><strong>R1 (Roteador)</strong></td>
+              <td>GigabitEthernet0/1.30</td>
+              <td>172.17.30.1</td>
+              <td>255.255.255.0</td>
+              <td>VLAN 30 (Guest)</td>
+            </tr>
+            <tr>
+              <td><strong>PC1 (Host Final)</strong></td>
+              <td>Placa de Rede (NIC)</td>
+              <td>172.17.10.10</td>
+              <td>255.255.255.0</td>
+              <td>VLAN 10 (Porta Fa0/11)</td>
+            </tr>
+            <tr>
+              <td><strong>PC3 (Host Final)</strong></td>
+              <td>Placa de Rede (NIC)</td>
+              <td>172.17.30.10</td>
+              <td>255.255.255.0</td>
+              <td>VLAN 30 (Porta Fa0/6)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Tabela Oficial de Troubleshooting (Problemas e Soluções)</h2>
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Dispositivo Identificado</th>
+              <th>Falha / Sintoma Detectado</th>
+              <th>Causa Raiz do Problema</th>
+              <th>Solução Aplicada no Terminal CLI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Roteador R1</strong></td>
+              <td>Interface G0/1.10 listada como <i>administratively down</i> no status do sistema.</td>
+              <td>A subinterface virtual foi devidamente criada, mas permaneceu desligada eletronicamente por software.</td>
+              <td>Execução do comando corporativo <code>no shutdown</code> diretamente na subinterface virtual.</td>
+            </tr>
+            <tr>
+              <td><strong>Roteador R1</strong></td>
+              <td>Inversão completa de tráfego inter-VLAN nas sub-redes locais.</td>
+              <td>O comando <code>encapsulation dot1Q</code> vinculou as IDs de VLAN de forma trocada nas portas de software.</td>
+              <td>Remoção completa dos IPs, limpeza das tags duplicadas, realinhamento das IDs 10 e 30 e reconfiguração dos gateways.</td>
+            </tr>
+            <tr>
+              <td><strong>Roteador R1</strong></td>
+              <td>Mensagem de Erro: <i>%Configuration of multiple subinterfaces... is not permitted</i></td>
+              <td>
+                O IOS travou a linha de comando pois o processador identificou que a tag cobiçada já estava em uso por outra interface
+                ativa.
+              </td>
+              <td>Uso do comando de expurgo <code>no encapsulation dot1Q</code> para liberar o registro do ID na memória do chassi.</td>
+            </tr>
+            <tr>
+              <td><strong>Switch S1</strong></td>
+              <td>Frames ethernet marcados sendo descartados na subida do cabo principal.</td>
+              <td>A interface física de uplink Gig0/1 operava em modo Access (VLAN 1), impedindo o tráfego de dados tagados.</td>
+              <td>Conversão imediata da interface física para o modo de entroncamento <code>switchport mode trunk</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-briefcase"></i> Casos de Uso Reais desta Configuração</h2>
+        <p>
+          A topologia baseada na arquitetura **Router-on-a-Stick** resolvida neste projeto é largamente implementada no mercado corporativo
+          atual nos seguintes cenários:
+        </p>
+
+        <div class="card">
+          <h3>Segmentação de Baixo Custo em PMEs</h3>
+          <p>
+            Utilizado em empresas de pequeno e médio porte que precisam isolar dados sensíveis por compliance (como separar a rede Wi-Fi
+            corporativa da rede de Wi-Fi pública para visitantes), mas possuem restrições orçamentárias para investir em switches
+            multicamada de Core. A engenharia reaproveita uma única interface física do roteador para gerenciar a segurança de múltiplas
+            sub-redes.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Ambientes de Prototipagem e Sandboxes Isoladas</h3>
+          <p>
+            Criação de redes temporárias para testes de software, auditorias de vulnerabilidades e firewalls, permitindo simular cenários
+            complexos sem a necessidade de gastar com cabeamento físico estruturado adicional.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-code"></i> Engenharia de Comandos (Causa, Efeito e Objetivo)</h2>
+
+        <div class="card">
+          <h3>1. Expulsão de Tags e Desbloqueio de Conflito de Hardware</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>
+R1(config-subif)# interface g0/1.30&#10;R1(config-subif)# no encapsulation dot1Q&#10;R1(config-subif)# interface g0/1.10&#10;R1(config-subif)# encapsulation dot1Q 10</pre
+            >
+          </div>
+          <p>
+            <strong>Por que:</strong> Como as subinterfaces estavam com os carimbos lógicos invertidos, o sistema operacional recusava a
+            alteração direta. Aplicar o comando <code>no encapsulation dot1Q</code> limpa os registros do processador, liberando a ID 10
+            para ser atrelada à interface física correta.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Correção do erro de barramento, permitindo que a subinterface .10 assuma a VLAN 10 e a
+            subinterface .30 assuma a VLAN 30 de forma limpa.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Ativação de Barramentos Lógicos de Rede</h3>
+          <p><strong>O comando faz isso:</strong></p>
+          <div class="terminal">
+            <pre>R1(config-subif)# interface g0/1.10&#10;R1(config-subif)# no shutdown</pre>
+          </div>
+          <p>
+            <strong>Por que:</strong> Interfaces lógicas secundárias herdam o estado físico da interface principal, mas podem ser desligadas
+            individualmente por falhas de escrita ou segurança. Esse comando força a inicialização do fluxo elétrico virtual.
+          </p>
+          <p>
+            <strong>O resultado é:</strong> Mudança de status para <code>up / up (connected)</code>, permitindo que o gateway responda às
+            requisições da rede interna.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-book"></i> Glossário de Engenharia de Redes</h2>
+        <div class="card">
+          <ul>
+            <li>
+              <strong>Router-on-a-Stick:</strong> Solução de arquitetura de redes onde um único roteador físico realiza o encaminhamento de
+              pacotes entre múltiplas redes lógicas locais (VLANs), usando um único link físico configurado como Trunk.
+            </li>
+            <li>
+              <strong>Subinterface:</strong> Uma porta virtual criada por software dentro de uma interface de rede física. Cada subinterface
+              trabalha de forma totalmente isolada, possuindo IP e regras próprias.
+            </li>
+            <li>
+              <strong>Encapsulamento 802.1Q (Dot1Q):</strong> O protocolo padronizado internacionalmente que insere tags (etiquetas
+              numéricas) no cabeçalho das mensagens ethernet para identificar sua rede de origem.
+            </li>
+            <li>
+              <strong>Write Memory (wr):</strong> Comando do ecossistema Cisco que grava todas as configurações ativas presentes na memória
+              RAM executável para a memória de armazenamento permanente (NVRAM).
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="download-zone">
+        <h2>Deseja auditar o progresso atual do projeto?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+          Baixe o arquivo de simulação do Packet Tracer salvo com o progresso das subinterfaces do roteador validadas e prontas para
+          revisão.
+        </p>
+        <a href="../labs/lab_17.pka" class="btn-download" download> <i class="fas fa-network-wired"></i> Baixar Arquivo Anexado (.PKA) </a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 - Central de Documentação e Auditoria de Infraestrutura de Redes Avançadas.</p>
+    </footer>
+  </body>
+</html>
