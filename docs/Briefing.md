@@ -134,17 +134,13 @@ Estrutura HTML do Top Bar e Sidebar:
 HTML
 
 <div class="top-bar">
-    <button class="menu-toggle" id="openMenu">
-        <i class="fas fa-network-wired"></i>
-        <span>Console Menu</span>
-    </button>
-    <a href="index.html" class="top-bar-brand">
-        <i class="fas fa-server"></i> Cisco CCNA 2 (SRWE)
-    </a>
-    <a href="index.html" class="btn-outline">
-        <i class="fas fa-door-open"></i> Sair do Lab
-    </a>
-</div>
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
 
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">

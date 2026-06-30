@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Investigar a Prevenção de Loop de STP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_18.pkt" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1-1"><i class="fas fa-table"></i> 1.1 Instância Convergente</a>
+        </li>
+        <li>
+          <a href="#secao1-2"><i class="fas fa-terminal"></i> 1.2 Logs e Diagnóstico CLI</a>
+        </li>
+        <li>
+          <a href="#secao2-1"><i class="fas fa-project-diagram"></i> 2.1 Processo de Convergência</a>
+        </li>
+        <li>
+          <a href="../labs/lab_18.pka"><i class="fas fa-cloud-download-alt"></i> Download Resolução</a>
+        </li>
+        <li>
+          <a href="#secao-analogia"><i class="fas fa-lightbulb"></i> 1.3 Caso de Uso & Analogia</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Laboratório de Infraestrutura Chaveada</span>
+        <h1>Investigar a Prevenção de Loop de STP</h1>
+        <p style="color: var(--text-dim)">
+          Análise prática e monitoramento de convergência do Spanning Tree Protocol sob topologias redundantes de Camada 2.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.1</span> Observação da Árvore Convergente
+        </h2>
+        <div class="card">
+          <p>
+            Em topologias redundantes triangulares, o Spanning Tree Protocol mapeia os custos dos caminhos e elege uma ponte raiz (Root
+            Bridge) baseando-se na prioridade e nos endereços físicos dos ativos.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> <strong>Informação de Topologia:</strong> O switch S2 assumiu o papel de Root Bridge por
+            possuir o menor endereço MAC da infraestrutura analisada.
+          </div>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Switch</th>
+                <th>Porta</th>
+                <th>Estado (FWD, BLK...)</th>
+                <th>Função (Role)</th>
+                <th>Root Bridge?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1</strong></td>
+                <td>Gi0/1<br />Gi0/2</td>
+                <td>FWD<br />FWD</td>
+                <td>Designated<br />Root</td>
+                <td>Não</td>
+              </tr>
+              <tr>
+                <td><strong>S2</strong></td>
+                <td>Gi0/1<br />Gi0/2</td>
+                <td>FWD<br />FWD</td>
+                <td>Designated<br />Designated</td>
+                <td><strong>Sim (Root)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>S3</strong></td>
+                <td>Gi0/1<br />Gi0/2</td>
+                <td>FWD<br /><span style="color: var(--danger); font-weight: bold">BLK</span></td>
+                <td>Root<br />Alternate</td>
+                <td>Não</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.2</span> Logs e Diagnóstico CLI
+        </h2>
+        <div class="card">
+          <p>
+            Abaixo estão estruturados os logs de saída em modo avançado obtidos diretamente a partir do terminal operativo do Switch S3
+            antes da desconexão de links físicos.
+          </p>
+
+          <div class="terminal">
+            <pre>
+S3# show spanning-tree vlan 1
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.6448.C6E7
+             Cost        4
+             Port        25(GigabitEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     000C.CF45.7534
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Gi0/2            Altn BLK 4         128.26   P2p
+Gi0/1            Root FWD 4         128.25   P2p</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">2.1</span> Processo de Convergência Ativa
+        </h2>
+        <div class="card">
+          <p>
+            Ao remover fisicamente o meio de transmissão que unifica S1 e S2, a infraestrutura inicia o recálculo do menor custo de link
+            disponível para manter a comunicação ativa e estável.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Instrução de Validação:</strong> Não execute testes de ping nos hosts
+            terminais durante a transição estrutural. Aguarde a conclusão dos estados temporizados de Listening e Learning para evitar erros
+            de drop de pacotes.
+          </div>
+
+          <p style="margin-top: 1rem; color: var(--text-dim)">
+            A interface <strong>Gi0/2 do S3</strong> transiciona automaticamente por três etapas cronometradas até alcançar o modo
+            operacional final:
+          </p>
+          <ul style="margin: 1rem 0 1rem 2rem; color: var(--primary)">
+            <li><strong>Blocking (BLK):</strong> Porta inativa para dados, mitigando tempestades de broadcast.</li>
+            <li><strong>Listening & Learning (LIS/LRN):</strong> Análise de pacotes BPDU e reconstrução da tabela de endereços MAC.</li>
+            <li><strong>Forwarding (FWD):</strong> Interface ativa e liberada para o tráfego normal de pacotes de dados.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas.
+          </p>
+          <a href="../labs/lab_18.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+      <section id="secao-analogia" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-lightbulb"></i>
+          <span class="section-number">1.3</span> Entendendo o STP: O Guarda de Trânsito e o Caso de Uso
+        </h2>
+
+        <div class="card">
+          <p>
+            Para entender o Spanning Tree Protocol (STP) de uma vez por todas, pense nele como um
+            <strong>guarda de trânsito inteligente</strong> para redes de computadores.
+          </p>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+            Na essência, o STP é um protocolo de Camada 2 (Data Link) criado para permitir que uma rede tenha caminhos redundantes (vários
+            cabos interligando os switches para o caso de um quebrar) sem que isso cause um desastre técnico chamado
+            <strong>Loop de Redes</strong>. Para fixar bem na cabeça, vamos esquecer os comandos técnicos por um minuto e usar uma analogia
+            do dia a dia.
+          </p>
+
+          <h3 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0; font-size: 1.2rem">
+            <i class="fas fa-users"></i> A Analogia do Cotidiano: O Grupo de WhatsApp da Empresa
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Imagine uma empresa com três diretores: <strong>Carlos, Amanda e Bruno</strong>. Eles trabalham em salas diferentes e precisam
+            repassar recados importantes. Para garantir que a informação chegue se alguém faltar, eles criam uma regra de comunicação
+            direta:
+          </p>
+          <ul style="margin: 0 0 1.5rem 2rem; color: var(--text)">
+            <li>Carlos tem uma linha direta com Amanda.</li>
+            <li>Amanda tem uma linha direta com Bruno.</li>
+            <li>Bruno tem uma linha direta com Carlos.</li>
+          </ul>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">Pronto, criamos um triângulo de comunicação (uma rede com redundância).</p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-bomb"></i> <strong>O Desastre (Sem STP):</strong><br />
+            Um belo dia, Carlos recebe um memorando genérico: <em>"Aviso geral: Amanhã haverá manutenção no estoque"</em>.<br />
+            1. Carlos lê e passa para Amanda: "Olha esse aviso que recebi".<br />
+            2. Amanda lê e, para garantir que todos saibam, passa para Bruno: "Olha esse aviso".<br />
+            3. Bruno lê e, achando que é uma novidade, passa de volta para Carlos: "Chefe, viu isso?".<br />
+            4. Carlos recebe de Bruno e pensa: "Nossa, a Amanda precisa ver isso" e manda para Amanda de novo...<br /><br />
+            Como nenhum deles joga o papel no lixo e apenas continuam encaminhando em círculo, em poucos minutos eles estão berrando, os
+            telefones estão congestionados e ninguém consegue fazer mais nada. Isso na TI é uma
+            <strong>Tempestade de Broadcast (Broadcast Storm)</strong>. A rede trava completamente.
+          </div>
+
+          <h3 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0; font-size: 1.2rem">
+            <i class="fas fa-user-shield"></i> A Solução do Guarda de Trânsito (Com STP)
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Para resolver isso, os três diretores elegem o funcionário mais experiente como o Líder (<strong>Root Bridge</strong>). Vamos
+            dizer que a Amanda foi eleita a Líder. A Amanda, como Líder, analisa as linhas de comunicação e toma uma decisão estratégica:
+          </p>
+          <div class="terminal" style="margin: 1rem 0">
+            <pre>
+"Para evitar que a gente fique repetindo mensagens em círculo, vou ordenar que o Bruno 
+desligue temporariamente o telefone da linha direta dele com o Carlos. Nós só vamos 
+usar essa linha se o cabo principal entre o Carlos e eu arrebentar."</pre
+            >
+          </div>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            O link Bruno-Carlos foi colocado em <strong>Bloqueio (Blocking)</strong>. Se Carlos quiser falar com Bruno, a mensagem
+            obrigatoriamente vai: <span style="color: var(--primary)">Carlos &rarr; Amanda &rarr; Bruno</span>. O loop acabou!
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-sync-alt"></i> <strong>O Caso de Uso: O Cabo Rompido (Convergência)</strong><br />
+            De repente, um funcionário tropeça no cabo que ligava a sala do Carlos à sala da Amanda e o corta. Imediatamente, Amanda (a
+            Líder) percebe que Carlos sumiu do mapa. Ela aciona o Bruno:
+            <em>"Bruno, lembra daquela linha reserva que você tem com o Carlos? Pode ligar o telefone dela agora!"</em>.<br />
+            Bruno reativa a linha (o link passa por estados de transição até ficar Verde / Forwarding). A comunicação da empresa é
+            restaurada em segundos, usando o caminho reserva, sem que ninguém precisasse passar um cabo novo correndo.
+          </div>
+
+          <h3 style="color: var(--primary); margin: 2rem 0 0.5rem 0; font-size: 1.2rem">
+            <i class="fas fa-microchip"></i> Como o STP funciona na prática dos Switches (Resumo Técnico)
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Trazendo a analogia de volta para os equipamentos de rede que você acabou de ver na CLI do laboratório:
+          </p>
+
+          <ul style="margin: 0 0 1.5rem 1.5rem; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem">
+            <li>
+              <strong>Eleção da Root Bridge (A Líder):</strong> Os switches trocam mensagens chamadas BPDUs (Bridge Protocol Data Units). O
+              switch que tiver a menor "Priority" (Prioridade) ou o menor endereço MAC ganha e vira a Root Bridge (no seu lab, foi o S2).
+            </li>
+            <li>
+              <strong>Definição dos Melhores Caminhos:</strong> Todos os outros switches calculam o "custo" de velocidade para chegar até a
+              Root Bridge. As portas que apontam para o caminho mais rápido viram Root Ports (Root FWD).
+            </li>
+            <li>
+              <strong>Bloqueio do Loop:</strong> O STP identifica onde o círculo se fecha e escolhe a porta menos eficiente ou de menor
+              prioridade para "desligar" logicamente. Ela assume o estado Altn BLK (Alternate Blocking, exatamente como a porta Gi0/2 do S3
+              no seu exercício).
+            </li>
+            <li>
+              <strong>Convergência:</strong> Se o link principal cair, o STP percebe a falta de BPDUs, liga a porta bloqueada e a rede volta
+              a funcionar pelo caminho alternativo.
+            </li>
+          </ul>
+
+          <table class="table-custom" style="margin-top: 1.5rem">
+            <thead>
+              <tr>
+                <th>Elemento da Analogia</th>
+                <th>Conceito Técnico (Cisco CCNA)</th>
+                <th>Estado Real no Lab</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Amanda (Diretora Líder)</strong></td>
+                <td><span class="badge-lab" style="padding: 0.2rem 0.6rem">Root Bridge</span></td>
+                <td>Switch <strong>S2</strong> (This bridge is the root)</td>
+              </tr>
+              <tr>
+                <td><strong>Linhas de Comunicação Ativas</strong></td>
+                <td>Portas em <span style="color: var(--success)">Forwarding (FWD)</span></td>
+                <td>S1 (Gi0/1, Gi0/2) e S2 (Gi0/1, Gi0/2)</td>
+              </tr>
+              <tr>
+                <td><strong>Telefone Desligado do Bruno</strong></td>
+                <td>Porta em <span style="color: var(--danger)">Blocking (BLK)</span></td>
+                <td>Interface <strong>Gi0/2 do S3</strong> (Altn BLK)</td>
+              </tr>
+              <tr>
+                <td><strong>Reativação da Linha Reserva</strong></td>
+                <td>Processo de <span style="color: var(--info)">Convergência</span></td>
+                <td>Transição de estados (BLK &rarr; LIS &rarr; LRN &rarr; FWD)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

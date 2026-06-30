@@ -1,0 +1,3550 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 5: Conceitos de STP</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao5-0-1"><i class="fas fa-graduation-cap"></i> 5.0.1 Visão Geral e Introdução</a>
+        </li>
+        <li>
+          <a href="#secao5-0-2"><i class="fas fa-project-diagram"></i> 5.0.2 Topologia e Redundância</a>
+        </li>
+        <li>
+          <a href="#secao5-1-1"><i class="fas fa-layer-group"></i> 5.1.1 Redundância em Redes L2</a>
+        </li>
+        <li>
+          <a href="#secao5-1-2"><i class="fas fa-project-diagram"></i> 5.1.2 Spanning Tree Protocol</a>
+        </li>
+        <li>
+          <a href="#secao5-1-3"><i class="fas fa-sync-alt"></i> 5.1.3 Recálculo STP na Falha</a>
+        </li>
+        <li>
+          <a href="#secao5-1-4"><i class="fas fa-exclamation-circle"></i> 5.1.4 Problemas com Links Redundantes</a>
+        </li>
+        <li>
+          <a href="#secao5-1-5"><i class="fas fa-redo"></i> 5.1.5 Loops de Camada 2</a>
+        </li>
+        <li>
+          <a href="#secao5-1-6"><i class="fas fa-bolt"></i> 5.1.6 Tempestade de Broadcast</a>
+        </li>
+        <li>
+          <a href="../pages/lab_18.html">
+            <i class="fas fa-tools"></i>
+            5.1.9 Packet Tracer - Investigar a Prevenção de Loop de STP
+            <span class="accessibility-completion-indicator" style="color: var(--success); font-size: 0.75rem; margin-left: 0.5rem">
+              <i class="fas fa-check-circle"></i> Concluída
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#secao5-2-1"><i class="fas fa-sitemap"></i> 5.2.1 Algoritmo Spanning Tree</a>
+        </li>
+        <li>
+          <a href="#secao5-2-3"><i class="fas fa-dollar-sign"></i> 5.2.3 Custo do Caminho STP</a>
+        </li>
+        <li>
+          <a href="#secao5-2-4"><i class="fas fa-network-wired"></i> 5.2.4 Funções das Portas STP</a>
+        </li>
+        <li>
+          <a href="#secao5-2-5"><i class="fas fa-sliders-h"></i> 5.2.5 Configurando a Prioridade STP</a>
+        </li>
+        <li>
+          <a href="#secao5-2-6"><i class="fas fa-project-diagram"></i> 5.2.6 Eleição de Portas Designadas e Alternativas</a>
+        </li>
+        <li>
+          <a href="#secao5-2-7"><i class="fas fa-list-ol"></i> 5.2.7 ID de Porta como Desempate</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="badge-lab">Cisco IOS Interactive Lab</div>
+      <h1
+        style="
+          background: linear-gradient(90deg, var(--primary), var(--secondary));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        "
+      >
+        Switching, Routing, and Wireless Essentials
+      </h1>
+    </section>
+
+    <div class="container">
+      <section id="secao5-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">5.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-door-open"></i>
+          <p>Bem-vindo à <strong>STP Concepts</strong>!</p>
+          <p>
+            Uma rede de Camada 2 bem projetada terá switches e caminhos redundantes para garantir que, se um switch ficar inativo, outro
+            caminho para um switch diferente esteja disponível para encaminhar dados. Os usuários da rede não sofreriam qualquer interrupção
+            do serviço. A redundância em um design de rede hierárquica corrige o problema de um único ponto de falha, mas pode criar um tipo
+            diferente de problema chamado <strong>loops de Camada 2</strong>.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Analogia do Mundo Real:</strong> Imagine que você está em um concerto. O microfone do
+          cantor e o alto-falante amplificado podem, por uma variedade de razões, criar um loop de feedback. O que você ouve é um sinal
+          amplificado do microfone que sai do alto-falante que é então pego novamente pelo microfone, amplificado ainda mais, e passado
+          novamente através do alto-falante. O som rapidamente se torna muito alto, desagradável e torna impossível ouvir qualquer música
+          real. Isso continua até que a conexão entre o microfone e o alto-falante seja cortada.
+        </div>
+
+        <div class="card">
+          <p>
+            Um loop de Camada 2 cria um caos semelhante em uma rede. Isso pode acontecer muito rapidamente e tornar impossível usar a
+            infraestrutura. Existem algumas maneiras comuns que um loop da Camada 2 pode ser criado e propagado. O
+            <strong>STP (Spanning Tree Protocol)</strong> foi projetado especificamente para eliminar loops de Camada 2 em sua rede. Este
+            módulo discute as causas de loops e os vários tipos de protocolos de árvore de abrangência. Ele inclui explicações estruturadas,
+            análises CLI e atividades práticas de Packet Tracer para ajudá-lo a dominar os conceitos de STP.
+          </p>
+        </div>
+      </section>
+      <section id="secao5-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-bookmark"></i>
+          <span class="section-number">5.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-graduation-cap"></i>
+          <p style="margin-top: 0.5rem"><strong>Título do módulo:</strong> <span style="color: var(--primary)">Conceitos de STP</span></p>
+          <p>
+            <strong>Objetivo do módulo:</strong> Explicar como o <strong>STP</strong> possibilita a redundância em uma rede de camada 2.
+          </p>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width: 30%"><i class="fas fa-list-alt"></i> Título do Tópico</th>
+                <th style="width: 70%"><i class="fas fa-bullseye"></i> Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Objetivo do STP</strong></td>
+                <td>Explicar os problemas comuns em uma rede com switches redundante de camada 2.</td>
+              </tr>
+              <tr>
+                <td><strong>Operações STP</strong></td>
+                <td>Explique como o STP opera em uma rede comutada simples.</td>
+              </tr>
+              <tr>
+                <td><strong>Evolução do STP</strong></td>
+                <td>Explicar como o <strong>Rapid PVST+</strong> funciona.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao5-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">5.1.1</span> Redundância em redes comutadas de camada 2
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-sitemap"></i>
+          <p>
+            Este tópico aborda as causas de loops em uma rede de Camada 2 e explica brevemente como funciona o protocolo de árvore de
+            abrangência (<strong>Spanning Tree Protocol</strong>).
+          </p>
+          <p>
+            A redundância é uma parte importante do design hierárquico para eliminar pontos únicos de falha e impedir a interrupção dos
+            serviços de rede para os usuários. Redes redundantes exigem a inclusão de caminhos físicos, mas a redundância lógica também deve
+            fazer parte do projeto.
+          </p>
+        </div>
+
+        <div class="card">
+          <p>
+            Ter caminhos físicos alternativos para que os dados trafeguem pela rede possibilita aos usuários acessar recursos de rede,
+            independentemente da interrupção do caminho. No entanto, os caminhos redundantes em uma rede Ethernet comutada podem provocar
+            loops físicos e lógicos na Camada 2.
+          </p>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Regra Crítica de Redes Ethernet:</strong> As LANs Ethernet exigem uma
+          topologia sem loop com um único caminho entre dois dispositivos. Um loop em uma LAN Ethernet pode causar a propagação contínua de
+          quadros (<em>frames</em>) Ethernet até que um link seja fisicamente ou logicamente interrompido para quebrar o loop.
+        </div>
+      </section>
+      <section id="secao5-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">5.1.2</span> Spanning Tree Protocol
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-shield-alt"></i>
+          <p>
+            O <strong>Spanning Tree Protocol (STP)</strong> é um protocolo de rede de prevenção de loop que permite redundância ao criar uma
+            topologia de Camada 2 sem loop. O <strong>IEEE 802.1D</strong> é o padrão original IEEE MAC Bridging para STP.
+          </p>
+          <p>
+            Use os controles interativos abaixo para reproduzir e analisar detalhadamente a animação da operação normal do STP mitigando
+            loops lógicos.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-play-circle"></i> LAB SIMULATION: Operação Normal do STP
+          </h3>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para ignorar travas do CSS global */
+            .canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .stp-sim-canvas {
+              position: relative !important;
+              width: 1020px !important; /* Fixa a largura para forçar o wrapper a criar a barra de rolagem */
+              min-width: 1020px !important;
+              height: 400px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            /* Dispositivos */
+            .sim-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .sim-node i {
+              font-size: 2.2rem;
+              color: #00b4d8;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            }
+            .sim-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal; /* Permite quebra de texto dentro do nó se necessário */
+            }
+            .sim-node .ip {
+              color: var(--text-dim);
+              font-size: 0.7rem;
+            }
+            /* Cabeamento e Enlaces */
+            .sim-link {
+              position: absolute;
+              background: var(--success);
+              transform-origin: left center;
+              z-index: 2;
+              box-shadow: 0 0 6px var(--success);
+            }
+            .sim-link.blocked {
+              background: var(--danger) !important;
+              box-shadow: 0 0 6px var(--danger) !important;
+            }
+            /* Sinalizador de Bloqueio */
+            .block-marker {
+              position: absolute;
+              width: 24px;
+              height: 24px;
+              background: var(--danger);
+              border-radius: 50%;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.75rem;
+              font-weight: bold;
+              z-index: 6;
+              box-shadow: 0 0 10px var(--danger);
+            }
+            /* Envelopes de Pacotes */
+            .sim-packet {
+              position: absolute;
+              width: 18px;
+              height: 14px;
+              background: #ffd166;
+              border: 1px solid #ffb703;
+              border-radius: 3px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 8px #ffb703;
+            }
+            .sim-packet::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              border-left: 9px solid transparent;
+              border-right: 9px solid transparent;
+              border-top: 6px solid #ffb703;
+            }
+            /* Painel de Navegação Inferior */
+            .sim-controls {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              margin-top: 1.5rem;
+              background: #121824;
+              padding: 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            .sim-btn {
+              background: transparent;
+              border: 1px solid var(--primary);
+              color: var(--primary);
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.2rem;
+              transition: all 0.2s;
+            }
+            .sim-btn:hover {
+              background: var(--primary);
+              color: #0a0e17;
+              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            }
+            .sim-slider-container {
+              flex-grow: 1;
+              display: flex;
+              align-items: center;
+              position: relative;
+            }
+            .sim-slider {
+              width: 100%;
+              -webkit-appearance: none;
+              appearance: none;
+              height: 6px;
+              border-radius: 3px;
+              background: var(--border);
+              outline: none;
+            }
+            .sim-slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              background: #ffd166;
+              cursor: pointer;
+              box-shadow: 0 0 8px #ffd166;
+            }
+            .sim-status-box {
+              background: #0a0e17;
+              border: 1px solid var(--border);
+              padding: 0.8rem 1.2rem;
+              border-radius: 6px;
+              min-height: 55px;
+              display: flex;
+              align-items: center;
+              color: var(--text);
+              font-family: monospace;
+              font-size: 0.85rem;
+              margin-top: 1rem;
+            }
+          </style>
+
+          <div class="canvas-responsive-wrapper">
+            <div class="stp-sim-canvas" id="stpCanvas">
+              <div class="sim-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="sim-link" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
+              <div class="sim-link" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+              <div class="sim-link" style="top: 75px; left: 640px; width: 240px; height: 3px; transform: rotate(0deg)"></div>
+              <div class="sim-link" style="top: 215px; left: 390px; width: 280px; height: 3px; transform: rotate(145deg)"></div>
+              <div class="sim-link" style="top: 215px; left: 400px; width: 140px; height: 3px; transform: rotate(90deg)"></div>
+              <div class="sim-link" style="top: 215px; left: 410px; width: 280px; height: 3px; transform: rotate(35deg)"></div>
+              <div class="block-marker" style="top: 130px; left: 245px" title="Porta Fa0/2 em Estado Blocking">X</div>
+
+              <div class="sim-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
+              <div class="sim-node" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root)</span>
+              </div>
+              <div class="sim-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+
+              <div class="sim-node" style="top: 310px; left: 120px">
+                <i class="fas fa-laptop"></i><span>PC1</span><span class="ip">172.17.10.21</span>
+              </div>
+              <div class="sim-node" style="top: 310px; left: 345px">
+                <i class="fas fa-laptop"></i><span>PC2</span><span class="ip">172.17.10.22</span>
+              </div>
+              <div class="sim-node" style="top: 310px; left: 560px">
+                <i class="fas fa-laptop"></i><span>PC3</span><span class="ip">172.17.10.23</span>
+              </div>
+              <div class="sim-node" style="top: 40px; left: 860px">
+                <i class="fas fa-laptop"></i><span>PC4</span><span class="ip">172.17.10.27</span>
+              </div>
+
+              <div class="sim-packet" id="pkt1"></div>
+              <div class="sim-packet" id="pkt2"></div>
+              <div class="sim-packet" id="pkt3"></div>
+              <div class="sim-packet" id="pkt4"></div>
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <button class="sim-btn" id="stpPlayBtn"><i class="fas fa-play" id="playIcon"></i></button>
+            <div class="sim-slider-container">
+              <input type="range" min="0" max="3" value="0" class="sim-slider" id="stpRange" />
+            </div>
+          </div>
+
+          <div class="sim-status-box" id="stpStatus">
+            Clique no botão Play ou intercale as etapas para ver a mitigação de loop l2 do STP.
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> <strong>Insight de Engenharia:</strong> Observe como o frame de broadcast emitido por PC1
+          trafega para todos os segmentos, mas é descartado imediatamente na interface em estado <code>Blocking</code> do tronco redundante,
+          eliminando a criação de tempestades de encaminhamento cíclico.
+        </div>
+      </section>
+
+      <script>
+        ;(function () {
+          const playBtn = document.getElementById('stpPlayBtn')
+          const playIcon = document.getElementById('playIcon')
+          const range = document.getElementById('stpRange')
+          const status = document.getElementById('stpStatus')
+
+          // Envelopes
+          const p1 = document.getElementById('pkt1')
+          const p2 = document.getElementById('pkt2')
+          const p3 = document.getElementById('pkt3')
+          const p4 = document.getElementById('pkt4')
+
+          let currentStep = 0
+          let timer = null
+
+          const steps = [
+            {
+              text: 'Etapa 0: Rede operacional e convergida. O PC1 está preparando o envio de um quadro de Broadcast para a rede local.',
+              action: () => {
+                hideAllPackets()
+              }
+            },
+            {
+              text: 'Etapa 1: O PC1 envia o quadro de Broadcast para o switch de acesso S2 pela porta local Fa0/11.',
+              action: () => {
+                hideAllPackets()
+                movePacket(p1, 140, 310, 360, 220)
+              }
+            },
+            {
+              text: 'Etapa 2: O S2 inunda o frame por todas as portas ativas: vai para PC2, PC3 e sobe o link Tronco 1 em direção ao S1. O link para S3 está bloqueado pelo STP.',
+              action: () => {
+                hideAllPackets()
+                movePacket(p1, 360, 220, 365, 310) // para PC2
+                movePacket(p2, 360, 220, 580, 310) // para PC3
+                movePacket(p3, 360, 220, 600, 80) // subindo para S1
+              }
+            },
+            {
+              text: 'Etapa 3: O S1 recebe o Broadcast e encaminha por todas as suas portas ativas (PC4 e Tronco 3 para S3). O S3 recebe, mas a porta Fa0/2 está em BLOCKING; o loop é evitado com sucesso!',
+              action: () => {
+                hideAllPackets()
+                movePacket(p1, 600, 80, 880, 40) // para PC4
+                movePacket(p2, 600, 80, 120, 40) // de S1 para S3
+              }
+            }
+          ]
+
+          function hideAllPackets() {
+            p1.style.display = 'none'
+            p2.style.display = 'none'
+            p3.style.display = 'none'
+            p4.style.display = 'none'
+          }
+
+          function movePacket(pkt, fromX, fromY, toX, toY) {
+            pkt.style.display = 'block'
+            pkt.style.left = fromX + 'px'
+            pkt.style.top = fromY + 'px'
+            setTimeout(() => {
+              pkt.style.transition = 'all 0.8s ease-in-out'
+              pkt.style.left = toX + 'px'
+              pkt.style.top = toY + 'px'
+            }, 50)
+            // Reseta transição ao limpar
+            setTimeout(() => {
+              pkt.style.transition = 'none'
+            }, 850)
+          }
+
+          function renderStep(idx) {
+            currentStep = idx
+            range.value = idx
+            steps[idx].action()
+            status.innerHTML = `<i class="fas fa-terminal" style="color:var(--secondary);"></i> ${steps[idx].text}`
+          }
+
+          function playSimulation() {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            } else {
+              playIcon.className = 'fas fa-pause'
+              if (currentStep >= 3) currentStep = -1
+
+              timer = setInterval(() => {
+                currentStep++
+                renderStep(currentStep)
+                if (currentStep >= 3) {
+                  clearInterval(timer)
+                  timer = null
+                  playIcon.className = 'fas fa-play'
+                }
+              }, 2000)
+            }
+          }
+
+          range.addEventListener('input', (e) => {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            }
+            renderStep(parseInt(e.target.value))
+          })
+
+          playBtn.addEventListener('click', playSimulation)
+
+          // Inicializa a etapa 0
+          renderStep(0)
+        })()
+      </script>
+      <section id="secao5-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sync-alt"></i>
+          <span class="section-number">5.1.3</span> Recálculo STP
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-tools"></i>
+          <p>
+            Quando ocorre uma falha física em um link ativo dentro de uma topologia comutada, o
+            <strong>Spanning Tree Protocol</strong> reage realizando um recálculo de árvore de abrangência. Durante esse processo, portas
+            anteriormente bloqueadas mudam de estado para garantir caminhos redundantes lógicos alternativos.
+          </p>
+          <p>
+            Utilize os controles interativos abaixo para reproduzir passo a passo o comportamento dinâmico de convergência quando o link
+            principal (Tronco 1) falha e o link de backup assume a topologia.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-play-circle"></i> LAB SIMULATION: O STP Compensa a Falha da Rede
+          </h3>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para ignorar travas do CSS global */
+            .recalc-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .recalc-sim-canvas {
+              position: relative !important;
+              width: 1020px !important; /* Fixa a largura interna para forçar a barra de rolagem no mobile */
+              min-width: 1020px !important;
+              height: 400px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            .recalc-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .recalc-node i {
+              font-size: 2.2rem;
+              color: #00b4d8;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            }
+            .recalc-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal;
+            }
+            .recalc-node .ip {
+              color: var(--text-dim);
+              font-size: 0.7rem;
+            }
+            .recalc-link {
+              position: absolute;
+              background: var(--success);
+              transform-origin: left center;
+              z-index: 2;
+              box-shadow: 0 0 6px var(--success);
+            }
+            .recalc-link.down {
+              background: var(--danger) !important;
+              box-shadow: 0 0 6px var(--danger) !important;
+              border-top: 2px dashed #ff4d6d;
+            }
+            .recalc-link.blocked {
+              background: var(--warning);
+              box-shadow: 0 0 6px var(--warning);
+            }
+            .fail-cross {
+              position: absolute;
+              font-size: 2rem;
+              color: var(--danger);
+              font-weight: bold;
+              z-index: 7;
+              display: none;
+              text-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+            }
+            .recalc-block-marker {
+              position: absolute;
+              width: 24px;
+              height: 24px;
+              background: var(--danger);
+              border-radius: 50%;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.75rem;
+              font-weight: bold;
+              z-index: 6;
+              box-shadow: 0 0 10px var(--danger);
+            }
+            .recalc-packet {
+              position: absolute;
+              width: 18px;
+              height: 14px;
+              background: #ffd166;
+              border: 1px solid #ffb703;
+              border-radius: 3px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 8px #ffb703;
+            }
+            .recalc-packet::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              border-left: 9px solid transparent;
+              border-right: 9px solid transparent;
+              border-top: 6px solid #ffb703;
+            }
+            .recalc-controls {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              margin-top: 1.5rem;
+              background: #121824;
+              padding: 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            .recalc-btn {
+              background: transparent;
+              border: 1px solid var(--primary);
+              color: var(--primary);
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.2rem;
+              transition: all 0.2s;
+            }
+            .recalc-btn:hover {
+              background: var(--primary);
+              color: #0a0e17;
+              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            }
+            .recalc-slider-container {
+              flex-grow: 1;
+              display: flex;
+              align-items: center;
+            }
+            .recalc-slider {
+              width: 100%;
+              -webkit-appearance: none;
+              appearance: none;
+              height: 6px;
+              border-radius: 3px;
+              background: var(--border);
+              outline: none;
+            }
+            .recalc-slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              background: #ffd166;
+              cursor: pointer;
+              box-shadow: 0 0 8px #ffd166;
+            }
+            .recalc-status-box {
+              background: #0a0e17;
+              border: 1px solid var(--border);
+              padding: 0.8rem 1.2rem;
+              border-radius: 6px;
+              min-height: 55px;
+              display: flex;
+              align-items: center;
+              color: var(--text);
+              font-family: monospace;
+              font-size: 0.85rem;
+              margin-top: 1rem;
+            }
+          </style>
+
+          <div class="recalc-canvas-responsive-wrapper">
+            <div class="recalc-sim-canvas" id="recalcCanvas">
+              <div class="recalc-link" id="linkTronco3" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div
+                class="recalc-link"
+                id="linkTronco2"
+                style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"
+              ></div>
+              <div
+                class="recalc-link"
+                id="linkTronco1"
+                style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"
+              ></div>
+              <div class="recalc-link" style="top: 75px; left: 640px; width: 240px; height: 3px; transform: rotate(0deg)"></div>
+              <div class="recalc-link" style="top: 215px; left: 390px; width: 280px; height: 3px; transform: rotate(145deg)"></div>
+              <div class="recalc-link" style="top: 215px; left: 400px; width: 140px; height: 3px; transform: rotate(90deg)"></div>
+              <div class="recalc-link" style="top: 215px; left: 410px; width: 280px; height: 3px; transform: rotate(35deg)"></div>
+              <div class="fail-cross" id="visualX" style="top: 100px; left: 495px">❌</div>
+
+              <div class="recalc-block-marker" id="recalcBlockMarker" style="top: 130px; left: 245px">X</div>
+
+              <div class="recalc-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
+              <div class="recalc-node" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root)</span>
+              </div>
+              <div class="recalc-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+
+              <div class="recalc-node" style="top: 310px; left: 120px">
+                <i class="fas fa-laptop"></i><span>PC1</span><span class="ip">172.17.10.21</span>
+              </div>
+              <div class="recalc-node" style="top: 310px; left: 345px">
+                <i class="fas fa-laptop"></i><span>PC2</span><span class="ip">172.17.10.22</span>
+              </div>
+              <div class="recalc-node" style="top: 310px; left: 560px">
+                <i class="fas fa-laptop"></i><span>PC3</span><span class="ip">172.17.10.23</span>
+              </div>
+              <div class="recalc-node" style="top: 40px; left: 860px">
+                <i class="fas fa-laptop"></i><span>PC4</span><span class="ip">172.17.10.27</span>
+              </div>
+
+              <div class="recalc-packet" id="rpkt1"></div>
+              <div class="recalc-packet" id="rpkt2"></div>
+              <div class="recalc-packet" id="rpkt3"></div>
+            </div>
+          </div>
+
+          <div class="recalc-controls">
+            <button class="recalc-btn" id="recalcPlayBtn"><i class="fas fa-play" id="recalcPlayIcon"></i></button>
+            <div class="recalc-slider-container">
+              <input type="range" min="0" max="5" value="0" class="recalc-slider" id="recalcRange" />
+            </div>
+          </div>
+
+          <div class="recalc-status-box" id="recalcStatus">
+            Clique em Play ou arraste o controle deslizante para ver a convergência dinâmica após a quebra do Tronco 1.
+          </div>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i> <strong>Conclusão sobre Alta Disponibilidade:</strong> Graças ao recálculo automático do STP,
+          o tráfego de dados recupera sua conectividade lógica fim-a-fim sem que ocorra interrupção definitiva ou necessidade de intervenção
+          manual do administrador de redes.
+        </div>
+      </section>
+      <script>
+        ;(function () {
+          const playBtn = document.getElementById('recalcPlayBtn')
+          const playIcon = document.getElementById('recalcPlayIcon')
+          const range = document.getElementById('recalcRange')
+          const status = document.getElementById('recalcStatus')
+
+          // Elementos Gráficos
+          const lTronco1 = document.getElementById('linkTronco1')
+          const lTronco2 = document.getElementById('linkTronco2')
+          const visualX = document.getElementById('visualX')
+          const blockMarker = document.getElementById('recalcBlockMarker')
+
+          // Envelopes
+          const p1 = document.getElementById('rpkt1')
+          const p2 = document.getElementById('rpkt2')
+          const p3 = document.getElementById('rpkt3')
+
+          let currentStep = 0
+          let timer = null
+
+          const steps = [
+            {
+              text: 'Etapa 0: Topologia Operacional Inicial. O link entre S2 e S1 (Tronco 1) está ativo e transmitindo tráfego normalmente. Tronco 2 está bloqueado.',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link'
+                lTronco2.className = 'recalc-link'
+                visualX.style.display = 'none'
+                blockMarker.style.display = 'flex'
+                blockMarker.style.background = 'var(--danger)'
+              }
+            },
+            {
+              text: 'Etapa 1: Falha no Enlace! O link de tronco físico entre o switch S2 e o switch S1 (Tronco 1) sofreu uma ruptura (Link Down).',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link down'
+                lTronco2.className = 'recalc-link'
+                visualX.style.display = 'block'
+                blockMarker.style.display = 'flex'
+              }
+            },
+            {
+              text: 'Etapa 2: PC1 inicia a transmissão de um quadro de broadcast em direção à rede para tentar restabelecer contato.',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link down'
+                visualX.style.display = 'block'
+                movePacket(p1, 140, 310, 360, 220) // PC1 -> S2
+              }
+            },
+            {
+              text: 'Etapa 3: S2 encaminha a transmissão por todas as portas ativas do switch, exceto a porta de origem e o link que falhou para o Tronco 1.',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link down'
+                visualX.style.display = 'block'
+                movePacket(p1, 360, 220, 365, 310) // para PC2
+                movePacket(p2, 360, 220, 580, 310) // para PC3
+                movePacket(p3, 360, 220, 140, 75) // em direção à porta em transição do S3
+              }
+            },
+            {
+              text: 'Etapa 4: Recálculo STP concluído. S3 detectou a perda de link da topologia e abre o Tronco 2, alterando a interface de BLOCKING para FORWARDING (Verde).',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link down'
+                lTronco2.className = 'recalc-link' // Fica verde estável
+                visualX.style.display = 'block'
+                blockMarker.style.display = 'none' // Sumiu o bloqueio X
+                movePacket(p1, 140, 75, 120, 40) // O frame sobe por S3 com sucesso
+              }
+            },
+            {
+              text: 'Etapa 5: O switch S3 encaminha a transmissão por todas as portas disponíveis. O frame atravessa o Tronco 3 e alcança com sucesso o Root Bridge S1, que distribui para o PC4.',
+              action: () => {
+                hideAllPackets()
+                lTronco1.className = 'recalc-link down'
+                visualX.style.display = 'block'
+                blockMarker.style.display = 'none'
+                movePacket(p1, 120, 40, 600, 40) // De S3 para S1 via Tronco 3
+                setTimeout(() => {
+                  movePacket(p2, 600, 40, 880, 40) // De S1 para PC4
+                }, 400)
+              }
+            }
+          ]
+
+          function hideAllPackets() {
+            p1.style.display = 'none'
+            p2.style.display = 'none'
+            p3.style.display = 'none'
+          }
+
+          function movePacket(pkt, fromX, fromY, toX, toY) {
+            pkt.style.display = 'block'
+            pkt.style.left = fromX + 'px'
+            pkt.style.top = fromY + 'px'
+            setTimeout(() => {
+              pkt.style.transition = 'all 0.6s ease-in-out'
+              pkt.style.left = toX + 'px'
+              pkt.style.top = toY + 'px'
+            }, 50)
+            setTimeout(() => {
+              pkt.style.transition = 'none'
+            }, 650)
+          }
+
+          function renderStep(idx) {
+            currentStep = idx
+            range.value = idx
+            steps[idx].action()
+            status.innerHTML = `<i class="fas fa-terminal" style="color:var(--secondary);"></i> ${steps[idx].text}`
+          }
+
+          function playSimulation() {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            } else {
+              playIcon.className = 'fas fa-pause'
+              if (currentStep >= 5) currentStep = -1
+
+              timer = setInterval(() => {
+                currentStep++
+                renderStep(currentStep)
+                if (currentStep >= 5) {
+                  clearInterval(timer)
+                  timer = null
+                  playIcon.className = 'fas fa-play'
+                }
+              }, 2500)
+            }
+          }
+
+          range.addEventListener('input', (e) => {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            }
+            renderStep(parseInt(e.target.value))
+          })
+
+          playBtn.addEventListener('click', playSimulation)
+
+          // Inicializa a etapa 0
+          renderStep(0)
+        })()
+      </script>
+      <section id="secao5-1-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-circle"></i>
+          <span class="section-number">5.1.4</span> Problemas com links de switch redundantes
+        </h2>
+
+        <div class="card">
+          <p>
+            A redundância de caminho fornece vários serviços de rede, eliminando a possibilidade de um único ponto de falha. Quando existem
+            vários caminhos entre dois dispositivos em uma rede Ethernet e não há implementação de <strong>Spanning Tree</strong> nos
+            switches, ocorre um loop da Camada 2.
+          </p>
+          <p>
+            Um loop de Camada 2 pode resultar em <strong>instabilidade da tabela de endereços MAC</strong>,
+            <strong>saturação de links</strong> e <strong>alta utilização da CPU</strong> em switches e dispositivos finais, resultando na
+            rede se tornando inutilizável.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3 style="color: var(--warning); font-size: 1.1rem; margin-bottom: 1.2rem; font-family: 'Inter', sans-serif">
+            <i class="fas fa-balance-scale"></i> Análise de Mecanismo: Por que a Camada 2 Falha sem STP?
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text)">
+            Diferente dos protocolos da camada 3, IPv4 e IPv6, a camada 2 Ethernet não inclui um mecanismo para reconhecer e eliminar
+            quadros (<em>frames</em>) de loop infinito.
+          </p>
+
+          <style>
+            .layer-compare-grid {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 1.5rem !important;
+              margin-top: 1.5rem !important;
+            }
+            .layer-box {
+              background: var(--bg-dark) !important;
+              border: 1px solid var(--border) !important;
+              border-radius: 8px !important;
+              padding: 1.2rem !important;
+              position: relative !important;
+              display: flex !important;
+              flex-direction: column !important;
+              justify-content: space-between !important;
+            }
+            .layer-box h4 {
+              margin: 0 0 0.8rem 0 !important;
+              font-family: monospace !important;
+              font-size: 1rem !important;
+              display: flex !important;
+              align-items: center !important;
+              gap: 0.5rem !important;
+            }
+            .layer-badge {
+              position: absolute !important;
+              top: 12px !important;
+              right: 12px !important;
+              font-size: 0.7rem !important;
+              padding: 2px 6px !important;
+              border-radius: 4px !important;
+              font-family: monospace !important;
+            }
+            .field-structure {
+              background: #121824 !important;
+              border: 1px solid #202b42 !important;
+              padding: 0.6rem !important;
+              border-radius: 6px !important;
+              font-family: monospace !important;
+              font-size: 0.8rem !important;
+              margin-top: 0.8rem !important;
+              color: var(--text-dim) !important;
+              text-align: center !important;
+            }
+            .field-structure strong {
+              color: var(--secondary) !important;
+            }
+
+            /* Ajuste para Mobile - Força exibição em coluna única sem espremer */
+            @media (max-width: 768px) {
+              .layer-compare-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+              }
+              .layer-badge {
+                position: static !important;
+                align-self: flex-start !important;
+                margin-bottom: 0.5rem !important;
+              }
+            }
+          </style>
+
+          <div class="layer-compare-grid">
+            <div class="layer-box" style="border-top: 3px solid var(--success) !important">
+              <span class="layer-badge" style="background: rgba(3, 244, 135, 0.1) !important; color: var(--success) !important"
+                >Mecanismo Ativo</span
+              >
+              <h4 style="color: var(--success) !important"><i class="fas fa-route"></i> Camada 3 (IPv4 / IPv6)</h4>
+              <p style="font-size: 0.85rem; margin: 0; line-height: 1.4 !important">
+                Incluem um mecanismo que limita o número de vezes que um dispositivo de rede pode retransmitir um pacote. O roteador
+                diminuirá o <strong>TTL (Time to Live)</strong> em cada pacote IPv4 e o campo <strong>Limite de Hop</strong> em cada pacote
+                IPv6. Quando esses campos diminuem para 0, o roteador descarta o pacote.
+              </p>
+              <div class="field-structure">IPv4 Packet Header: [ ... | <strong>TTL (Decrementa -1 por Salto)</strong> | ... ]</div>
+            </div>
+
+            <div class="layer-box" style="border-top: 3px solid var(--danger) !important">
+              <span class="layer-badge" style="background: rgba(255, 77, 109, 0.1) !important; color: var(--danger) !important"
+                >Sem Mecanismo</span
+              >
+              <h4 style="color: var(--danger) !important"><i class="fas fa-network-wired"></i> Camada 2 (Ethernet)</h4>
+              <p style="font-size: 0.85rem; margin: 0; line-height: 1.4 !important">
+                Os switches Ethernet não têm nenhum mecanismo comparável para limitar o número de vezes que um switch retransmite um quadro
+                de Camada 2. Sem um protocolo de controle, o frame circula indefinidamente consumindo banda e processamento.
+              </p>
+              <div class="field-structure">
+                Ethernet Frame: [ Preamble | DMAC | SMAC | Type | Payload | <strong>Sem Campo de Vida Útil!</strong> ]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-shield-alt"></i> <strong>Conclusão de Engenharia:</strong> O <strong>STP</strong> foi desenvolvido
+          especificamente como um mecanismo de prevenção de loop para Ethernet de camada 2, suprindo a ausência de um campo de expiração
+          nativo no quadro Ethernet.
+        </div>
+      </section>
+      <section id="secao5-1-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-redo"></i>
+          <span class="section-number">5.1.5</span> Loops de Camada 2
+        </h2>
+
+        <div class="card">
+          <p>
+            Sem o <strong>STP</strong> habilitado, os loops da Camada 2 podem se formar, fazendo com que os quadros de difusão
+            (<em>Broadcast</em>), <em>Multicast</em> e <em>Unicast</em> desconhecidos circulem sem parar. Isso pode derrubar uma rede dentro
+            de um período de tempo muito curto, às vezes em apenas alguns segundos.
+          </p>
+          <p>
+            Por exemplo, os quadros de <em>Broadcast</em>, como uma Solicitação <strong>ARP</strong>, são encaminhados para todas as portas
+            do switch, exceto a porta de entrada original. Isso garante que todos os dispositivos em um domínio de <em>Broadcast</em> possam
+            receber o quadro. Se houver mais de um caminho para o quadro ser encaminhado, isso pode resultar em um loop interminável.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--danger)">
+          <h3
+            style="
+              color: var(--danger);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-biohazard"></i> CLI &amp; TOPOLOGY CRASH: Comportamento Sem STP
+          </h3>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para garantir a rolagem horizontal no mobile */
+            .loop-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid rgba(255, 77, 109, 0.2) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .loop-sim-canvas {
+              position: relative !important;
+              width: 780px !important; /* Fixa a largura interna para disparar a barra de rolagem se a tela for menor */
+              min-width: 780px !important;
+              height: 380px !important;
+              background: #05070b !important;
+              overflow: hidden !important;
+            }
+
+            .loop-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .loop-node i {
+              font-size: 2.2rem;
+              color: #718096;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+            }
+            .loop-node.active-switch i {
+              color: var(--warning);
+              border-color: var(--warning);
+              animation: pulse-orange 1s infinite alternate;
+            }
+            .loop-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal;
+            }
+            .loop-link {
+              position: absolute;
+              background: var(--warning);
+              z-index: 2;
+              box-shadow: 0 0 8px var(--warning);
+            }
+            .loop-link.active-loop {
+              background: var(--danger) !important;
+              box-shadow: 0 0 15px var(--danger) !important;
+              animation: link-burn 0.2s infinite;
+            }
+            .loop-packet {
+              position: absolute;
+              width: 14px;
+              height: 10px;
+              background: var(--danger);
+              border-radius: 2px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 10px var(--danger);
+            }
+            .loop-mac-terminal {
+              background: #020406;
+              border: 1px solid var(--border);
+              border-radius: 8px;
+              padding: 0.8rem;
+              font-family: 'Consolas', monospace;
+              font-size: 0.75rem;
+              color: var(--text);
+              height: 110px;
+              overflow-y: hidden;
+              margin-top: 1rem;
+              border-left: 3px solid var(--danger);
+            }
+            .loop-controls-panel {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+              margin-top: 1rem;
+            }
+            .loop-btn-trigger {
+              background: rgba(255, 77, 109, 0.1);
+              border: 1px solid var(--danger);
+              color: var(--danger);
+              padding: 0.6rem 1.2rem;
+              border-radius: 6px;
+              cursor: pointer;
+              font-family: monospace;
+              font-weight: bold;
+              transition: all 0.2s;
+            }
+            .loop-btn-trigger:hover {
+              background: var(--danger);
+              color: #000;
+              box-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
+            }
+            @keyframes pulse-orange {
+              from {
+                box-shadow: 0 0 5px rgba(255, 183, 3, 0.2);
+              }
+              to {
+                box-shadow: 0 0 20px rgba(255, 183, 3, 0.6);
+              }
+            }
+            @keyframes link-burn {
+              0% {
+                opacity: 0.6;
+              }
+              50% {
+                opacity: 1;
+              }
+              100% {
+                opacity: 0.6;
+              }
+            }
+          </style>
+
+          <div class="loop-canvas-responsive-wrapper">
+            <div class="loop-sim-canvas">
+              <div class="loop-link" id="ll1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="loop-link" id="ll2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
+              <div class="loop-link" id="ll3" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+
+              <div class="loop-node" id="nodeS3" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
+              <div class="loop-node" id="nodeS1" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
+              <div class="loop-node" id="nodeS2" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+
+              <div class="loop-node" style="top: 290px; left: 345px"><i class="fas fa-laptop"></i><span>PC1 (Gera ARP Request)</span></div>
+
+              <div class="loop-packet" id="lp1"></div>
+              <div class="loop-packet" id="lp2"></div>
+              <div class="loop-packet" id="lp3"></div>
+            </div>
+          </div>
+
+          <div class="loop-controls-panel">
+            <button class="loop-btn-trigger" id="startLoopBtn"><i class="fas fa-bomb"></i> INJETAR BROADCAST SEM STP</button>
+            <button
+              class="loop-btn-trigger"
+              id="resetLoopBtn"
+              style="color: var(--text-dim); border-color: var(--border); background: transparent; display: none"
+            >
+              RESETAR INFRA
+            </button>
+          </div>
+
+          <div class="loop-mac-terminal" id="loopTerminal">
+            S2# show mac address-table dynamic
+            <br /><span style="color: var(--text-dim)">[Aguardando injeção de tráfego para processamento da tabela MAC...]</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Quando ocorre um loop, a <strong>tabela de endereços MAC</strong> em um switch muda constantemente com as atualizações dos
+            quadros de <em>Broadcast</em>, o que resulta em <strong>instabilidade do banco de dados MAC</strong> (<em>MAC Table Flapping</em
+            >). Isso causa alta utilização da CPU, o que torna o switch incapaz de encaminhar quadros.
+          </p>
+          <p>
+            Os quadros de <em>Broadcast</em> não são os únicos afetados. Os quadros <strong>Unicast Desconhecidos</strong> enviados para uma
+            rede com loops fazem com que quadros duplicados cheguem ao dispositivo de destino. Um quadro <em>Unicast</em> desconhecido
+            ocorre quando o switch não possui o endereço MAC de destino mapeado em sua tabela e é forçado a inundar o quadro por todas as
+            portas, alimentando o ciclo interminável.
+          </p>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-skull-crossbones"></i> <strong>Efeito Broadcast Storm:</strong> Como o cabeçalho Ethernet de Camada 2 não possui
+          um campo TTL, os pacotes duplicados continuam se multiplicando exponencialmente até que a memória interna dos switches se esgote,
+          resultando em um colapso total dos serviços de rede.
+        </div>
+      </section>
+
+      <script>
+        ;(function () {
+          const startBtn = document.getElementById('startLoopBtn')
+          const resetBtn = document.getElementById('resetLoopBtn')
+          const term = document.getElementById('loopTerminal')
+
+          const s1 = document.getElementById('nodeS1')
+          const s2 = document.getElementById('nodeS2')
+          const s3 = document.getElementById('nodeS3')
+
+          const ll1 = document.getElementById('ll1')
+          const ll2 = document.getElementById('ll2')
+          const ll3 = document.getElementById('ll3')
+
+          const p1 = document.getElementById('lp1')
+          const p2 = document.getElementById('lp2')
+          const p3 = document.getElementById('lp3')
+
+          let loopInterval = null
+          let macToggle = false
+
+          function runLoopAnimation() {
+            // Ativa comportamento visual de estresse
+            s1.classList.add('active-switch')
+            s2.classList.add('active-switch')
+            s3.classList.add('active-switch')
+            ll1.classList.add('active-loop')
+            ll2.classList.add('active-loop')
+            ll3.classList.add('active-loop')
+
+            p1.style.display = 'block'
+            p2.style.display = 'block'
+            p3.style.display = 'block'
+
+            let phase = 0
+
+            loopInterval = setInterval(() => {
+              // Alterna posições de forma caótica e rápida para simular a tempestade
+              if (phase === 0) {
+                p1.style.left = '360px'
+                p1.style.top = '220px'
+                p2.style.left = '120px'
+                p2.style.top = '60px'
+                p3.style.left = '600px'
+                p3.style.top = '60px'
+                phase = 1
+              } else if (phase === 1) {
+                p1.style.left = '120px'
+                p1.style.top = '60px'
+                p2.style.left = '600px'
+                p2.style.top = '60px'
+                p3.style.left = '360px'
+                p3.style.top = '220px'
+                phase = 2
+              } else {
+                p1.style.left = '600px'
+                p1.style.top = '60px'
+                p2.style.left = '360px'
+                p2.style.top = '220px'
+                p3.style.left = '120px'
+                p3.style.top = '60px'
+                phase = 0
+              }
+
+              // Simula Log de Flapping de tabela MAC no console
+              macToggle = !macToggle
+              const portA = macToggle ? 'Fa0/1' : 'Fa0/2'
+              const portB = macToggle ? 'Fa0/2' : 'Fa0/1'
+
+              term.innerHTML =
+                `*Jun 30 13:14:10.512: %MAC_MOVE-4-NOTIF: MAC address 000a.00b4.d8a5 moved from port ${portA} to port ${portB}<br>` +
+                term.innerHTML
+
+              // Limita linhas do terminal fake para não quebrar o layout
+              const lines = term.innerHTML.split('<br>')
+              if (lines.length > 6) {
+                term.innerHTML = lines.slice(0, 5).join('<br>')
+              }
+            }, 180)
+
+            startBtn.style.display = 'none'
+            resetBtn.style.display = 'inline-block'
+          }
+
+          function resetTopology() {
+            clearInterval(loopInterval)
+            s1.classList.remove('active-switch')
+            s2.classList.remove('active-switch')
+            s3.classList.remove('active-switch')
+            ll1.classList.remove('active-loop')
+            ll2.classList.remove('active-loop')
+            ll3.classList.remove('active-loop')
+
+            p1.style.display = 'none'
+            p2.style.display = 'none'
+            p3.style.display = 'none'
+
+            term.innerHTML = `S2# show mac address-table dynamic<br><span style="color: var(--text-dim);">[Topologia resetada. Aguardando nova injeção de Broadcast...]</span>`
+
+            resetBtn.style.display = 'none'
+            startBtn.style.display = 'inline-block'
+          }
+
+          startBtn.addEventListener('click', runLoopAnimation)
+          resetBtn.addEventListener('click', resetTopology)
+        })()
+      </script>
+      <section id="secao5-1-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-bolt"></i>
+          <span class="section-number">5.1.6</span> Tempestade de Broadcast
+        </h2>
+
+        <div class="card">
+          <p>
+            Uma <strong>Tempestade de Broadcast</strong> (<em>Broadcast Storm</em>) ocorre quando tantos quadros de difusão são capturados
+            em um loop de Camada 2 que toda a largura de banda disponível é consumida instantaneamente. Como esses quadros continuam se
+            propagando de forma cíclica, nenhum tráfego legítimo de usuários consegue trafegar pela LAN, resultando em um colapso completo
+            dos serviços de rede.
+          </p>
+          <p>
+            Em uma rede com loops lógicos e sem a proteção do <strong>STP</strong>, os switches continuam a encaminhar o tráfego de
+            <em>Broadcast</em> indefinidamente. Consequentemente, a contagem de frames se multiplica de forma exponencial em pouquíssimos
+            milissegundos.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--danger)">
+          <h3
+            style="
+              color: var(--danger);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-radiation"></i> CRITICAL STORM SIMULATION: Multiplicação Exponencial de Quadros
+          </h3>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para garantir a rolagem nativa no mobile */
+            .storm-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid rgba(255, 77, 109, 0.3) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .storm-sim-canvas {
+              position: relative !important;
+              width: 820px !important; /* Fixa a largura para forçar o scroll horizontal no mobile */
+              min-width: 820px !important;
+              height: 380px !important;
+              background: #04060a !important;
+              overflow: hidden !important;
+            }
+
+            .storm-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .storm-node i {
+              font-size: 2.2rem;
+              color: #718096;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+              transition: all 0.3s;
+            }
+            .storm-node.overloaded i {
+              color: var(--danger) !important;
+              border-color: var(--danger) !important;
+              box-shadow: 0 0 20px var(--danger) !important;
+              animation: shake-device 0.15s infinite;
+            }
+            .storm-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal;
+            }
+            .storm-link {
+              position: absolute;
+              background: var(--text-dim);
+              z-index: 2;
+            }
+            .storm-link.saturated {
+              background: linear-gradient(90deg, var(--danger), var(--warning)) !important;
+              box-shadow: 0 0 12px var(--danger) !important;
+            }
+            .storm-packet {
+              position: absolute;
+              width: 14px;
+              height: 10px;
+              background: #ff4d6d;
+              border-radius: 2px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 8px #ff4d6d;
+            }
+            .storm-controls {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              margin-top: 1.5rem;
+              background: #121824;
+              padding: 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            .storm-btn {
+              background: rgba(255, 77, 109, 0.1);
+              border: 1px solid var(--danger);
+              color: var(--danger);
+              padding: 0.6rem 1.2rem;
+              border-radius: 6px;
+              cursor: pointer;
+              font-family: monospace;
+              font-weight: bold;
+              transition: all 0.2s;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            }
+            .storm-btn:hover {
+              background: var(--danger);
+              color: #000;
+              box-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
+            }
+            .storm-status-box {
+              background: #0a0e17;
+              border: 1px solid var(--border);
+              padding: 0.8rem 1.2rem;
+              border-radius: 6px;
+              min-height: 55px;
+              display: flex;
+              align-items: center;
+              color: var(--text);
+              font-family: monospace;
+              font-size: 0.85rem;
+              margin-top: 1rem;
+              border-left: 3px solid var(--danger);
+            }
+
+            @keyframes shake-device {
+              0% {
+                transform: translate(1px, 1px) rotate(0deg);
+              }
+              100% {
+                transform: translate(-1px, -2px) rotate(-1deg);
+              }
+            }
+          </style>
+
+          <div class="storm-canvas-responsive-wrapper">
+            <div class="storm-sim-canvas" id="stormCanvas">
+              <div class="storm-link" id="sl1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="storm-link" id="sl2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
+              <div class="storm-link" id="sl3" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+
+              <div class="storm-node" id="stS3" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
+              <div class="storm-node" id="stS1" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
+              <div class="storm-node" id="stS2" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+
+              <div class="storm-node" style="top: 290px; left: 345px">
+                <i class="fas fa-laptop"></i><span>PC1 (Emite Broadcast original)</span>
+              </div>
+
+              <div class="storm-packet" id="spk1"></div>
+              <div class="storm-packet" id="spk2"></div>
+              <div class="storm-packet" id="spk3"></div>
+              <div class="storm-packet" id="spk4"></div>
+              <div class="storm-packet" id="spk5"></div>
+              <div class="storm-packet" id="spk6"></div>
+            </div>
+          </div>
+
+          <div class="storm-controls">
+            <button class="storm-btn" id="triggerStormBtn"><i class="fas fa-bolt"></i> INICIAR BROADCAST STORM</button>
+            <button
+              class="storm-btn"
+              id="clearStormBtn"
+              style="color: var(--text-dim); border-color: var(--border); background: transparent; display: none"
+            >
+              CORTAR LINKS (RESET)
+            </button>
+          </div>
+
+          <div class="storm-status-box" id="stormStatus">
+            Aguardando injeção do pacote inicial. Clique no botão acima para iniciar a tempestade cíclica.
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            À medida que o processo continua, a tabela de endereços MAC do switch falha devido ao recebimento constante de frames em portas
+            diferentes (<em>MAC Table Flapping</em>). A CPU do switch fica tão sobrecarregada processando os pacotes repetidos que ele deixa
+            de responder, congelando completamente o encaminhamento de qualquer tráfego útil.
+          </p>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-skull-crossbones"></i> <strong>Fato de Rede Inegociável:</strong> Um Broadcast Storm pode travar completamente
+          uma rede corporativa inteira em menos de 5 segundos. Sem o <strong>STP</strong> habilitado de forma nativa para bloquear de forma
+          lógica um dos segmentos físicos redundantes, não há solução senão desligar fisicamente os cabos de rede para quebrar o ciclo.
+        </div>
+      </section>
+
+      <script>
+        ;(function () {
+          const triggerBtn = document.getElementById('triggerStormBtn')
+          const clearBtn = document.getElementById('clearStormBtn')
+          const statusBox = document.getElementById('stormStatus')
+
+          const s1 = document.getElementById('stS1')
+          const s2 = document.getElementById('stS2')
+          const s3 = document.getElementById('stS3')
+
+          const l1 = document.getElementById('sl1')
+          const l2 = document.getElementById('sl2')
+          const l3 = document.getElementById('sl3')
+
+          // Array contendo referências para todos os pacotes móveis simulados
+          const packets = [
+            document.getElementById('spk1'),
+            document.getElementById('spk2'),
+            document.getElementById('spk3'),
+            document.getElementById('spk4'),
+            document.getElementById('spk5'),
+            document.getElementById('spk6')
+          ]
+
+          let stormInterval = null
+
+          function startStorm() {
+            // Altera estados visuais de enlaces e dispositivos para sobrecarga/saturação
+            s1.classList.add('overloaded')
+            s2.classList.add('overloaded')
+            s3.classList.add('overloaded')
+
+            l1.classList.add('saturated')
+            l2.classList.add('saturated')
+            l3.classList.add('saturated')
+
+            // Ativa e exibe todos os pacotes
+            packets.forEach((p) => (p.style.display = 'block'))
+
+            let toggleState = 0
+
+            // Loop de animação rápido e contínuo simulando a multiplicação caótica dos pacotes
+            stormInterval = setInterval(() => {
+              if (toggleState === 0) {
+                // S2 espalha para S1 e S3
+                packets[0].style.left = '360px'
+                packets[0].style.top = '220px'
+                packets[1].style.left = '120px'
+                packets[1].style.top = '60px'
+                // S1 joga para S3
+                packets[2].style.left = '600px'
+                packets[2].style.top = '60px'
+                packets[3].style.left = '120px'
+                packets[3].style.top = '60px'
+                // S3 duplica para S2 e S1
+                packets[4].style.left = '360px'
+                packets[4].style.top = '220px'
+                packets[5].style.left = '600px'
+                packets[5].style.top = '60px'
+                toggleState = 1
+              } else {
+                // Movimentação invertida cruzada
+                packets[0].style.left = '600px'
+                packets[0].style.top = '60px'
+                packets[1].style.left = '360px'
+                packets[1].style.top = '220px'
+                packets[2].style.left = '120px'
+                packets[2].style.top = '60px'
+                packets[3].style.left = '360px'
+                packets[3].style.top = '220px'
+                packets[4].style.left = '600px'
+                packets[4].style.top = '60px'
+                packets[5].style.left = '120px'
+                packets[5].style.top = '60px'
+                toggleState = 0
+              }
+
+              statusBox.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:var(--danger); animation: pulse 0.5s infinite;"></i> <strong>SYS-LOG CRITICAL:</strong> S2 CPU Utilization 100% | Broadcast Storm Active | Bandwidth Exhausted!`
+            }, 120)
+
+            triggerBtn.style.display = 'none'
+            clearBtn.style.display = 'flex'
+          }
+
+          function clearStorm() {
+            clearInterval(stormInterval)
+
+            s1.classList.remove('overloaded')
+            s2.classList.remove('overloaded')
+            s3.classList.remove('overloaded')
+
+            l1.classList.remove('saturated')
+            l2.classList.remove('saturated')
+            l3.classList.remove('saturated')
+
+            packets.forEach((p) => (p.style.display = 'none'))
+
+            statusBox.innerHTML = `Infraestrutura limpa. Links reestabelecidos. Aguardando nova injeção de tráfego.`
+
+            clearBtn.style.display = 'none'
+            triggerBtn.style.display = 'flex'
+          }
+
+          triggerBtn.addEventListener('click', startStorm)
+          clearBtn.addEventListener('click', clearStorm)
+        })()
+      </script>
+      <section id="secao5-1-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-eye-slash"></i>
+          <span class="section-number">5.1.7</span> Problemas com links redundantes: Unicast Desconhecido
+        </h2>
+
+        <div class="card">
+          <p>
+            Os quadros de <em>Broadcast</em> não são os únicos afetados pelos loops de Camada 2. Quadros do tipo
+            <strong>Unicast Desconhecido</strong> (<em>Unknown Unicast</em>) enviados para uma rede comutada redundante sem a proteção do
+            <strong>STP</strong> provocam a chegada de pacotes duplicados e redundantes nos dispositivos de destino.
+          </p>
+          <p>
+            Um quadro <em>Unicast</em> desconhecido ocorre quando o switch recebe um frame destinado a um endereço MAC específico que
+            <strong>não consta em sua tabela de endereços MAC local</strong>. Diante disso, o switch é forçado a realizar a inundação
+            (<em>flooding</em>) desse quadro por todas as portas ativas, exceto a porta de entrada. Se houver um loop físico na topologia,
+            esse frame passará a circular infinitamente, sendo duplicado por cada switch no caminho.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-play-circle"></i> LAB SIMULATION: Inundação e Duplicação de Unknown Unicast
+          </h3>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para garantir o scroll horizontal no mobile */
+            .unicast-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .unicast-sim-canvas {
+              position: relative !important;
+              width: 820px !important; /* Mantém largura fixa interna para evitar quebras absolutas no mobile */
+              min-width: 820px !important;
+              height: 380px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            .unicast-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .unicast-node i {
+              font-size: 2.2rem;
+              color: #00b4d8;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            }
+            .unicast-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal;
+            }
+            .unicast-link {
+              position: absolute;
+              background: var(--success);
+              z-index: 2;
+              box-shadow: 0 0 6px var(--success);
+            }
+            .unicast-packet {
+              position: absolute;
+              width: 16px;
+              height: 12px;
+              background: #90e0ef;
+              border: 1px solid var(--primary);
+              border-radius: 2px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 8px var(--primary);
+            }
+            .unicast-controls {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              margin-top: 1.5rem;
+              background: #121824;
+              padding: 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            .unicast-btn {
+              background: transparent;
+              border: 1px solid var(--primary);
+              color: var(--primary);
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.2rem;
+              transition: all 0.2s;
+            }
+            .unicast-btn:hover {
+              background: var(--primary);
+              color: #0a0e17;
+              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            }
+            .unicast-slider-container {
+              flex-grow: 1;
+              display: flex;
+              align-items: center;
+            }
+            .unicast-slider {
+              width: 100%;
+              -webkit-appearance: none;
+              appearance: none;
+              height: 6px;
+              border-radius: 3px;
+              background: var(--border);
+              outline: none;
+            }
+            .unicast-slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              background: #90e0ef;
+              cursor: pointer;
+              box-shadow: 0 0 8px #90e0ef;
+            }
+            .unicast-status-box {
+              background: #0a0e17;
+              border: 1px solid var(--border);
+              padding: 0.8rem 1.2rem;
+              border-radius: 6px;
+              min-height: 55px;
+              display: flex;
+              align-items: center;
+              color: var(--text);
+              font-family: monospace;
+              font-size: 0.85rem;
+              margin-top: 1rem;
+              border-left: 3px solid var(--primary);
+            }
+          </style>
+
+          <div class="unicast-canvas-responsive-wrapper">
+            <div class="unicast-sim-canvas" id="unicastCanvas">
+              <div class="unicast-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="unicast-link" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
+              <div class="unicast-link" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+
+              <div class="unicast-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
+              <div class="unicast-node" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
+              <div class="unicast-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+
+              <div class="unicast-node" style="top: 290px; left: 120px"><i class="fas fa-laptop"></i><span>PC1</span></div>
+              <div class="unicast-node" style="top: 290px; left: 560px">
+                <i class="fas fa-laptop"></i><span>PC2 (Destino Unicast)</span>
+              </div>
+
+              <div class="unicast-packet" id="upkt1"></div>
+              <div class="unicast-packet" id="upkt2"></div>
+              <div class="unicast-packet" id="upkt3"></div>
+            </div>
+          </div>
+
+          <div class="unicast-controls">
+            <button class="unicast-btn" id="unicastPlayBtn"><i class="fas fa-play" id="unicastPlayIcon"></i></button>
+            <div class="unicast-slider-container">
+              <input type="range" min="0" max="4" value="0" class="unicast-slider" id="unicastRange" />
+            </div>
+          </div>
+
+          <div class="unicast-status-box" id="unicastStatus">
+            Clique no Play ou intercale as etapas para analisar o fluxo do quadro Unicast Desconhecido.
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Instabilidade do Banco de Dados:</strong> Além da entrega de pacotes
+          duplicados para as estações de trabalho finais, a inundação constante causada por loops força os switches a atualizarem
+          freneticamente suas próprias tabelas MAC. Esse sintoma degrada imediatamente o desempenho de processamento (plano de controle) da
+          caixa.
+        </div>
+      </section>
+
+      <script>
+        ;(function () {
+          const playBtn = document.getElementById('unicastPlayBtn')
+          const playIcon = document.getElementById('unicastPlayIcon')
+          const range = document.getElementById('unicastRange')
+          const status = document.getElementById('unicastStatus')
+
+          const p1 = document.getElementById('upkt1')
+          const p2 = document.getElementById('upkt2')
+          const p3 = document.getElementById('upkt3')
+
+          let currentStep = 0
+          let timer = null
+
+          const steps = [
+            {
+              text: 'Etapa 0: O PC1 envia um quadro Unicast direcionado ao PC2. O switch de acesso S2 recebe o frame pela interface local.',
+              action: () => {
+                hidePackets()
+                movePacket(p1, 140, 290, 360, 220)
+              }
+            },
+            {
+              text: 'Etapa 1: MAC table miss! O switch S2 não localiza o endereço MAC do PC2 em seu banco de dados dinâmico e inunda o frame por todas as portas ativas (sobe para S1 e S3).',
+              action: () => {
+                hidePackets()
+                movePacket(p1, 360, 220, 120, 75) // Vai para S3 via Tronco
+                movePacket(p2, 360, 220, 600, 75) // Vai para S1 via Tronco
+              }
+            },
+            {
+              text: 'Etapa 2: O switch S1 e o switch S3 recebem os quadros. Como também não conhecem o MAC de destino, inundam o segmento. S1 entrega a primeira cópia legítima para PC2.',
+              action: () => {
+                hidePackets()
+                movePacket(p1, 600, 75, 580, 290) // S1 entrega cópia 1 para PC2
+                movePacket(p2, 120, 75, 580, 45) // S3 propaga horizontalmente para S1 via link superior
+              }
+            },
+            {
+              text: 'Etapa 3: Devido ao loop físico, o frame vindo de S3 atravessa o link superior, atinge S1 e faz com que S1 realize uma nova inundação desnecessária em direção ao PC2.',
+              action: () => {
+                hidePackets()
+                movePacket(p1, 580, 45, 580, 290) // S1 entrega cópia 2 (duplicada) para PC2!
+                movePacket(p2, 580, 45, 360, 220) // O frame desce de volta para S2, fechando o loop
+              }
+            },
+            {
+              text: 'Etapa 4: Conclusão do Loop: O tráfego continua circulando indefinidamente. O PC2 recebe cópias infinitas do mesmo frame até que os links entrem em colapso.',
+              action: () => {
+                hidePackets()
+                movePacket(p1, 360, 220, 120, 75)
+                movePacket(p2, 600, 75, 580, 290) // Nova cópia sendo gerada ciclicamente
+              }
+            }
+          ]
+
+          function hidePackets() {
+            p1.style.display = 'none'
+            p2.style.display = 'none'
+            p3.style.display = 'none'
+          }
+
+          function movePacket(pkt, fromX, fromY, toX, toY) {
+            pkt.style.display = 'block'
+            pkt.style.left = fromX + 'px'
+            pkt.style.top = fromY + 'px'
+            setTimeout(() => {
+              pkt.style.transition = 'all 0.7s ease-in-out'
+              pkt.style.left = toX + 'px'
+              pkt.style.top = toY + 'px'
+            }, 50)
+            setTimeout(() => {
+              pkt.style.transition = 'none'
+            }, 750)
+          }
+
+          function renderStep(idx) {
+            currentStep = idx
+            range.value = idx
+            steps[idx].action()
+            status.innerHTML = `<i class="fas fa-terminal" style="color:var(--primary);"></i> ${steps[idx].text}`
+          }
+
+          function playSimulation() {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            } else {
+              playIcon.className = 'fas fa-pause'
+              if (currentStep >= 4) currentStep = -1
+
+              timer = setInterval(() => {
+                currentStep++
+                renderStep(currentStep)
+                if (currentStep >= 4) {
+                  clearInterval(timer)
+                  timer = null
+                  playIcon.className = 'fas fa-play'
+                }
+              }, 2400)
+            }
+          }
+
+          range.addEventListener('input', (e) => {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            }
+            renderStep(parseInt(e.target.value))
+          })
+
+          playBtn.addEventListener('click', playSimulation)
+
+          // Inicializa a primeira etapa
+          renderStep(0)
+        })()
+      </script>
+      <section id="secao5-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">5.2.1</span> Operações do STP: Algoritmo Spanning Tree
+        </h2>
+
+        <div class="card">
+          <p>
+            A redundância aumenta a disponibilidade da topologia de rede, mas introduz a possibilidade de loops. Para garantir caminhos
+            alternativos sem gerar falhas lógicas, o <strong>STP</strong> utiliza o <strong>STA (Spanning Tree Algorithm)</strong> para
+            criar uma topologia sem loops.
+          </p>
+          <p>
+            O STA faz isso bloqueando intencionalmente portas específicas em switches da infraestrutura. Portas em estado de bloqueio
+            (<em>Blocking</em>) atuam como links de backup de prontidão, não encaminhando quadros de dados de usuários e ignorando
+            solicitações comuns. O STP garante que exista apenas <strong>um único caminho lógico ativo</strong> entre quaisquer dois
+            dispositivos finais da rede local.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--secondary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-project-diagram"></i> ALGORITHM OPERATION: Etapas de Convergência do STA
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.5rem">
+            O algoritmo utiliza um processo rígido de quatro etapas para eleger e estruturar a árvore lógica da rede local. Clique nas
+            etapas do console abaixo para simular o comportamento de cálculo do switch:
+          </p>
+
+          <style>
+            /* Envoltório responsivo blindado para visualização em grid/colunas mobile e desktops */
+            .sta-steps-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              -webkit-overflow-scrolling: touch !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .sta-steps-container {
+              display: flex !important;
+              gap: 1rem !important;
+              min-width: 900px !important; /* Mantém estrutura horizontal limpa para visualização sequencial */
+              padding: 0.5rem 0;
+            }
+
+            .sta-step-box {
+              flex: 1 !important;
+              background: var(--bg-dark) !important;
+              border: 1px solid var(--border) !important;
+              border-radius: 8px !important;
+              padding: 1.2rem !important;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              position: relative;
+              border-top: 3px solid var(--text-dim) !important;
+            }
+
+            .sta-step-box:hover,
+            .sta-step-box.active-step {
+              border-color: var(--primary) !important;
+              background: var(--bg-card-hover) !important;
+              transform: translateY(-3px);
+            }
+
+            .sta-step-box.active-step {
+              border-top-color: var(--secondary) !important;
+              box-shadow: 0 4px 15px rgba(0, 245, 212, 0.15);
+            }
+
+            .sta-step-num {
+              font-family: monospace;
+              font-size: 0.8rem;
+              color: var(--secondary);
+              font-weight: bold;
+              margin-bottom: 0.5rem;
+              text-transform: uppercase;
+            }
+
+            .sta-step-box h4 {
+              margin: 0 0 0.5rem 0;
+              font-size: 0.95rem;
+              color: var(--text);
+            }
+
+            .sta-terminal-output {
+              background: #020406;
+              border: 1px solid var(--border);
+              border-left: 3px solid var(--secondary);
+              border-radius: 8px;
+              padding: 1rem;
+              font-family: 'Consolas', monospace;
+              font-size: 0.85rem;
+              color: var(--text);
+              min-height: 120px;
+              margin-top: 1.5rem;
+              line-height: 1.5;
+            }
+
+            /* Ajuste responsivo complementar para telas muito pequenas */
+            @media (max-width: 768px) {
+              .sta-steps-container {
+                min-width: 850px !important;
+              }
+            }
+          </style>
+
+          <div class="sta-steps-wrapper">
+            <div class="sta-steps-container">
+              <div class="sta-step-box active-step" id="staBtn1" onclick="selectStaStep(1)">
+                <div class="sta-step-num">Passo 1</div>
+                <h4>Eleger o Root Bridge</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0; white-space: normal">
+                  O switch com o menor Bridge ID (BID) é escolhido como ponto de referência central.
+                </p>
+              </div>
+
+              <div class="sta-step-box" id="staBtn2" onclick="selectStaStep(2)">
+                <div class="sta-step-num">Passo 2</div>
+                <h4>Eleger as Root Ports</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0; white-space: normal">
+                  Switches não-root elegem uma única porta com o caminho mais barato até o Root.
+                </p>
+              </div>
+
+              <div class="sta-step-box" id="staBtn3" onclick="selectStaStep(3)">
+                <div class="sta-step-num">Passo 3</div>
+                <h4>Portas Designadas</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0; white-space: normal">
+                  Eleição de uma porta por segmento autorizada a encaminhar tráfego de dados.
+                </p>
+              </div>
+
+              <div class="sta-step-box" id="staBtn4" onclick="selectStaStep(4)">
+                <div class="sta-step-num">Passo 4</div>
+                <h4>Portas Alternativas</h4>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0; white-space: normal">
+                  Interfaces redundantes restantes são colocadas em estado de bloqueio (Blocking).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="sta-terminal-output" id="staTerminal">
+            <strong>S1# show spanning-tree</strong><br />
+            STP State: Calculating STA topology...<br />
+            <span style="color: var(--success)"
+              >[PASSO 1] Todos os switches trocam pacotes BPDU. Menor Bridge ID localizado. S1 torna-se o Root Bridge definitivo da
+              topologia.</span
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Se um link físico falhar ou se uma nova conexão for adicionada à topologia de switches, o <strong>STA</strong> executa um novo
+            cálculo automaticamente, abrindo caminhos bloqueados se necessário para restabelecer o fluxo fim-a-fim de forma transparente.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Conceito de Backup Passivo:</strong> Portas configuradas como alternativas permanecem em
+          modo de escuta contínua de frames <strong>BPDU (Bridge Protocol Data Unit)</strong>. Elas não morrem, apenas aguardam uma eventual
+          interrupção no caminho principal.
+        </div>
+      </section>
+
+      <script>
+        function selectStaStep(stepNum) {
+          // Reseta classes ativas de todos os cards de passos
+          for (let i = 1; i <= 4; i++) {
+            document.getElementById('staBtn' + i).classList.remove('active-step')
+          }
+
+          // Adiciona classe ativa no elemento clicado
+          document.getElementById('staBtn' + stepNum).classList.add('active-step')
+
+          const terminal = document.getElementById('staTerminal')
+
+          // Atualiza o output do console simulado de acordo com o passo selecionado
+          switch (stepNum) {
+            case 1:
+              terminal.innerHTML =
+                `<strong>S1# show spanning-tree active-calculations</strong><br>` +
+                `STP State: Electing central authority...<br>` +
+                `<span style="color: var(--success);">[PASSO 1 COMPLETO] Todos os switches trocam frames BPDU. O switch com o menor Bridge ID (BID) é coroado como Root Bridge. S1 assume o controle.</span>`
+              break
+            case 2:
+              terminal.innerHTML =
+                `<strong>S2# show spanning-tree root-ports</strong><br>` +
+                `Calculating Root Path Cost for local interfaces...<br>` +
+                `Fa0/1 -> Cost 19 (Link Direto ao Root)<br>` +
+                `Fa0/2 -> Cost 38 (Caminho alternativo via S3)<br>` +
+                `<span style="color: var(--primary);">[PASSO 2 COMPLETO] Interface Fa0/1 eleita como a Root Port (RP) oficial do Switch S2 por possuir o menor custo.</span>`
+              break
+            case 3:
+              terminal.innerHTML =
+                `<strong>S3# show spanning-tree ports-roles</strong><br>` +
+                `Evaluating segment S3-to-LAN...<br>` +
+                `Port Fa0/1 Designated Candidate. Forwarding state active.<br>` +
+                `<span style="color: var(--info);">[PASSO 3 COMPLETO] Portas com o melhor custo em cada segmento físico individual assumem o papel de Designated Ports (DP) para encaminhamento.</span>`
+              break
+            case 4:
+              terminal.innerHTML =
+                `<strong>S3# show spanning-tree alternative-blocking</strong><br>` +
+                `Interface Fa0/2 classified as redundant path loop liability.<br>` +
+                `Changing state: Forwarding -> Blocking.<br>` +
+                `<span style="color: var(--danger);">[PASSO 4 COMPLETO] Loop mitigado. A interface sobressalente Fa0/2 é desativada logicamente pelo STA. Topologia L2 está estável e livre de loops.</span>`
+              break
+          }
+        }
+      </script>
+      <section id="secao5-2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-crown"></i>
+          <span class="section-number">5.2.2</span> Eleição do Root Bridge
+        </h2>
+
+        <div class="card">
+          <p>
+            O algoritmo <strong>STA</strong> necessita eleger um ponto de referência central para servir como a base da árvore de
+            abrangência de Camada 2. Esse dispositivo de referência é chamado de <strong>Root Bridge</strong>.
+          </p>
+          <p>
+            Todos os switches na rede trocam quadros especiais de controle chamados <strong>BPDUs (Bridge Protocol Data Units)</strong> a
+            cada 2 segundos. O switch que possuir o <strong>menor Bridge ID (BID)</strong> ganha a eleição e é coroado como o Root Bridge. O
+            BID é composto por três elementos essenciais:
+          </p>
+          <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6">
+            <li>
+              <strong>Prioridade da Ponte (Bridge Priority):</strong> Um valor numérico configurável. O padrão da Cisco é
+              <code>32768</code>.
+            </li>
+            <li><strong>ID do Sistema Estendido (System ID Extension):</strong> Identifica o número da VLAN local (ex: VLAN 1).</li>
+            <li>
+              <strong>Endereço MAC (MAC Address):</strong> Utilizado como critério estrito de desempate se as prioridades forem idênticas.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-vote-yea"></i> ELECTION PROCESS: Análise de BPDUs e Desempate MAC
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Simule a troca de mensagens BPDU entre os switches da rede local. Veja como o critério do menor endereço MAC decide a eleição
+            automática:
+          </p>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para evitar quebras de layout no mobile */
+            .election-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .election-sim-canvas {
+              position: relative !important;
+              width: 820px !important; /* Força largura interna fixa para manter o alinhamento absoluto das divs */
+              min-width: 820px !important;
+              height: 380px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            .election-node {
+              position: absolute;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              z-index: 5;
+            }
+            .election-node i {
+              font-size: 2.2rem;
+              color: #718096;
+              background: #121824;
+              padding: 10px;
+              border: 2px solid #202b42;
+              border-radius: 8px;
+              transition: all 0.3s ease;
+            }
+            .election-node.is-root i {
+              color: var(--secondary) !important;
+              border-color: var(--secondary) !important;
+              box-shadow: 0 0 15px rgba(0, 245, 212, 0.4) !important;
+            }
+            .election-node span {
+              font-family: monospace;
+              font-size: 0.75rem;
+              margin-top: 4px;
+              color: var(--text);
+              white-space: normal;
+            }
+            .election-node .bid-data {
+              font-size: 0.65rem;
+              color: var(--text-dim);
+              font-family: monospace;
+              text-align: center;
+              margin-top: 2px;
+              background: rgba(0, 0, 0, 0.3);
+              padding: 2px 4px;
+              border-radius: 4px;
+            }
+
+            .election-link {
+              position: absolute;
+              background: var(--border);
+              z-index: 2;
+            }
+            .election-link.active-trunk {
+              background: var(--primary) !important;
+              box-shadow: 0 0 6px var(--primary) !important;
+            }
+
+            .bpdu-frame {
+              position: absolute;
+              width: 55px;
+              height: 18px;
+              background: var(--primary-dark);
+              border: 1px solid var(--primary);
+              color: #fff;
+              font-family: monospace;
+              font-size: 0.65rem;
+              font-weight: bold;
+              text-align: center;
+              line-height: 16px;
+              border-radius: 4px;
+              z-index: 10;
+              display: none;
+              box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+            }
+
+            .election-controls {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              margin-top: 1.5rem;
+              background: #121824;
+              padding: 1rem;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            .election-btn {
+              background: transparent;
+              border: 1px solid var(--primary);
+              color: var(--primary);
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.2rem;
+              transition: all 0.2s;
+            }
+            .election-btn:hover {
+              background: var(--primary);
+              color: #0a0e17;
+              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+            }
+            .election-slider-container {
+              flex-grow: 1;
+              display: flex;
+              align-items: center;
+            }
+            .election-slider {
+              width: 100%;
+              -webkit-appearance: none;
+              appearance: none;
+              height: 6px;
+              border-radius: 3px;
+              background: var(--border);
+              outline: none;
+            }
+            .election-slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              background: var(--secondary);
+              cursor: pointer;
+              box-shadow: 0 0 8px var(--secondary);
+            }
+
+            .election-status-box {
+              background: #0a0e17;
+              border: 1px solid var(--border);
+              padding: 0.8rem 1.2rem;
+              border-radius: 6px;
+              min-height: 55px;
+              display: flex;
+              align-items: center;
+              color: var(--text);
+              font-family: monospace;
+              font-size: 0.85rem;
+              margin-top: 1rem;
+              border-left: 3px solid var(--secondary);
+            }
+          </style>
+
+          <div class="election-canvas-responsive-wrapper">
+            <div class="election-sim-canvas" id="electionCanvas">
+              <div class="election-link" id="el1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="election-link" id="el2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
+              <div
+                class="election-link"
+                id="el3"
+                style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"
+              ></div>
+
+              <div class="election-node" id="elecS3" style="top: 40px; left: 100px">
+                <i class="fas fa-server"></i><span>S3</span>
+                <div class="bid-data">Pri: 32768<br />MAC: 000A.0011.1111</div>
+              </div>
+              <div class="election-node" id="elecS1" style="top: 40px; left: 580px">
+                <i class="fas fa-server"></i><span>S1</span>
+                <div class="bid-data">Pri: 32768<br /><span style="color: var(--secondary)">MAC: 000A.0000.2222</span></div>
+              </div>
+              <div class="election-node" id="elecS2" style="top: 200px; left: 340px">
+                <i class="fas fa-server"></i><span>S2</span>
+                <div class="bid-data">Pri: 32768<br />MAC: 000A.0033.3333</div>
+              </div>
+
+              <div class="bpdu-frame" id="bframe1">BPDU</div>
+              <div class="bpdu-frame" id="bframe2">BPDU</div>
+            </div>
+          </div>
+
+          <div class="election-controls">
+            <button class="election-btn" id="electPlayBtn"><i class="fas fa-play" id="electPlayIcon"></i></button>
+            <div class="election-slider-container">
+              <input type="range" min="0" max="3" value="0" class="election-slider" id="electRange" />
+            </div>
+          </div>
+
+          <div class="election-status-box" id="electStatus">
+            Clique no botão Play ou arraste o controle para monitorar o processo eleitoral das pontes.
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Uma vez que o switch com o menor Bridge ID é identificado e a eleição converge, as portas físicas desse switch específico são
+            declaradas automaticamente como <strong>Designated Ports (Portas Designadas)</strong>, assumindo o estado de encaminhamento
+            (<em>Forwarding</em>) permanente enquanto ele atuar como a raiz.
+          </p>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Instrução Prática de Projeto:</strong> Em ambientes profissionais de
+          infraestrutura, nunca deixe a eleição no modo padrão automático. Se o MAC for o único critério, um switch antigo com hardware
+          obsoleto pode ganhar a eleição por possuir um MAC mais baixo antigo, sobrecarregando a topologia corporativa. Configure a
+          prioridade manualmente para forçar o switch core como Root Bridge.
+        </div>
+      </section>
+
+      <script>
+        ;(function () {
+          const playBtn = document.getElementById('electPlayBtn')
+          const playIcon = document.getElementById('electPlayIcon')
+          const range = document.getElementById('electRange')
+          const status = document.getElementById('electStatus')
+
+          const s1 = document.getElementById('elecS1')
+          const s2 = document.getElementById('elecS2')
+          const s3 = document.getElementById('elecS3')
+
+          const l1 = document.getElementById('el1')
+          const l2 = document.getElementById('el2')
+          const l3 = document.getElementById('el3')
+
+          const bf1 = document.getElementById('bframe1')
+          const bf2 = document.getElementById('bframe2')
+
+          let currentStep = 0
+          let timer = null
+
+          const steps = [
+            {
+              text: 'Etapa 0: Inicialização. Os switches S1, S2 e S3 ligam e assumem temporariamente que cada um deles é o Root Bridge original da infraestrutura. Todos iniciam a transmissão de BPDUs.',
+              action: () => {
+                hideFrames()
+                resetVisuals()
+              }
+            },
+            {
+              text: 'Etapa 1: Troca de Controle. S2 e S3 propagam seus pacotes BPDU contendo seus IDs em direção aos switches vizinhos para medição de parâmetros.',
+              action: () => {
+                hideFrames()
+                resetVisuals()
+                l2.classList.add('active-trunk')
+                l3.classList.add('active-trunk')
+                moveFrame(bf1, 360, 220, 600, 75) // S2 para S1
+                moveFrame(bf2, 120, 75, 600, 75) // S3 para S1
+              }
+            },
+            {
+              text: 'Etapa 2: Comparação de Critérios. S1 recebe e analisa as mensagens. Como todas as prioridades são idênticas (32768), os switches avaliam o endereço MAC. O endereço MAC do S1 (000A.0000.2222) é o menor de toda a topologia.',
+              action: () => {
+                hideFrames()
+                resetVisuals()
+                l1.classList.add('active-trunk')
+                l3.classList.add('active-trunk')
+                // S1 espalha e anuncia sua vitória contendo seu BID imbatível
+                moveFrame(bf1, 600, 75, 360, 220)
+                moveFrame(bf2, 600, 75, 120, 75)
+              }
+            },
+            {
+              text: 'Etapa 3: Convergência Estabelecida! S2 e S3 reconhecem o BID superior de S1, encerram suas autodeclarações e assumem o estado de subordinados. S1 é coroado oficialmente como o Root Bridge da topologia l2.',
+              action: () => {
+                hideFrames()
+                resetVisuals()
+                s1.classList.add('is-root')
+                l1.classList.add('active-trunk')
+                l2.classList.add('active-trunk')
+                l3.classList.add('active-trunk')
+              }
+            }
+          ]
+
+          function hideFrames() {
+            bf1.style.display = 'none'
+            bf2.style.display = 'none'
+          }
+
+          function resetVisuals() {
+            s1.classList.remove('is-root')
+            l1.className = 'election-link'
+            l2.className = 'election-link'
+            l3.className = 'election-link'
+          }
+
+          function moveFrame(pkt, fromX, fromY, toX, toY) {
+            pkt.style.display = 'block'
+            pkt.style.left = fromX + 'px'
+            pkt.style.top = fromY + 'px'
+            setTimeout(() => {
+              pkt.style.transition = 'all 0.8s ease-in-out'
+              pkt.style.left = toX + 'px'
+              pkt.style.top = toY + 'px'
+            }, 50)
+            setTimeout(() => {
+              pkt.style.transition = 'none'
+            }, 850)
+          }
+
+          function renderStep(idx) {
+            currentStep = idx
+            range.value = idx
+            steps[idx].action()
+            status.innerHTML = `<i class="fas fa-terminal" style="color:var(--secondary);"></i> ${steps[idx].text}`
+          }
+
+          function playSimulation() {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            } else {
+              playIcon.className = 'fas fa-pause'
+              if (currentStep >= 3) currentStep = -1
+
+              timer = setInterval(() => {
+                currentStep++
+                renderStep(currentStep)
+                if (currentStep >= 3) {
+                  clearInterval(timer)
+                  timer = null
+                  playIcon.className = 'fas fa-play'
+                }
+              }, 2500)
+            }
+          }
+
+          range.addEventListener('input', (e) => {
+            if (timer) {
+              clearInterval(timer)
+              timer = null
+              playIcon.className = 'fas fa-play'
+            }
+            renderStep(parseInt(e.target.value))
+          })
+
+          playBtn.addEventListener('click', playSimulation)
+
+          // Inicia na Etapa 0
+          renderStep(0)
+        })()
+      </script>
+      <section id="secao5-2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-dollar-sign"></i>
+          <span class="section-number">5.2.3</span> Operações do STP: Custo do Caminho (Path Cost)
+        </h2>
+
+        <div class="card">
+          <p>
+            Após a eleição do <strong>Root Bridge</strong>, o algoritmo <strong>STA (Spanning Tree Algorithm)</strong> determina quais são
+            os melhores caminhos físicos para alcançar a raiz a partir de cada switch da rede. Para fazer isso, o STP avalia o
+            <strong>Custo do Caminho (Path Cost)</strong>, que é calculado com base na velocidade/largura de banda de cada link individual.
+          </p>
+          <p>
+            O custo total do caminho é a soma de todos os custos de link individuais ao longo do trajeto até o Root Bridge. Os valores de
+            custo padrão são definidos pelas especificações do <strong>IEEE</strong> e variam conforme a tecnologia do link (Ethernet, Fast
+            Ethernet, Gigabit Ethernet ou 10-Gigabit).
+          </p>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tachometer-alt"></i> Velocidade do Link</th>
+                <th><i class="fas fa-chart-bar"></i> Custo Padrão STP (IEEE 802.1D)</th>
+                <th><i class="fas fa-bolt"></i> Custo RSTP (IEEE 802.1w)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>10 Mbps</strong> (Ethernet)</td>
+                <td><code>100</code></td>
+                <td><code>2.000.000</code></td>
+              </tr>
+              <tr>
+                <td><strong>100 Mbps</strong> (Fast Ethernet)</td>
+                <td><code style="color: var(--secondary)">19</code></td>
+                <td><code>200.000</code></td>
+              </tr>
+              <tr>
+                <td><strong>1 Gbps</strong> (Gigabit Ethernet)</td>
+                <td><code style="color: var(--success)">4</code></td>
+                <td><code>20.000</code></td>
+              </tr>
+              <tr>
+                <td><strong>10 Gbps</strong> (10-Gigabit Ethernet)</td>
+                <td><code>2</code></td>
+                <td><code>2.000</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-network-wired"></i> PATH COST TOPOLOGY: Cálculo Lógico de Caminho Mais Curto
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Analise a topologia triangular abaixo. Veja como o Switch S2 escolhe o link direto para o Root Bridge (S1) porque o custo
+            acumulado de 19 é menor do que dar o salto através de S3 (19 + 19 = 38):
+          </p>
+
+          <style>
+            /* Wrapper de isolamento responsivo blindado para mobile */
+            .cost-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .cost-sim-canvas {
+              position: relative !important;
+              width: 760px !important; /* Mantém tamanho fixo ideal para o triângulo simples */
+              min-width: 760px !important;
+              height: 340px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            .cost-node {
+              position: absolute !important;
+              display: flex !important;
+              flex-direction: column !important;
+              align-items: center !important;
+              z-index: 5 !important;
+              white-space: nowrap !important;
+            }
+            .cost-node i {
+              font-size: 2.2rem !important;
+              color: #718096 !important;
+              background: #121824 !important;
+              padding: 10px !important;
+              border: 2px solid #202b42 !important;
+              border-radius: 8px !important;
+              display: inline-block !important;
+            }
+            .cost-node.is-root i {
+              color: var(--secondary) !important;
+              border-color: var(--secondary) !important;
+              box-shadow: 0 0 12px rgba(0, 245, 212, 0.3) !important;
+            }
+            .cost-node span {
+              font-family: monospace !important;
+              font-size: 0.75rem !important;
+              margin-top: 4px !important;
+              color: var(--text) !important;
+              display: block !important;
+            }
+
+            .cost-link {
+              position: absolute !important;
+              background: var(--primary) !important;
+              z-index: 2 !important;
+              box-shadow: 0 0 4px var(--primary) !important;
+            }
+
+            /* Rótulo de Custo absolutizado para evitar quebras dinâmicas nos nós */
+            .cost-label {
+              position: absolute !important;
+              background: #121824 !important;
+              border: 1px solid var(--border) !important;
+              padding: 2px 6px !important;
+              border-radius: 4px !important;
+              font-family: monospace !important;
+              font-size: 0.7rem !important;
+              color: var(--text) !important;
+              width: max-content !important;
+              z-index: 6 !important;
+            }
+          </style>
+
+          <div class="cost-canvas-responsive-wrapper">
+            <div class="cost-sim-canvas" id="costCanvas">
+              <div class="cost-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="cost-link" style="top: 75px; left: 140px; width: 220px; height: 3px; transform: rotate(45deg)"></div>
+              <div class="cost-link" style="top: 75px; left: 580px; width: 220px; height: 3px; transform: rotate(135deg)"></div>
+              <div class="cost-label" style="top: 45px; left: 350px; border-color: var(--secondary)">F0/1 a F0/1 (Custo: 19)</div>
+              <div class="cost-label" style="top: 150px; left: 170px">F0/2 a F0/2 (Custo: 19)</div>
+              <div class="cost-label" style="top: 150px; left: 450px; border-color: var(--success); color: var(--success)">
+                F0/1 a F0/2 (Custo: 19) <i class="fas fa-check"></i>
+              </div>
+
+              <div class="cost-node" id="costS3" style="top: 40px; left: 100px">
+                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
+              </div>
+              <div class="cost-node" id="costS1" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
+              </div>
+              <div class="cost-node" id="costS2" style="top: 220px; left: 340px">
+                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> <strong>Como o Custo é Medido:</strong> O custo do caminho de uma porta é acumulado de forma
+          direcional à medida que as mensagens <strong>BPDU</strong> entram nas interfaces dos switches. Portas que recebem BPDUs adicionam
+          o valor da velocidade do seu próprio link local para computar o custo total de chegada até a raiz.
+        </div>
+      </section>
+      <section id="secao5-2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">5.2.4</span> Operações do STP: Funções das Portas (Port Roles)
+        </h2>
+
+        <div class="card">
+          <p>
+            O algoritmo <strong>STA (Spanning Tree Algorithm)</strong> configura funções de porta específicas (<em>Port Roles</em>) em cada
+            porta de switch para estruturar a topologia livre de loops. As funções das portas determinam se elas estão autorizadas a
+            encaminhar tráfego de dados do usuário ou se devem bloquear o enlace:
+          </p>
+          <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6; margin-bottom: 0">
+            <li>
+              <strong>Root Ports (Portas Raiz):</strong> Portas de switch mais próximas ao Root Bridge (com o menor custo acumulado). Existe
+              apenas <strong>uma única Root Port por switch não-root</strong>. Elas ficam em estado de encaminhamento (<em>Forwarding</em>).
+            </li>
+            <li>
+              <strong>Designated Ports (Portas Designadas):</strong> Portas autorizadas a encaminhar tráfego no segmento de rede. Todas as
+              portas ativas de um <strong>Root Bridge</strong> são automaticamente Portas Designadas. Elas ficam em estado de encaminhamento
+              (<em>Forwarding</em>).
+            </li>
+            <li>
+              <strong>Alternate Ports (Portas Alternativas):</strong> Portas configuradas em estado de bloqueio (<em>Blocking</em>) para
+              mitigar loops. Elas monitoram os frames <strong>BPDU</strong> e atuam estritamente como caminhos de backup redundantes.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-sitemap"></i> PORT ROLES TOPOLOGY: Estrutura Lógica Convergida do STP
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Analise a atribuição de funções lógicas no triângulo de switches Fast Ethernet (Custo 19). Veja como a interface Gi0/2 do Switch
+            S3 assume o estado de bloqueio (Alternativa) para encerrar o ciclo físico:
+          </p>
+
+          <style>
+            /* Wrapper responsivo blindado com !important para isolar a rolagem no smartphone */
+            .roles-canvas-responsive-wrapper {
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              margin-bottom: 1rem !important;
+            }
+
+            .roles-sim-canvas {
+              position: relative !important;
+              width: 780px !important; /* Tamanho fixado ideal para o triângulo estável */
+              min-width: 780px !important;
+              height: 350px !important;
+              background: #0a0e17 !important;
+              overflow: hidden !important;
+            }
+
+            .roles-node {
+              position: absolute !important;
+              display: flex !important;
+              flex-direction: column !important;
+              align-items: center !important;
+              z-index: 5 !important;
+              white-space: nowrap !important;
+            }
+            .roles-node i {
+              font-size: 2.2rem !important;
+              color: #718096 !important;
+              background: #121824 !important;
+              padding: 10px !important;
+              border: 2px solid #202b42 !important;
+              border-radius: 8px !important;
+              display: inline-block !important;
+            }
+            .roles-node.is-root i {
+              color: var(--secondary) !important;
+              border-color: var(--secondary) !important;
+              box-shadow: 0 0 12px rgba(0, 245, 212, 0.3) !important;
+            }
+            .roles-node span {
+              font-family: monospace !important;
+              font-size: 0.75rem !important;
+              margin-top: 4px !important;
+              color: var(--text) !important;
+              display: block !important;
+            }
+
+            .roles-link {
+              position: absolute !important;
+              background: var(--primary) !important;
+              z-index: 2 !important;
+              box-shadow: 0 0 4px var(--primary) !important;
+            }
+            .roles-link.blocked-link {
+              background: var(--danger) !important;
+              box-shadow: 0 0 4px var(--danger) !important;
+            }
+
+            /* Tags de Portas Absolutizadas para eliminar esmagamento no mobile */
+            .port-role-badge {
+              position: absolute !important;
+              font-family: monospace !important;
+              font-size: 0.65rem !important;
+              font-weight: bold !important;
+              padding: 2px 6px !important;
+              border-radius: 4px !important;
+              width: max-content !important;
+              z-index: 6 !important;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+            }
+            .role-dp {
+              background: rgba(3, 244, 135, 0.15) !important;
+              border: 1px solid var(--success) !important;
+              color: var(--success) !important;
+            }
+            .role-rp {
+              background: rgba(0, 180, 216, 0.15) !important;
+              border: 1px solid var(--primary) !important;
+              color: var(--primary) !important;
+            }
+            .role-ap {
+              background: rgba(255, 77, 109, 0.15) !important;
+              border: 1px solid var(--danger) !important;
+              color: var(--danger) !important;
+            }
+          </style>
+
+          <div class="roles-canvas-responsive-wrapper">
+            <div class="roles-sim-canvas" id="rolesCanvas">
+              <div class="roles-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="roles-link" style="top: 75px; left: 140px; width: 220px; height: 3px; transform: rotate(45deg)"></div>
+              <div
+                class="roles-link blocked-link"
+                style="top: 75px; left: 580px; width: 220px; height: 3px; transform: rotate(135deg)"
+              ></div>
+              <div class="port-role-badge role-dp" style="top: 40px; left: 535px">Gi0/1 [DP]</div>
+              <div class="port-role-badge role-dp" style="top: 110px; left: 540px">Gi0/2 [DP]</div>
+
+              <div class="port-role-badge role-rp" style="top: 190px; left: 445px">Gi0/1 [RP]</div>
+              <div class="port-role-badge role-dp" style="top: 220px; left: 275px">Gi0/2 [DP]</div>
+
+              <div class="port-role-badge role-rp" style="top: 110px; left: 210px">Gi0/1 [RP]</div>
+              <div class="port-role-badge role-ap" style="top: 40px; left: 170px">Gi0/2 [AP]</div>
+
+              <div class="roles-node" id="roleNodeS3" style="top: 40px; left: 100px">
+                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
+              </div>
+              <div class="roles-node" id="roleNodeS1" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
+              </div>
+              <div class="roles-node" id="roleNodeS2" style="top: 220px; left: 340px">
+                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i> <strong>Conclusão da Convergência:</strong> Uma vez associadas as funções de porta pelo
+          algoritmo, a topologia física com caminhos redundantes passa a trafegar dados em uma estrutura em árvore livre de loops,
+          garantindo alta resiliência e estabilidade lógica.
+        </div>
+      </section>
+      <section id="secao5-2-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sliders-h"></i>
+          <span class="section-number">5.2.5</span> Operações do STP: Configurando a Prioridade do BID
+        </h2>
+
+        <div class="card">
+          <p>
+            Para garantir que o switch core ou de distribuição mais robusto da infraestrutura seja eleito como o
+            <strong>Root Bridge</strong>, o administrador de redes não deve depender do desempate aleatório pelo endereço MAC. Em vez disso,
+            deve-se alterar manualmente o campo de <strong>Prioridade da Ponte (Bridge Priority)</strong>.
+          </p>
+          <p>
+            O valor de prioridade padrão em switches Cisco é <code>32768</code>. Esse parâmetro deve ser configurado obrigatoriamente em
+            **múltiplos de 4096** (valores válidos como 0, 4096, 8192, 12288, 16384, etc.), por conta do espaço reservado ao ID do sistema
+            estendido (VLAN) no cabeçalho do ID do Spanning Tree.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-sitemap"></i> MANIPULATED ROOT BRIDGE: Topologia Lógica com Prioridade Forçada
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Observe no diagrama triangular como o Switch S1 força a sua eleição como Root Bridge absoluto ao derrubar a sua prioridade
+            padrão de 32768 para 24576, superando com folga os switches concorrentes:
+          </p>
+
+          <div class="election-canvas-responsive-wrapper">
+            <div class="election-sim-canvas" id="priorityCanvas" style="height: 350px !important">
+              <div class="election-link active-trunk" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div
+                class="election-link active-trunk"
+                style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"
+              ></div>
+              <div
+                class="election-link active-trunk"
+                style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"
+              ></div>
+
+              <div class="election-node" id="prioS3" style="top: 40px; left: 100px">
+                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
+                <div class="bid-data">Pri: 32768 | MAC: 000A.0011.1111</div>
+              </div>
+              <div class="election-node is-root" id="prioS1" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Forced Root)</span>
+                <div class="bid-data">Pri: <span style="color: var(--secondary); font-weight: bold">24576</span> | MAC: 000A.0000.2222</div>
+              </div>
+              <div class="election-node" id="prioS2" style="top: 200px; left: 340px">
+                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
+                <div class="bid-data">Pri: 32768 | MAC: 000A.0033.3333</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Para configurar e forçar um switch a se tornar o Root Bridge da rede local para uma VLAN específica através do console Cisco
+            IOS, utilize os comandos do modo de configuração global detalhados abaixo:
+          </p>
+
+          <div class="terminal">
+            <pre>Switch> <strong>enable</strong>
+Switch# <strong>configure terminal</strong>
+Enter configuration commands, one per line. End with CNTL/Z.
+Switch(config)# <strong>hostname S1</strong>
+S1(config)# <strong>spanning-tree vlan 1 priority 24576</strong>
+S1(config)# <strong>exit</strong>
+S1# <strong>show spanning-tree vlan 1 brief</strong>
+
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24577  (priority 24576 sys-id-ext 1)
+             Address     000A.0000.2222
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+</pre>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i> <strong>Método Alternativo Simplificado:</strong> O Cisco IOS também suporta um comando macro
+          alternativo para essa finalidade: <code>spanning-tree vlan 1 root primary</code>. Ao executar esta linha, o switch varre a rede
+          local para ler o BID atual do Root Bridge ativo e configura automaticamente a sua própria prioridade local para um valor inferior,
+          forçando a sua vitória.
+        </div>
+      </section>
+      <section id="secao5-2-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">5.2.6</span> Operações do STP: Eleição de Portas Designadas e Alternativas
+        </h2>
+
+        <div class="card">
+          <p>
+            Quando dois switches não-root estão conectados no mesmo segmento físico de rede (como o link inter-switch entre S2 e S3), o
+            <strong>STP</strong> precisa determinar qual dos dois switches terá a porta configurada como
+            <strong>Designated Port (Porta Designada - FWD)</strong> e qual terá a porta configurada como
+            <strong>Alternate Port (Porta Alternativa - BLK)</strong> para cortar o loop.
+          </p>
+          <p>O processo de decisão segue uma hierarquia estrita de critérios de desempate contidos nas mensagens BPDU:</p>
+          <ol style="padding-left: 1.5rem; color: var(--text); line-height: 1.6">
+            <li>
+              <strong>Menor Custo de Caminho até o Root Bridge:</strong> O switch que tiver o caminho mais barato para chegar à raiz ganha a
+              porta designada.
+            </li>
+            <li>
+              <strong>Menor Bridge ID (BID):</strong> Se o custo de caminho dos dois switches for idêntico, ganha o switch com o menor BID
+              (avaliando a prioridade ou, em última instância, o menor endereço MAC).
+            </li>
+            <li>
+              <strong>Menor ID de Porta (Port ID):</strong> Critério interno utilizado se as portas estiverem conectadas ao mesmo switch
+              (links paralelos).
+            </li>
+          </ol>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-balance-scale"></i> PORT TIE-BREAKER: Resolução de Conflito entre S2 e S3
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Analise o desempate no link inferior. Ambos S2 e S3 têm o mesmo custo até a raiz (19). Como o Bridge ID de S2 possui um endereço
+            MAC menor (000A.0022.2222) que o de S3 (000A.0033.3333), S2 ganha a porta Designada (DP), forçando a interface de S3 ao estado
+            de Bloqueio Alternativo (AP):
+          </p>
+
+          <div class="designated-canvas-responsive-wrapper">
+            <div class="roles-sim-canvas" id="designatedCanvas" style="height: 340px !important">
+              <div class="roles-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
+              <div class="roles-link" style="top: 75px; left: 140px; width: 220px; height: 3px; transform: rotate(45deg)"></div>
+              <div
+                class="roles-link blocked-link"
+                style="top: 75px; left: 580px; width: 220px; height: 3px; transform: rotate(135deg)"
+              ></div>
+
+              <div class="port-role-badge role-dp" style="top: 40px; left: 535px">F0/1 [DP]</div>
+              <div class="port-role-badge role-dp" style="top: 110px; left: 540px">F0/2 [DP]</div>
+
+              <div class="port-role-badge role-rp" style="top: 190px; left: 445px">F0/1 [RP] (Custo 19)</div>
+              <div
+                class="port-role-badge role-dp"
+                style="top: 220px; left: 275px; border-color: var(--secondary) !important; color: var(--secondary) !important"
+              >
+                F0/2 [DP] (Ganha pelo MAC)
+              </div>
+
+              <div class="port-role-badge role-rp" style="top: 110px; left: 210px">F0/1 [RP] (Custo 19)</div>
+              <div class="port-role-badge role-ap" style="top: 40px; left: 170px">F0/2 [AP] (Bloqueada)</div>
+
+              <div class="roles-node" style="top: 40px; left: 100px">
+                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
+                <div
+                  style="
+                    position: absolute;
+                    top: 70px;
+                    font-size: 0.6rem;
+                    color: var(--text-dim);
+                    font-family: monospace;
+                    background: rgba(0, 0, 0, 0.4);
+                    padding: 2px;
+                    border-radius: 4px;
+                    width: max-content;
+                  "
+                >
+                  MAC: 000A.0033.3333
+                </div>
+              </div>
+              <div class="roles-node is-root" style="top: 40px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
+              </div>
+              <div class="roles-node" style="top: 220px; left: 340px">
+                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
+                <div
+                  style="
+                    position: absolute;
+                    top: 70px;
+                    font-size: 0.6rem;
+                    color: var(--secondary);
+                    font-family: monospace;
+                    background: rgba(0, 0, 0, 0.4);
+                    padding: 2px;
+                    border-radius: 4px;
+                    width: max-content;
+                  "
+                >
+                  MAC: 000A.0022.2222
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          /* Estilos do wrapper e do canvas isolados especificamente para esta seção com !important */
+          .designated-canvas-responsive-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            display: block !important;
+            white-space: nowrap !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            margin-bottom: 1rem !important;
+          }
+        </style>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Instabilidade Evitada:</strong> Graças ao critério de desempate baseado no
+          Bridge ID, o STP garante que não ocorram impasses lógicos na rede. Apenas uma única interface assume a responsabilidade pelo
+          segmento, enquanto a outra corta imediatamente o fluxo circular de quadros.
+        </div>
+      </section>
+      <section id="secao5-2-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list-ol"></i>
+          <span class="section-number">5.2.7</span> Operações do STP: ID de Porta como Desempate Final
+        </h2>
+
+        <div class="card">
+          <p>
+            O último critério na hierarquia de desempate do algoritmo <strong>STA</strong> ocorre quando dois switches possuem **links
+            paralelos redundantes** conectados diretamente entre si. Nesse cenário, o switch não-root recebe BPDUs com o mesmo Custo de
+            Caminho e originados do mesmo Bridge ID (o mesmo switch vizinho).
+          </p>
+          <p>
+            Para decidir qual caminho manter ativo e qual bloquear, o switch avalia o <strong>Port ID (ID de Porta)</strong> contido no
+            frame BPDU enviado pelo switch vizinho. O Port ID padrão é composto pela prioridade da porta (padrão <code>128</code>) seguida
+            pelo número físico da interface. O switch não-root elegerá a interface conectada ao **menor ID de porta do switch transmissor**
+            como a sua <strong>Root Port (RP)</strong>, bloqueando a outra.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-compress-alt"></i> PARALLEL LINKS TIE-BREAKER: Desempate por ID de Porta do Transmissor
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Analise os links paralelos entre o Root Bridge S1 e o Switch S2. S2 recebe BPDUs em ambas as portas vindas do mesmo switch. Como
+            o ID de porta de origem <strong>F0/1 (128.1)</strong> é menor que o de <strong>F0/2 (128.2)</strong>, a porta F0/1 de S2 vira a
+            Root Port (RP), forçando a interface F0/2 de S2 ao estado de Bloqueio Alternativo (AP):
+          </p>
+
+          <div class="portid-canvas-responsive-wrapper">
+            <div
+              class="roles-sim-canvas"
+              id="portIdCanvas"
+              style="height: 280px !important; width: 720px !important; min-width: 720px !important"
+            >
+              <div class="roles-link" style="top: 105px; left: 160px; width: 400px; height: 3px"></div>
+              <div class="roles-link blocked-link" style="top: 155px; left: 160px; width: 400px; height: 3px"></div>
+              <div class="port-role-badge role-dp" style="top: 80px; left: 450px">F0/1 [DP] (ID: 128.1)</div>
+              <div class="port-role-badge role-dp" style="top: 165px; left: 450px">F0/2 [DP] (ID: 128.2)</div>
+
+              <div
+                class="port-role-badge role-rp"
+                style="top: 80px; left: 180px; border-color: var(--secondary) !important; color: var(--secondary) !important"
+              >
+                F0/1 [RP] (Ouve o menor ID)
+              </div>
+              <div class="port-role-badge role-ap" style="top: 165px; left: 180px">F0/2 [AP] (Bloqueada)</div>
+
+              <div class="roles-node" style="top: 95px; left: 60px"><i class="fas fa-server"></i><span>S2 (Non-Root)</span></div>
+              <div class="roles-node is-root" style="top: 95px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          /* Estilos customizados e isolados com !important para o wrapper de links paralelos */
+          .portid-canvas-responsive-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            display: block !important;
+            white-space: nowrap !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            margin-bottom: 1rem !important;
+          }
+        </style>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Atenção ao Ponto de Vista:</strong> Lembre-se sempre de que o desempate avalia
+          o ID de porta do switch <strong>transmissor (vizinho)</strong>, e não do próprio switch local que está calculando. Se a interface
+          F0/1 do S1 estiver conectada na interface F0/20 do S2, a F0/20 se tornará a Root Port por estar escutando o menor identificador da
+          raiz.
+        </div>
+      </section>
+      <section id="secao5-2-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list-ol"></i>
+          <span class="section-number">5.2.7</span> Operações do STP: ID de Porta como Desempate Final
+        </h2>
+
+        <div class="card">
+          <p>
+            O último critério na hierarquia de desempate do algoritmo <strong>STA</strong> ocorre quando dois switches possuem **links
+            paralelos redundantes** conectados diretamente entre si. Nesse cenário, o switch não-root recebe BPDUs com o mesmo Custo de
+            Caminho e originados do mesmo Bridge ID (o mesmo switch vizinho).
+          </p>
+          <p>
+            Para decidir qual caminho manter ativo e qual bloquear, o switch avalia o <strong>Port ID (ID de Porta)</strong> contido no
+            frame BPDU enviado pelo switch vizinho. O Port ID padrão é composto pela prioridade da porta (padrão <code>128</code>) seguida
+            pelo número físico da interface. O switch não-root elegerá a interface conectada ao **menor ID de porta do switch transmissor**
+            como a sua <strong>Root Port (RP)</strong>, bloqueando a outra.
+          </p>
+        </div>
+
+        <div class="card" style="background: #070b12; border-color: var(--border)">
+          <h3
+            style="
+              color: var(--primary);
+              font-size: 1.1rem;
+              margin-bottom: 1.5rem;
+              font-family: monospace;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-compress-alt"></i> PARALLEL LINKS TIE-BREAKER: Desempate por ID de Porta do Transmissor
+          </h3>
+
+          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
+            Analise os links paralelos entre o Root Bridge S1 e o Switch S2. S2 recebe BPDUs em ambas as portas vindas do mesmo switch. Como
+            o ID de porta de origem <strong>F0/1 (128.1)</strong> é menor que o de <strong>F0/2 (128.2)</strong>, a porta F0/1 de S2 vira a
+            Root Port (RP), forçando a interface F0/2 de S2 ao estado de Bloqueio Alternativo (AP):
+          </p>
+
+          <div class="portid-canvas-responsive-wrapper">
+            <div
+              class="roles-sim-canvas"
+              id="portIdCanvas"
+              style="height: 280px !important; width: 720px !important; min-width: 720px !important"
+            >
+              <div class="roles-link" style="top: 105px; left: 160px; width: 400px; height: 3px"></div>
+              <div class="roles-link blocked-link" style="top: 155px; left: 160px; width: 400px; height: 3px"></div>
+              <div class="port-role-badge role-dp" style="top: 80px; left: 450px">F0/1 [DP] (ID: 128.1)</div>
+              <div class="port-role-badge role-dp" style="top: 165px; left: 450px">F0/2 [DP] (ID: 128.2)</div>
+
+              <div
+                class="port-role-badge role-rp"
+                style="top: 80px; left: 180px; border-color: var(--secondary) !important; color: var(--secondary) !important"
+              >
+                F0/1 [RP] (Ouve o menor ID)
+              </div>
+              <div class="port-role-badge role-ap" style="top: 165px; left: 180px">F0/2 [AP] (Bloqueada)</div>
+
+              <div class="roles-node" style="top: 95px; left: 60px"><i class="fas fa-server"></i><span>S2 (Non-Root)</span></div>
+              <div class="roles-node is-root" style="top: 95px; left: 580px">
+                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          /* Estilos customizados e isolados com !important para o wrapper de links paralelos */
+          .portid-canvas-responsive-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            display: block !important;
+            white-space: nowrap !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            margin-bottom: 1rem !important;
+          }
+        </style>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i> <strong>Atenção ao Ponto de Vista:</strong> Lembre-se sempre de que o desempate avalia
+          o ID de porta do switch <strong>transmissor (vizinho)</strong>, e não do próprio switch local que está calculando. Se a interface
+          F0/1 do S1 estiver conectada na interface F0/20 do S2, a F0/20 se tornará a Root Port por estar escutando o menor identificador da
+          raiz.
+        </div>
+      </section>
+    </div>
+
+    <footer style="padding: 2rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem">
+      Cisco Networking Academy | CCNA 2 v7.0 (SRWE) - Ambiente de Laboratório Digital
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
