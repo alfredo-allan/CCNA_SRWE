@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Resolução de Problemas em EtherChannel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="#download" class="btn-outline">
+        <i class="fas fa-download"></i> Arquivo .PKT
+      </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao-cenario"
+            ><i class="fas fa-info-circle"></i> Cenário & Defeitos</a
+          >
+        </li>
+        <li>
+          <a href="#secao-topologia"
+            ><i class="fas fa-project-diagram"></i> 1.1 Topologia de 4
+            Switches</a
+          >
+        </li>
+        <li>
+          <a href="#secao-diagnostico"
+            ><i class="fas fa-search-minus"></i> 1.2 Análise dos Logs
+            Iniciais</a
+          >
+        </li>
+        <li>
+          <a href="#secao-glossario"
+            ><i class="fas fa-book"></i> 1.3 Glossário e Protocolos</a
+          >
+        </li>
+        <li>
+          <a href="#secao-analogia"
+            ><i class="fas fa-graduation-cap"></i> 1.4 O Caso de Uso
+            Logístico</a
+          >
+        </li>
+        <li>
+          <a href="#secao-scripts"
+            ><i class="fas fa-terminal"></i> 2.1 Scripts Corretivos CLI</a
+          >
+        </li>
+        <li>
+          <a href="#secao-justificativa"
+            ><i class="fas fa-code-branch"></i> 2.2 Justificativa de Comandos</a
+          >
+        </li>
+        <li>
+          <a href="../labs/lab_20.pka"
+            ><i class="fas fa-cloud-download-alt"></i> Download Conclusão</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Troubleshooting e Diagnóstico - Camada 2</span>
+        <h1>Resolução de Problemas em EtherChannel</h1>
+        <p style="color: var(--text-dim)">
+          Investigação profunda de logs, correção de incompatibilidade de
+          protocolos (LACP vs PAgP) e reestruturação de troncos lógicos.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao-cenario" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span class="section-number">1.0</span> Histórico do Problema e
+          Objetivos
+        </h2>
+        <div class="card">
+          <p style="color: var(--text)">
+            Um técnico júnior realizou a instalação e configuração inicial de
+            uma malha com quatro switches corporativos (<strong
+              style="color: var(--primary)"
+              >S1, S2, S3 e S4</strong
+            >). Imediatamente após a entrega do serviço, os usuários começaram a
+            abrir chamados reclamando de extrema lentidão na transferência de
+            dados.
+          </p>
+          <p style="color: var(--text-dim); margin-top: 0.5rem">
+            A nossa diretriz de engenharia de redes para este projeto exige a
+            aplicação de um padrão único e aberto de mercado: **LACP Ativo em
+            todas as interfaces participantes**, garantindo a máxima vazão,
+            agregação mútua e eliminação de loops em parceria com o Spanning
+            Tree Protocol.
+          </p>
+        </div>
+      </section>
+
+      <section id="secao-topologia" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">1.1</span> Espaço Visual da Topologia de
+          Rede (4 Switches)
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1.5rem">
+            Veja abaixo a disposição dos links redundantes paralelos conectando
+            os quatro switches da empresa. A imagem está configurada para se
+            adaptar perfeitamente a dispositivos móveis ou desktops:
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 780px;
+              margin: 0 auto 1.5rem auto;
+              background: #141414;
+              padding: 12px;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <img
+              src="../assets/Captura de tela 2026-07-01 200243.png"
+              alt="Topologia do Laboratório de Troubleshooting de EtherChannel com 4 Switches"
+              style="
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 8px;
+              "
+            />
+          </div>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Grupo Lógico</th>
+                <th>Links Físicos Envolvidos</th>
+                <th>Destino Correto do Canal</th>
+                <th>Protocolo Mandatório</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Port-Channel 1</strong></td>
+                <td>GigabitEthernet 0/1, GigabitEthernet 0/2</td>
+                <td>S1 &leftrightarrow; S2</td>
+                <td>LACP active</td>
+              </tr>
+              <tr>
+                <td><strong>Port-Channel 2</strong></td>
+                <td>GigabitEthernet 0/1, GigabitEthernet 0/2</td>
+                <td>S2 &leftrightarrow; S4</td>
+                <td>LACP active</td>
+              </tr>
+              <tr>
+                <td><strong>Port-Channel 3</strong></td>
+                <td>FastEthernet 0/23, FastEthernet 0/24</td>
+                <td>S1 &leftrightarrow; S2</td>
+                <td>LACP active</td>
+              </tr>
+              <tr>
+                <td><strong>Port-Channel 4</strong></td>
+                <td>FastEthernet 0/23, FastEthernet 0/24</td>
+                <td>S3 &leftrightarrow; S4</td>
+                <td>LACP active</td>
+              </tr>
+              <tr>
+                <td><strong>Port-Channel 5</strong></td>
+                <td>FastEthernet 0/21, FastEthernet 0/22</td>
+                <td>S1 &leftrightarrow; S4</td>
+                <td>LACP active</td>
+              </tr>
+              <tr>
+                <td><strong>Port-Channel 6</strong></td>
+                <td>FastEthernet 0/21, FastEthernet 0/22</td>
+                <td>S2 &leftrightarrow; S3</td>
+                <td>LACP active</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao-diagnostico" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-search-minus"></i>
+          <span class="section-number">1.2</span> Condições Encontradas baseadas
+          nos Logs da CLI
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1rem">
+            Ao auditarmos os logs iniciais coletados com o comando
+            <code>show spanning-tree vlan 1</code> e
+            <code>show etherchannel summary</code>, localizamos três falhas
+            críticas que explicam a pane geral na rede:
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>Inconsistência de Modo (Trunk vs Access) no S2:</strong
+            ><br />
+            O log do <strong>S2</strong> mostrava o status
+            <code>Po3 Root BKN*12 P2p *TYPE_Inc</code>. A flag **BKN (Broken)**
+            associada ao erro **TYPE_Inc** provou que o júnior esqueceu portas
+            em modo Access em uma ponta, enquanto a outra estava em Trunk. O
+            Spanning Tree quebrou o link preventivamente.
+          </div>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-sync-alt"></i>
+            <strong
+              >Incompatibilidade de Protocolos no S3 (LACP vs PAgP):</strong
+            ><br />
+            O log do <strong>S3</strong> revelou que ele estava operando sob o
+            protocolo **PAgP** em todos os grupos. Como todos os outros switches
+            usavam LACP, os dispositivos tentavam falar "línguas diferentes",
+            forçando as portas ao estado de isolamento
+            <code>(I) Stand-alone</code>.
+          </div>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-shuffle"></i>
+            <strong>Erro de Atribuição Crítica de Grupos no S2 e S3:</strong
+            ><br />
+            Na CLI do <strong>S3</strong>, as portas Gigabit estavam injetadas
+            no <strong>Grupo 1</strong>. No entanto, de acordo com o projeto de
+            rede, o S3 não pertence ao Grupo 1! O S3 deveria fechar o Grupo 2
+            com o S4. O mesmo erro de numeração ocorreu nas portas Gigabit do
+            <strong>S2</strong>.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-glossario" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">1.3</span> Glossário de Termos e
+          Comportamento dos Protocolos
+        </h2>
+        <div class="card">
+          <dl
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              color: var(--text-dim);
+            "
+          >
+            <dt
+              style="
+                color: var(--primary);
+                font-weight: 600;
+                font-family: monospace;
+              "
+            >
+              EtherChannel:
+            </dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Tecnologia de agregação que funde vários cabos físicos paralelos
+              em uma única via lógica, multiplicando a largura de banda
+              disponível.
+            </dd>
+
+            <dt
+              style="
+                color: var(--primary);
+                font-weight: 600;
+                font-family: monospace;
+              "
+            >
+              LACP (IEEE 802.3ad - Link Aggregation Control Protocol):
+            </dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Protocolo universal e de padrão aberto. Permite que switches de
+              diferentes fabricantes conversem e criem links virtuais de forma
+              automática.
+            </dd>
+
+            <dt
+              style="
+                color: var(--primary);
+                font-weight: 600;
+                font-family: monospace;
+              "
+            >
+              PAgP (Port Aggregation Protocol):
+            </dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Mecanismo de controle legado e de uso exclusivo da fabricante
+              Cisco, incompatível com sistemas abertos.
+            </dd>
+
+            <dt
+              style="
+                color: var(--primary);
+                font-weight: 600;
+                font-family: monospace;
+              "
+            >
+              Flags (SU) / (P) / (I):
+            </dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              <strong>SU</strong> significa que o canal lógico está ativo na
+              Camada 2 (Up); <strong>P</strong> indica que a porta física se
+              uniu com sucesso ao grupo; <strong>I</strong> significa
+              Stand-alone (a porta está isolada e o canal faliu).
+            </dd>
+          </dl>
+        </div>
+      </section>
+
+      <section id="secao-analogia" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">1.4</span> Caso de Uso Humanizado: O Caos
+          dos Quatro Galpões Logísticos
+        </h2>
+        <div class="card">
+          <p>
+            Para simplificar, imagine uma grande transportadora que possui
+            quatro galpões de distribuição regionais: **Galpão Carlos (S1),
+            Galpão Amanda (S2), Galpão Bruno (S3) e Galpão Diana (S4)**.
+          </p>
+          <p style="color: var(--text-dim); margin-top: 0.5rem">
+            Para agilizar as entregas de mercadorias, a empresa construiu
+            estradas paralelas de duas faixas ligando os galpões em um formato
+            de anel quadrado com um X no meio.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-truck"></i>
+            <strong>O Erro do Júnior (O Gargalo Logístico):</strong><br />
+            O técnico júnior cometeu o erro de colocar fiscais de trânsito no
+            Galpão Bruno (S3) falando inglês, enquanto todos os outros galpões
+            usavam espanhol. Além disso, mandou os caminhões irem para as
+            numerações de rotas trocadas no mapa. Como os gerentes não se
+            entendiam, as estradas paralelas começaram a registrar
+            congestionamento em massa, gerando um colapso operacional que parou
+            a frota da empresa.
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>A Solução da Engenharia:</strong><br />
+            Nós fomos a campo, padronizamos o idioma de comunicação em todos os
+            galpões (ativamos o **LACP Ativo**), alinhamos as numerações
+            corretas das estradas e forçamos a abertura das cancelas (ativando o
+            **Trunk estático**). O tráfego de caminhões foi distribuído
+            igualmente, acabando com a lentidão!
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-scripts" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">2.1</span> Scripts de Correção Cirúrgica
+          Aplicados na CLI
+        </h2>
+        <div class="card">
+          <p>
+            Utilize os blocos estruturados abaixo para corrigir de forma
+            definitiva as falhas de atribuição e protocolos apontadas nos
+            relatórios:
+          </p>
+
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem">
+            <i class="fas fa-cube"></i> Correção Estrutural no Switch S2 (Ajuste
+            de Grupo Gigabit)
+          </h4>
+          <div class="terminal">
+            <pre>
+S2# configure terminal
+S2(config)# interface range g0/1 - 2
+S2(config-if-range)# switchport mode trunk
+S2(config-if-range)# shutdown
+S2(config-if-range)# no channel-group 1
+S2(config-if-range)# channel-group 2 mode active
+S2(config-if-range)# no shutdown
+S2(config)# interface po 2
+S2(config-if)# switchport mode trunk</pre
+            >
+          </div>
+
+          <h4
+            style="
+              color: var(--primary);
+              margin-top: 1.5rem;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <i class="fas fa-cube"></i> Correção Estrutural no Switch S3
+            (Migração Total de PAgP para LACP)
+          </h4>
+          <div class="terminal">
+            <pre>
+S3# configure terminal
+! Removendo o Grupo 1 incorreto e ativando o Grupo 2 em LACP Ativo
+S3(config)# interface range g0/1 - 2
+S3(config-if-range)# switchport mode trunk
+S3(config-if-range)# shutdown
+S3(config-if-range)# no channel-group 1
+S3(config-if-range)# channel-group 2 mode active
+S3(config-if-range)# no shutdown
+! Corrigindo o Grupo 4 para LACP Ativo
+S3(config)# interface range f0/23 - 24
+S3(config-if-range)# switchport mode trunk
+S3(config-if-range)# shutdown
+S3(config-if-range)# no channel-group 4
+S3(config-if-range)# channel-group 4 mode active
+S3(config-if-range)# no shutdown
+! Corrigindo o Grupo 6 para LACP Ativo
+S3(config)# interface range f0/21 - 22
+S3(config-if-range)# switchport mode trunk
+S3(config-if-range)# shutdown
+S3(config-if-range)# no channel-group 6
+S3(config-if-range)# channel-group 6 mode active
+S3(config-if-range)# no shutdown
+! Amarrando o Modo Trunk individualmente nas portas virtuais do S3
+S3(config)# interface po 2
+S3(config-if)# switchport mode trunk
+S3(config)# interface po 4
+S3(config-if)# switchport mode trunk
+S3(config)# interface po 6
+S3(config-if)# switchport mode trunk</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-justificativa" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-code-branch"></i>
+          <span class="section-number">2.2</span> Justificativa Técnica da Série
+          de Comandos Realizados
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1rem">
+            Para blindar o conhecimento do estudante de CCNA, veja o porquê de
+            cada comando ter sido aplicado na arquitetura de troubleshooting:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              color: var(--text-dim);
+              display: flex;
+              flex-direction: column;
+              gap: 0.75rem;
+            "
+          >
+            <li>
+              <strong style="color: var(--text)"
+                >no channel-group [número]:</strong
+              >
+              Esse comando deleta o agrupamento lógico antigo com numeração
+              incorreta criado pelo júnior. Sem retirá-lo primeiro, o IOS impede
+              a injeção do novo canal, gerando sobreposição de comandos.
+            </li>
+            <li>
+              <strong style="color: var(--text)"
+                >shutdown / no shutdown:</strong
+              >
+              Forçar a interface física a desligar desativa o tráfego de pacotes
+              enquanto alteramos os parâmetros. Isso garante estabilidade e
+              previne que o switch derrube os links em modo de travamento
+              automático de segurança (err-disabled).
+            </li>
+            <li>
+              <strong style="color: var(--text)"
+                >channel-group [ID] mode active:</strong
+              >
+              Aplica a numeração correta exigida pela Tabela de Dispositivos e
+              força o uso do protocolo aberto **LACP** em modo de negociação
+              incondicional ativo.
+            </li>
+            <li>
+              <strong style="color: var(--text)"
+                >interface po [número] / switchport mode trunk:</strong
+              >
+              Configuração individual na interface virtual gerada. Garante que o
+              agrupamento lógico atue como um canal de transporte de múltiplas
+              VLANs de forma estática, eliminando falhas de pacotes DTP.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i
+            class="fas fa-file-code"
+            style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"
+          ></i>
+          <h3>Laboratório Concluído com Sucesso</h3>
+          <p
+            style="
+              color: var(--text-dim);
+              margin-bottom: 1.5rem;
+              font-size: 0.9rem;
+            "
+          >
+            Baixe o arquivo de topologia resolvido e corrigido (.pkt) com 100%
+            de aproveitamento das validações.
+          </p>
+          <a
+            href="../labs/lab_20.pka"
+            download
+            class="btn-download"
+          >
+            <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2026 - Cisco Networking Academy Clone. Todos os direitos
+        reservados.
+      </p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById("sidebar");
+          this.overlay = document.getElementById("sidebarOverlay");
+          this.openBtn = document.getElementById("openMenu");
+          this.closeBtn = document.getElementById("closeMenu");
+          this.init();
+        }
+        init() {
+          if (!this.sidebar) return;
+          if (this.openBtn)
+            this.openBtn.addEventListener("click", () => this.open());
+          if (this.closeBtn)
+            this.closeBtn.addEventListener("click", () => this.close());
+          if (this.overlay)
+            this.overlay.addEventListener("click", () => this.close());
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.sidebar.classList.contains("open"))
+              this.close();
+          });
+          document
+            .querySelectorAll(".sidebar .nav-modules a")
+            .forEach((link) => {
+              link.addEventListener("click", () => this.close());
+            });
+        }
+        open() {
+          this.sidebar.classList.add("open");
+          this.overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+        close() {
+          this.sidebar.classList.remove("open");
+          this.overlay.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        new SidebarMenu();
+      });
+    </script>
+  </body>
+</html>
