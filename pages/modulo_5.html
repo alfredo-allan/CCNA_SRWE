@@ -78,6 +78,11 @@
         <li>
           <a href="#secao5-2-7"><i class="fas fa-list-ol"></i> 5.2.7 ID de Porta como Desempate</a>
         </li>
+        <li><a href="#secao5-2-8"><i class="fas fa-clock"></i> 5.2.8 Temporizadores e Mensagens BPDU</a></li>
+        <li><a href="#secao5-2-9"><i class="fas fa-traffic-light"></i> 5.2.9 Estados das Portas STP</a></li>
+        <li><a href="#secao5-2-10"><i class="fas fa-shield-alt"></i> 5.2.10 PortFast e BPDU Guard</a></li>
+        <li><a href="#secao5-3-1"><i class="fas fa-layer-group"></i> 5.3.1 Variantes do STP</a></li>
+        <li><a href="#secao5-3-2"><i class="fas fa-bolt"></i> 5.3.2 Estados das Portas no RSTP</a></li>
       </ul>
     </div>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -205,262 +210,105 @@
         </div>
       </section>
       <section id="secao5-1-2" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-project-diagram"></i>
-          <span class="section-number">5.1.2</span> Spanning Tree Protocol
-        </h2>
+  <h2 class="section-title">
+    <i class="fas fa-project-diagram"></i>
+    <span class="section-number">5.1.2</span> Spanning Tree Protocol
+  </h2>
 
-        <div class="card">
-          <i class="fas fa-shield-alt"></i>
-          <p>
-            O <strong>Spanning Tree Protocol (STP)</strong> é um protocolo de rede de prevenção de loop que permite redundância ao criar uma
-            topologia de Camada 2 sem loop. O <strong>IEEE 802.1D</strong> é o padrão original IEEE MAC Bridging para STP.
-          </p>
-          <p>
-            Use os controles interativos abaixo para reproduzir e analisar detalhadamente a animação da operação normal do STP mitigando
-            loops lógicos.
-          </p>
-        </div>
+  <div class="card">
+    <i class="fas fa-shield-alt"></i>
+    <p>
+      O <strong>Spanning Tree Protocol (STP)</strong> é um protocolo de rede de prevenção de loop que permite redundância ao criar uma
+      topologia de Camada 2 sem loop. O <strong>IEEE 802.1D</strong> é o padrão original IEEE MAC Bridging para STP.
+    </p>
+  </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-play-circle"></i> LAB SIMULATION: Operação Normal do STP
-          </h3>
+  <div class="card" style="background: #070b12; border-color: var(--border);">
+    <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: monospace; display: flex; align-items: center; gap: 0.5rem;">
+      <i class="fas fa-network-wired"></i> TOPOLOGY MAP: Estado Lógico das Pontes da Infraestrutura
+    </h3>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para ignorar travas do CSS global */
-            .canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
+    <style>
+      /* Grid simples: 3 colunas iguais no Desktop */
+      .simple-topo-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 1.5rem !important;
+        margin-top: 1rem !important;
+      }
+      .topo-node-card {
+        background: var(--bg-dark) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1.2rem !important;
+        text-align: center !important;
+      }
+      .topo-node-card i {
+        font-size: 2.2rem !important;
+        margin-bottom: 0.5rem !important;
+        display: inline-block !important;
+      }
+      .topo-node-card h4 {
+        margin: 0 0 0.5rem 0 !important;
+        font-family: monospace !important;
+        font-size: 1rem !important;
+      }
+      .port-status-list {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-family: monospace !important;
+        font-size: 0.75rem !important;
+        text-align: left !important;
+      }
+      .port-status-list li {
+        padding: 4px 0 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+      }
 
-            .stp-sim-canvas {
-              position: relative !important;
-              width: 1020px !important; /* Fixa a largura para forçar o wrapper a criar a barra de rolagem */
-              min-width: 1020px !important;
-              height: 400px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
+      /* Breakpoint Mobile - Transforma o triângulo em blocos verticais independentes */
+      @media (max-width: 768px) {
+        .simple-topo-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+        }
+      }
+    </style>
 
-            /* Dispositivos */
-            .sim-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .sim-node i {
-              font-size: 2.2rem;
-              color: #00b4d8;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            }
-            .sim-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal; /* Permite quebra de texto dentro do nó se necessário */
-            }
-            .sim-node .ip {
-              color: var(--text-dim);
-              font-size: 0.7rem;
-            }
-            /* Cabeamento e Enlaces */
-            .sim-link {
-              position: absolute;
-              background: var(--success);
-              transform-origin: left center;
-              z-index: 2;
-              box-shadow: 0 0 6px var(--success);
-            }
-            .sim-link.blocked {
-              background: var(--danger) !important;
-              box-shadow: 0 0 6px var(--danger) !important;
-            }
-            /* Sinalizador de Bloqueio */
-            .block-marker {
-              position: absolute;
-              width: 24px;
-              height: 24px;
-              background: var(--danger);
-              border-radius: 50%;
-              color: #fff;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 0.75rem;
-              font-weight: bold;
-              z-index: 6;
-              box-shadow: 0 0 10px var(--danger);
-            }
-            /* Envelopes de Pacotes */
-            .sim-packet {
-              position: absolute;
-              width: 18px;
-              height: 14px;
-              background: #ffd166;
-              border: 1px solid #ffb703;
-              border-radius: 3px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 8px #ffb703;
-            }
-            .sim-packet::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              border-left: 9px solid transparent;
-              border-right: 9px solid transparent;
-              border-top: 6px solid #ffb703;
-            }
-            /* Painel de Navegação Inferior */
-            .sim-controls {
-              display: flex;
-              align-items: center;
-              gap: 1.5rem;
-              margin-top: 1.5rem;
-              background: #121824;
-              padding: 1rem;
-              border-radius: 8px;
-              border: 1px solid var(--border);
-            }
-            .sim-btn {
-              background: transparent;
-              border: 1px solid var(--primary);
-              color: var(--primary);
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 1.2rem;
-              transition: all 0.2s;
-            }
-            .sim-btn:hover {
-              background: var(--primary);
-              color: #0a0e17;
-              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
-            }
-            .sim-slider-container {
-              flex-grow: 1;
-              display: flex;
-              align-items: center;
-              position: relative;
-            }
-            .sim-slider {
-              width: 100%;
-              -webkit-appearance: none;
-              appearance: none;
-              height: 6px;
-              border-radius: 3px;
-              background: var(--border);
-              outline: none;
-            }
-            .sim-slider::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              appearance: none;
-              width: 18px;
-              height: 18px;
-              border-radius: 50%;
-              background: #ffd166;
-              cursor: pointer;
-              box-shadow: 0 0 8px #ffd166;
-            }
-            .sim-status-box {
-              background: #0a0e17;
-              border: 1px solid var(--border);
-              padding: 0.8rem 1.2rem;
-              border-radius: 6px;
-              min-height: 55px;
-              display: flex;
-              align-items: center;
-              color: var(--text);
-              font-family: monospace;
-              font-size: 0.85rem;
-              margin-top: 1rem;
-            }
-          </style>
+    <div class="simple-topo-grid">
+      <div class="topo-node-card" style="border-top: 3px solid var(--secondary) !important;">
+        <i class="fas fa-server" style="color: var(--secondary) !important;"></i>
+        <h4>S1 (Root Bridge)</h4>
+        <ul class="port-status-list">
+          <li><span style="color: var(--success);">[DP] F0/1</span> - Forwarding</li>
+          <li><span style="color: var(--success);">[DP] F0/2</span> - Forwarding</li>
+        </ul>
+      </div>
 
-          <div class="canvas-responsive-wrapper">
-            <div class="stp-sim-canvas" id="stpCanvas">
-              <div class="sim-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="sim-link" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
-              <div class="sim-link" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
-              <div class="sim-link" style="top: 75px; left: 640px; width: 240px; height: 3px; transform: rotate(0deg)"></div>
-              <div class="sim-link" style="top: 215px; left: 390px; width: 280px; height: 3px; transform: rotate(145deg)"></div>
-              <div class="sim-link" style="top: 215px; left: 400px; width: 140px; height: 3px; transform: rotate(90deg)"></div>
-              <div class="sim-link" style="top: 215px; left: 410px; width: 280px; height: 3px; transform: rotate(35deg)"></div>
-              <div class="block-marker" style="top: 130px; left: 245px" title="Porta Fa0/2 em Estado Blocking">X</div>
+      <div class="topo-node-card" style="border-top: 3px solid var(--primary) !important;">
+        <i class="fas fa-server" style="color: var(--primary) !important;"></i>
+        <h4>S2 (Non-Root)</h4>
+        <ul class="port-status-list">
+          <li><span style="color: var(--primary);">[RP] F0/1</span> - Forwarding</li>
+          <li><span style="color: var(--success);">[DP] F0/2</span> - Forwarding</li>
+        </ul>
+      </div>
 
-              <div class="sim-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
-              <div class="sim-node" style="top: 40px; left: 580px">
-                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root)</span>
-              </div>
-              <div class="sim-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+      <div class="topo-node-card" style="border-top: 3px solid var(--danger) !important;">
+        <i class="fas fa-server" style="color: #718096 !important;"></i>
+        <h4>S3 (Non-Root)</h4>
+        <ul class="port-status-list">
+          <li><span style="color: var(--primary);">[RP] F0/1</span> - Forwarding</li>
+          <li><span style="color: var(--danger); font-weight: bold;">[AP] F0/2</span> - Blocking <i class="fas fa-lock"></i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-              <div class="sim-node" style="top: 310px; left: 120px">
-                <i class="fas fa-laptop"></i><span>PC1</span><span class="ip">172.17.10.21</span>
-              </div>
-              <div class="sim-node" style="top: 310px; left: 345px">
-                <i class="fas fa-laptop"></i><span>PC2</span><span class="ip">172.17.10.22</span>
-              </div>
-              <div class="sim-node" style="top: 310px; left: 560px">
-                <i class="fas fa-laptop"></i><span>PC3</span><span class="ip">172.17.10.23</span>
-              </div>
-              <div class="sim-node" style="top: 40px; left: 860px">
-                <i class="fas fa-laptop"></i><span>PC4</span><span class="ip">172.17.10.27</span>
-              </div>
-
-              <div class="sim-packet" id="pkt1"></div>
-              <div class="sim-packet" id="pkt2"></div>
-              <div class="sim-packet" id="pkt3"></div>
-              <div class="sim-packet" id="pkt4"></div>
-            </div>
-          </div>
-
-          <div class="sim-controls">
-            <button class="sim-btn" id="stpPlayBtn"><i class="fas fa-play" id="playIcon"></i></button>
-            <div class="sim-slider-container">
-              <input type="range" min="0" max="3" value="0" class="sim-slider" id="stpRange" />
-            </div>
-          </div>
-
-          <div class="sim-status-box" id="stpStatus">
-            Clique no botão Play ou intercale as etapas para ver a mitigação de loop l2 do STP.
-          </div>
-        </div>
-
-        <div class="alert alert-info">
-          <i class="fas fa-info-circle"></i> <strong>Insight de Engenharia:</strong> Observe como o frame de broadcast emitido por PC1
-          trafega para todos os segmentos, mas é descartado imediatamente na interface em estado <code>Blocking</code> do tronco redundante,
-          eliminando a criação de tempestades de encaminhamento cíclico.
-        </div>
-      </section>
+  <div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> <strong>Insight de Engenharia:</strong> Observe como o frame de broadcast emitido por qualquer host trafega para todos os segmentos, mas é descartado imediatamente na interface <code>F0/2</code> em estado <code>Blocking (AP)</code> do Switch S3, eliminando de vez a criação de loops cíclicos.
+  </div>
+</section>
 
       <script>
         ;(function () {
@@ -576,281 +424,186 @@
           renderStep(0)
         })()
       </script>
-      <section id="secao5-1-3" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-sync-alt"></i>
-          <span class="section-number">5.1.3</span> Recálculo STP
-        </h2>
+    <section id="secao5-1-3" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-sync-alt"></i>
+        <span class="section-number">5.1.3</span> Recálculo STP
+    </h2>
 
-        <div class="card">
-          <i class="fas fa-tools"></i>
-          <p>
+    <div class="card">
+        <i class="fas fa-tools"></i>
+        <p>
             Quando ocorre uma falha física em um link ativo dentro de uma topologia comutada, o
             <strong>Spanning Tree Protocol</strong> reage realizando um recálculo de árvore de abrangência. Durante esse processo, portas
             anteriormente bloqueadas mudam de estado para garantir caminhos redundantes lógicos alternativos.
-          </p>
-          <p>
-            Utilize os controles interativos abaixo para reproduzir passo a passo o comportamento dinâmico de convergência quando o link
-            principal (Tronco 1) falha e o link de backup assume a topologia.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
+    <div class="card">
+        <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
             <i class="fas fa-play-circle"></i> LAB SIMULATION: O STP Compensa a Falha da Rede
-          </h3>
+        </h3>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para ignorar travas do CSS global */
-            .recalc-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
+        <!-- TOPOLOGIA SIMPLIFICADA -->
+        <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important;">
+            <div style="display: flex; align-items: center; justify-content: space-around; min-width: 600px; padding: 1rem 0;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--primary); border-radius: 8px; padding: 0.5rem 1rem;">
+                        <i class="fas fa-server" style="color: var(--primary); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S3</span>
+                </div>
 
-            .recalc-sim-canvas {
-              position: relative !important;
-              width: 1020px !important; /* Fixa a largura interna para forçar a barra de rolagem no mobile */
-              min-width: 1020px !important;
-              height: 400px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
+                <!-- Link Tronco 1 (ATIVO) -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 80px; height: 3px; background: var(--success); box-shadow: 0 0 8px var(--success);"></div>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; font-family: monospace;">Tronco 1 ✅</span>
+                </div>
 
-            .recalc-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .recalc-node i {
-              font-size: 2.2rem;
-              color: #00b4d8;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            }
-            .recalc-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal;
-            }
-            .recalc-node .ip {
-              color: var(--text-dim);
-              font-size: 0.7rem;
-            }
-            .recalc-link {
-              position: absolute;
-              background: var(--success);
-              transform-origin: left center;
-              z-index: 2;
-              box-shadow: 0 0 6px var(--success);
-            }
-            .recalc-link.down {
-              background: var(--danger) !important;
-              box-shadow: 0 0 6px var(--danger) !important;
-              border-top: 2px dashed #ff4d6d;
-            }
-            .recalc-link.blocked {
-              background: var(--warning);
-              box-shadow: 0 0 6px var(--warning);
-            }
-            .fail-cross {
-              position: absolute;
-              font-size: 2rem;
-              color: var(--danger);
-              font-weight: bold;
-              z-index: 7;
-              display: none;
-              text-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
-            }
-            .recalc-block-marker {
-              position: absolute;
-              width: 24px;
-              height: 24px;
-              background: var(--danger);
-              border-radius: 50%;
-              color: #fff;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 0.75rem;
-              font-weight: bold;
-              z-index: 6;
-              box-shadow: 0 0 10px var(--danger);
-            }
-            .recalc-packet {
-              position: absolute;
-              width: 18px;
-              height: 14px;
-              background: #ffd166;
-              border: 1px solid #ffb703;
-              border-radius: 3px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 8px #ffb703;
-            }
-            .recalc-packet::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              border-left: 9px solid transparent;
-              border-right: 9px solid transparent;
-              border-top: 6px solid #ffb703;
-            }
-            .recalc-controls {
-              display: flex;
-              align-items: center;
-              gap: 1.5rem;
-              margin-top: 1.5rem;
-              background: #121824;
-              padding: 1rem;
-              border-radius: 8px;
-              border: 1px solid var(--border);
-            }
-            .recalc-btn {
-              background: transparent;
-              border: 1px solid var(--primary);
-              color: var(--primary);
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 1.2rem;
-              transition: all 0.2s;
-            }
-            .recalc-btn:hover {
-              background: var(--primary);
-              color: #0a0e17;
-              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
-            }
-            .recalc-slider-container {
-              flex-grow: 1;
-              display: flex;
-              align-items: center;
-            }
-            .recalc-slider {
-              width: 100%;
-              -webkit-appearance: none;
-              appearance: none;
-              height: 6px;
-              border-radius: 3px;
-              background: var(--border);
-              outline: none;
-            }
-            .recalc-slider::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              appearance: none;
-              width: 18px;
-              height: 18px;
-              border-radius: 50%;
-              background: #ffd166;
-              cursor: pointer;
-              box-shadow: 0 0 8px #ffd166;
-            }
-            .recalc-status-box {
-              background: #0a0e17;
-              border: 1px solid var(--border);
-              padding: 0.8rem 1.2rem;
-              border-radius: 6px;
-              min-height: 55px;
-              display: flex;
-              align-items: center;
-              color: var(--text);
-              font-family: monospace;
-              font-size: 0.85rem;
-              margin-top: 1rem;
-            }
-          </style>
+                <!-- S1 (Root) -->
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--secondary); border-radius: 8px; padding: 0.5rem 1rem;">
+                        <i class="fas fa-server" style="color: var(--secondary); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--secondary); font-family: monospace; font-size: 0.8rem;">S1 (Root)</span>
+                </div>
 
-          <div class="recalc-canvas-responsive-wrapper">
-            <div class="recalc-sim-canvas" id="recalcCanvas">
-              <div class="recalc-link" id="linkTronco3" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div
-                class="recalc-link"
-                id="linkTronco2"
-                style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"
-              ></div>
-              <div
-                class="recalc-link"
-                id="linkTronco1"
-                style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"
-              ></div>
-              <div class="recalc-link" style="top: 75px; left: 640px; width: 240px; height: 3px; transform: rotate(0deg)"></div>
-              <div class="recalc-link" style="top: 215px; left: 390px; width: 280px; height: 3px; transform: rotate(145deg)"></div>
-              <div class="recalc-link" style="top: 215px; left: 400px; width: 140px; height: 3px; transform: rotate(90deg)"></div>
-              <div class="recalc-link" style="top: 215px; left: 410px; width: 280px; height: 3px; transform: rotate(35deg)"></div>
-              <div class="fail-cross" id="visualX" style="top: 100px; left: 495px">❌</div>
+                <!-- Link Tronco 2 (BLOQUEADO) -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 80px; height: 3px; background: var(--warning); box-shadow: 0 0 8px var(--warning);"></div>
+                    <span style="color: var(--warning); font-size: 0.65rem; font-family: monospace;">Tronco 2 ⚠️</span>
+                </div>
 
-              <div class="recalc-block-marker" id="recalcBlockMarker" style="top: 130px; left: 245px">X</div>
-
-              <div class="recalc-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
-              <div class="recalc-node" style="top: 40px; left: 580px">
-                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root)</span>
-              </div>
-              <div class="recalc-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
-
-              <div class="recalc-node" style="top: 310px; left: 120px">
-                <i class="fas fa-laptop"></i><span>PC1</span><span class="ip">172.17.10.21</span>
-              </div>
-              <div class="recalc-node" style="top: 310px; left: 345px">
-                <i class="fas fa-laptop"></i><span>PC2</span><span class="ip">172.17.10.22</span>
-              </div>
-              <div class="recalc-node" style="top: 310px; left: 560px">
-                <i class="fas fa-laptop"></i><span>PC3</span><span class="ip">172.17.10.23</span>
-              </div>
-              <div class="recalc-node" style="top: 40px; left: 860px">
-                <i class="fas fa-laptop"></i><span>PC4</span><span class="ip">172.17.10.27</span>
-              </div>
-
-              <div class="recalc-packet" id="rpkt1"></div>
-              <div class="recalc-packet" id="rpkt2"></div>
-              <div class="recalc-packet" id="rpkt3"></div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S2</span>
+                </div>
             </div>
-          </div>
-
-          <div class="recalc-controls">
-            <button class="recalc-btn" id="recalcPlayBtn"><i class="fas fa-play" id="recalcPlayIcon"></i></button>
-            <div class="recalc-slider-container">
-              <input type="range" min="0" max="5" value="0" class="recalc-slider" id="recalcRange" />
-            </div>
-          </div>
-
-          <div class="recalc-status-box" id="recalcStatus">
-            Clique em Play ou arraste o controle deslizante para ver a convergência dinâmica após a quebra do Tronco 1.
-          </div>
         </div>
 
-        <div class="alert alert-success">
-          <i class="fas fa-check-circle"></i> <strong>Conclusão sobre Alta Disponibilidade:</strong> Graças ao recálculo automático do STP,
-          o tráfego de dados recupera sua conectividade lógica fim-a-fim sem que ocorra interrupção definitiva ou necessidade de intervenção
-          manual do administrador de redes.
+        <!-- ESTADOS DOS LINKS -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(3, 244, 135, 0.1); border: 1px solid var(--success); border-radius: 8px; padding: 0.8rem;">
+                <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                <span style="color: var(--text); font-family: monospace; margin-left: 0.5rem;">Tronco 1: <strong style="color: var(--success);">ATIVO</strong></span>
+            </div>
+            <div style="background: rgba(255, 183, 3, 0.1); border: 1px solid var(--warning); border-radius: 8px; padding: 0.8rem;">
+                <i class="fas fa-ban" style="color: var(--warning);"></i>
+                <span style="color: var(--text); font-family: monospace; margin-left: 0.5rem;">Tronco 2: <strong style="color: var(--warning);">BLOQUEADO</strong></span>
+            </div>
         </div>
-      </section>
+    </div>
+
+    <!-- COMANDOS CISCO -->
+    <div class="card">
+        <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-terminal"></i> Verificando o Estado STP
+        </h3>
+
+        <div class="terminal">
+            <pre>
+S1# <strong>show spanning-tree</strong>
+
+Spanning tree enabled protocol ieee
+Root ID    Priority    32769
+           Address     0001.4321.ABCD
+           Cost        4
+           Port        1 (GigabitEthernet0/1)
+           Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+Bridge ID  Priority    32769
+           Address     0001.4321.DCBA
+           Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+           Aging Time  300
+
+Interface        Role Sts Cost      Prio.Nbr Type
+--------------- ---- --- --------- -------- --------------------------------
+Gi0/1            Root FWD 4         128.1    P2p
+Gi0/2            Altn BLK 4         128.2    P2p
+            </pre>
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> 
+            <strong>Interpretação:</strong> A porta <strong>Gi0/1</strong> está em estado <strong>FWD</strong> (Forwarding) e é a porta raiz. 
+            A porta <strong>Gi0/2</strong> está em estado <strong>BLK</strong> (Blocking) e é a porta alternativa.
+        </div>
+    </div>
+
+    <!-- SIMULAÇÃO DE FALHA -->
+    <div class="card">
+        <h3 style="color: var(--danger); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-exclamation-triangle"></i> Simulação de Falha
+        </h3>
+
+        <div style="background: #090d16; border-radius: 8px; padding: 1rem; border: 1px solid var(--border);">
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <button onclick="simularFalhaSTP()" style="background: var(--danger); border: none; color: #fff; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-family: monospace; font-weight: 600;">
+                    <i class="fas fa-bolt"></i> Simular Falha no Tronco 1
+                </button>
+                <button onclick="restaurarSTP()" style="background: var(--bg-card); border: 1px solid var(--primary); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-family: monospace;">
+                    <i class="fas fa-undo"></i> Restaurar
+                </button>
+                <span id="statusSTP" style="color: var(--success); font-family: monospace;">✅ Tronco 1: ATIVO | Tronco 2: BLOQUEADO</span>
+            </div>
+        </div>
+
+        <div class="terminal" id="terminalSTP" style="margin-top: 1rem;">
+            <pre id="logSTP">
+<span style="color: var(--text-dim);">%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up</span>
+<span style="color: var(--text-dim);">%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up</span>
+<span style="color: var(--success);">%STP-6-PORTSTATE: Port Gi0/1 transitioned to FORWARDING</span>
+<span style="color: var(--warning);">%STP-6-PORTSTATE: Port Gi0/2 transitioned to BLOCKING</span>
+            </pre>
+        </div>
+    </div>
+
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> 
+        <strong>Conclusão sobre Alta Disponibilidade:</strong> Graças ao recálculo automático do STP, o tráfego de dados recupera sua conectividade lógica fim-a-fim sem interrupção definitiva ou necessidade de intervenção manual.
+    </div>
+</section>
+
+<script>
+// Função para simular falha
+function simularFalhaSTP() {
+    const status = document.getElementById('statusSTP');
+    const log = document.getElementById('logSTP');
+    
+    status.innerHTML = '❌ Tronco 1: <span style="color: var(--danger);">FALHA</span> | Tronco 2: <span style="color: var(--success);">ATIVO</span>';
+    status.style.color = 'var(--danger)';
+    
+    log.innerHTML = `
+<span style="color: var(--danger);">%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to down</span>
+<span style="color: var(--danger);">%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to down</span>
+<span style="color: var(--warning);">%STP-6-PORTSTATE: Port Gi0/1 transitioned to BLOCKING</span>
+<span style="color: var(--warning);">%STP-6-PORTSTATE: Port Gi0/2 transitioned to LEARNING (15s)</span>
+<span style="color: var(--success);">%STP-6-PORTSTATE: Port Gi0/2 transitioned to FORWARDING</span>
+<span style="color: var(--text-dim);">%SYS-5-CONFIG_I: Configured from console by console</span>
+<span style="color: var(--success);">✅ Convergência concluída em 32 segundos</span>
+    `;
+}
+
+// Função para restaurar
+function restaurarSTP() {
+    const status = document.getElementById('statusSTP');
+    const log = document.getElementById('logSTP');
+    
+    status.innerHTML = '✅ Tronco 1: ATIVO | Tronco 2: BLOQUEADO';
+    status.style.color = 'var(--success)';
+    
+    log.innerHTML = `
+<span style="color: var(--text-dim);">%LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up</span>
+<span style="color: var(--text-dim);">%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up</span>
+<span style="color: var(--success);">%STP-6-PORTSTATE: Port Gi0/1 transitioned to FORWARDING</span>
+<span style="color: var(--warning);">%STP-6-PORTSTATE: Port Gi0/2 transitioned to BLOCKING</span>
+    `;
+}
+</script>
       <script>
         ;(function () {
           const playBtn = document.getElementById('recalcPlayBtn')
@@ -1132,221 +885,199 @@
         </div>
       </section>
       <section id="secao5-1-5" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-redo"></i>
-          <span class="section-number">5.1.5</span> Loops de Camada 2
-        </h2>
+    <h2 class="section-title">
+        <i class="fas fa-redo"></i>
+        <span class="section-number">5.1.5</span> Loops de Camada 2
+    </h2>
 
-        <div class="card">
-          <p>
+    <div class="card">
+        <p>
             Sem o <strong>STP</strong> habilitado, os loops da Camada 2 podem se formar, fazendo com que os quadros de difusão
             (<em>Broadcast</em>), <em>Multicast</em> e <em>Unicast</em> desconhecidos circulem sem parar. Isso pode derrubar uma rede dentro
             de um período de tempo muito curto, às vezes em apenas alguns segundos.
-          </p>
-          <p>
+        </p>
+        <p>
             Por exemplo, os quadros de <em>Broadcast</em>, como uma Solicitação <strong>ARP</strong>, são encaminhados para todas as portas
             do switch, exceto a porta de entrada original. Isso garante que todos os dispositivos em um domínio de <em>Broadcast</em> possam
             receber o quadro. Se houver mais de um caminho para o quadro ser encaminhado, isso pode resultar em um loop interminável.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--danger)">
-          <h3
-            style="
-              color: var(--danger);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-biohazard"></i> CLI &amp; TOPOLOGY CRASH: Comportamento Sem STP
-          </h3>
+    <!-- SIMULAÇÃO SIMPLIFICADA -->
+    <div class="card" style="border-color: var(--danger);">
+        <h3 style="color: var(--danger); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-biohazard"></i> Comportamento Sem STP
+        </h3>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para garantir a rolagem horizontal no mobile */
-            .loop-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid rgba(255, 77, 109, 0.2) !important;
-              margin-bottom: 1rem !important;
-            }
+        <!-- Topologia em HTML puro -->
+        <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-around; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div id="s3Icon" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S3</span>
+                </div>
 
-            .loop-sim-canvas {
-              position: relative !important;
-              width: 780px !important; /* Fixa a largura interna para disparar a barra de rolagem se a tela for menor */
-              min-width: 780px !important;
-              height: 380px !important;
-              background: #05070b !important;
-              overflow: hidden !important;
-            }
+                <!-- Link S3-S1 -->
+                <div id="linkS3S1" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s;"></div>
 
-            .loop-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .loop-node i {
-              font-size: 2.2rem;
-              color: #718096;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-            }
-            .loop-node.active-switch i {
-              color: var(--warning);
-              border-color: var(--warning);
-              animation: pulse-orange 1s infinite alternate;
-            }
-            .loop-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal;
-            }
-            .loop-link {
-              position: absolute;
-              background: var(--warning);
-              z-index: 2;
-              box-shadow: 0 0 8px var(--warning);
-            }
-            .loop-link.active-loop {
-              background: var(--danger) !important;
-              box-shadow: 0 0 15px var(--danger) !important;
-              animation: link-burn 0.2s infinite;
-            }
-            .loop-packet {
-              position: absolute;
-              width: 14px;
-              height: 10px;
-              background: var(--danger);
-              border-radius: 2px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 10px var(--danger);
-            }
-            .loop-mac-terminal {
-              background: #020406;
-              border: 1px solid var(--border);
-              border-radius: 8px;
-              padding: 0.8rem;
-              font-family: 'Consolas', monospace;
-              font-size: 0.75rem;
-              color: var(--text);
-              height: 110px;
-              overflow-y: hidden;
-              margin-top: 1rem;
-              border-left: 3px solid var(--danger);
-            }
-            .loop-controls-panel {
-              display: flex;
-              align-items: center;
-              gap: 1rem;
-              margin-top: 1rem;
-            }
-            .loop-btn-trigger {
-              background: rgba(255, 77, 109, 0.1);
-              border: 1px solid var(--danger);
-              color: var(--danger);
-              padding: 0.6rem 1.2rem;
-              border-radius: 6px;
-              cursor: pointer;
-              font-family: monospace;
-              font-weight: bold;
-              transition: all 0.2s;
-            }
-            .loop-btn-trigger:hover {
-              background: var(--danger);
-              color: #000;
-              box-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
-            }
-            @keyframes pulse-orange {
-              from {
-                box-shadow: 0 0 5px rgba(255, 183, 3, 0.2);
-              }
-              to {
-                box-shadow: 0 0 20px rgba(255, 183, 3, 0.6);
-              }
-            }
-            @keyframes link-burn {
-              0% {
-                opacity: 0.6;
-              }
-              50% {
-                opacity: 1;
-              }
-              100% {
-                opacity: 0.6;
-              }
-            }
-          </style>
+                <!-- S1 -->
+                <div style="text-align: center;">
+                    <div id="s1Icon" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S1</span>
+                </div>
 
-          <div class="loop-canvas-responsive-wrapper">
-            <div class="loop-sim-canvas">
-              <div class="loop-link" id="ll1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="loop-link" id="ll2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
-              <div class="loop-link" id="ll3" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+                <!-- Link S1-S2 -->
+                <div id="linkS1S2" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s;"></div>
 
-              <div class="loop-node" id="nodeS3" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
-              <div class="loop-node" id="nodeS1" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
-              <div class="loop-node" id="nodeS2" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="s2Icon" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S2</span>
+                </div>
 
-              <div class="loop-node" style="top: 290px; left: 345px"><i class="fas fa-laptop"></i><span>PC1 (Gera ARP Request)</span></div>
-
-              <div class="loop-packet" id="lp1"></div>
-              <div class="loop-packet" id="lp2"></div>
-              <div class="loop-packet" id="lp3"></div>
+                <!-- Link S2-S3 -->
+                <div id="linkS2S3" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s;"></div>
             </div>
-          </div>
 
-          <div class="loop-controls-panel">
-            <button class="loop-btn-trigger" id="startLoopBtn"><i class="fas fa-bomb"></i> INJETAR BROADCAST SEM STP</button>
-            <button
-              class="loop-btn-trigger"
-              id="resetLoopBtn"
-              style="color: var(--text-dim); border-color: var(--border); background: transparent; display: none"
-            >
-              RESETAR INFRA
-            </button>
-          </div>
-
-          <div class="loop-mac-terminal" id="loopTerminal">
-            S2# show mac address-table dynamic
-            <br /><span style="color: var(--text-dim)">[Aguardando injeção de tráfego para processamento da tabela MAC...]</span>
-          </div>
+            <!-- PC -->
+            <div style="text-align: center; margin-top: 1rem;">
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: inline-block;">
+                    <i class="fas fa-laptop" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                </div>
+                <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">PC1 (Gera ARP Request)</span>
+            </div>
         </div>
 
-        <div class="card">
-          <p>
+        <!-- Controles -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button onclick="iniciarLoop()" style="background: rgba(255, 77, 109, 0.1); border: 1px solid var(--danger); color: var(--danger); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-bomb"></i> INJETAR BROADCAST SEM STP
+            </button>
+            <button onclick="resetarLoop()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR INFRA
+            </button>
+        </div>
+
+        <!-- Terminal de Log -->
+        <div style="background: #020406; border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem; font-family: 'Consolas', monospace; font-size: 0.75rem; color: var(--text); min-height: 120px; border-left: 3px solid var(--danger);">
+            <div id="loopLog">
+                S2# show mac address-table dynamic<br>
+                <span style="color: var(--text-dim);">[Aguardando injeção de tráfego para processamento da tabela MAC...]</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <p>
             Quando ocorre um loop, a <strong>tabela de endereços MAC</strong> em um switch muda constantemente com as atualizações dos
-            quadros de <em>Broadcast</em>, o que resulta em <strong>instabilidade do banco de dados MAC</strong> (<em>MAC Table Flapping</em
-            >). Isso causa alta utilização da CPU, o que torna o switch incapaz de encaminhar quadros.
-          </p>
-          <p>
+            quadros de <em>Broadcast</em>, o que resulta em <strong>instabilidade do banco de dados MAC</strong> (<em>MAC Table Flapping</em>).
+            Isso causa alta utilização da CPU, o que torna o switch incapaz de encaminhar quadros.
+        </p>
+        <p>
             Os quadros de <em>Broadcast</em> não são os únicos afetados. Os quadros <strong>Unicast Desconhecidos</strong> enviados para uma
             rede com loops fazem com que quadros duplicados cheguem ao dispositivo de destino. Um quadro <em>Unicast</em> desconhecido
             ocorre quando o switch não possui o endereço MAC de destino mapeado em sua tabela e é forçado a inundar o quadro por todas as
             portas, alimentando o ciclo interminável.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="alert alert-danger">
-          <i class="fas fa-skull-crossbones"></i> <strong>Efeito Broadcast Storm:</strong> Como o cabeçalho Ethernet de Camada 2 não possui
-          um campo TTL, os pacotes duplicados continuam se multiplicando exponencialmente até que a memória interna dos switches se esgote,
-          resultando em um colapso total dos serviços de rede.
-        </div>
-      </section>
+    <div class="alert alert-danger">
+        <i class="fas fa-skull-crossbones"></i> 
+        <strong>Efeito Broadcast Storm:</strong> Como o cabeçalho Ethernet de Camada 2 não possui um campo TTL, os pacotes duplicados continuam se multiplicando exponencialmente até que a memória interna dos switches se esgote, resultando em um colapso total dos serviços de rede.
+    </div>
+</section>
 
+<script>
+// Estado do loop
+let loopAtivo = false;
+let intervaloLoop;
+
+function iniciarLoop() {
+    if (loopAtivo) return;
+    loopAtivo = true;
+    
+    // Atualiza ícones para modo ativo (laranja)
+    document.getElementById('s3Icon').style.borderColor = 'var(--warning)';
+    document.getElementById('s3Icon').querySelector('i').style.color = 'var(--warning)';
+    document.getElementById('s1Icon').style.borderColor = 'var(--warning)';
+    document.getElementById('s1Icon').querySelector('i').style.color = 'var(--warning)';
+    document.getElementById('s2Icon').style.borderColor = 'var(--warning)';
+    document.getElementById('s2Icon').querySelector('i').style.color = 'var(--warning)';
+    
+    // Atualiza links para vermelho com animação
+    document.getElementById('linkS3S1').style.background = 'var(--danger)';
+    document.getElementById('linkS3S1').style.boxShadow = '0 0 15px var(--danger)';
+    document.getElementById('linkS1S2').style.background = 'var(--danger)';
+    document.getElementById('linkS1S2').style.boxShadow = '0 0 15px var(--danger)';
+    document.getElementById('linkS2S3').style.background = 'var(--danger)';
+    document.getElementById('linkS2S3').style.boxShadow = '0 0 15px var(--danger)';
+    
+    // Simula inundação de broadcasts
+    let contador = 0;
+    const log = document.getElementById('loopLog');
+    
+    intervaloLoop = setInterval(() => {
+        contador++;
+        const macs = [
+            '00:1A:2B:3C:4D:5E',
+            '00:1A:2B:3C:4D:5F',
+            '00:1A:2B:3C:4D:60',
+            '00:1A:2B:3C:4D:61',
+            '00:1A:2B:3C:4D:62'
+        ];
+        const macRandom = macs[Math.floor(Math.random() * macs.length)];
+        const portas = ['Gi0/1', 'Gi0/2', 'Gi0/3', 'Gi0/4'];
+        const portaRandom = portas[Math.floor(Math.random() * portas.length)];
+        
+        log.innerHTML += `<br><span style="color: var(--warning);">%SW_MATM-4-MACFLAP_NOTIF: Host ${macRandom} in VLAN 1 is flapping between port ${portaRandom} and port ${portas[Math.floor(Math.random() * portas.length)]}</span>`;
+        
+        if (contador > 15) {
+            log.innerHTML += `<br><span style="color: var(--danger); font-weight: bold;">!!! BROADCAST STORM DETECTADO - CPU 98% !!!</span>`;
+            log.innerHTML += `<br><span style="color: var(--danger);">%SYS-2-MALLOCFAIL: Memory allocation of 4096 bytes failed</span>`;
+            log.innerHTML += `<br><span style="color: var(--danger); font-weight: bold;">⚠️ SWITCH REINICIANDO POR EXCESSO DE TRÁFEGO...</span>`;
+            clearInterval(intervaloLoop);
+            loopAtivo = false;
+        }
+        
+        // Scroll para o final
+        log.scrollTop = log.scrollHeight;
+    }, 800);
+}
+
+function resetarLoop() {
+    clearInterval(intervaloLoop);
+    loopAtivo = false;
+    
+    // Reseta ícones
+    document.getElementById('s3Icon').style.borderColor = 'var(--border)';
+    document.getElementById('s3Icon').querySelector('i').style.color = 'var(--text-dim)';
+    document.getElementById('s1Icon').style.borderColor = 'var(--border)';
+    document.getElementById('s1Icon').querySelector('i').style.color = 'var(--text-dim)';
+    document.getElementById('s2Icon').style.borderColor = 'var(--border)';
+    document.getElementById('s2Icon').querySelector('i').style.color = 'var(--text-dim)';
+    
+    // Reseta links
+    document.getElementById('linkS3S1').style.background = 'var(--text-dim)';
+    document.getElementById('linkS3S1').style.boxShadow = 'none';
+    document.getElementById('linkS1S2').style.background = 'var(--text-dim)';
+    document.getElementById('linkS1S2').style.boxShadow = 'none';
+    document.getElementById('linkS2S3').style.background = 'var(--text-dim)';
+    document.getElementById('linkS2S3').style.boxShadow = 'none';
+    
+    // Reseta log
+    document.getElementById('loopLog').innerHTML = `
+        S2# show mac address-table dynamic<br>
+        <span style="color: var(--text-dim);">[Aguardando injeção de tráfego para processamento da tabela MAC...]</span>
+    `;
+}
+</script>
       <script>
         ;(function () {
           const startBtn = document.getElementById('startLoopBtn')
@@ -1454,218 +1185,261 @@
           resetBtn.addEventListener('click', resetTopology)
         })()
       </script>
-      <section id="secao5-1-6" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-bolt"></i>
-          <span class="section-number">5.1.6</span> Tempestade de Broadcast
-        </h2>
+     <section id="secao5-1-6" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-bolt"></i>
+        <span class="section-number">5.1.6</span> Tempestade de Broadcast
+    </h2>
 
-        <div class="card">
-          <p>
+    <div class="card">
+        <p>
             Uma <strong>Tempestade de Broadcast</strong> (<em>Broadcast Storm</em>) ocorre quando tantos quadros de difusão são capturados
             em um loop de Camada 2 que toda a largura de banda disponível é consumida instantaneamente. Como esses quadros continuam se
             propagando de forma cíclica, nenhum tráfego legítimo de usuários consegue trafegar pela LAN, resultando em um colapso completo
             dos serviços de rede.
-          </p>
-          <p>
+        </p>
+        <p>
             Em uma rede com loops lógicos e sem a proteção do <strong>STP</strong>, os switches continuam a encaminhar o tráfego de
             <em>Broadcast</em> indefinidamente. Consequentemente, a contagem de frames se multiplica de forma exponencial em pouquíssimos
             milissegundos.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--danger)">
-          <h3
-            style="
-              color: var(--danger);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-radiation"></i> CRITICAL STORM SIMULATION: Multiplicação Exponencial de Quadros
-          </h3>
+    <!-- SIMULAÇÃO SIMPLIFICADA -->
+    <div class="card" style="border-color: var(--danger);">
+        <h3 style="color: var(--danger); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-radiation"></i> Simulação: Multiplicação Exponencial de Quadros
+        </h3>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para garantir a rolagem nativa no mobile */
-            .storm-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid rgba(255, 77, 109, 0.3) !important;
-              margin-bottom: 1rem !important;
-            }
+        <!-- Topologia em HTML puro -->
+        <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-around; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div id="stormS3" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S3</span>
+                    <div id="stormCountS3" style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">0 frames</div>
+                </div>
 
-            .storm-sim-canvas {
-              position: relative !important;
-              width: 820px !important; /* Fixa a largura para forçar o scroll horizontal no mobile */
-              min-width: 820px !important;
-              height: 380px !important;
-              background: #04060a !important;
-              overflow: hidden !important;
-            }
+                <!-- Link S3-S1 -->
+                <div id="stormLink1" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s; position: relative;">
+                    <div id="stormTraffic1" style="position: absolute; top: -8px; left: 0; color: var(--text-dim); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
 
-            .storm-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .storm-node i {
-              font-size: 2.2rem;
-              color: #718096;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-              transition: all 0.3s;
-            }
-            .storm-node.overloaded i {
-              color: var(--danger) !important;
-              border-color: var(--danger) !important;
-              box-shadow: 0 0 20px var(--danger) !important;
-              animation: shake-device 0.15s infinite;
-            }
-            .storm-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal;
-            }
-            .storm-link {
-              position: absolute;
-              background: var(--text-dim);
-              z-index: 2;
-            }
-            .storm-link.saturated {
-              background: linear-gradient(90deg, var(--danger), var(--warning)) !important;
-              box-shadow: 0 0 12px var(--danger) !important;
-            }
-            .storm-packet {
-              position: absolute;
-              width: 14px;
-              height: 10px;
-              background: #ff4d6d;
-              border-radius: 2px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 8px #ff4d6d;
-            }
-            .storm-controls {
-              display: flex;
-              align-items: center;
-              gap: 1.5rem;
-              margin-top: 1.5rem;
-              background: #121824;
-              padding: 1rem;
-              border-radius: 8px;
-              border: 1px solid var(--border);
-            }
-            .storm-btn {
-              background: rgba(255, 77, 109, 0.1);
-              border: 1px solid var(--danger);
-              color: var(--danger);
-              padding: 0.6rem 1.2rem;
-              border-radius: 6px;
-              cursor: pointer;
-              font-family: monospace;
-              font-weight: bold;
-              transition: all 0.2s;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            }
-            .storm-btn:hover {
-              background: var(--danger);
-              color: #000;
-              box-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
-            }
-            .storm-status-box {
-              background: #0a0e17;
-              border: 1px solid var(--border);
-              padding: 0.8rem 1.2rem;
-              border-radius: 6px;
-              min-height: 55px;
-              display: flex;
-              align-items: center;
-              color: var(--text);
-              font-family: monospace;
-              font-size: 0.85rem;
-              margin-top: 1rem;
-              border-left: 3px solid var(--danger);
-            }
+                <!-- S1 -->
+                <div style="text-align: center;">
+                    <div id="stormS1" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S1</span>
+                    <div id="stormCountS1" style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">0 frames</div>
+                </div>
 
-            @keyframes shake-device {
-              0% {
-                transform: translate(1px, 1px) rotate(0deg);
-              }
-              100% {
-                transform: translate(-1px, -2px) rotate(-1deg);
-              }
-            }
-          </style>
+                <!-- Link S1-S2 -->
+                <div id="stormLink2" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s; position: relative;">
+                    <div id="stormTraffic2" style="position: absolute; top: -8px; left: 0; color: var(--text-dim); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
 
-          <div class="storm-canvas-responsive-wrapper">
-            <div class="storm-sim-canvas" id="stormCanvas">
-              <div class="storm-link" id="sl1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="storm-link" id="sl2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
-              <div class="storm-link" id="sl3" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="stormS2" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S2</span>
+                    <div id="stormCountS2" style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">0 frames</div>
+                </div>
 
-              <div class="storm-node" id="stS3" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
-              <div class="storm-node" id="stS1" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
-              <div class="storm-node" id="stS2" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
-
-              <div class="storm-node" style="top: 290px; left: 345px">
-                <i class="fas fa-laptop"></i><span>PC1 (Emite Broadcast original)</span>
-              </div>
-
-              <div class="storm-packet" id="spk1"></div>
-              <div class="storm-packet" id="spk2"></div>
-              <div class="storm-packet" id="spk3"></div>
-              <div class="storm-packet" id="spk4"></div>
-              <div class="storm-packet" id="spk5"></div>
-              <div class="storm-packet" id="spk6"></div>
+                <!-- Link S2-S3 -->
+                <div id="stormLink3" style="width: 80px; height: 3px; background: var(--text-dim); transition: all 0.3s; position: relative;">
+                    <div id="stormTraffic3" style="position: absolute; top: -8px; left: 0; color: var(--text-dim); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
             </div>
-          </div>
 
-          <div class="storm-controls">
-            <button class="storm-btn" id="triggerStormBtn"><i class="fas fa-bolt"></i> INICIAR BROADCAST STORM</button>
-            <button
-              class="storm-btn"
-              id="clearStormBtn"
-              style="color: var(--text-dim); border-color: var(--border); background: transparent; display: none"
-            >
-              CORTAR LINKS (RESET)
-            </button>
-          </div>
-
-          <div class="storm-status-box" id="stormStatus">
-            Aguardando injeção do pacote inicial. Clique no botão acima para iniciar a tempestade cíclica.
-          </div>
+            <!-- PC -->
+            <div style="text-align: center; margin-top: 1rem;">
+                <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; display: inline-block;">
+                    <i class="fas fa-laptop" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                </div>
+                <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">PC1 (Emite Broadcast original)</span>
+            </div>
         </div>
 
-        <div class="card">
-          <p>
+        <!-- Controles -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button onclick="iniciarStorm()" style="background: rgba(255, 77, 109, 0.1); border: 1px solid var(--danger); color: var(--danger); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-bolt"></i> INICIAR BROADCAST STORM
+            </button>
+            <button onclick="resetarStorm()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR
+            </button>
+        </div>
+
+        <!-- Status -->
+        <div id="stormStatus" style="background: #0a0e17; border: 1px solid var(--border); padding: 0.8rem 1.2rem; border-radius: 6px; color: var(--text); font-family: monospace; font-size: 0.85rem; border-left: 3px solid var(--danger);">
+            Aguardando injeção do pacote inicial. Clique no botão acima para iniciar a tempestade cíclica.
+        </div>
+    </div>
+
+    <div class="card">
+        <p>
             À medida que o processo continua, a tabela de endereços MAC do switch falha devido ao recebimento constante de frames em portas
             diferentes (<em>MAC Table Flapping</em>). A CPU do switch fica tão sobrecarregada processando os pacotes repetidos que ele deixa
             de responder, congelando completamente o encaminhamento de qualquer tráfego útil.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="alert alert-danger">
-          <i class="fas fa-skull-crossbones"></i> <strong>Fato de Rede Inegociável:</strong> Um Broadcast Storm pode travar completamente
-          uma rede corporativa inteira em menos de 5 segundos. Sem o <strong>STP</strong> habilitado de forma nativa para bloquear de forma
-          lógica um dos segmentos físicos redundantes, não há solução senão desligar fisicamente os cabos de rede para quebrar o ciclo.
-        </div>
-      </section>
+    <div class="alert alert-danger">
+        <i class="fas fa-skull-crossbones"></i> 
+        <strong>Fato de Rede Inegociável:</strong> Um Broadcast Storm pode travar completamente uma rede corporativa inteira em menos de 5 segundos. Sem o <strong>STP</strong> habilitado de forma nativa para bloquear de forma lógica um dos segmentos físicos redundantes, não há solução senão desligar fisicamente os cabos de rede para quebrar o ciclo.
+    </div>
+</section>
+
+<script>
+let stormAtivo = false;
+let stormIntervalo;
+let contadorFrames = 0;
+
+function iniciarStorm() {
+    if (stormAtivo) return;
+    stormAtivo = true;
+    contadorFrames = 0;
+    
+    const elementos = {
+        s3: document.getElementById('stormS3'),
+        s1: document.getElementById('stormS1'),
+        s2: document.getElementById('stormS2'),
+        link1: document.getElementById('stormLink1'),
+        link2: document.getElementById('stormLink2'),
+        link3: document.getElementById('stormLink3'),
+        traffic1: document.getElementById('stormTraffic1'),
+        traffic2: document.getElementById('stormTraffic2'),
+        traffic3: document.getElementById('stormTraffic3'),
+        countS3: document.getElementById('stormCountS3'),
+        countS1: document.getElementById('stormCountS1'),
+        countS2: document.getElementById('stormCountS2'),
+        status: document.getElementById('stormStatus')
+    };
+    
+    // Ativa visualização de tráfego
+    elementos.traffic1.style.display = 'block';
+    elementos.traffic2.style.display = 'block';
+    elementos.traffic3.style.display = 'block';
+    
+    // Atualiza status
+    elementos.status.innerHTML = '⚠️ <span style="color: var(--danger);">BROADCAST STORM INICIADO!</span> Multiplicação exponencial de frames em andamento...';
+    
+    // Loop de tempestade
+    stormIntervalo = setInterval(() => {
+        contadorFrames += Math.floor(Math.random() * 5) + 1;
+        
+        // Atualiza contadores com crescimento exponencial
+        const framesS3 = contadorFrames;
+        const framesS1 = contadorFrames * 2;
+        const framesS2 = contadorFrames * 3;
+        
+        elementos.countS3.innerHTML = `${framesS3} frames`;
+        elementos.countS1.innerHTML = `${framesS1} frames`;
+        elementos.countS2.innerHTML = `${framesS2} frames`;
+        
+        // Muda cores conforme intensidade
+        if (contadorFrames > 50) {
+            // Links saturados
+            elementos.link1.style.background = 'linear-gradient(90deg, var(--danger), var(--warning))';
+            elementos.link1.style.boxShadow = '0 0 15px var(--danger)';
+            elementos.link2.style.background = 'linear-gradient(90deg, var(--danger), var(--warning))';
+            elementos.link2.style.boxShadow = '0 0 15px var(--danger)';
+            elementos.link3.style.background = 'linear-gradient(90deg, var(--danger), var(--warning))';
+            elementos.link3.style.boxShadow = '0 0 15px var(--danger)';
+            
+            // Switches sobrecarregados
+            elementos.s3.style.borderColor = 'var(--danger)';
+            elementos.s3.style.boxShadow = '0 0 20px var(--danger)';
+            elementos.s3.querySelector('i').style.color = 'var(--danger)';
+            
+            elementos.s1.style.borderColor = 'var(--danger)';
+            elementos.s1.style.boxShadow = '0 0 20px var(--danger)';
+            elementos.s1.querySelector('i').style.color = 'var(--danger)';
+            
+            elementos.s2.style.borderColor = 'var(--danger)';
+            elementos.s2.style.boxShadow = '0 0 20px var(--danger)';
+            elementos.s2.querySelector('i').style.color = 'var(--danger)';
+            
+            // Tráfego intenso
+            elementos.traffic1.style.color = 'var(--danger)';
+            elementos.traffic2.style.color = 'var(--danger)';
+            elementos.traffic3.style.color = 'var(--danger)';
+        }
+        
+        if (contadorFrames > 100) {
+            elementos.status.innerHTML = '💀 <span style="color: var(--danger); font-weight: bold;">COLAPSO TOTAL!</span> CPU 100% - Switches não respondem mais!';
+            clearInterval(stormIntervalo);
+            stormAtivo = false;
+        } else if (contadorFrames > 50) {
+            elementos.status.innerHTML = `🔥 <span style="color: var(--warning);">INTENSIDADE CRÍTICA!</span> ${contadorFrames} frames em loop - Largura de banda saturada!`;
+        } else {
+            elementos.status.innerHTML = `⚡ <span style="color: var(--warning);">PROPAGAÇÃO EXPONENCIAL:</span> ${contadorFrames} frames em circulação...`;
+        }
+        
+    }, 600);
+}
+
+function resetarStorm() {
+    clearInterval(stormIntervalo);
+    stormAtivo = false;
+    contadorFrames = 0;
+    
+    const elementos = {
+        s3: document.getElementById('stormS3'),
+        s1: document.getElementById('stormS1'),
+        s2: document.getElementById('stormS2'),
+        link1: document.getElementById('stormLink1'),
+        link2: document.getElementById('stormLink2'),
+        link3: document.getElementById('stormLink3'),
+        traffic1: document.getElementById('stormTraffic1'),
+        traffic2: document.getElementById('stormTraffic2'),
+        traffic3: document.getElementById('stormTraffic3'),
+        countS3: document.getElementById('stormCountS3'),
+        countS1: document.getElementById('stormCountS1'),
+        countS2: document.getElementById('stormCountS2'),
+        status: document.getElementById('stormStatus')
+    };
+    
+    // Reseta visual
+    elementos.s3.style.borderColor = 'var(--border)';
+    elementos.s3.style.boxShadow = 'none';
+    elementos.s3.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s1.style.borderColor = 'var(--border)';
+    elementos.s1.style.boxShadow = 'none';
+    elementos.s1.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s2.style.borderColor = 'var(--border)';
+    elementos.s2.style.boxShadow = 'none';
+    elementos.s2.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.link1.style.background = 'var(--text-dim)';
+    elementos.link1.style.boxShadow = 'none';
+    elementos.link2.style.background = 'var(--text-dim)';
+    elementos.link2.style.boxShadow = 'none';
+    elementos.link3.style.background = 'var(--text-dim)';
+    elementos.link3.style.boxShadow = 'none';
+    
+    elementos.traffic1.style.display = 'none';
+    elementos.traffic2.style.display = 'none';
+    elementos.traffic3.style.display = 'none';
+    elementos.traffic1.style.color = 'var(--text-dim)';
+    elementos.traffic2.style.color = 'var(--text-dim)';
+    elementos.traffic3.style.color = 'var(--text-dim)';
+    
+    elementos.countS3.innerHTML = '0 frames';
+    elementos.countS1.innerHTML = '0 frames';
+    elementos.countS2.innerHTML = '0 frames';
+    
+    elementos.status.innerHTML = 'Aguardando injeção do pacote inicial. Clique no botão acima para iniciar a tempestade cíclica.';
+}
+</script>
 
       <script>
         ;(function () {
@@ -1775,211 +1549,304 @@
         })()
       </script>
       <section id="secao5-1-7" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-eye-slash"></i>
-          <span class="section-number">5.1.7</span> Problemas com links redundantes: Unicast Desconhecido
-        </h2>
+    <h2 class="section-title">
+        <i class="fas fa-eye-slash"></i>
+        <span class="section-number">5.1.7</span> Problemas com links redundantes: Unicast Desconhecido
+    </h2>
 
-        <div class="card">
-          <p>
+    <div class="card">
+        <p>
             Os quadros de <em>Broadcast</em> não são os únicos afetados pelos loops de Camada 2. Quadros do tipo
             <strong>Unicast Desconhecido</strong> (<em>Unknown Unicast</em>) enviados para uma rede comutada redundante sem a proteção do
             <strong>STP</strong> provocam a chegada de pacotes duplicados e redundantes nos dispositivos de destino.
-          </p>
-          <p>
+        </p>
+        <p>
             Um quadro <em>Unicast</em> desconhecido ocorre quando o switch recebe um frame destinado a um endereço MAC específico que
             <strong>não consta em sua tabela de endereços MAC local</strong>. Diante disso, o switch é forçado a realizar a inundação
             (<em>flooding</em>) desse quadro por todas as portas ativas, exceto a porta de entrada. Se houver um loop físico na topologia,
             esse frame passará a circular infinitamente, sendo duplicado por cada switch no caminho.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-play-circle"></i> LAB SIMULATION: Inundação e Duplicação de Unknown Unicast
-          </h3>
+    <!-- SIMULAÇÃO SIMPLIFICADA -->
+    <div class="card" style="border-color: var(--border);">
+        <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-play-circle"></i> Simulação: Inundação e Duplicação de Unknown Unicast
+        </h3>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para garantir o scroll horizontal no mobile */
-            .unicast-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
+        <!-- Topologia em HTML puro -->
+        <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-around; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div id="uniS3" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S3</span>
+                    <div id="uniTableS3" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">MAC: vazia</div>
+                </div>
 
-            .unicast-sim-canvas {
-              position: relative !important;
-              width: 820px !important; /* Mantém largura fixa interna para evitar quebras absolutas no mobile */
-              min-width: 820px !important;
-              height: 380px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
+                <!-- Link S3-S1 -->
+                <div id="uniLink1" style="width: 80px; height: 3px; background: var(--success); transition: all 0.3s; position: relative;">
+                    <div id="uniTraffic1" style="position: absolute; top: -8px; left: 0; color: var(--success); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
 
-            .unicast-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .unicast-node i {
-              font-size: 2.2rem;
-              color: #00b4d8;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            }
-            .unicast-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal;
-            }
-            .unicast-link {
-              position: absolute;
-              background: var(--success);
-              z-index: 2;
-              box-shadow: 0 0 6px var(--success);
-            }
-            .unicast-packet {
-              position: absolute;
-              width: 16px;
-              height: 12px;
-              background: #90e0ef;
-              border: 1px solid var(--primary);
-              border-radius: 2px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 8px var(--primary);
-            }
-            .unicast-controls {
-              display: flex;
-              align-items: center;
-              gap: 1.5rem;
-              margin-top: 1.5rem;
-              background: #121824;
-              padding: 1rem;
-              border-radius: 8px;
-              border: 1px solid var(--border);
-            }
-            .unicast-btn {
-              background: transparent;
-              border: 1px solid var(--primary);
-              color: var(--primary);
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 1.2rem;
-              transition: all 0.2s;
-            }
-            .unicast-btn:hover {
-              background: var(--primary);
-              color: #0a0e17;
-              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
-            }
-            .unicast-slider-container {
-              flex-grow: 1;
-              display: flex;
-              align-items: center;
-            }
-            .unicast-slider {
-              width: 100%;
-              -webkit-appearance: none;
-              appearance: none;
-              height: 6px;
-              border-radius: 3px;
-              background: var(--border);
-              outline: none;
-            }
-            .unicast-slider::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              appearance: none;
-              width: 18px;
-              height: 18px;
-              border-radius: 50%;
-              background: #90e0ef;
-              cursor: pointer;
-              box-shadow: 0 0 8px #90e0ef;
-            }
-            .unicast-status-box {
-              background: #0a0e17;
-              border: 1px solid var(--border);
-              padding: 0.8rem 1.2rem;
-              border-radius: 6px;
-              min-height: 55px;
-              display: flex;
-              align-items: center;
-              color: var(--text);
-              font-family: monospace;
-              font-size: 0.85rem;
-              margin-top: 1rem;
-              border-left: 3px solid var(--primary);
-            }
-          </style>
+                <!-- S1 -->
+                <div style="text-align: center;">
+                    <div id="uniS1" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S1</span>
+                    <div id="uniTableS1" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">MAC: vazia</div>
+                </div>
 
-          <div class="unicast-canvas-responsive-wrapper">
-            <div class="unicast-sim-canvas" id="unicastCanvas">
-              <div class="unicast-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="unicast-link" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
-              <div class="unicast-link" style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"></div>
+                <!-- Link S1-S2 -->
+                <div id="uniLink2" style="width: 80px; height: 3px; background: var(--success); transition: all 0.3s; position: relative;">
+                    <div id="uniTraffic2" style="position: absolute; top: -8px; left: 0; color: var(--success); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
 
-              <div class="unicast-node" style="top: 40px; left: 100px"><i class="fas fa-server"></i><span>S3</span></div>
-              <div class="unicast-node" style="top: 40px; left: 580px"><i class="fas fa-server"></i><span>S1</span></div>
-              <div class="unicast-node" style="top: 180px; left: 340px"><i class="fas fa-server"></i><span>S2</span></div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="uniS2" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S2</span>
+                    <div id="uniTableS2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">MAC: vazia</div>
+                </div>
 
-              <div class="unicast-node" style="top: 290px; left: 120px"><i class="fas fa-laptop"></i><span>PC1</span></div>
-              <div class="unicast-node" style="top: 290px; left: 560px">
-                <i class="fas fa-laptop"></i><span>PC2 (Destino Unicast)</span>
-              </div>
-
-              <div class="unicast-packet" id="upkt1"></div>
-              <div class="unicast-packet" id="upkt2"></div>
-              <div class="unicast-packet" id="upkt3"></div>
+                <!-- Link S2-S3 -->
+                <div id="uniLink3" style="width: 80px; height: 3px; background: var(--success); transition: all 0.3s; position: relative;">
+                    <div id="uniTraffic3" style="position: absolute; top: -8px; left: 0; color: var(--success); font-size: 0.6rem; display: none;">⬤</div>
+                </div>
             </div>
-          </div>
 
-          <div class="unicast-controls">
-            <button class="unicast-btn" id="unicastPlayBtn"><i class="fas fa-play" id="unicastPlayIcon"></i></button>
-            <div class="unicast-slider-container">
-              <input type="range" min="0" max="4" value="0" class="unicast-slider" id="unicastRange" />
+            <!-- PCs -->
+            <div style="display: flex; justify-content: space-around; margin-top: 0.5rem;">
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.3rem 0.8rem; display: inline-block;">
+                        <i class="fas fa-laptop" style="color: var(--text-dim); font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.7rem; display: block;">PC1 (Origem)</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">MAC: AA:AA:AA:AA:AA:01</span>
+                </div>
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--primary); border-radius: 8px; padding: 0.3rem 0.8rem; display: inline-block;">
+                        <i class="fas fa-laptop" style="color: var(--primary); font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="color: var(--primary); font-family: monospace; font-size: 0.7rem; display: block;">PC2 (Destino)</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">MAC: BB:BB:BB:BB:BB:02</span>
+                </div>
             </div>
-          </div>
-
-          <div class="unicast-status-box" id="unicastStatus">
-            Clique no Play ou intercale as etapas para analisar o fluxo do quadro Unicast Desconhecido.
-          </div>
         </div>
 
-        <div class="alert alert-warning">
-          <i class="fas fa-exclamation-triangle"></i> <strong>Instabilidade do Banco de Dados:</strong> Além da entrega de pacotes
-          duplicados para as estações de trabalho finais, a inundação constante causada por loops força os switches a atualizarem
-          freneticamente suas próprias tabelas MAC. Esse sintoma degrada imediatamente o desempenho de processamento (plano de controle) da
-          caixa.
+        <!-- Controles -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button onclick="iniciarUnicast()" style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-play"></i> INICIAR UNKNOWN UNICAST
+            </button>
+            <button onclick="resetarUnicast()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR
+            </button>
+            <button onclick="aprenderMAC()" style="background: transparent; border: 1px solid var(--success); color: var(--success); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-graduation-cap"></i> APRENDER MAC
+            </button>
         </div>
-      </section>
+
+        <!-- Status -->
+        <div id="uniStatus" style="background: #0a0e17; border: 1px solid var(--border); padding: 0.8rem 1.2rem; border-radius: 6px; color: var(--text); font-family: monospace; font-size: 0.85rem; border-left: 3px solid var(--primary);">
+            Aguardando envio do quadro Unicast Desconhecido. Clique no botão acima para iniciar a simulação.
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> 
+        <strong>Instabilidade do Banco de Dados:</strong> Além da entrega de pacotes duplicados para as estações de trabalho finais, a inundação constante causada por loops força os switches a atualizarem freneticamente suas próprias tabelas MAC. Esse sintoma degrada imediatamente o desempenho de processamento (plano de controle) da caixa.
+    </div>
+</section>
+
+<script>
+let unicastAtivo = false;
+let unicastIntervalo;
+let etapaUnicast = 0;
+const MAC_DESTINO = 'BB:BB:BB:BB:BB:02';
+
+function iniciarUnicast() {
+    if (unicastAtivo) return;
+    unicastAtivo = true;
+    etapaUnicast = 0;
+    
+    const elementos = {
+        s3: document.getElementById('uniS3'),
+        s1: document.getElementById('uniS1'),
+        s2: document.getElementById('uniS2'),
+        link1: document.getElementById('uniLink1'),
+        link2: document.getElementById('uniLink2'),
+        link3: document.getElementById('uniLink3'),
+        traffic1: document.getElementById('uniTraffic1'),
+        traffic2: document.getElementById('uniTraffic2'),
+        traffic3: document.getElementById('uniTraffic3'),
+        tableS3: document.getElementById('uniTableS3'),
+        tableS1: document.getElementById('uniTableS1'),
+        tableS2: document.getElementById('uniTableS2'),
+        status: document.getElementById('uniStatus')
+    };
+    
+    // Ativa tráfego
+    elementos.traffic1.style.display = 'block';
+    elementos.traffic2.style.display = 'block';
+    elementos.traffic3.style.display = 'block';
+    
+    // Inicia simulação
+    elementos.status.innerHTML = '📤 <span style="color: var(--primary);">PC1 envia quadro Unicast para PC2 (MAC: BB:BB:BB:BB:BB:02)</span>';
+    
+    // Etapa 1: S3 recebe e inunda
+    setTimeout(() => {
+        elementos.tableS3.innerHTML = `MAC: ${MAC_DESTINO} ❌ (não encontrado)`;
+        elementos.s3.style.borderColor = 'var(--warning)';
+        elementos.s3.querySelector('i').style.color = 'var(--warning)';
+        elementos.status.innerHTML = '🔄 <span style="color: var(--warning);">S3 não conhece o MAC! Realizando flooding em todas as portas...</span>';
+        elementos.traffic1.style.color = 'var(--warning)';
+        elementos.traffic3.style.color = 'var(--warning)';
+    }, 1000);
+    
+    // Etapa 2: S1 e S2 recebem
+    setTimeout(() => {
+        elementos.tableS1.innerHTML = `MAC: ${MAC_DESTINO} ❌ (não encontrado)`;
+        elementos.tableS2.innerHTML = `MAC: ${MAC_DESTINO} ❌ (não encontrado)`;
+        elementos.s1.style.borderColor = 'var(--warning)';
+        elementos.s1.querySelector('i').style.color = 'var(--warning)';
+        elementos.s2.style.borderColor = 'var(--warning)';
+        elementos.s2.querySelector('i').style.color = 'var(--warning)';
+        elementos.status.innerHTML = '🔄 <span style="color: var(--warning);">S1 e S2 também não conhecem o MAC! Flooding continua...</span>';
+        elementos.traffic2.style.color = 'var(--warning)';
+    }, 2000);
+    
+    // Etapa 3: Loop se forma
+    setTimeout(() => {
+        elementos.link1.style.background = 'var(--danger)';
+        elementos.link1.style.boxShadow = '0 0 15px var(--danger)';
+        elementos.link2.style.background = 'var(--danger)';
+        elementos.link2.style.boxShadow = '0 0 15px var(--danger)';
+        elementos.link3.style.background = 'var(--danger)';
+        elementos.link3.style.boxShadow = '0 0 15px var(--danger)';
+        
+        elementos.traffic1.style.color = 'var(--danger)';
+        elementos.traffic2.style.color = 'var(--danger)';
+        elementos.traffic3.style.color = 'var(--danger)';
+        
+        elementos.s3.style.borderColor = 'var(--danger)';
+        elementos.s3.style.boxShadow = '0 0 20px var(--danger)';
+        elementos.s1.style.borderColor = 'var(--danger)';
+        elementos.s1.style.boxShadow = '0 0 20px var(--danger)';
+        elementos.s2.style.borderColor = 'var(--danger)';
+        elementos.s2.style.boxShadow = '0 0 20px var(--danger)';
+        
+        elementos.status.innerHTML = '💀 <span style="color: var(--danger); font-weight: bold;">LOOP DETECTADO!</span> Quadro duplicado circulando infinitamente entre S3 ↔ S1 ↔ S2';
+        
+        // Simula MAC Flapping
+        let flapping = 0;
+        unicastIntervalo = setInterval(() => {
+            flapping++;
+            const portas = ['Gi0/1', 'Gi0/2', 'Gi0/3'];
+            const porta1 = portas[Math.floor(Math.random() * portas.length)];
+            const porta2 = portas[Math.floor(Math.random() * portas.length)];
+            
+            elementos.tableS3.innerHTML = `⚠️ MAC ${MAC_DESTINO} flapping entre ${porta1} e ${porta2}`;
+            
+            if (flapping > 3) {
+                elementos.status.innerHTML = '🔥 <span style="color: var(--danger); font-weight: bold;">MAC TABLE FLAPPING!</span> CPU 85% - Switch degradado!';
+            }
+            if (flapping > 6) {
+                elementos.status.innerHTML = '💀 <span style="color: var(--danger); font-weight: bold;">COLAPSO!</span> Switch não responde mais!';
+                clearInterval(unicastIntervalo);
+                unicastAtivo = false;
+            }
+        }, 1500);
+        
+    }, 3500);
+}
+
+function resetarUnicast() {
+    clearInterval(unicastIntervalo);
+    unicastAtivo = false;
+    
+    const elementos = {
+        s3: document.getElementById('uniS3'),
+        s1: document.getElementById('uniS1'),
+        s2: document.getElementById('uniS2'),
+        link1: document.getElementById('uniLink1'),
+        link2: document.getElementById('uniLink2'),
+        link3: document.getElementById('uniLink3'),
+        traffic1: document.getElementById('uniTraffic1'),
+        traffic2: document.getElementById('uniTraffic2'),
+        traffic3: document.getElementById('uniTraffic3'),
+        tableS3: document.getElementById('uniTableS3'),
+        tableS1: document.getElementById('uniTableS1'),
+        tableS2: document.getElementById('uniTableS2'),
+        status: document.getElementById('uniStatus')
+    };
+    
+    // Reseta visual
+    elementos.s3.style.borderColor = 'var(--border)';
+    elementos.s3.style.boxShadow = 'none';
+    elementos.s3.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s1.style.borderColor = 'var(--border)';
+    elementos.s1.style.boxShadow = 'none';
+    elementos.s1.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s2.style.borderColor = 'var(--border)';
+    elementos.s2.style.boxShadow = 'none';
+    elementos.s2.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.link1.style.background = 'var(--success)';
+    elementos.link1.style.boxShadow = 'none';
+    elementos.link2.style.background = 'var(--success)';
+    elementos.link2.style.boxShadow = 'none';
+    elementos.link3.style.background = 'var(--success)';
+    elementos.link3.style.boxShadow = 'none';
+    
+    elementos.traffic1.style.display = 'none';
+    elementos.traffic2.style.display = 'none';
+    elementos.traffic3.style.display = 'none';
+    elementos.traffic1.style.color = 'var(--success)';
+    elementos.traffic2.style.color = 'var(--success)';
+    elementos.traffic3.style.color = 'var(--success)';
+    
+    elementos.tableS3.innerHTML = 'MAC: vazia';
+    elementos.tableS1.innerHTML = 'MAC: vazia';
+    elementos.tableS2.innerHTML = 'MAC: vazia';
+    
+    elementos.status.innerHTML = 'Aguardando envio do quadro Unicast Desconhecido. Clique no botão acima para iniciar a simulação.';
+}
+
+function aprenderMAC() {
+    if (unicastAtivo) {
+        resetarUnicast();
+    }
+    
+    const elementos = {
+        tableS3: document.getElementById('uniTableS3'),
+        tableS1: document.getElementById('uniTableS1'),
+        tableS2: document.getElementById('uniTableS2'),
+        status: document.getElementById('uniStatus')
+    };
+    
+    elementos.tableS3.innerHTML = `MAC: ${MAC_DESTINO} ✅ (Gi0/1)`;
+    elementos.tableS1.innerHTML = `MAC: ${MAC_DESTINO} ✅ (Gi0/2)`;
+    elementos.tableS2.innerHTML = `MAC: ${MAC_DESTINO} ✅ (Gi0/3)`;
+    
+    elementos.status.innerHTML = '✅ <span style="color: var(--success);">MAC address aprendido por todos os switches! Sem flooding necessário.</span>';
+    
+    // Destaca aprendizado
+    document.getElementById('uniS3').style.borderColor = 'var(--success)';
+    document.getElementById('uniS3').querySelector('i').style.color = 'var(--success)';
+    document.getElementById('uniS1').style.borderColor = 'var(--success)';
+    document.getElementById('uniS1').querySelector('i').style.color = 'var(--success)';
+    document.getElementById('uniS2').style.borderColor = 'var(--success)';
+    document.getElementById('uniS2').querySelector('i').style.color = 'var(--success)';
+}
+</script>
 
       <script>
         ;(function () {
@@ -2323,269 +2190,289 @@
           }
         }
       </script>
-      <section id="secao5-2-2" class="section">
-        <h2 class="section-title">
-          <i class="fas fa-crown"></i>
-          <span class="section-number">5.2.2</span> Eleição do Root Bridge
-        </h2>
+     <section id="secao5-2-2" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-crown"></i>
+        <span class="section-number">5.2.2</span> Eleição do Root Bridge
+    </h2>
 
-        <div class="card">
-          <p>
+    <div class="card">
+        <p>
             O algoritmo <strong>STA</strong> necessita eleger um ponto de referência central para servir como a base da árvore de
             abrangência de Camada 2. Esse dispositivo de referência é chamado de <strong>Root Bridge</strong>.
-          </p>
-          <p>
+        </p>
+        <p>
             Todos os switches na rede trocam quadros especiais de controle chamados <strong>BPDUs (Bridge Protocol Data Units)</strong> a
             cada 2 segundos. O switch que possuir o <strong>menor Bridge ID (BID)</strong> ganha a eleição e é coroado como o Root Bridge. O
             BID é composto por três elementos essenciais:
-          </p>
-          <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6">
+        </p>
+        <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6">
             <li>
-              <strong>Prioridade da Ponte (Bridge Priority):</strong> Um valor numérico configurável. O padrão da Cisco é
-              <code>32768</code>.
+                <strong>Prioridade da Ponte (Bridge Priority):</strong> Um valor numérico configurável. O padrão da Cisco é
+                <code>32768</code>.
             </li>
             <li><strong>ID do Sistema Estendido (System ID Extension):</strong> Identifica o número da VLAN local (ex: VLAN 1).</li>
             <li>
-              <strong>Endereço MAC (MAC Address):</strong> Utilizado como critério estrito de desempate se as prioridades forem idênticas.
+                <strong>Endereço MAC (MAC Address):</strong> Utilizado como critério estrito de desempate se as prioridades forem idênticas.
             </li>
-          </ul>
+        </ul>
+    </div>
+
+    <!-- SIMULAÇÃO SIMPLIFICADA -->
+    <div class="card" style="border-color: var(--border);">
+        <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
+            <i class="fas fa-vote-yea"></i> Simulação: Análise de BPDUs e Desempate MAC
+        </h3>
+
+        <!-- Topologia em HTML puro -->
+        <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-around; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div id="rootS3" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S3</span>
+                    <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">
+                        Prioridade: 32768<br>
+                        MAC: 000A.0011.1111
+                    </div>
+                    <div id="rootStatusS3" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Aguardando...</div>
+                </div>
+
+                <!-- Link S3-S1 -->
+                <div id="rootLink1" style="width: 80px; height: 3px; background: var(--border); transition: all 0.3s; position: relative;">
+                    <div id="rootBPDU1" style="position: absolute; top: -10px; left: 0; color: var(--primary); font-size: 0.5rem; display: none; background: var(--bg-dark); padding: 0 4px;">BPDU</div>
+                </div>
+
+                <!-- S1 -->
+                <div style="text-align: center;">
+                    <div id="rootS1" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S1</span>
+                    <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">
+                        Prioridade: 32768<br>
+                        MAC: <span style="color: var(--secondary);">000A.0000.2222</span>
+                    </div>
+                    <div id="rootStatusS1" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Aguardando...</div>
+                </div>
+
+                <!-- Link S1-S2 -->
+                <div id="rootLink2" style="width: 80px; height: 3px; background: var(--border); transition: all 0.3s; position: relative;">
+                    <div id="rootBPDU2" style="position: absolute; top: -10px; left: 0; color: var(--primary); font-size: 0.5rem; display: none; background: var(--bg-dark); padding: 0 4px;">BPDU</div>
+                </div>
+
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="rootS2" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem;">S2</span>
+                    <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">
+                        Prioridade: 32768<br>
+                        MAC: 000A.0033.3333
+                    </div>
+                    <div id="rootStatusS2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Aguardando...</div>
+                </div>
+
+                <!-- Link S2-S3 -->
+                <div id="rootLink3" style="width: 80px; height: 3px; background: var(--border); transition: all 0.3s; position: relative;">
+                    <div id="rootBPDU3" style="position: absolute; top: -10px; left: 0; color: var(--primary); font-size: 0.5rem; display: none; background: var(--bg-dark); padding: 0 4px;">BPDU</div>
+                </div>
+            </div>
         </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-vote-yea"></i> ELECTION PROCESS: Análise de BPDUs e Desempate MAC
-          </h3>
-
-          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
-            Simule a troca de mensagens BPDU entre os switches da rede local. Veja como o critério do menor endereço MAC decide a eleição
-            automática:
-          </p>
-
-          <style>
-            /* Wrapper responsivo blindado com !important para evitar quebras de layout no mobile */
-            .election-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
-
-            .election-sim-canvas {
-              position: relative !important;
-              width: 820px !important; /* Força largura interna fixa para manter o alinhamento absoluto das divs */
-              min-width: 820px !important;
-              height: 380px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
-
-            .election-node {
-              position: absolute;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              z-index: 5;
-            }
-            .election-node i {
-              font-size: 2.2rem;
-              color: #718096;
-              background: #121824;
-              padding: 10px;
-              border: 2px solid #202b42;
-              border-radius: 8px;
-              transition: all 0.3s ease;
-            }
-            .election-node.is-root i {
-              color: var(--secondary) !important;
-              border-color: var(--secondary) !important;
-              box-shadow: 0 0 15px rgba(0, 245, 212, 0.4) !important;
-            }
-            .election-node span {
-              font-family: monospace;
-              font-size: 0.75rem;
-              margin-top: 4px;
-              color: var(--text);
-              white-space: normal;
-            }
-            .election-node .bid-data {
-              font-size: 0.65rem;
-              color: var(--text-dim);
-              font-family: monospace;
-              text-align: center;
-              margin-top: 2px;
-              background: rgba(0, 0, 0, 0.3);
-              padding: 2px 4px;
-              border-radius: 4px;
-            }
-
-            .election-link {
-              position: absolute;
-              background: var(--border);
-              z-index: 2;
-            }
-            .election-link.active-trunk {
-              background: var(--primary) !important;
-              box-shadow: 0 0 6px var(--primary) !important;
-            }
-
-            .bpdu-frame {
-              position: absolute;
-              width: 55px;
-              height: 18px;
-              background: var(--primary-dark);
-              border: 1px solid var(--primary);
-              color: #fff;
-              font-family: monospace;
-              font-size: 0.65rem;
-              font-weight: bold;
-              text-align: center;
-              line-height: 16px;
-              border-radius: 4px;
-              z-index: 10;
-              display: none;
-              box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
-            }
-
-            .election-controls {
-              display: flex;
-              align-items: center;
-              gap: 1.5rem;
-              margin-top: 1.5rem;
-              background: #121824;
-              padding: 1rem;
-              border-radius: 8px;
-              border: 1px solid var(--border);
-            }
-            .election-btn {
-              background: transparent;
-              border: 1px solid var(--primary);
-              color: var(--primary);
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 1.2rem;
-              transition: all 0.2s;
-            }
-            .election-btn:hover {
-              background: var(--primary);
-              color: #0a0e17;
-              box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
-            }
-            .election-slider-container {
-              flex-grow: 1;
-              display: flex;
-              align-items: center;
-            }
-            .election-slider {
-              width: 100%;
-              -webkit-appearance: none;
-              appearance: none;
-              height: 6px;
-              border-radius: 3px;
-              background: var(--border);
-              outline: none;
-            }
-            .election-slider::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              appearance: none;
-              width: 18px;
-              height: 18px;
-              border-radius: 50%;
-              background: var(--secondary);
-              cursor: pointer;
-              box-shadow: 0 0 8px var(--secondary);
-            }
-
-            .election-status-box {
-              background: #0a0e17;
-              border: 1px solid var(--border);
-              padding: 0.8rem 1.2rem;
-              border-radius: 6px;
-              min-height: 55px;
-              display: flex;
-              align-items: center;
-              color: var(--text);
-              font-family: monospace;
-              font-size: 0.85rem;
-              margin-top: 1rem;
-              border-left: 3px solid var(--secondary);
-            }
-          </style>
-
-          <div class="election-canvas-responsive-wrapper">
-            <div class="election-sim-canvas" id="electionCanvas">
-              <div class="election-link" id="el1" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="election-link" id="el2" style="top: 75px; left: 140px; width: 250px; height: 3px; transform: rotate(34deg)"></div>
-              <div
-                class="election-link"
-                id="el3"
-                style="top: 75px; left: 620px; width: 250px; height: 3px; transform: rotate(146deg)"
-              ></div>
-
-              <div class="election-node" id="elecS3" style="top: 40px; left: 100px">
-                <i class="fas fa-server"></i><span>S3</span>
-                <div class="bid-data">Pri: 32768<br />MAC: 000A.0011.1111</div>
-              </div>
-              <div class="election-node" id="elecS1" style="top: 40px; left: 580px">
-                <i class="fas fa-server"></i><span>S1</span>
-                <div class="bid-data">Pri: 32768<br /><span style="color: var(--secondary)">MAC: 000A.0000.2222</span></div>
-              </div>
-              <div class="election-node" id="elecS2" style="top: 200px; left: 340px">
-                <i class="fas fa-server"></i><span>S2</span>
-                <div class="bid-data">Pri: 32768<br />MAC: 000A.0033.3333</div>
-              </div>
-
-              <div class="bpdu-frame" id="bframe1">BPDU</div>
-              <div class="bpdu-frame" id="bframe2">BPDU</div>
-            </div>
-          </div>
-
-          <div class="election-controls">
-            <button class="election-btn" id="electPlayBtn"><i class="fas fa-play" id="electPlayIcon"></i></button>
-            <div class="election-slider-container">
-              <input type="range" min="0" max="3" value="0" class="election-slider" id="electRange" />
-            </div>
-          </div>
-
-          <div class="election-status-box" id="electStatus">
-            Clique no botão Play ou arraste o controle para monitorar o processo eleitoral das pontes.
-          </div>
+        <!-- Controles -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button onclick="iniciarEleicao()" style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-play"></i> INICIAR ELEIÇÃO
+            </button>
+            <button onclick="resetarEleicao()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR
+            </button>
+            <button onclick="forcarRoot()" style="background: transparent; border: 1px solid var(--warning); color: var(--warning); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-crown"></i> FORÇAR S1 COMO ROOT
+            </button>
         </div>
 
-        <div class="card">
-          <p>
+        <!-- Status -->
+        <div id="rootStatus" style="background: #0a0e17; border: 1px solid var(--border); padding: 0.8rem 1.2rem; border-radius: 6px; color: var(--text); font-family: monospace; font-size: 0.85rem; border-left: 3px solid var(--secondary);">
+            Clique no botão acima para iniciar o processo de eleição do Root Bridge.
+        </div>
+    </div>
+
+    <div class="card">
+        <p>
             Uma vez que o switch com o menor Bridge ID é identificado e a eleição converge, as portas físicas desse switch específico são
             declaradas automaticamente como <strong>Designated Ports (Portas Designadas)</strong>, assumindo o estado de encaminhamento
             (<em>Forwarding</em>) permanente enquanto ele atuar como a raiz.
-          </p>
-        </div>
+        </p>
+    </div>
 
-        <div class="alert alert-warning">
-          <i class="fas fa-exclamation-triangle"></i> <strong>Instrução Prática de Projeto:</strong> Em ambientes profissionais de
-          infraestrutura, nunca deixe a eleição no modo padrão automático. Se o MAC for o único critério, um switch antigo com hardware
-          obsoleto pode ganhar a eleição por possuir um MAC mais baixo antigo, sobrecarregando a topologia corporativa. Configure a
-          prioridade manualmente para forçar o switch core como Root Bridge.
-        </div>
-      </section>
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> 
+        <strong>Instrução Prática de Projeto:</strong> Em ambientes profissionais de infraestrutura, nunca deixe a eleição no modo padrão automático. Se o MAC for o único critério, um switch antigo com hardware obsoleto pode ganhar a eleição por possuir um MAC mais baixo antigo, sobrecarregando a topologia corporativa. Configure a prioridade manualmente para forçar o switch core como Root Bridge.
+    </div>
+</section>
 
+<script>
+let eleicaoAtiva = false;
+let eleicaoIntervalo;
+
+function iniciarEleicao() {
+    if (eleicaoAtiva) return;
+    eleicaoAtiva = true;
+    
+    const elementos = {
+        s3: document.getElementById('rootS3'),
+        s1: document.getElementById('rootS1'),
+        s2: document.getElementById('rootS2'),
+        link1: document.getElementById('rootLink1'),
+        link2: document.getElementById('rootLink2'),
+        link3: document.getElementById('rootLink3'),
+        bpdu1: document.getElementById('rootBPDU1'),
+        bpdu2: document.getElementById('rootBPDU2'),
+        bpdu3: document.getElementById('rootBPDU3'),
+        statusS3: document.getElementById('rootStatusS3'),
+        statusS1: document.getElementById('rootStatusS1'),
+        statusS2: document.getElementById('rootStatusS2'),
+        status: document.getElementById('rootStatus')
+    };
+    
+    // Ativa BPDUs
+    elementos.bpdu1.style.display = 'block';
+    elementos.bpdu2.style.display = 'block';
+    elementos.bpdu3.style.display = 'block';
+    
+    // Simula troca de BPDUs
+    elementos.status.innerHTML = '📡 <span style="color: var(--primary);">Trocando BPDUs entre os switches...</span>';
+    
+    let etapa = 0;
+    eleicaoIntervalo = setInterval(() => {
+        etapa++;
+        
+        if (etapa === 1) {
+            elementos.statusS3.innerHTML = '📤 Enviando BPDU (BID: 32768.000A.0011.1111)';
+            elementos.statusS1.innerHTML = '📤 Enviando BPDU (BID: 32768.000A.0000.2222)';
+            elementos.statusS2.innerHTML = '📤 Enviando BPDU (BID: 32768.000A.0033.3333)';
+            elementos.status.innerHTML = '🔄 <span style="color: var(--warning);">Comparando Bridge IDs...</span>';
+            
+            // Ativa links
+            elementos.link1.style.background = 'var(--primary)';
+            elementos.link1.style.boxShadow = '0 0 8px var(--primary)';
+            elementos.link2.style.background = 'var(--primary)';
+            elementos.link2.style.boxShadow = '0 0 8px var(--primary)';
+            elementos.link3.style.background = 'var(--primary)';
+            elementos.link3.style.boxShadow = '0 0 8px var(--primary)';
+            
+        } else if (etapa === 2) {
+            // S1 tem o menor MAC (000A.0000.2222)
+            elementos.statusS1.innerHTML = '🏆 <span style="color: var(--secondary);">MENOR BID! Eleito Root Bridge!</span>';
+            elementos.statusS3.innerHTML = '📥 Recebido BPDU de S1 - S1 tem menor BID';
+            elementos.statusS2.innerHTML = '📥 Recebido BPDU de S1 - S1 tem menor BID';
+            
+            // Destaca S1 como Root
+            elementos.s1.style.borderColor = 'var(--secondary)';
+            elementos.s1.style.boxShadow = '0 0 20px rgba(0, 245, 212, 0.3)';
+            elementos.s1.querySelector('i').style.color = 'var(--secondary)';
+            
+            // Links para S1 ficam verdes (ativos)
+            elementos.link1.style.background = 'var(--success)';
+            elementos.link1.style.boxShadow = '0 0 10px var(--success)';
+            elementos.link2.style.background = 'var(--success)';
+            elementos.link2.style.boxShadow = '0 0 10px var(--success)';
+            
+            elementos.status.innerHTML = '👑 <span style="color: var(--secondary); font-weight: bold;">S1 ELEITO ROOT BRIDGE!</span> Menor Bridge ID: 32768.000A.0000.2222';
+            
+        } else if (etapa === 3) {
+            elementos.statusS3.innerHTML = '✅ Reconhecendo S1 como Root Bridge';
+            elementos.statusS1.innerHTML = '👑 <span style="color: var(--secondary); font-weight: bold;">ROOT BRIDGE ATIVO</span>';
+            elementos.statusS2.innerHTML = '✅ Reconhecendo S1 como Root Bridge';
+            
+            clearInterval(eleicaoIntervalo);
+            eleicaoAtiva = false;
+        }
+    }, 2000);
+}
+
+function resetarEleicao() {
+    clearInterval(eleicaoIntervalo);
+    eleicaoAtiva = false;
+    
+    const elementos = {
+        s3: document.getElementById('rootS3'),
+        s1: document.getElementById('rootS1'),
+        s2: document.getElementById('rootS2'),
+        link1: document.getElementById('rootLink1'),
+        link2: document.getElementById('rootLink2'),
+        link3: document.getElementById('rootLink3'),
+        bpdu1: document.getElementById('rootBPDU1'),
+        bpdu2: document.getElementById('rootBPDU2'),
+        bpdu3: document.getElementById('rootBPDU3'),
+        statusS3: document.getElementById('rootStatusS3'),
+        statusS1: document.getElementById('rootStatusS1'),
+        statusS2: document.getElementById('rootStatusS2'),
+        status: document.getElementById('rootStatus')
+    };
+    
+    // Reseta visual
+    elementos.s3.style.borderColor = 'var(--border)';
+    elementos.s3.style.boxShadow = 'none';
+    elementos.s3.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s1.style.borderColor = 'var(--border)';
+    elementos.s1.style.boxShadow = 'none';
+    elementos.s1.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.s2.style.borderColor = 'var(--border)';
+    elementos.s2.style.boxShadow = 'none';
+    elementos.s2.querySelector('i').style.color = 'var(--text-dim)';
+    
+    elementos.link1.style.background = 'var(--border)';
+    elementos.link1.style.boxShadow = 'none';
+    elementos.link2.style.background = 'var(--border)';
+    elementos.link2.style.boxShadow = 'none';
+    elementos.link3.style.background = 'var(--border)';
+    elementos.link3.style.boxShadow = 'none';
+    
+    elementos.bpdu1.style.display = 'none';
+    elementos.bpdu2.style.display = 'none';
+    elementos.bpdu3.style.display = 'none';
+    
+    elementos.statusS3.innerHTML = '⏳ Aguardando...';
+    elementos.statusS1.innerHTML = '⏳ Aguardando...';
+    elementos.statusS2.innerHTML = '⏳ Aguardando...';
+    
+    elementos.status.innerHTML = 'Clique no botão acima para iniciar o processo de eleição do Root Bridge.';
+}
+
+function forcarRoot() {
+    resetarEleicao();
+    
+    const elementos = {
+        s1: document.getElementById('rootS1'),
+        statusS1: document.getElementById('rootStatusS1'),
+        status: document.getElementById('rootStatus'),
+        link1: document.getElementById('rootLink1'),
+        link2: document.getElementById('rootLink2')
+    };
+    
+    // Força S1 como Root (prioridade 0)
+    elementos.s1.style.borderColor = 'var(--secondary)';
+    elementos.s1.style.boxShadow = '0 0 20px rgba(0, 245, 212, 0.3)';
+    elementos.s1.querySelector('i').style.color = 'var(--secondary)';
+    
+    elementos.link1.style.background = 'var(--success)';
+    elementos.link1.style.boxShadow = '0 0 10px var(--success)';
+    elementos.link2.style.background = 'var(--success)';
+    elementos.link2.style.boxShadow = '0 0 10px var(--success)';
+    
+    elementos.statusS1.innerHTML = '👑 <span style="color: var(--secondary); font-weight: bold;">ROOT BRIDGE (Prioridade 0)</span>';
+    
+    elementos.status.innerHTML = '⚙️ <span style="color: var(--warning);">S1 forçado como Root Bridge via configuração manual de prioridade 0!</span>';
+}
+</script>
       <script>
         ;(function () {
           const playBtn = document.getElementById('electPlayBtn')
@@ -2773,123 +2660,202 @@
           </table>
         </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-network-wired"></i> PATH COST TOPOLOGY: Cálculo Lógico de Caminho Mais Curto
-          </h3>
+        <div class="card" style="border-color: var(--border);">
+    <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
+        <i class="fas fa-network-wired"></i> Cálculo do Caminho Mais Curto (Path Cost)
+    </h3>
 
-          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
-            Analise a topologia triangular abaixo. Veja como o Switch S2 escolhe o link direto para o Root Bridge (S1) porque o custo
-            acumulado de 19 é menor do que dar o salto através de S3 (19 + 19 = 38):
-          </p>
+    <p style="color: var(--text); margin-bottom: 1.2rem;">
+        Analise a topologia triangular abaixo. Veja como o Switch S2 escolhe o link direto para o Root Bridge (S1) porque o custo
+        acumulado de <strong style="color: var(--success);">19</strong> é menor do que dar o salto através de S3 
+        (<span style="color: var(--danger);">19 + 19 = 38</span>):
+    </p>
 
-          <style>
-            /* Wrapper de isolamento responsivo blindado para mobile */
-            .cost-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
+    <!-- Topologia em HTML puro -->
+    <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important;">
+        <div style="display: flex; align-items: center; justify-content: center; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap; gap: 2rem;">
+            
+            <!-- Coluna Esquerda: S3 no topo -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">S3</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">(Non-Root)</span>
+                </div>
 
-            .cost-sim-canvas {
-              position: relative !important;
-              width: 760px !important; /* Mantém tamanho fixo ideal para o triângulo simples */
-              min-width: 760px !important;
-              height: 340px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
+                <!-- Link S3-S2 (custo 19) -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 100px; height: 3px; background: var(--border);"></div>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">F0/2 a F0/2 (Custo: 19)</span>
+                </div>
 
-            .cost-node {
-              position: absolute !important;
-              display: flex !important;
-              flex-direction: column !important;
-              align-items: center !important;
-              z-index: 5 !important;
-              white-space: nowrap !important;
-            }
-            .cost-node i {
-              font-size: 2.2rem !important;
-              color: #718096 !important;
-              background: #121824 !important;
-              padding: 10px !important;
-              border: 2px solid #202b42 !important;
-              border-radius: 8px !important;
-              display: inline-block !important;
-            }
-            .cost-node.is-root i {
-              color: var(--secondary) !important;
-              border-color: var(--secondary) !important;
-              box-shadow: 0 0 12px rgba(0, 245, 212, 0.3) !important;
-            }
-            .cost-node span {
-              font-family: monospace !important;
-              font-size: 0.75rem !important;
-              margin-top: 4px !important;
-              color: var(--text) !important;
-              display: block !important;
-            }
-
-            .cost-link {
-              position: absolute !important;
-              background: var(--primary) !important;
-              z-index: 2 !important;
-              box-shadow: 0 0 4px var(--primary) !important;
-            }
-
-            /* Rótulo de Custo absolutizado para evitar quebras dinâmicas nos nós */
-            .cost-label {
-              position: absolute !important;
-              background: #121824 !important;
-              border: 1px solid var(--border) !important;
-              padding: 2px 6px !important;
-              border-radius: 4px !important;
-              font-family: monospace !important;
-              font-size: 0.7rem !important;
-              color: var(--text) !important;
-              width: max-content !important;
-              z-index: 6 !important;
-            }
-          </style>
-
-          <div class="cost-canvas-responsive-wrapper">
-            <div class="cost-sim-canvas" id="costCanvas">
-              <div class="cost-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="cost-link" style="top: 75px; left: 140px; width: 220px; height: 3px; transform: rotate(45deg)"></div>
-              <div class="cost-link" style="top: 75px; left: 580px; width: 220px; height: 3px; transform: rotate(135deg)"></div>
-              <div class="cost-label" style="top: 45px; left: 350px; border-color: var(--secondary)">F0/1 a F0/1 (Custo: 19)</div>
-              <div class="cost-label" style="top: 150px; left: 170px">F0/2 a F0/2 (Custo: 19)</div>
-              <div class="cost-label" style="top: 150px; left: 450px; border-color: var(--success); color: var(--success)">
-                F0/1 a F0/2 (Custo: 19) <i class="fas fa-check"></i>
-              </div>
-
-              <div class="cost-node" id="costS3" style="top: 40px; left: 100px">
-                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
-              </div>
-              <div class="cost-node" id="costS1" style="top: 40px; left: 580px">
-                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
-              </div>
-              <div class="cost-node" id="costS2" style="top: 220px; left: 340px">
-                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
-              </div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="costS2" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">S2</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">(Non-Root)</span>
+                    <div id="costStatusS2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Calculando...</div>
+                </div>
             </div>
-          </div>
+
+            <!-- Coluna Direita: S1 no topo -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <!-- S1 (Root) -->
+                <div style="text-align: center;">
+                    <div id="costS1" style="background: var(--bg-card); border: 2px solid var(--secondary); border-radius: 8px; padding: 0.5rem 1rem; box-shadow: 0 0 15px rgba(0, 245, 212, 0.2);">
+                        <i class="fas fa-server" style="color: var(--secondary); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--secondary); font-family: monospace; font-size: 0.8rem; display: block;">S1</span>
+                    <span style="color: var(--secondary); font-family: monospace; font-size: 0.6rem;">(Root Bridge)</span>
+                </div>
+
+                <!-- Link S1-S2 (custo 19) - CAMINHO DIRETO -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="costLinkDireto" style="width: 100px; height: 3px; background: var(--success); box-shadow: 0 0 10px var(--success); transition: all 0.3s;"></div>
+                    <span style="color: var(--success); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">
+                        F0/1 a F0/1 (Custo: 19) <i class="fas fa-check"></i>
+                    </span>
+                </div>
+
+                <!-- Link S3-S1 (custo 19) -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="costLinkS3S1" style="width: 100px; height: 3px; background: var(--border); transition: all 0.3s;"></div>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">F0/1 a F0/2 (Custo: 19)</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Comparação de Custos -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div style="background: rgba(3, 244, 135, 0.1); border: 1px solid var(--success); border-radius: 8px; padding: 0.8rem; text-align: center;">
+                <i class="fas fa-route" style="color: var(--success);"></i>
+                <span style="color: var(--text); font-family: monospace; display: block; font-size: 0.75rem;">
+                    <strong style="color: var(--success);">Caminho Direto</strong><br>
+                    S2 → S1<br>
+                    <span style="color: var(--success); font-size: 1.2rem;">19</span>
+                </span>
+            </div>
+            <div style="background: rgba(255, 77, 109, 0.1); border: 1px solid var(--danger); border-radius: 8px; padding: 0.8rem; text-align: center;">
+                <i class="fas fa-route" style="color: var(--danger);"></i>
+                <span style="color: var(--text); font-family: monospace; display: block; font-size: 0.75rem;">
+                    <strong style="color: var(--danger);">Caminho Alternativo</strong><br>
+                    S2 → S3 → S1<br>
+                    <span style="color: var(--danger); font-size: 1.2rem;">19 + 19 = 38</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Botão de Simulação -->
+        <div style="display: flex; gap: 1rem; margin-top: 1rem; justify-content: center;">
+            <button onclick="simularPathCost()" style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-calculator"></i> CALCULAR PATH COST
+            </button>
+            <button onclick="resetarPathCost()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR
+            </button>
+        </div>
+
+        <!-- Status -->
+        <div id="costStatus" style="background: #0a0e17; border: 1px solid var(--border); padding: 0.8rem 1.2rem; border-radius: 6px; color: var(--text); font-family: monospace; font-size: 0.85rem; margin-top: 1rem; border-left: 3px solid var(--primary); text-align: center;">
+            Clique em "Calcular Path Cost" para ver a decisão do S2.
+        </div>
+    </div>
+</div>
+
+<script>
+function simularPathCost() {
+    const s2 = document.getElementById('costS2');
+    const linkDireto = document.getElementById('costLinkDireto');
+    const linkS3S1 = document.getElementById('costLinkS3S1');
+    const statusS2 = document.getElementById('costStatusS2');
+    const status = document.getElementById('costStatus');
+    
+    // Etapa 1: S2 analisa as rotas
+    status.innerHTML = '🔍 <span style="color: var(--warning);">S2 analisando caminhos disponíveis...</span>';
+    statusS2.innerHTML = '🔍 Analisando...';
+    
+    setTimeout(() => {
+        // Etapa 2: S2 calcula custo via S3
+        status.innerHTML = '📊 <span style="color: var(--warning);">Caminho via S3: 19 + 19 = 38</span>';
+        statusS2.innerHTML = '📊 Via S3: 38';
+        linkS3S1.style.background = 'var(--warning)';
+        linkS3S1.style.boxShadow = '0 0 8px var(--warning)';
+        
+        setTimeout(() => {
+            // Etapa 3: S2 calcula custo direto
+            status.innerHTML = '📊 <span style="color: var(--success);">Caminho Direto: 19</span>';
+            statusS2.innerHTML = '📊 Via S1: 19';
+            linkDireto.style.background = 'var(--success)';
+            linkDireto.style.boxShadow = '0 0 15px var(--success)';
+            
+            setTimeout(() => {
+                // Etapa 4: S2 escolhe o caminho mais curto
+                s2.style.borderColor = 'var(--success)';
+                s2.style.boxShadow = '0 0 20px rgba(3, 244, 135, 0.2)';
+                s2.querySelector('i').style.color = 'var(--success)';
+                
+                statusS2.innerHTML = '✅ <span style="color: var(--success);">ESCOLHIDO: Caminho Direto (19)</span>';
+                status.innerHTML = '✅ <span style="color: var(--success); font-weight: bold;">S2 escolhe o caminho mais curto: Custo 19 (direto para S1)!</span>';
+                
+                // Mostra o caminho alternativo como bloqueado
+                setTimeout(() => {
+                    linkS3S1.style.background = 'var(--danger)';
+                    linkS3S1.style.boxShadow = '0 0 10px var(--danger)';
+                    
+                    // Adiciona indicador de bloqueio
+                    const linkS3S1Parent = linkS3S1.parentElement;
+                    const bloqueio = document.createElement('span');
+                    bloqueio.innerHTML = '🚫';
+                    bloqueio.style.cssText = 'color: var(--danger); font-size: 0.8rem; margin-top: 2px;';
+                    
+                    // Remove bloqueio anterior se existir
+                    const antigoBloqueio = linkS3S1Parent.querySelector('.bloqueio-indicator');
+                    if (antigoBloqueio) antigoBloqueio.remove();
+                    
+                    const indicator = document.createElement('span');
+                    indicator.className = 'bloqueio-indicator';
+                    indicator.style.cssText = 'color: var(--danger); font-family: monospace; font-size: 0.6rem; margin-top: 2px;';
+                    indicator.innerHTML = '🚫 Bloqueado (Custo maior)';
+                    linkS3S1Parent.appendChild(indicator);
+                    
+                }, 1000);
+                
+            }, 1500);
+        }, 1500);
+    }, 1500);
+}
+
+function resetarPathCost() {
+    const s2 = document.getElementById('costS2');
+    const linkDireto = document.getElementById('costLinkDireto');
+    const linkS3S1 = document.getElementById('costLinkS3S1');
+    const statusS2 = document.getElementById('costStatusS2');
+    const status = document.getElementById('costStatus');
+    
+    // Reseta visual
+    s2.style.borderColor = 'var(--border)';
+    s2.style.boxShadow = 'none';
+    s2.querySelector('i').style.color = 'var(--text-dim)';
+    
+    linkDireto.style.background = 'var(--success)';
+    linkDireto.style.boxShadow = '0 0 10px var(--success)';
+    
+    linkS3S1.style.background = 'var(--border)';
+    linkS3S1.style.boxShadow = 'none';
+    
+    statusS2.innerHTML = '⏳ Calculando...';
+    status.innerHTML = 'Clique em "Calcular Path Cost" para ver a decisão do S2.';
+    
+    // Remove indicadores de bloqueio
+    const bloqueios = document.querySelectorAll('.bloqueio-indicator');
+    bloqueios.forEach(el => el.remove());
+}
+</script>
 
         <div class="alert alert-info">
           <i class="fas fa-info-circle"></i> <strong>Como o Custo é Medido:</strong> O custo do caminho de uma porta é acumulado de forma
@@ -2926,147 +2892,255 @@
           </ul>
         </div>
 
-        <div class="card" style="background: #070b12; border-color: var(--border)">
-          <h3
-            style="
-              color: var(--primary);
-              font-size: 1.1rem;
-              margin-bottom: 1.5rem;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              gap: 0.5rem;
-            "
-          >
-            <i class="fas fa-sitemap"></i> PORT ROLES TOPOLOGY: Estrutura Lógica Convergida do STP
-          </h3>
+       <div class="card" style="border-color: var(--border);">
+    <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem;">
+        <i class="fas fa-sitemap"></i> Funções das Portas no STP (Port Roles)
+    </h3>
 
-          <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 1.2rem">
-            Analise a atribuição de funções lógicas no triângulo de switches Fast Ethernet (Custo 19). Veja como a interface Gi0/2 do Switch
-            S3 assume o estado de bloqueio (Alternativa) para encerrar o ciclo físico:
-          </p>
+    <p style="color: var(--text); margin-bottom: 1.2rem;">
+        Analise a atribuição de funções lógicas no triângulo de switches Fast Ethernet (Custo 19). Veja como a interface Gi0/2 do Switch
+        S3 assume o estado de bloqueio (Alternativa) para encerrar o ciclo físico:
+    </p>
 
-          <style>
-            /* Wrapper responsivo blindado com !important para isolar a rolagem no smartphone */
-            .roles-canvas-responsive-wrapper {
-              width: 100% !important;
-              overflow-x: auto !important;
-              display: block !important;
-              white-space: nowrap !important;
-              -webkit-overflow-scrolling: touch !important;
-              border-radius: 12px !important;
-              border: 1px solid var(--border) !important;
-              margin-bottom: 1rem !important;
-            }
+    <!-- Topologia em HTML puro -->
+    <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border); overflow-x: auto !important;">
+        <div style="display: flex; align-items: center; justify-content: center; min-width: 500px; padding: 1rem 0; flex-wrap: nowrap; gap: 2rem;">
+            
+            <!-- Coluna Esquerda: S3 -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <!-- S3 -->
+                <div style="text-align: center;">
+                    <div id="roleS3" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">S3</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">(Non-Root)</span>
+                    <div id="roleStatusS3" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Analisando...</div>
+                </div>
 
-            .roles-sim-canvas {
-              position: relative !important;
-              width: 780px !important; /* Tamanho fixado ideal para o triângulo estável */
-              min-width: 780px !important;
-              height: 350px !important;
-              background: #0a0e17 !important;
-              overflow: hidden !important;
-            }
+                <!-- Link S3-S2 -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="roleLinkS3S2" style="width: 100px; height: 3px; background: var(--border); transition: all 0.3s;"></div>
+                    <span id="roleLabelS3S2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">Gi0/2 [---]</span>
+                </div>
 
-            .roles-node {
-              position: absolute !important;
-              display: flex !important;
-              flex-direction: column !important;
-              align-items: center !important;
-              z-index: 5 !important;
-              white-space: nowrap !important;
-            }
-            .roles-node i {
-              font-size: 2.2rem !important;
-              color: #718096 !important;
-              background: #121824 !important;
-              padding: 10px !important;
-              border: 2px solid #202b42 !important;
-              border-radius: 8px !important;
-              display: inline-block !important;
-            }
-            .roles-node.is-root i {
-              color: var(--secondary) !important;
-              border-color: var(--secondary) !important;
-              box-shadow: 0 0 12px rgba(0, 245, 212, 0.3) !important;
-            }
-            .roles-node span {
-              font-family: monospace !important;
-              font-size: 0.75rem !important;
-              margin-top: 4px !important;
-              color: var(--text) !important;
-              display: block !important;
-            }
-
-            .roles-link {
-              position: absolute !important;
-              background: var(--primary) !important;
-              z-index: 2 !important;
-              box-shadow: 0 0 4px var(--primary) !important;
-            }
-            .roles-link.blocked-link {
-              background: var(--danger) !important;
-              box-shadow: 0 0 4px var(--danger) !important;
-            }
-
-            /* Tags de Portas Absolutizadas para eliminar esmagamento no mobile */
-            .port-role-badge {
-              position: absolute !important;
-              font-family: monospace !important;
-              font-size: 0.65rem !important;
-              font-weight: bold !important;
-              padding: 2px 6px !important;
-              border-radius: 4px !important;
-              width: max-content !important;
-              z-index: 6 !important;
-              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
-            }
-            .role-dp {
-              background: rgba(3, 244, 135, 0.15) !important;
-              border: 1px solid var(--success) !important;
-              color: var(--success) !important;
-            }
-            .role-rp {
-              background: rgba(0, 180, 216, 0.15) !important;
-              border: 1px solid var(--primary) !important;
-              color: var(--primary) !important;
-            }
-            .role-ap {
-              background: rgba(255, 77, 109, 0.15) !important;
-              border: 1px solid var(--danger) !important;
-              color: var(--danger) !important;
-            }
-          </style>
-
-          <div class="roles-canvas-responsive-wrapper">
-            <div class="roles-sim-canvas" id="rolesCanvas">
-              <div class="roles-link" style="top: 75px; left: 160px; width: 440px; height: 3px"></div>
-              <div class="roles-link" style="top: 75px; left: 140px; width: 220px; height: 3px; transform: rotate(45deg)"></div>
-              <div
-                class="roles-link blocked-link"
-                style="top: 75px; left: 580px; width: 220px; height: 3px; transform: rotate(135deg)"
-              ></div>
-              <div class="port-role-badge role-dp" style="top: 40px; left: 535px">Gi0/1 [DP]</div>
-              <div class="port-role-badge role-dp" style="top: 110px; left: 540px">Gi0/2 [DP]</div>
-
-              <div class="port-role-badge role-rp" style="top: 190px; left: 445px">Gi0/1 [RP]</div>
-              <div class="port-role-badge role-dp" style="top: 220px; left: 275px">Gi0/2 [DP]</div>
-
-              <div class="port-role-badge role-rp" style="top: 110px; left: 210px">Gi0/1 [RP]</div>
-              <div class="port-role-badge role-ap" style="top: 40px; left: 170px">Gi0/2 [AP]</div>
-
-              <div class="roles-node" id="roleNodeS3" style="top: 40px; left: 100px">
-                <i class="fas fa-server"></i><span>S3 (Non-Root)</span>
-              </div>
-              <div class="roles-node" id="roleNodeS1" style="top: 40px; left: 580px">
-                <i class="fas fa-server" style="color: var(--secondary)"></i><span>S1 (Root Bridge)</span>
-              </div>
-              <div class="roles-node" id="roleNodeS2" style="top: 220px; left: 340px">
-                <i class="fas fa-server"></i><span>S2 (Non-Root)</span>
-              </div>
+                <!-- S2 -->
+                <div style="text-align: center;">
+                    <div id="roleS2" style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s;">
+                        <i class="fas fa-server" style="color: var(--text-dim); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--text); font-family: monospace; font-size: 0.8rem; display: block;">S2</span>
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem;">(Non-Root)</span>
+                    <div id="roleStatusS2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">⏳ Analisando...</div>
+                </div>
             </div>
-          </div>
+
+            <!-- Coluna Direita: S1 (Root) -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <!-- S1 (Root) -->
+                <div style="text-align: center;">
+                    <div id="roleS1" style="background: var(--bg-card); border: 2px solid var(--secondary); border-radius: 8px; padding: 0.5rem 1rem; box-shadow: 0 0 15px rgba(0, 245, 212, 0.2);">
+                        <i class="fas fa-server" style="color: var(--secondary); font-size: 1.5rem;"></i>
+                    </div>
+                    <span style="color: var(--secondary); font-family: monospace; font-size: 0.8rem; display: block;">S1</span>
+                    <span style="color: var(--secondary); font-family: monospace; font-size: 0.6rem;">(Root Bridge)</span>
+                    <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">👑 Root</div>
+                </div>
+
+                <!-- Link S1-S2 -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="roleLinkS1S2" style="width: 100px; height: 3px; background: var(--border); transition: all 0.3s;"></div>
+                    <span id="roleLabelS1S2" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">Gi0/1 [---]</span>
+                </div>
+
+                <!-- Link S1-S3 -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="roleLinkS1S3" style="width: 100px; height: 3px; background: var(--border); transition: all 0.3s;"></div>
+                    <span id="roleLabelS1S3" style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 2px;">Gi0/1 [---]</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Legenda das Funções -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+            <div style="background: rgba(0, 180, 216, 0.1); border: 1px solid var(--primary); border-radius: 8px; padding: 0.5rem; text-align: center;">
+                <span style="color: var(--primary); font-family: monospace; font-weight: bold;">RP</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.65rem; display: block;">Root Port</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem;">(Caminho para Root)</span>
+            </div>
+            <div style="background: rgba(3, 244, 135, 0.1); border: 1px solid var(--success); border-radius: 8px; padding: 0.5rem; text-align: center;">
+                <span style="color: var(--success); font-family: monospace; font-weight: bold;">DP</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.65rem; display: block;">Designated Port</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem;">(Encaminhamento)</span>
+            </div>
+            <div style="background: rgba(255, 77, 109, 0.1); border: 1px solid var(--danger); border-radius: 8px; padding: 0.5rem; text-align: center;">
+                <span style="color: var(--danger); font-family: monospace; font-weight: bold;">AP</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.65rem; display: block;">Alternate Port</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem;">(Bloqueado)</span>
+            </div>
+        </div>
+
+        <!-- Botões de Controle -->
+        <div style="display: flex; gap: 1rem; margin-top: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button onclick="simularPortRoles()" style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace; font-weight: bold;">
+                <i class="fas fa-play"></i> ATRIBUIR FUNÇÕES
+            </button>
+            <button onclick="resetarPortRoles()" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: monospace;">
+                <i class="fas fa-undo"></i> RESETAR
+            </button>
+        </div>
+
+        <!-- Status -->
+        <div id="roleStatus" style="background: #0a0e17; border: 1px solid var(--border); padding: 0.8rem 1.2rem; border-radius: 6px; color: var(--text); font-family: monospace; font-size: 0.85rem; margin-top: 1rem; border-left: 3px solid var(--primary); text-align: center;">
+            Clique em "Atribuir Funções" para ver a convergência do STP.
+        </div>
+    </div>
+</div>
+
+<script>
+function simularPortRoles() {
+    const elementos = {
+        s1: document.getElementById('roleS1'),
+        s2: document.getElementById('roleS2'),
+        s3: document.getElementById('roleS3'),
+        linkS1S2: document.getElementById('roleLinkS1S2'),
+        linkS1S3: document.getElementById('roleLinkS1S3'),
+        linkS3S2: document.getElementById('roleLinkS3S2'),
+        labelS1S2: document.getElementById('roleLabelS1S2'),
+        labelS1S3: document.getElementById('roleLabelS1S3'),
+        labelS3S2: document.getElementById('roleLabelS3S2'),
+        statusS2: document.getElementById('roleStatusS2'),
+        statusS3: document.getElementById('roleStatusS3'),
+        status: document.getElementById('roleStatus')
+    };
+    
+    // Etapa 1: Identificação do Root
+    elementos.status.innerHTML = '🔍 <span style="color: var(--warning);">S1 identificado como Root Bridge (menor BID)</span>';
+    elementos.s1.style.borderColor = 'var(--secondary)';
+    elementos.s1.style.boxShadow = '0 0 20px rgba(0, 245, 212, 0.3)';
+    
+    setTimeout(() => {
+        // Etapa 2: S2 escolhe Root Port (caminho mais curto para S1)
+        elementos.status.innerHTML = '📡 <span style="color: var(--primary);">S2 escolhendo Root Port...</span>';
+        elementos.s2.style.borderColor = 'var(--primary)';
+        elementos.s2.style.boxShadow = '0 0 15px rgba(0, 180, 216, 0.2)';
+        elementos.statusS2.innerHTML = '🔍 Escolhendo Root Port...';
+        
+        setTimeout(() => {
+            // S2: Gi0/1 = RP (Root Port)
+            elementos.linkS1S2.style.background = 'var(--primary)';
+            elementos.linkS1S2.style.boxShadow = '0 0 10px var(--primary)';
+            elementos.labelS1S2.innerHTML = 'Gi0/1 <span style="color: var(--primary); font-weight: bold;">[RP]</span>';
+            elementos.statusS2.innerHTML = '✅ Gi0/1 = <span style="color: var(--primary);">Root Port</span>';
+            
+            // S1: Gi0/1 = DP (Designated Port)
+            elementos.labelS1S2.innerHTML += ' | S1 Gi0/1 <span style="color: var(--success); font-weight: bold;">[DP]</span>';
+            
+            setTimeout(() => {
+                // Etapa 3: S3 escolhe Root Port
+                elementos.status.innerHTML = '📡 <span style="color: var(--primary);">S3 escolhendo Root Port...</span>';
+                elementos.s3.style.borderColor = 'var(--primary)';
+                elementos.s3.style.boxShadow = '0 0 15px rgba(0, 180, 216, 0.2)';
+                elementos.statusS3.innerHTML = '🔍 Escolhendo Root Port...';
+                
+                setTimeout(() => {
+                    // S3: Gi0/1 = RP (Root Port para S1)
+                    elementos.linkS1S3.style.background = 'var(--primary)';
+                    elementos.linkS1S3.style.boxShadow = '0 0 10px var(--primary)';
+                    elementos.labelS1S3.innerHTML = 'Gi0/1 <span style="color: var(--primary); font-weight: bold;">[RP]</span>';
+                    elementos.statusS3.innerHTML = '✅ Gi0/1 = <span style="color: var(--primary);">Root Port</span>';
+                    
+                    // S1: Gi0/2 = DP (Designated Port)
+                    elementos.labelS1S3.innerHTML += ' | S1 Gi0/2 <span style="color: var(--success); font-weight: bold;">[DP]</span>';
+                    
+                    setTimeout(() => {
+                        // Etapa 4: S2 e S3 disputam a Designated Port no link entre eles
+                        elementos.status.innerHTML = '⚖️ <span style="color: var(--warning);">S2 e S3 disputando Designated Port...</span>';
+                        
+                        setTimeout(() => {
+                            // S2: Gi0/2 = DP (menor BID)
+                            elementos.linkS3S2.style.background = 'var(--success)';
+                            elementos.linkS3S2.style.boxShadow = '0 0 10px var(--success)';
+                            elementos.labelS3S2.innerHTML = 'S2 Gi0/2 <span style="color: var(--success); font-weight: bold;">[DP]</span>';
+                            
+                            // S3: Gi0/2 = AP (Alternate Port - Bloqueado)
+                            elementos.linkS3S2.style.background = 'var(--danger)';
+                            elementos.linkS3S2.style.boxShadow = '0 0 15px var(--danger)';
+                            elementos.labelS3S2.innerHTML += ' | S3 Gi0/2 <span style="color: var(--danger); font-weight: bold;">[AP]</span>';
+                            elementos.statusS3.innerHTML += ' | Gi0/2 = <span style="color: var(--danger);">Alternate Port (Bloqueado)</span>';
+                            
+                            // Destaque para S3 com AP
+                            elementos.s3.style.borderColor = 'var(--danger)';
+                            elementos.s3.style.boxShadow = '0 0 15px rgba(255, 77, 109, 0.2)';
+                            
+                            elementos.status.innerHTML = '✅ <span style="color: var(--success); font-weight: bold;">STP CONVERGIDO!</span> S3 Gi0/2 bloqueado para evitar loop.';
+                            
+                            // Adiciona indicador de bloqueio no link
+                            const linkContainer = document.querySelector('#roleLinkS3S2').parentElement;
+                            const bloqueioIndicator = document.createElement('span');
+                            bloqueioIndicator.className = 'block-indicator';
+                            bloqueioIndicator.style.cssText = 'color: var(--danger); font-family: monospace; font-size: 0.6rem; margin-top: 2px; font-weight: bold;';
+                            bloqueioIndicator.innerHTML = '🚫 BLOQUEADO';
+                            
+                            // Remove indicador antigo se existir
+                            const antigo = linkContainer.querySelector('.block-indicator');
+                            if (antigo) antigo.remove();
+                            linkContainer.appendChild(bloqueioIndicator);
+                            
+                        }, 1500);
+                    }, 1500);
+                }, 1500);
+            }, 1500);
+        }, 1500);
+    }, 1500);
+}
+
+function resetarPortRoles() {
+    const elementos = {
+        s1: document.getElementById('roleS1'),
+        s2: document.getElementById('roleS2'),
+        s3: document.getElementById('roleS3'),
+        linkS1S2: document.getElementById('roleLinkS1S2'),
+        linkS1S3: document.getElementById('roleLinkS1S3'),
+        linkS3S2: document.getElementById('roleLinkS3S2'),
+        labelS1S2: document.getElementById('roleLabelS1S2'),
+        labelS1S3: document.getElementById('roleLabelS1S3'),
+        labelS3S2: document.getElementById('roleLabelS3S2'),
+        statusS2: document.getElementById('roleStatusS2'),
+        statusS3: document.getElementById('roleStatusS3'),
+        status: document.getElementById('roleStatus')
+    };
+    
+    // Reseta visual
+    elementos.s1.style.borderColor = 'var(--secondary)';
+    elementos.s1.style.boxShadow = '0 0 15px rgba(0, 245, 212, 0.2)';
+    
+    elementos.s2.style.borderColor = 'var(--border)';
+    elementos.s2.style.boxShadow = 'none';
+    
+    elementos.s3.style.borderColor = 'var(--border)';
+    elementos.s3.style.boxShadow = 'none';
+    
+    elementos.linkS1S2.style.background = 'var(--border)';
+    elementos.linkS1S2.style.boxShadow = 'none';
+    elementos.linkS1S3.style.background = 'var(--border)';
+    elementos.linkS1S3.style.boxShadow = 'none';
+    elementos.linkS3S2.style.background = 'var(--border)';
+    elementos.linkS3S2.style.boxShadow = 'none';
+    
+    elementos.labelS1S2.innerHTML = 'Gi0/1 [---]';
+    elementos.labelS1S3.innerHTML = 'Gi0/1 [---]';
+    elementos.labelS3S2.innerHTML = 'Gi0/2 [---]';
+    
+    elementos.statusS2.innerHTML = '⏳ Analisando...';
+    elementos.statusS3.innerHTML = '⏳ Analisando...';
+    elementos.status.innerHTML = 'Clique em "Atribuir Funções" para ver a convergência do STP.';
+    
+    // Remove indicadores
+    const bloqueios = document.querySelectorAll('.block-indicator');
+    bloqueios.forEach(el => el.remove());
+}
+</script>
 
         <div class="alert alert-success">
           <i class="fas fa-check-circle"></i> <strong>Conclusão da Convergência:</strong> Uma vez associadas as funções de porta pelo
@@ -3488,6 +3562,481 @@ VLAN0001
           raiz.
         </div>
       </section>
+      <section id="secao5-2-8" class="section">
+  <h2 class="section-title">
+    <i class="fas fa-clock"></i>
+    <span class="section-number">5.2.8</span> Operações do STP: Temporizadores e Mensagens BPDU
+  </h2>
+
+  <div class="card">
+    <p>
+      O intercâmbio contínuo de quadros <strong>BPDU (Bridge Protocol Data Unit)</strong> permite que os switches monitorem a integridade da topologia lógica. A convergência e a sincronização do algoritmo <strong>STA</strong> são coordenadas por três temporizadores (<em>timers</em>) principais:
+    </p>
+    <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6;">
+      <li><strong>Hello Time:</strong> O intervalo em que o Root Bridge transmite BPDUs por suas portas. O padrão de fábrica é de <code>2 segundos</code>.</li>
+      <li><strong>Max Age:</strong> O tempo limite que um switch espera antes de iniciar um recálculo caso pare de ouvir as mensagens de Hello. O padrão é de <code>20 segundos</code>.</li>
+      <li><strong>Forward Delay:</strong> O tempo gasto nos estados intermediários de escuta (<em>Listening</em>) e aprendizado (<em>Learning</em>) antes de liberar o encaminhamento de dados. O padrão é de <code>15 segundos</code> para cada estado (30 segundos no total).</li>
+    </ul>
+  </div>
+
+  <div class="card" style="background: #070b12; border-color: var(--border);">
+    <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: monospace; display: flex; align-items: center; gap: 0.5rem;">
+      <i class="fas fa-exchange-alt"></i> TIMERS DIAGRAM: Sincronização L2 entre Pontes
+    </h3>
+
+    <style>
+      /* Layout padrão em linha (Desktop) */
+      .simple-topo-grid {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 1.5rem !important;
+        margin-top: 1rem !important;
+      }
+      .topo-switch-box {
+        background: var(--bg-dark) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1.2rem !important;
+        text-align: center !important;
+        min-width: 180px !important;
+      }
+      .topo-switch-box i {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+      .topo-line-desc {
+        flex-grow: 1 !important;
+        text-align: center !important;
+        position: relative !important;
+        padding: 1rem !important;
+        background: rgba(0, 180, 216, 0.03) !important;
+        border: 1px dashed var(--border) !important;
+        border-radius: 8px !important;
+      }
+      .timer-badge {
+        display: inline-block !important;
+        font-family: monospace !important;
+        font-size: 0.75rem !important;
+        background: #121824 !important;
+        border: 1px solid var(--border) !important;
+        padding: 2px 8px !important;
+        border-radius: 4px !important;
+        margin: 2px !important;
+        color: var(--text-dim) !important;
+      }
+
+      /* Breakpoint Mobile - Transforma o diagrama horizontal em blocos empilhados verticais */
+      @media (max-width: 768px) {
+        .simple-topo-grid {
+          flex-direction: column !important;
+          align-items: stretch !important;
+          gap: 1rem !important;
+        }
+        .topo-line-desc {
+          border-left: 3px solid var(--primary) !important;
+          border-top: none !important;
+          border-right: none !important;
+          border-bottom: none !important;
+          border-radius: 0 8px 8px 0 !important;
+          text-align: left !important;
+        }
+      }
+    </style>
+
+    <div class="simple-topo-grid">
+      <div class="topo-switch-box" style="border-top: 3px solid var(--secondary) !important;">
+        <i class="fas fa-server" style="color: var(--secondary) !important;"></i>
+        <div style="font-family: monospace; font-size: 0.85rem; font-weight: bold;">S1 (Root Bridge)</div>
+      </div>
+
+      <div class="topo-line-desc">
+        <div style="font-family: monospace; font-size: 0.8rem; color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">
+          <i class="fas fa-arrow-right"></i> Envio Periódico de BPDUs <i class="fas fa-arrow-right"></i>
+        </div>
+        <span class="timer-badge" style="border-color: var(--secondary) !important; color: var(--secondary) !important;">Hello Time: 2s</span>
+        <span class="timer-badge">Max Age: 20s</span>
+        <span class="timer-badge">Forward Delay: 15s</span>
+      </div>
+
+      <div class="topo-switch-box">
+        <i class="fas fa-server" style="color: var(--primary) !important;"></i>
+        <div style="font-family: monospace; font-size: 0.85rem; font-weight: bold;">S2 (Non-Root)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle"></i> <strong>Aviso de Engenharia:</strong> Alterar as métricas padrão de temporizadores do STP de forma manual sem um planejamento prévio é perigoso. Se o Hello Time ou o Max Age forem configurados com tempos curtos demais, os switches podem iniciar falsos recálculos por conta de pequenas oscilações temporárias de tráfego, gerando instabilidades na rede.
+  </div>
+</section>
+<section id="secao5-2-10" class="section">
+  <h2 class="section-title">
+    <i class="fas fa-shield-alt"></i>
+    <span class="section-number">5.2.10</span> Operações do STP: PortFast e BPDU Guard
+  </h2>
+
+  <div class="card">
+    <p>
+      Quando um dispositivo final (como um PC, servidor ou impressora) é conectado a uma porta de switch, o STP tradicional faz com que essa interface passe pelos estados de <em>Listening</em> e <em>Learning</em> por 30 segundos antes de liberar o tráfego. Para evitar essa demora desnecessária em portas de acesso, a Cisco implementa dois recursos essenciais:
+    </p>
+    <ul style="padding-left: 1.5rem; color: var(--text); line-height: 1.6;">
+      <li><strong>PortFast:</strong> Faz com que uma porta de acesso passe imediatamente do estado de bloqueio para o estado de encaminhamento (<em>Forwarding</em>), minimizando o tempo de espera para o usuário receber um endereço IP via DHCP.</li>
+      <li><strong>BPDU Guard (Proteção de BPDU):</strong> Uma medida de segurança obrigatória para proteger portas com PortFast ativo. Se um switch malicioso for conectado a essa interface e disparar um frame <strong>BPDU</strong>, o recurso desativa a porta imediatamente para evitar loops induzidos por terceiros.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="background: #070b12; border-color: var(--border);">
+    <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: monospace; display: flex; align-items: center; gap: 0.5rem;">
+      <i class="fas fa-shield-halved"></i> EDGE PROTECTION: Comportamento das Tecnologias na Borda
+    </h3>
+
+    <style>
+      /* Layout flexível em linha para Desktop e em coluna para Mobile */
+      .edge-topo-grid {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 1.5rem !important;
+        margin-top: 1rem !important;
+      }
+      .edge-box {
+        background: var(--bg-dark) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        text-align: center !important;
+        flex: 1 !important;
+      }
+      .edge-box i {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+      .edge-middle-desc {
+        background: rgba(0, 180, 216, 0.03) !important;
+        border: 1px dashed var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        text-align: center !important;
+        flex: 1.5 !important;
+      }
+      .status-tag {
+        display: inline-block !important;
+        font-family: monospace !important;
+        font-size: 0.75rem !important;
+        padding: 2px 8px !important;
+        border-radius: 4px !important;
+        margin-top: 0.5rem !important;
+        font-weight: bold !important;
+      }
+
+      /* Breakpoint Mobile - Empilha as caixas sem amassar */
+      @media (max-width: 768px) {
+        .edge-topo-grid {
+          flex-direction: column !important;
+          align-items: stretch !important;
+          gap: 1rem !important;
+        }
+        .edge-middle-desc {
+          border-left: 3px solid var(--primary) !important;
+          border-top: none !important;
+          border-right: none !important;
+          border-bottom: none !important;
+          border-radius: 0 8px 8px 0 !important;
+          text-align: left !important;
+        }
+      }
+    </style>
+
+    <div class="edge-topo-grid">
+      <div class="edge-box">
+        <i class="fas fa-server" style="color: var(--primary) !important;"></i>
+        <div style="font-family: monospace; font-size: 0.85rem; font-weight: bold;">Switch de Acesso</div>
+        <span class="status-tag" style="background: rgba(0, 180, 216, 0.1) !important; color: var(--primary) !important; border: 1px solid var(--primary) !important;">PortFast Enabled</span>
+      </div>
+
+      <div class="edge-middle-desc">
+        <div style="font-family: monospace; font-size: 0.8rem; color: var(--success); font-weight: bold; margin-bottom: 0.3rem;">
+          <i class="fas fa-bolt"></i> Transição Imediata para Forwarding
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-dim); margin: 0; white-space: normal;">
+          Se um frame BPDU for detectado nesta porta de borda, o <strong>BPDU Guard</strong> derruba a interface automaticamente para proteger a rede.
+        </p>
+      </div>
+
+      <div class="edge-box">
+        <i class="fas fa-laptop" style="color: var(--text-dim) !important;"></i>
+        <div style="font-family: monospace; font-size: 0.85rem; font-weight: bold;">Estação / PC do Usuário</div>
+        <span class="status-tag" style="background: rgba(3, 244, 135, 0.1) !important; color: var(--success) !important; border: 1px solid var(--success) !important;">Link Instantly UP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p>
+      Para ativar o PortFast e blindar a interface com o BPDU Guard diretamente no console do Cisco IOS, utilize as linhas de comando do modo de configuração de interface detalhadas abaixo:
+    </p>
+
+    <div class="terminal">
+      <pre>Switch# <strong>configure terminal</strong>
+Switch(config)# <strong>interface FastEthernet 0/11</strong>
+Switch(config-if)# <strong>switchport mode access</strong>
+Switch(config-if)# <strong>spanning-tree portfast</strong>
+%Warning: portfast should only be enabled on ports connected to a single host.
+Switch(config-if)# <strong>spanning-tree bpduguard enable</strong>
+Switch(config-if)# <strong>end</strong>
+Switch#
+</pre>
+    </div>
+  </div>
+
+  <div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i> <strong>Aviso de Segurança Crítico (Err-Disabled):</strong> Quando uma porta protegida por BPDU Guard recebe um pacote de controle BPDU, o switch coloca a interface no estado <strong>err-disabled</strong> (desativada por erro), apagando o LED físico da porta. O tráfego só volta a passar após o administrador remover o dispositivo causador do loop e aplicar os comandos <code>shutdown</code> seguido de <code>no shutdown</code> na interface.
+  </div>
+</section>
+<section id="secao5-3-1" class="section">
+  <h2 class="section-title">
+    <i class="fas fa-layer-group"></i>
+    <span class="section-number">5.3.1</span> Evolução do STP: Variantes do Spanning Tree Protocol
+  </h2>
+
+  <div class="card">
+    <p>
+      Desde a criação do padrão original, o <strong>Spanning Tree Protocol</strong> evoluiu para atender à demanda por maior velocidade de convergência e suporte a ambientes corporativos complexos com múltiplas redes locais virtuais (VLANs). Os administradores de rede devem conhecer as principais variantes do protocolo:
+    </p>
+  </div>
+
+  <div class="card" style="background: #070b12; border-color: var(--border);">
+    <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: monospace; display: flex; align-items: center; gap: 0.5rem;">
+      <i class="fas fa-history"></i> STP EVOLUTION: Linhagem e Padrões de Árvore de Abrangência
+    </h3>
+
+    <style>
+      /* Container flexível que se alinha em linha no desktop e vira coluna no mobile */
+      .variants-flex-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+        margin-top: 1rem !important;
+      }
+      .variant-row-card {
+        background: var(--bg-dark) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1.2rem !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
+      }
+      .variant-icon-wrapper {
+        min-width: 60px !important;
+        height: 60px !important;
+        border-radius: 50% !important;
+        background: #121824 !important;
+        border: 1px solid var(--border) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.5rem !important;
+      }
+      .variant-info-content {
+        flex-grow: 1 !important;
+      }
+      .variant-info-content h4 {
+        margin: 0 0 0.4rem 0 !important;
+        font-family: monospace !important;
+        font-size: 1.05rem !important;
+      }
+      .variant-info-content p {
+        font-size: 0.85rem !important;
+        color: var(--text-dim) !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
+      }
+
+      /* Breakpoint responsivo para telas menores */
+      @media (max-width: 600px) {
+        .variant-row-card {
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          gap: 0.8rem !important;
+        }
+        .variant-icon-wrapper {
+          min-width: 45px !important;
+          height: 45px !important;
+          font-size: 1.2rem !important;
+        }
+      }
+    </style>
+
+    <div class="variants-flex-container">
+      <div class="variant-row-card" style="border-left: 4px solid var(--text-dim) !important;">
+        <div class="variant-icon-wrapper" style="color: var(--text-dim);"><i class="fas fa-code-branch"></i></div>
+        <div class="variant-info-content">
+          <h4>STP (IEEE 802.1D)</h4>
+          <p>O padrão original lançado para topologias de ponte única. Fornece uma topologia sem loops em uma rede local, mas possui convergência lenta (cerca de 30 a 50 segundos).</p>
+        </div>
+      </div>
+
+      <div class="variant-row-card" style="border-left: 4px solid var(--primary) !important;">
+        <div class="variant-icon-wrapper" style="color: var(--primary);"><i class="fas fa-sitemap"></i></div>
+        <div class="variant-info-content">
+          <h4>PVST+ (Per-VLAN Spanning Tree)</h4>
+          <p>Aprimoramento da Cisco que cria uma instância de árvore de abrangência 802.1D separada para <strong>cada VLAN</strong> configurada na rede. Permite otimizar caminhos e fazer balanceamento de carga de Camada 2.</p>
+        </div>
+      </div>
+
+      <div class="variant-row-card" style="border-left: 4px solid var(--success) !important;">
+        <div class="variant-icon-wrapper" style="color: var(--success);"><i class="fas fa-bolt"></i></div>
+        <div class="variant-info-content">
+          <h4>RSTP (IEEE 802.1w)</h4>
+          <p><strong>Rapid Spanning Tree Protocol</strong>. Uma evolução direta do 802.1D que fornece uma convergência significativamente mais rápida (poucos segundos ou milissegundos) através de novos papéis de porta e mecanismos de sincronização ativa.</p>
+        </div>
+      </div>
+
+      <div class="variant-row-card" style="border-left: 4px solid var(--secondary) !important;">
+        <div class="variant-icon-wrapper" style="color: var(--secondary);"><i class="fas fa-star"></i></div>
+        <div class="variant-info-content">
+          <h4>Rapid PVST+</h4>
+          <p>Variante proprietária da Cisco que combina a alta velocidade de convergência do <strong>RSTP (802.1w)</strong> com a flexibilidade do <strong>PVST+</strong> (instâncias independentes por VLAN). É o padrão moderno amplamente utilizado em ambientes Cisco.</p>
+        </div>
+      </div>
+
+      <div class="variant-row-card" style="border-left: 4px solid var(--info) !important;">
+        <div class="variant-icon-wrapper" style="color: var(--info);"><i class="fas fa-cubes"></i></div>
+        <div class="variant-info-content">
+          <h4>MSTP / MST (IEEE 802.1s)</h4>
+          <p><strong>Multiple Spanning Tree Protocol</strong>. Mapeia múltiplas VLANs em um número reduzido de instâncias lógicas de spanning tree, economizando drasticamente a memória e a CPU dos switches em redes de grande porte.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <i class="fas fa-lightbulb"></i> <strong>Padrão de Fábrica da Cisco:</strong> A maioria dos switches Catalyst modernos da Cisco sai de fábrica rodando o protocolo <strong>PVST+</strong> ou o <strong>Rapid PVST+</strong> ativado por padrão em todas as portas para garantir proteção imediata Plug-and-Play.
+  </div>
+</section>
+<section id="secao5-3-2" class="section">
+  <h2 class="section-title">
+    <i class="fas fa-bolt"></i>
+    <span class="section-number">5.3.2</span> Evolução do STP: Estados das Portas no RSTP
+  </h2>
+
+  <div class="card">
+    <p>
+      O <strong>RSTP (IEEE 802.1w)</strong> otimizou drasticamente o tempo de convergência da rede. Uma das principais mudanças para alcançar essa velocidade foi a simplificação dos <strong>Estados das Portas</strong>. 
+    </p>
+    <p>
+      Enquanto o STP clássico (802.1D) utilizava cinco estados, o RSTP reduziu esse número para apenas <strong>três estados operacionais</strong>, fundindo os modos em que a porta não encaminha tráfego de dados.
+    </p>
+  </div>
+
+  <div class="card" style="background: #070b12; border-color: var(--border);">
+    <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: monospace; display: flex; align-items: center; gap: 0.5rem;">
+      <i class="fas fa-balance-scale"></i> COMPARAÇÃO DIRETA: STP (802.1D) vs. RSTP (802.1w)
+    </h3>
+
+    <style>
+      .rstp-compare-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+      }
+      .rstp-state-card {
+        background: var(--bg-dark) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 1.2rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
+      .rstp-mapping-line {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.8rem !important;
+        font-family: monospace !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 0.3rem !important;
+      }
+      .badge-classic {
+        background: rgba(255, 77, 109, 0.15) !important;
+        border: 1px solid var(--danger) !important;
+        color: var(--danger) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+      }
+      .badge-rapid {
+        background: rgba(0, 245, 212, 0.15) !important;
+        border: 1px solid var(--secondary) !important;
+        color: var(--secondary) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+      }
+    </style>
+
+    <div class="rstp-compare-grid">
+      <div class="rstp-state-card" style="border-left: 4px solid var(--danger) !important;">
+        <div class="rstp-mapping-line">
+          <span class="badge-classic">STP: Disabled / Blocking / Listening</span>
+          <i class="fas fa-arrow-right" style="color: var(--text-dim);"></i>
+          <span class="badge-rapid">RSTP: Discarding</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; white-space: normal;">
+          O estado <strong>Discarding (Descarte)</strong> unificou três estados do STP antigo. Neste modo, a porta descarta os quadros de dados dos usuários e não aprende endereços MAC, mas continua escutando e processando mensagens BPDU para detectar mudanças na topologia.
+        </p>
+      </div>
+
+      <div class="rstp-state-card" style="border-left: 4px solid var(--warning) !important;">
+        <div class="rstp-mapping-line">
+          <span class="badge-classic">STP: Learning</span>
+          <i class="fas fa-arrow-right" style="color: var(--text-dim);"></i>
+          <span class="badge-rapid">RSTP: Learning</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; white-space: normal;">
+          O estado de <strong>Learning (Aprendizado)</strong> foi mantido idêntico. A porta ainda não tem permissão para encaminhar os quadros dos usuários, mas analisa o tráfego recebido para popular e atualizar a tabela de endereços MAC (MAC Address Table).
+        </p>
+      </div>
+
+      <div class="rstp-state-card" style="border-left: 4px solid var(--success) !important;">
+        <div class="rstp-mapping-line">
+          <span class="badge-classic">STP: Forwarding</span>
+          <i class="fas fa-arrow-right" style="color: var(--text-dim);"></i>
+          <span class="badge-rapid">RSTP: Forwarding</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; white-space: normal;">
+          O estado de <strong>Forwarding (Encaminhamento)</strong> representa a operação normal da interface ativa. A porta aprende os endereços MAC de origem e encaminha os quadros de dados enviados pelos dispositivos finais normalmente.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <table class="table-custom">
+      <thead>
+        <tr>
+          <th>Padrão</th>
+          <th colspan="3" style="text-align: center;">Estados de Porta do Protocolo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>STP (802.1D)</strong></td>
+          <td style="color: var(--danger);">Disabled / Blocking</td>
+          <td style="color: var(--warning);">Listening / Learning</td>
+          <td style="color: var(--success);">Forwarding</td>
+        </tr>
+        <tr>
+          <td><strong>RSTP (802.1w)</strong></td>
+          <td style="color: var(--danger); font-weight: bold;" colspan="2">Discarding</td>
+          <td style="color: var(--success); font-weight: bold;">Forwarding</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
     </div>
 
     <footer style="padding: 2rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem">
