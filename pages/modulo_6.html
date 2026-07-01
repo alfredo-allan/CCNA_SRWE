@@ -1,0 +1,2727 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 6: EtherChannel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+      /* Estilos específicos para a substituição de imagens por topologias interativas nativas */
+      .topology-container {
+        background: #090d16;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1.5rem 0;
+        overflow-x: auto;
+      }
+      .topology-ui {
+        display: block;
+        min-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .topology-row {
+        display: block;
+        margin: 10px 0;
+      }
+      .topo-device {
+        display: inline-block;
+        background: var(--bg-card);
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        color: var(--text);
+        font-weight: 700;
+        min-width: 120px;
+        box-shadow: 0 4px 12px rgba(0, 180, 216, 0.1);
+      }
+      .topo-device i {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--secondary);
+        margin-bottom: 5px;
+      }
+      .topo-links {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 40px;
+        position: relative;
+        padding: 10px;
+        background: rgba(20, 30, 49, 0.4);
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+      }
+      .topo-link-line {
+        display: block;
+        height: 3px;
+        width: 120px;
+        margin: 8px 0;
+        background: var(--success);
+        position: relative;
+      }
+      .topo-link-line.bundled {
+        background: var(--primary);
+      }
+      .topo-bundle-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-dark);
+        border: 1px solid var(--secondary);
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+        line-height: 20px;
+        color: var(--secondary);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao6-0-1"><i class="fas fa-compass"></i> 6.0.1 Introdução</a>
+        </li>
+        <li>
+          <a href="#secao6-0-2"><i class="fas fa-file-alt"></i> 6.0.2 O que vou aprender neste módulo?</a>
+        </li>
+        <li>
+          <a href="#secao6-1-1"><i class="fas fa-layer-group"></i> 6.1.1 Agregação de Links</a>
+        </li>
+        <li>
+          <a href="#secao6-1-2"><i class="fas fa-link"></i> 6.1.2 EtherChannel</a>
+        </li>
+        <li>
+          <a href="#secao6-1-3"><i class="fas fa-chart-line"></i> 6.1.3 Vantagens do EtherChannel</a>
+        </li>
+        <li>
+          <a href="#secao6-1-4"><i class="fas fa-shield-alt"></i> 6.1.4 Restrições de Implementação</a>
+        </li>
+        <li>
+          <a href="#secao6-1-5"><i class="fas fa-layer-group"></i> 6.1.5 Protocolos de Negociação Automática</a>
+        </li>
+        <li>
+          <a href="#secao6-1-6"><i class="fas fa-toggle-on"></i> 6.1.6 Operação PAgP</a>
+        </li>
+        <li>
+          <a href="#secao6-1-7"><i class="fas fa-desktop"></i> 6.1.7 Exemplo de Configuração PAgP</a>
+        </li>
+        <li>
+          <a href="#secao6-1-8"><i class="fas fa-layer-group"></i> 6.1.8 Operação LACP</a>
+        </li>
+        <li>
+          <a href="#secao6-1-9"><i class="fas fa-desktop"></i> 6.1.9 Exemplo de Configuração LACP</a>
+        </li>
+        <li>
+          <a href="#secao6-2-1"><i class="fas fa-tools"></i> 6.2.1 Diretrizes de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao6-2-3"><i class="fas fa-check-circle"></i> 6.2.3 Verificação do EtherChannel</a>
+        </li>
+        <li>
+          <a href="#secao6-2-2-4"><i class="fas fa-code"></i> 6.2.4 Verificador de Sintaxe: LACP</a>
+        </li>
+        <li>
+          <a href="../pages/lab_19.html"><i class="fas fa-desktop"></i> 6.2.4 Packet Tracer - Configuração do EtherChannel</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="badge-lab">Cisco IOS Interactive Lab</div>
+      <h1>Módulo 6: EtherChannel</h1>
+    </section>
+
+    <div class="container">
+      <section id="secao6-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-compass"></i>
+          <span class="section-number">6.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <p>Bem-vindo ao EtherChannel!</p>
+          <p>
+            Seu design de rede inclui switches e links redundantes. Você tem alguma versão do Spanning-Tree Protocol (STP) configurada para
+            impedir loops de Camada 2. Mas agora, como a maioria dos administradores de rede, você percebe que poderia usar mais largura de
+            banda e redundância em sua rede. Não se preocupe, o EtherChannel está aqui para ajudar!
+          </p>
+          <p>
+            O EtherChannel agrega links entre dispositivos em pacotes. Esses pacotes incluem links redundantes. O STP pode bloquear um
+            desses links, mas não bloqueará todos eles. Com o EtherChannel sua rede pode ter redundância, prevenção de loop e maior largura
+            de banda!
+          </p>
+          <p>
+            Existem dois protocolos de negociação dinâmica, <strong>PAgP</strong> e <strong>LACP</strong>. Este módulo explica ambos e
+            também mostra como configurá-los, verificar e solucionar problemas! Um Verificador de Sintaxe e duas atividades de Packet Tracer
+            ajudam você a entender melhor esses protocolos. O que você está esperando?
+          </p>
+        </div>
+      </section>
+      <!-- SEÇÃO 6.0.2: O QUE VOU APRENDER NESTE MÓDULO? -->
+      <section id="secao6-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-file-alt"></i>
+          <span class="section-number">6.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <p><strong>Título do módulo:</strong> EtherChannel</p>
+          <p><strong>Objetivo do módulo:</strong> Solucionar problemas do EtherChannel em links de switch.</p>
+        </div>
+
+        <!-- Tabela de Objetivos dos Tópicos -->
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Título do Tópico</th>
+              <th>Objetivo do Tópico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Operação do EtherChannel</strong></td>
+              <td>Descrever a tecnologia EtherChannel.</td>
+            </tr>
+            <tr>
+              <td><strong>Configurar o EtherChannel</strong></td>
+              <td>Configurar o EtherChannel.</td>
+            </tr>
+            <tr>
+              <td><strong>Verificação e solução de problemas do EtherChannel</strong></td>
+              <td>Solucionar problemas do EtherChannel.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section id="secao6-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">6.1.1</span> Agregação de Links
+        </h2>
+
+        <div class="card">
+          <p>
+            Há cenários em que é necessária mais largura de banda ou redundância entre dispositivos do que o que pode ser fornecido por um
+            único link. Vários links podem ser conectados entre dispositivos para aumentar a largura de banda. No entanto, o
+            <strong>Spanning Tree Protocol (STP)</strong>, que é habilitado em dispositivos de Camada 2, como switches Cisco, por padrão,
+            bloqueará links redundantes para evitar loops de switching, como mostrado na topologia abaixo.
+          </p>
+          <p>
+            É necessária uma tecnologia de agregação de links que permita links redundantes entre dispositivos que não serão bloqueados pelo
+            STP. Essa tecnologia é conhecida como <strong>EtherChannel</strong>.
+          </p>
+          <p>
+            O <strong>EtherChannel</strong> é uma tecnologia de agregação de link que agrupa vários links Ethernet físicos em um único link
+            lógico. Ele é usado para fornecer tolerância a falhas, compartilhamento de carga, maior largura de banda e redundância entre
+            switches, roteadores e servidores.
+          </p>
+          <p>
+            A tecnologia EtherChannel torna possível combinar o número de links físicos entre os comutadores para aumentar a velocidade
+            geral da comunicação entre comutadores.
+          </p>
+        </div>
+
+        <style>
+          .stp-topology {
+            background: #090d16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+          }
+          .stp-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 650px;
+            position: relative;
+          }
+          .stp-row-top {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-bottom: 4rem;
+          }
+          .stp-row-bottom {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+          }
+          .stp-switch {
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            color: var(--text);
+            font-weight: 700;
+            text-align: center;
+            min-width: 130px;
+            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.1);
+            z-index: 2;
+          }
+          .stp-switch i {
+            display: block;
+            font-size: 2rem;
+            color: var(--info);
+            margin-bottom: 0.5rem;
+          }
+          .stp-switch-label {
+            font-size: 0.9rem;
+            display: block;
+          }
+          /* Linhas de conexão física diagonais em formato V invertido */
+          .stp-connections-wrapper {
+            position: absolute;
+            width: 80%;
+            height: 140px;
+            top: 40px;
+            z-index: 1;
+          }
+          .stp-wire-group-left,
+          .stp-wire-group-right {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+          }
+          .stp-wire-group-left {
+            left: 40px;
+            border-bottom: 3px solid var(--text-dim);
+            transform: skewY(22deg);
+            height: 80px;
+          }
+          .stp-wire-group-left::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            top: 10px;
+            border-bottom: 3px solid var(--text-dim);
+          }
+          .stp-wire-group-right {
+            right: 40px;
+            border-bottom: 3px solid var(--text-dim);
+            transform: skewY(-22deg);
+            height: 80px;
+          }
+          .stp-wire-group-right::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            top: 10px;
+            border-bottom: 3px solid var(--text-dim);
+          }
+          /* Sinalizadores de Bloqueio do Spanning Tree */
+          .stp-block-tag {
+            position: absolute;
+            background: rgba(255, 77, 109, 0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            z-index: 3;
+            cursor: pointer;
+            transition: transform 0.2s;
+          }
+          .stp-block-tag:hover {
+            transform: scale(1.2);
+            background: var(--danger);
+            color: var(--bg-dark);
+          }
+          .stp-tag-left {
+            top: 95px;
+            left: 27%;
+          }
+          .stp-tag-right {
+            top: 95px;
+            right: 27%;
+          }
+          .stp-alert-badge {
+            background: rgba(255, 183, 3, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+          }
+        </style>
+
+        <div class="stp-topology">
+          <div class="network-canvas-wrapper">
+            <svg class="network-svg-canvas" viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="neon-glow-primary" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="neon-glow-danger" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <path d="M 200,90 L 400,240" class="wire-line trunk-active" />
+              <path d="M 220,90 L 420,240" class="wire-line trunk-blocked" />
+
+              <path d="M 600,90 L 400,240" class="wire-line trunk-active" />
+              <path d="M 580,90 L 380,240" class="wire-line trunk-blocked" />
+
+              <g class="svg-block-tag" transform="translate(295, 150)">
+                <circle cx="0" cy="0" r="12" />
+                <line x1="-6" y1="-6" x2="6" y2="6" />
+              </g>
+
+              <g class="svg-block-tag" transform="translate(505, 150)">
+                <circle cx="0" cy="0" r="12" />
+                <line x1="-6" y1="-6" x2="6" y2="6" />
+              </g>
+            </svg>
+
+            <div class="net-device dev-trunk-left">
+              <div class="device-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="device-name">Switch Trunk (Esq)</span>
+            </div>
+
+            <div class="net-device dev-trunk-right">
+              <div class="device-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="device-name">Switch Trunk (Dir)</span>
+            </div>
+
+            <div class="net-device dev-access">
+              <div class="device-icon-box"><i class="fas fa-server"></i></div>
+              <span class="device-name">Switch de Acesso</span>
+            </div>
+
+            <div class="topology-floating-alert">
+              <i class="fas fa-exclamation-triangle"></i> STP Detectou Loops: Links Redundantes Bloqueados por Padrão
+            </div>
+          </div>
+
+          <p class="topology-caption">
+            Por padrão, o Spanning-Tree Protocol (STP) colocará as interfaces redundantes em modo <strong>Alternate/Blocking</strong> para
+            blindar o domínio de colisão contra loops na Camada 2.
+          </p>
+        </div>
+
+        <style>
+          /* Container Principal com Rolagem Lateral Forçada no Mobile */
+          .stp-topology {
+            background: #06090f;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem 1rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+          }
+
+          /* Base do Canvas com Largura Mínima Garantida para Preservar o Layout */
+          .network-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            min-width: 760px;
+            height: 360px;
+            margin: 0 auto;
+          }
+
+          /* SVG Base */
+          .network-svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+          }
+
+          /* Estilização das Linhas de Conexão (Cabo de Rede) */
+          .wire-line {
+            fill: none;
+            stroke-width: 3px;
+            transition: stroke 0.3s ease;
+          }
+
+          /* Links Normais Ativos (Verde Terminal/Ciano) */
+          .wire-line.trunk-active {
+            stroke: rgba(3, 244, 135, 0.4);
+            stroke-dasharray: 4;
+            animation: linkDataFlow 30s linear infinite;
+          }
+
+          /* Links Bloqueados pelo STP (Laranja de Atenção / Vermelho Opaco) */
+          .wire-line.trunk-blocked {
+            stroke: var(--danger);
+            stroke-width: 2.5px;
+            opacity: 0.65;
+            stroke-dasharray: 6 4;
+            filter: drop-shadow(0 0 2px var(--danger));
+          }
+
+          /* Animação sutil de pulsação de dados nos cabos ativos */
+          @keyframes linkDataFlow {
+            to {
+              stroke-dashoffset: -100;
+            }
+          }
+
+          /* Emblema de Bloqueio Embutido no SVG (X Vermelho) */
+          .svg-block-tag circle {
+            fill: #06090f;
+            stroke: var(--danger);
+            stroke-width: 2px;
+          }
+
+          .svg-block-tag line {
+            stroke: var(--danger);
+            stroke-width: 3px;
+            stroke-linecap: round;
+          }
+
+          .svg-block-tag {
+            cursor: help;
+            transition: transform 0.2s ease-in-out;
+          }
+
+          .svg-block-tag:hover {
+            transform: scale(1.3) translate(var(--tw-translate-x), var(--tw-translate-y));
+            filter: drop-shadow(0 0 5px var(--danger));
+          }
+
+          /* Componentes dos Elementos de Rede (Switches) */
+          .net-device {
+            position: absolute;
+            z-index: 2;
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+
+          .device-icon-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            width: 65px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          }
+
+          .device-icon-box i {
+            font-size: 1.6rem;
+            color: var(--primary);
+          }
+
+          .device-name {
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+          }
+
+          /* Efeitos de Hover Profissionais nos Equipamentos */
+          .net-device:hover .device-icon-box {
+            border-color: var(--secondary);
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.25);
+          }
+
+          /* Coordenadas Absolutas Mapeadas Precisamente ao SVG */
+          .dev-trunk-left {
+            top: 20px;
+            left: 130px;
+          }
+
+          .dev-trunk-right {
+            top: 20px;
+            right: 130px;
+          }
+
+          .dev-access {
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          /* Banner Flutuante de Informação de Loop */
+          .topology-floating-alert {
+            position: absolute;
+            top: 105px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 28, 46, 0.95);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            z-index: 3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+          }
+
+          /* Legenda Inferior */
+          .topology-caption {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0;
+            line-height: 1.5;
+          }
+
+          .topology-caption strong {
+            color: var(--warning);
+          }
+        </style>
+      </section>
+      <section id="secao6-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-link"></i>
+          <span class="section-number">6.1.2</span> EtherChannel
+        </h2>
+
+        <div class="card">
+          <p>
+            A tecnologia <strong>EtherChannel</strong> foi originalmente desenvolvida pela Cisco como uma técnica de switch a switch em uma
+            LAN para agrupamento de diversas portas Fast Ethernet ou Gigabit Ethernet em um único canal lógico. Quando um EtherChannel é
+            configurado, a interface virtual resultante é chamada de <strong>Port-Channel</strong>. As interfaces físicas são agrupadas em
+            uma interface de canal de porta, conforme mostrado na topologia abaixo.
+          </p>
+        </div>
+
+        <div class="eth-topology">
+          <div class="network-canvas-wrapper">
+            <svg class="network-svg-canvas" viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="neon-glow-success" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <path d="M 195,90 L 395,240" class="eth-wire-line active-channel" />
+              <path d="M 215,90 L 415,240" class="eth-wire-line active-channel" />
+
+              <g transform="translate(305, 165) rotate(-37)">
+                <ellipse cx="0" cy="0" rx="8" ry="22" class="eth-bundle-ring" />
+              </g>
+
+              <path d="M 605,90 L 405,240" class="eth-wire-line active-channel" />
+              <path d="M 585,90 L 385,240" class="eth-wire-line active-channel" />
+
+              <g transform="translate(495, 165) rotate(37)">
+                <ellipse cx="0" cy="0" rx="8" ry="22" class="eth-bundle-ring" />
+              </g>
+            </svg>
+
+            <div class="net-device dev-trunk-left">
+              <div class="device-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="device-name">Switch Trunk (Esq)</span>
+            </div>
+
+            <div class="net-device dev-trunk-right">
+              <div class="device-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="device-name">Switch Trunk (Dir)</span>
+            </div>
+
+            <div class="net-device dev-access">
+              <div class="device-icon-box"><i class="fas fa-server"></i></div>
+              <span class="device-name">Switch de Acesso</span>
+            </div>
+
+            <div class="port-channel-label p-ch-left">EtherChannel</div>
+            <div class="port-channel-label p-ch-right">EtherChannel</div>
+          </div>
+
+          <p class="topology-caption">
+            Representação de Agrupamento Lógico: Com o <strong>EtherChannel</strong> ativo, as portas físicas paralelas operam como um único
+            link lógico. O STP não bloqueia os links, permitindo a utilização total da largura de banda combinada.
+          </p>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem"></i>
+          <strong>Ganho de Performance:</strong> O tráfego passa a ser balanceado dinamicamente entre os links ativos do bundle, provendo
+          alta disponibilidade sem necessidade de convergência do STP em caso de falha física de um dos cabos.
+        </div>
+      </section>
+
+      <style>
+        /* Container com tratamento overflow-x para mobile */
+        .eth-topology {
+          background: #06090f;
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 2rem 1rem;
+          margin: 2rem 0;
+          overflow-x: auto;
+          position: relative;
+          box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Linhas Físicas do Canal Agregado */
+        .eth-wire-line.active-channel {
+          fill: none;
+          stroke: var(--success);
+          stroke-width: 3px;
+          filter: drop-shadow(0 0 3px rgba(3, 244, 135, 0.3));
+          stroke-dasharray: 6 4;
+          animation: ethLinkFlow 25s linear infinite;
+        }
+
+        @keyframes ethLinkFlow {
+          to {
+            stroke-dashoffset: -100;
+          }
+        }
+
+        /* Elipse Roxa/Neon representativa do bundle EtherChannel */
+        .eth-bundle-ring {
+          fill: none;
+          stroke: #a855f7; /* Roxo padrão de encapsulamento Cisco */
+          stroke-width: 3px;
+          filter: drop-shadow(0 0 4px #a855f7);
+        }
+
+        /* Rótulos de Texto Flutuantes */
+        .port-channel-label {
+          position: absolute;
+          font-family: 'Consolas', monospace;
+          font-size: 0.8rem;
+          color: var(--text-dim);
+          background: rgba(10, 14, 23, 0.85);
+          padding: 2px 8px;
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          z-index: 3;
+          pointer-events: none;
+        }
+
+        .p-ch-left {
+          top: 185px;
+          left: 21%;
+        }
+
+        .p-ch-right {
+          top: 185px;
+          right: 21%;
+        }
+      </style>
+      <section id="secao6-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-chart-line"></i>
+          <span class="section-number">6.1.3</span> Vantagens do EtherChannel
+        </h2>
+
+        <div class="card" style="margin-bottom: 2rem">
+          <p>
+            A tecnologia <strong>EtherChannel</strong> apresenta inúmeros benefícios operacionais e arquiteturais para o gerenciamento de
+            infraestruturas de campus. Em vez de lidar com links individuais propensos a bloqueios arbitrários, ela otimiza o hardware
+            existente de forma inteligente.
+          </p>
+        </div>
+
+        <div class="advantages-grid">
+          <div class="card advantage-item">
+            <i class="fas fa-tools"></i>
+            <h4>Configuração Centralizada</h4>
+            <p>
+              A maioria das tarefas de configuração pode ser feita na interface do <strong>EtherChannel</strong> (Port-Channel) em vez de
+              ser aplicada em cada porta individual, assegurando a consistência da configuração ao longo dos links.
+            </p>
+          </div>
+
+          <div class="card advantage-item">
+            <i class="fas fa-layer-group"></i>
+            <h4>Utilização de Portas Existentes</h4>
+            <p>
+              O <strong>EtherChannel</strong> conta com portas já existentes nos switches. Não há necessidade de atualizar o link físico
+              para uma conexão mais rápida e dispendiosa para obter mais largura de banda.
+            </p>
+          </div>
+
+          <div class="card advantage-item">
+            <i class="fas fa-network-wired"></i>
+            <h4>Balanceamento de Carga</h4>
+            <p>
+              O compartilhamento de tráfego ocorre entre os links que fazem parte do mesmo canal. Dependendo da plataforma de hardware,
+              métodos baseados no MAC de origem/destino ou endereço IP de origem/destino distribuem o fluxo pelos links físicos.
+            </p>
+          </div>
+
+          <div class="card advantage-item">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Visão Lógica Unificada para o STP</h4>
+            <p>
+              Cria uma agregação considerada como um único link lógico. Quando o STP bloqueia um dos links redundantes fora do canal, ele
+              bloqueia o grupo inteiro. Onde houver apenas um <strong>EtherChannel</strong>, todos os links físicos ficam ativos, pois o STP
+              enxerga apenas um link virtual.
+            </p>
+          </div>
+
+          <div class="card advantage-item" style="grid-column: span 2">
+            <i class="fas fa-link"></i>
+            <h4>Redundância e Resiliência sem Recálculo de Topologia</h4>
+            <p>
+              Fornece redundância porque o link no geral é tratado como uma conexão lógica única. A perda de um link físico dentro do canal
+              não cria uma alteração na topologia de rede. Portanto, um recálculo da árvore de abrangência (STP) não é necessário. O
+              <strong>EtherChannel</strong> permanece totalmente funcional, apenas diminuindo a taxa de transferência geral de forma
+              transparente.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <style>
+        .advantages-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+          margin-top: 1.5rem;
+        }
+
+        .advantage-item {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-bottom: 0 !important; /* Reseta margem padrão do card para usar o gap do grid */
+        }
+
+        .advantage-item i {
+          font-size: 1.8rem;
+          color: var(--secondary);
+          margin-bottom: 0.8rem;
+          filter: drop-shadow(0 0 4px rgba(0, 245, 212, 0.2));
+        }
+
+        .advantage-item h4 {
+          font-family: 'Inter', sans-serif;
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: var(--text);
+          margin: 0 0 0.5rem 0;
+        }
+
+        .advantage-item p {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-dim);
+          margin: 0;
+        }
+
+        .advantage-item strong {
+          color: var(--primary);
+        }
+
+        /* Ajuste de Responsividade para Telas Menores (Mobile) */
+        @media (max-width: 768px) {
+          .advantages-grid {
+            grid-template-columns: 1fr;
+          }
+          .advantage-item {
+            grid-column: span 1 !important;
+          }
+        }
+      </style>
+      <section id="secao6-1-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">6.1.4</span> Restrições de Implementação
+        </h2>
+
+        <div class="card">
+          <p>
+            O <strong>EtherChannel</strong> possui diretrizes rígidas de configuração e restrições de hardware que determinam se o
+            agrupamento lógico de portas entrará em estado operacional estável ou falhará imediatamente devido a incompatibilidades de
+            parâmetros.
+          </p>
+        </div>
+
+        <div class="restrictions-grid">
+          <div class="card restriction-item">
+            <div class="restriction-badge badge-danger">Sem Mistura de Tipos</div>
+            <p>
+              Os tipos de interface não podem ser misturados em um bundle lógico. Por exemplo: portas <strong>Fast Ethernet</strong> (10/100
+              Mbps) e <strong>Gigabit Ethernet</strong> (10/100/1000 Mbps) não podem coexistir dentro de um mesmo
+              <strong>EtherChannel</strong>.
+            </p>
+          </div>
+
+          <div class="card restriction-item">
+            <div class="restriction-badge badge-info">Capacidade de Portas</div>
+            <p>
+              Atualmente, cada <strong>EtherChannel</strong> pode consistir em até **oito portas Ethernet** físicas configuradas segundo
+              critérios de compatibilidade estrita, fornecendo uma largura de banda full-duplex de até 800 Mbps ou 8 Gbps.
+            </p>
+          </div>
+
+          <div class="card restriction-item">
+            <div class="restriction-badge badge-info">Limites do Hardware</div>
+            <p>
+              O switch Cisco Catalyst 2960 Layer 2 suporta atualmente até **seis EtherChannels** simultâneos. À medida que novos sistemas
+              Cisco IOS são desenvolvidos e as plataformas mudam, esse limite pode ser expandido.
+            </p>
+          </div>
+
+          <div class="card restriction-item">
+            <div class="restriction-badge badge-warning">Consistência de Trunk e VLAN</div>
+            <p>
+              A configuração individual das portas membro do grupo deve ser consistente em ambos os dispositivos. Se um lado for configurado
+              como <strong>Trunk</strong>, o outro extremo também deve sê-lo, compartilhando a mesma <strong>Native VLAN</strong> e escopo
+              de VLANs permitidas.
+            </p>
+          </div>
+        </div>
+
+        <div class="hw-switch-component">
+          <div class="hw-switch-header">
+            <span><i class="fas fa-server"></i> CISCO CATALYST 2960 SERIES | CAMADA INTERATIVA</span>
+            <span class="hw-status-led">SYS <span class="led-glow"></span></span>
+          </div>
+
+          <div class="hw-panel-container">
+            <div class="hw-port-channel-block">
+              <div class="port-channel-tag"><i class="fas fa-link"></i> Interface de Canal (Port-Channel 1)</div>
+              <div class="hw-ports-row">
+                <div class="hw-rj45-port active-bundle">
+                  <span class="port-num">1</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port active-bundle">
+                  <span class="port-num">2</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port active-bundle">
+                  <span class="port-num">3</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port active-bundle">
+                  <span class="port-num">4</span>
+                  <div class="port-pins"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hw-port-channel-block">
+              <div class="port-channel-tag"><i class="fas fa-link"></i> Interface de Canal (Port-Channel 2)</div>
+              <div class="hw-ports-row">
+                <div class="hw-rj45-port active-bundle-alt">
+                  <span class="port-num">9</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port active-bundle-alt">
+                  <span class="port-num">10</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port active-bundle-alt">
+                  <span class="port-num">11</span>
+                  <div class="port-pins"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hw-port-channel-block isolated">
+              <div class="port-channel-tag">Portas Físicas Disponíveis</div>
+              <div class="hw-ports-row">
+                <div class="hw-rj45-port">
+                  <span class="port-num">5</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port">
+                  <span class="port-num">6</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port">
+                  <span class="port-num">7</span>
+                  <div class="port-pins"></div>
+                </div>
+                <div class="hw-rj45-port">
+                  <span class="port-num">8</span>
+                  <div class="port-pins"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hw-switch-footer-labels">
+            <span
+              >Mapeamento Físico para Lógico: Uma configuração aplicada diretamente na interface do canal afeta todas as portas
+              vinculadas.</span
+            >
+          </div>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 0.5rem"></i>
+          <strong>Impacto Global de Configuração:</strong> Mudar parâmetros de VLAN ou modo de operação (Access/Trunk) na interface virtual
+          do <strong>Port-Channel</strong> replica imediatamente a alteração para todas as portas físicas associadas. Modificações feitas em
+          uma única porta física isolada tiram a porta do bundle por incompatibilidade.
+        </div>
+      </section>
+
+      <style>
+        .restrictions-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .restriction-item {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-bottom: 0 !important;
+        }
+
+        .restriction-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 6px;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.8rem;
+        }
+
+        .badge-danger {
+          background: rgba(255, 77, 109, 0.15);
+          color: var(--danger);
+          border: 1px solid var(--danger);
+        }
+        .badge-info {
+          background: rgba(144, 224, 239, 0.15);
+          color: var(--info);
+          border: 1px solid var(--info);
+        }
+        .badge-warning {
+          background: rgba(255, 183, 3, 0.15);
+          color: var(--warning);
+          border: 1px solid var(--warning);
+        }
+
+        .restriction-item p {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text);
+          margin: 0;
+        }
+
+        .restriction-item strong {
+          color: var(--secondary);
+        }
+
+        /* COMPONENTE INTERATIVO: SWITCH EM MODO ESCURO */
+        .hw-switch-component {
+          background: #0d1527;
+          border: 2px solid var(--border);
+          border-radius: 12px;
+          padding: 1.5rem;
+          margin: 2.5rem 0;
+          overflow-x: auto;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hw-switch-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 0.75rem;
+          margin-bottom: 1.5rem;
+          font-family: 'Consolas', monospace;
+          font-size: 0.85rem;
+          color: var(--primary);
+        }
+
+        .hw-status-led {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--text-dim);
+        }
+
+        .led-glow {
+          width: 8px;
+          height: 8px;
+          background: var(--success);
+          border-radius: 50%;
+          display: inline-block;
+          box-shadow: 0 0 8px var(--success);
+        }
+
+        .hw-panel-container {
+          display: flex;
+          gap: 2rem;
+          min-width: 800px;
+          padding: 1rem 0;
+        }
+
+        .hw-port-channel-block {
+          background: rgba(10, 14, 23, 0.6);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 1rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+        }
+
+        .hw-port-channel-block::before {
+          content: '';
+          position: absolute;
+          top: -12px;
+          height: 2px;
+          left: 15px;
+          right: 15px;
+        }
+
+        .hw-port-channel-block:not(.isolated):nth-child(1) {
+          border-color: #a855f7;
+        }
+        .hw-port-channel-block:not(.isolated):nth-child(2) {
+          border-color: var(--primary);
+        }
+
+        .port-channel-tag {
+          font-family: 'Consolas', monospace;
+          font-size: 0.75rem;
+          color: var(--text-dim);
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+
+        .hw-port-channel-block:not(.isolated):nth-child(1) .port-channel-tag {
+          color: #c084fc;
+        }
+        .hw-port-channel-block:not(.isolated):nth-child(2) .port-channel-tag {
+          color: var(--info);
+        }
+
+        .hw-ports-row {
+          display: flex;
+          gap: 0.6rem;
+        }
+
+        /* Porta Física RJ45 */
+        .hw-rj45-port {
+          width: 42px;
+          height: 42px;
+          background: #1a2438;
+          border: 2px solid #2d3d5a;
+          border-radius: 6px;
+          position: relative;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          padding-bottom: 4px;
+          box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .port-num {
+          font-family: 'Consolas', monospace;
+          font-size: 0.7rem;
+          color: var(--text-dim);
+          pointer-events: none;
+        }
+
+        .port-pins {
+          position: absolute;
+          top: 4px;
+          width: 75%;
+          height: 6px;
+          background: #0a0e17;
+          border-bottom: 1px dashed var(--warning);
+        }
+
+        /* Estados de Associação Lógica */
+        .hw-rj45-port.active-bundle {
+          border-color: #a855f7;
+          background: rgba(168, 85, 247, 0.1);
+          box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+        .hw-rj45-port.active-bundle .port-num {
+          color: #e9d5ff;
+          font-weight: bold;
+        }
+
+        .hw-rj45-port.active-bundle-alt {
+          border-color: var(--primary);
+          background: rgba(0, 180, 216, 0.1);
+          box-shadow: 0 0 10px rgba(0, 180, 216, 0.2);
+        }
+        .hw-rj45-port.active-bundle-alt .port-num {
+          color: var(--info);
+          font-weight: bold;
+        }
+
+        .hw-switch-footer-labels {
+          margin-top: 1.5rem;
+          text-align: center;
+          font-size: 0.8rem;
+          color: var(--text-dim);
+          border-top: 1px solid var(--border);
+          padding-top: 0.8rem;
+        }
+
+        /* Responsividade do Grid */
+        @media (max-width: 768px) {
+          .restrictions-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+      <section id="secao6-1-5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">6.1.5</span> Protocolos de Negociação Automática
+        </h2>
+
+        <div class="card">
+          <p>
+            Os <strong>EtherChannels</strong> podem ser formados por meio de negociação usando um dos dois protocolos dinâmicos:
+            <strong>Port Aggregation Protocol (PAgP)</strong> ou <strong>Link Aggregation Control Protocol (LACP)</strong>. Esses protocolos
+            permitem que as portas com características semelhantes formem um canal por meio de negociação dinâmica com os switches
+            adjacentes.
+          </p>
+        </div>
+
+        <div class="protocol-negotiation-panel">
+          <div class="protocol-card pagp-theme">
+            <div class="protocol-header">
+              <span class="protocol-badge">Cisco Proprietary</span>
+              <h3>PAgP</h3>
+            </div>
+            <p class="protocol-desc">
+              O <strong>Port Aggregation Protocol</strong> é o protocolo proprietário da Cisco. Quando configurado, ele gerencia e
+              inspeciona o envio de pacotes entre as portas membro para formar o canal de forma automatizada.
+            </p>
+            <div class="protocol-modes-list">
+              <span class="mode-tag">Auto</span>
+              <span class="mode-tag">Desirable</span>
+            </div>
+          </div>
+
+          <div class="protocol-card lacp-theme">
+            <div class="protocol-header">
+              <span class="protocol-badge standard">IEEE 802.3ad</span>
+              <h3>LACP</h3>
+            </div>
+            <p class="protocol-desc">
+              O <strong>Link Aggregation Control Protocol</strong> é a especificação aberta padrão da indústria. Ele desempenha funções
+              similares ao PAgP, porém viabiliza a interoperabilidade entre switches multi-vendor.
+            </p>
+            <div class="protocol-modes-list">
+              <span class="mode-tag">Passive</span>
+              <span class="mode-tag">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb" style="color: var(--info); margin-right: 0.5rem"></i>
+          <strong>Observação de Arquitetura:</strong> Também é totalmente possível configurar um <strong>EtherChannel</strong> em modo
+          estático ou incondicional (Modo <code>on</code>). Neste cenário, as interfaces físicas são forçadas a agrupar-se sem a utilização
+          de PAgP ou LACP, desativando qualquer negociação dinâmica nas duas pontas.
+        </div>
+      </section>
+
+      <style>
+        .protocol-negotiation-panel {
+          display: flex;
+          gap: 1.5rem;
+          margin: 2rem 0;
+        }
+
+        .protocol-card {
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 1.5rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          transition: all 0.3s ease;
+        }
+
+        .protocol-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Identidades visuais distintas para os protocolos */
+        .protocol-card.pagp-theme:hover {
+          border-color: var(--primary);
+        }
+        .protocol-card.lacp-theme:hover {
+          border-color: var(--secondary);
+        }
+
+        .protocol-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .protocol-header h3 {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 800;
+          letter-spacing: 0.5px;
+        }
+
+        .pagp-theme h3 {
+          color: var(--primary);
+        }
+        .lacp-theme h3 {
+          color: var(--secondary);
+        }
+
+        .protocol-badge {
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          background: rgba(0, 180, 216, 0.1);
+          color: var(--primary);
+          padding: 2px 8px;
+          border-radius: 4px;
+          border: 1px solid rgba(0, 180, 216, 0.2);
+        }
+
+        .protocol-badge.standard {
+          background: rgba(0, 245, 212, 0.1);
+          color: var(--secondary);
+          border: 1px solid rgba(0, 245, 212, 0.2);
+        }
+
+        .protocol-desc {
+          font-size: 0.9rem;
+          line-height: 1.6;
+          color: var(--text-dim);
+          margin: 0 0 1.5rem 0;
+        }
+
+        .protocol-desc strong {
+          color: var(--text);
+        }
+
+        .protocol-modes-list {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .mode-tag {
+          font-family: 'Consolas', monospace;
+          font-size: 0.8rem;
+          background: #0a0e17;
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 4px 10px;
+          border-radius: 6px;
+        }
+
+        /* Responsividade do Painel */
+        @media (max-width: 768px) {
+          .protocol-negotiation-panel {
+            flex-direction: column;
+          }
+        }
+      </style>
+      <section id="secao6-1-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-toggle-on"></i>
+          <span class="section-number">6.1.6</span> Operação PAgP
+        </h2>
+
+        <div class="card">
+          <p>
+            O <strong>PAgP</strong> (pronunciado "Pag - P") é um protocolo de propriedade da Cisco que auxilia na criação automática de
+            links <strong>EtherChannel</strong>. Quando um link <strong>EtherChannel</strong> é configurado com o <strong>PAgP</strong>, os
+            pacotes de <strong>PAgP</strong> são enviados entre portas capazes de <strong>EtherChannel</strong> para negociar a formação de
+            um canal. Quando o <strong>PAgP</strong> identifica links Ethernet correspondentes, ele agrupa os links em um
+            <strong>EtherChannel</strong>. O <strong>EtherChannel</strong> é, então, adicionado ao <strong>Spanning-Tree</strong> como uma
+            única porta lógica.
+          </p>
+          <p>
+            Quando ativado, o <strong>PAgP</strong> também gerencia o <strong>EtherChannel</strong>. Os pacotes de <strong>PAgP</strong> são
+            enviados a cada **30 segundos**. O <strong>PAgP</strong> verifica a consistência da configuração e gerencia as adições e falhas
+            do link entre dois switches. Ele assegura que, quando um <strong>EtherChannel</strong> é criado, todas as portas tenham o mesmo
+            tipo de configuração.
+          </p>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-lightbulb" style="color: var(--warning); margin-right: 0.5rem"></i>
+          <strong>Observação de Consistência:</strong> No <strong>EtherChannel</strong>, é obrigatório que todas as portas tenham a mesma
+          velocidade, configuração duplex e informações de VLAN. Qualquer modificação feita na porta depois da criação do canal também muda
+          todas as demais portas de canal de forma automática.
+        </div>
+
+        <div class="card">
+          <p>
+            O <strong>PAgP</strong> ajuda a criar o link <strong>EtherChannel</strong>, detectando a configuração de cada lado e assegurando
+            que os links sejam compatíveis de modo que o link do <strong>EtherChannel</strong> possa ser ativado quando necessário. Os modos
+            para o <strong>PAgP</strong> funcionam da seguinte forma:
+          </p>
+        </div>
+
+        <div class="pagp-modes-grid">
+          <div class="card mode-item-card">
+            <div class="mode-item-header">
+              <span class="mode-pill-status">Forçado</span>
+              <h4>Modo On</h4>
+            </div>
+            <p>
+              Este modo força a interface a canalizar sem o <strong>PAgP</strong>. As interfaces configuradas no modo ligado não trocam
+              pacotes de <strong>PAgP</strong>.
+            </p>
+          </div>
+
+          <div class="card mode-item-card active-mode">
+            <div class="mode-item-header">
+              <span class="mode-pill-status active">Ativo</span>
+              <h4>PAgP Desejável (Desirable)</h4>
+            </div>
+            <p>
+              Esse modo <strong>PAgP</strong> coloca uma interface em um estado de negociação ativo, no qual a interface inicia negociações
+              com outras interfaces enviando pacotes <strong>PAgP</strong>.
+            </p>
+          </div>
+
+          <div class="card mode-item-card passive-mode">
+            <div class="mode-item-header">
+              <span class="mode-pill-status passive">Passivo</span>
+              <h4>PAgP Automático (Auto)</h4>
+            </div>
+            <p>
+              Esse modo <strong>PAgP</strong> coloca uma interface em um estado de negociação passiva, na qual a interface apenas responde
+              aos pacotes <strong>PAgP</strong> que recebe, mas não inicia uma negociação.
+            </p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem">
+          <h3 style="margin-top: 0; color: var(--primary); font-size: 1.1rem">
+            <i class="fas fa-table"></i> Matriz de Convergência de Modos PAgP
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem">
+            Os modos devem ser compatíveis de cada lado. Se um lado estiver em modo automático, ele aguardará o outro lado iniciar a
+            negociação.
+          </p>
+
+          <table class="table-custom matrix-table">
+            <thead>
+              <tr>
+                <th>Modo Switch 1</th>
+                <th>Modo Switch 2</th>
+                <th>Resultado do Canal</th>
+                <th>Comportamento Técnico do Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>On</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>Links forçados manualmente. Funciona sem troca de pacotes de controle.</td>
+              </tr>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>Desirable / Auto</code></td>
+                <td><span class="matrix-badge channel-down">Falhou</span></td>
+                <td>O Switch 2 tenta negociar através de pacotes, mas o Switch 1 não responde.</td>
+              </tr>
+              <tr>
+                <td><code>Desirable</code></td>
+                <td><code>Desirable</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>Ambos os lados enviam pacotes de forma ativa e estabelecem o canal.</td>
+              </tr>
+              <tr>
+                <td><code>Desirable</code></td>
+                <td><code>Auto</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>O Switch 1 inicia a negociação ativa e o Switch 2 responde passivamente.</td>
+              </tr>
+              <tr>
+                <td><code>Auto</code></td>
+                <td><code>Auto</code></td>
+                <td><span class="matrix-badge channel-down">Falhou</span></td>
+                <td>Ambos os switches aguardam passivamente. Nenhuma negociação é iniciada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 0.5rem"></i>
+          <strong>Incompatibilidade de Negociação Estática:</strong> O modo <code>On</code> coloca manualmente a interface no
+          <strong>EtherChannel</strong> sem nenhuma negociação. Ele funciona somente se o outro lado também estiver explicitamente como
+          <code>On</code>. Se um lado estiver como <code>On</code> e o outro lado configurado para negociar parâmetros através do
+          <strong>PAgP</strong>, nenhum <strong>EtherChannel</strong> será formado.
+        </div>
+      </section>
+
+      <style>
+        .pagp-modes-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.2rem;
+          margin-top: 1.5rem;
+        }
+
+        .mode-item-card {
+          margin-bottom: 0 !important;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          border-top: 3px solid var(--border);
+        }
+
+        .mode-item-card.active-mode {
+          border-top-color: var(--primary);
+        }
+        .mode-item-card.passive-mode {
+          border-top-color: var(--secondary);
+        }
+
+        .mode-item-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.8rem;
+        }
+
+        .mode-item-header h4 {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        .mode-pill-status {
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          background: rgba(113, 128, 150, 0.15);
+          color: var(--text-dim);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+
+        .mode-pill-status.active {
+          background: rgba(0, 180, 216, 0.15);
+          color: var(--primary);
+        }
+        .mode-pill-status.passive {
+          background: rgba(0, 245, 212, 0.15);
+          color: var(--secondary);
+        }
+
+        .mode-item-card p {
+          font-size: 0.85rem;
+          line-height: 1.5;
+          color: var(--text-dim);
+          margin: 0;
+        }
+
+        .mode-item-card strong {
+          color: var(--text);
+        }
+
+        /* Estilização da tabela de matriz */
+        .matrix-table code {
+          font-family: 'Consolas', monospace;
+          background: #0a0e17;
+          padding: 2px 6px;
+          border-radius: 4px;
+          color: var(--info);
+          border: 1px solid var(--border);
+        }
+
+        .matrix-badge {
+          font-size: 0.75rem;
+          font-weight: bold;
+          padding: 3px 8px;
+          border-radius: 5px;
+          display: inline-block;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .matrix-badge.channel-up {
+          background: rgba(3, 244, 134, 0.15);
+          color: var(--success);
+          border: 1px solid var(--success);
+        }
+
+        .matrix-badge.channel-down {
+          background: rgba(255, 77, 109, 0.15);
+          color: var(--danger);
+          border: 1px solid var(--danger);
+        }
+
+        /* Responsividade do bloco de modos */
+        @media (max-width: 768px) {
+          .pagp-modes-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+      <section id="secao6-1-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-desktop"></i>
+          <span class="section-number">6.1.7</span> Exemplo de Configurações do Modo PAgP
+        </h2>
+
+        <div class="card">
+          <p>
+            Considere os dois switches na figura abaixo. O fato de <strong>S1</strong> e <strong>S2</strong> estabelecerem ou não um
+            <strong>EtherChannel</strong> usando o protocolo proprietário <strong>PAgP</strong> depende estritamente das combinações de modo
+            configuradas em cada extremidade do canal de comunicação.
+          </p>
+        </div>
+
+        <div class="p2p-topology">
+          <div class="p2p-canvas-wrapper">
+            <svg class="p2p-svg-canvas" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrow-start" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 10 0 L 0 5 L 10 10 z" fill="var(--warning)" />
+                </marker>
+                <marker id="arrow-end" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--warning)" />
+                </marker>
+              </defs>
+
+              <line x1="230" y1="90" x2="570" y2="90" class="p2p-wire" />
+              <line x1="230" y1="110" x2="570" y2="110" class="p2p-wire" />
+
+              <line
+                x1="280"
+                y1="50"
+                x2="520"
+                y2="50"
+                class="p2p-negotiation-line"
+                marker-start="url(#arrow-start)"
+                marker-end="url(#arrow-end)"
+              />
+
+              <ellipse cx="400" cy="100" rx="10" ry="24" class="p2p-bundle-ellipse" />
+            </svg>
+
+            <div class="p2p-device dev-s1">
+              <div class="p2p-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="p2p-name">Switch S1</span>
+            </div>
+
+            <div class="p2p-protocol-tag">Mensagens PAgP (30s)</div>
+
+            <div class="p2p-device dev-s2">
+              <div class="p2p-icon-box"><i class="fas fa-network-wired"></i></div>
+              <span class="p2p-name">Switch S2</span>
+            </div>
+          </div>
+          <p class="topology-caption">
+            Fluxo Dinâmico: S1 e S2 trocam quadros de controle multicast para validar a integridade física e operacional do
+            <strong>Port-Channel</strong>.
+          </p>
+        </div>
+
+        <div class="card">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Configuração Switch S1</th>
+                <th>Configuração Switch S2</th>
+                <th>Estabelecimento de Canal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>On</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>Desejável / Automático</code></td>
+                <td><span class="matrix-badge channel-down">Não</span></td>
+              </tr>
+              <tr>
+                <td><code>Desejável</code></td>
+                <td><code>Desejável</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Desejável</code></td>
+                <td><code>Automático</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Automático</code></td>
+                <td><code>Desejável</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Automático</code></td>
+                <td><code>Automático</code></td>
+                <td><span class="matrix-badge channel-down">Não</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <style>
+        .p2p-topology {
+          background: #06090f;
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 2.5rem 1rem;
+          margin: 2rem 0;
+          overflow-x: auto;
+          position: relative;
+          box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .p2p-canvas-wrapper {
+          position: relative;
+          width: 100%;
+          min-width: 760px;
+          height: 200px;
+          margin: 0 auto;
+        }
+
+        .p2p-svg-canvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+
+        /* Cabos de Rede */
+        .p2p-wire {
+          stroke: var(--text-dim);
+          stroke-width: 3px;
+          opacity: 0.4;
+        }
+
+        /* Seta animada de negociação do PAgP */
+        .p2p-negotiation-line {
+          stroke: var(--warning);
+          stroke-width: 2px;
+          stroke-dasharray: 6 4;
+          animation: p2pPulse 4s linear infinite;
+        }
+
+        @keyframes p2pPulse {
+          0% {
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dashoffset: 50;
+          }
+        }
+
+        /* Elipse do Agrupamento Lógico */
+        .p2p-bundle-ellipse {
+          fill: none;
+          stroke: #a855f7;
+          stroke-width: 2.5px;
+          filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.4));
+        }
+
+        /* Dispositivos Switches */
+        .p2p-device {
+          position: absolute;
+          z-index: 2;
+          width: 120px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .p2p-icon-box {
+          background: var(--bg-card);
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          width: 60px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .p2p-icon-box i {
+          font-size: 1.5rem;
+          color: var(--primary);
+        }
+
+        .p2p-name {
+          margin-top: 0.5rem;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        .p2p-device:hover .p2p-icon-box {
+          border-color: var(--secondary);
+          transform: scale(1.05);
+          box-shadow: 0 0 12px rgba(0, 245, 212, 0.2);
+        }
+
+        .dev-s1 {
+          left: 80px;
+        }
+        .dev-s2 {
+          right: 80px;
+        }
+
+        /* Tag do Protocolo */
+        .p2p-protocol-tag {
+          position: absolute;
+          top: 15px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-family: 'Consolas', monospace;
+          font-size: 0.75rem;
+          color: var(--warning);
+          background: rgba(255, 183, 3, 0.05);
+          border: 1px solid rgba(255, 183, 3, 0.2);
+          padding: 3px 10px;
+          border-radius: 4px;
+          z-index: 3;
+        }
+      </style>
+      <section id="secao6-1-8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">6.1.8</span> Operação LACP
+        </h2>
+
+        <div class="card">
+          <p>
+            O <strong>LACP</strong> (Link Aggregation Control Protocol) faz parte de uma especificação IEEE (802.3ad) que permite que vários
+            links físicos sejam agrupados em um único canal lógico. O LACP permite que um switch negocie um feixe automático enviando
+            pacotes LACP para o peer. Ele executa uma função semelhante ao PAgP com o Cisco EtherChannel. Como o LACP é um padrão IEEE, ele
+            pode ser usado para facilitar EtherChannels em ambientes multi-vendor.
+          </p>
+          <p>
+            Nos dispositivos Cisco, ambos os protocolos são suportados. O <strong>LACP</strong> oferece os mesmos benefícios de negociação e
+            redundância que o PAgP, garantindo que as configurações de velocidade, duplex e VLAN sejam idênticas antes de erguer o link
+            lógico.
+          </p>
+        </div>
+
+        <div class="card">
+          <p>
+            Os modos de configuração para o protocolo <strong>LACP</strong> determinam como a interface se comportará durante o processo de
+            negociação dinâmica:
+          </p>
+        </div>
+
+        <div class="lacp-modes-grid">
+          <div class="card mode-item-card">
+            <div class="mode-item-header">
+              <span class="mode-pill-status">Forçado</span>
+              <h4>Modo On</h4>
+            </div>
+            <p>
+              Este modo força a interface a canalizar sem o <strong>LACP</strong>. As interfaces configuradas no modo ligado não trocam
+              pacotes de controle.
+            </p>
+          </div>
+
+          <div class="card mode-item-card active-mode">
+            <div class="mode-item-header">
+              <span class="mode-pill-status active">Ativo</span>
+              <h4>LACP Ativo (Active)</h4>
+            </div>
+            <p>
+              Esse modo coloca uma porta em um estado de negociação ativo. Nesse estado, a interface inicia negociações com outras
+              interfaces enviando pacotes <strong>LACP</strong>.
+            </p>
+          </div>
+
+          <div class="card mode-item-card passive-mode">
+            <div class="mode-item-header">
+              <span class="mode-pill-status passive">Passivo</span>
+              <h4>LACP Passivo (Passive)</h4>
+            </div>
+            <p>
+              Esse modo coloca uma interface em um estado de negociação passiva. Nesse estado, a interface responde aos pacotes
+              <strong>LACP</strong> que recebe, mas não inicia a negociação.
+            </p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem">
+          <h3 style="margin-top: 0; color: var(--secondary); font-size: 1.1rem">
+            <i class="fas fa-table"></i> Matriz de Convergência de Modos LACP
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem">
+            Assim como no PAgP, os modos devem ser compatíveis em cada extremidade do cabo para que o Port-Channel seja estabelecido.
+          </p>
+
+          <table class="table-custom matrix-table">
+            <thead>
+              <tr>
+                <th>Modo Switch 1</th>
+                <th>Modo Switch 2</th>
+                <th>Resultado do Canal</th>
+                <th>Comportamento Técnico do Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>On</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>Links forçados estaticamente. Funciona sem troca de pacotes LACP.</td>
+              </tr>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>Active / Passive</code></td>
+                <td><span class="matrix-badge channel-down">Falhou</span></td>
+                <td>O Switch 2 tenta negociar via pacotes LACP, mas o Switch 1 não responde.</td>
+              </tr>
+              <tr>
+                <td><code>Active</code></td>
+                <td><code>Active</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>Ambos os lados enviam pacotes LACP de forma ativa e fecham o canal.</td>
+              </tr>
+              <tr>
+                <td><code>Active</code></td>
+                <td><code>Passive</code></td>
+                <td><span class="matrix-badge channel-up">Estabelecido</span></td>
+                <td>O Switch 1 inicia a negociação ativa e o Switch 2 responde em conformidade.</td>
+              </tr>
+              <tr>
+                <td><code>Passive</code></td>
+                <td><code>Passive</code></td>
+                <td><span class="matrix-badge channel-down">Falhou</span></td>
+                <td>Ambos aguardam passivamente. Nenhuma negociação LACP é iniciada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle" style="color: var(--warning); margin-right: 0.5rem"></i>
+          <strong>Incompatibilidade de Protocolos:</strong> Nunca misture protocolos diferentes nas extremidades do link. Se o Switch 1
+          estiver rodando <strong>PAgP (Desirable)</strong> e o Switch 2 estiver configurado com <strong>LACP (Active)</strong>, a
+          negociação falhará e as portas físicas voltarão a ser tratadas individualmente, podendo ser bloqueadas pelo STP.
+        </div>
+      </section>
+
+      <style>
+        .lacp-modes-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.2rem;
+          margin-top: 1.5rem;
+        }
+
+        .mode-item-card {
+          margin-bottom: 0 !important;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          border-top: 3px solid var(--border);
+        }
+
+        .mode-item-card.active-mode {
+          border-top-color: var(--primary);
+        }
+        .mode-item-card.passive-mode {
+          border-top-color: var(--secondary);
+        }
+
+        .mode-item-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.8rem;
+        }
+
+        .mode-item-header h4 {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        .mode-pill-status {
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          background: rgba(113, 128, 150, 0.15);
+          color: var(--text-dim);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+
+        .mode-pill-status.active {
+          background: rgba(0, 180, 216, 0.15);
+          color: var(--primary);
+        }
+        .mode-pill-status.passive {
+          background: rgba(0, 245, 212, 0.15);
+          color: var(--secondary);
+        }
+
+        .mode-item-card p {
+          font-size: 0.85rem;
+          line-height: 1.5;
+          color: var(--text-dim);
+          margin: 0;
+        }
+
+        .mode-item-card strong {
+          color: var(--text);
+        }
+
+        /* Estilização da tabela de matriz */
+        .matrix-table code {
+          font-family: 'Consolas', monospace;
+          background: #0a0e17;
+          padding: 2px 6px;
+          border-radius: 4px;
+          color: var(--info);
+          border: 1px solid var(--border);
+        }
+
+        .matrix-badge {
+          font-size: 0.75rem;
+          font-weight: bold;
+          padding: 3px 8px;
+          border-radius: 5px;
+          display: inline-block;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .matrix-badge.channel-up {
+          background: rgba(3, 244, 134, 0.15);
+          color: var(--success);
+          border: 1px solid var(--success);
+        }
+
+        .matrix-badge.channel-down {
+          background: rgba(255, 77, 109, 0.15);
+          color: var(--danger);
+          border: 1px solid var(--danger);
+        }
+
+        /* Responsividade do bloco de modos */
+        @media (max-width: 768px) {
+          .lacp-modes-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+      <section id="secao6-1-9" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-desktop"></i>
+          <span class="section-number">6.1.9</span> Exemplo de Configurações do Modo LACP
+        </h2>
+
+        <div class="card">
+          <p>
+            Considere os dois switches na figura abaixo. O fato de <strong>S1</strong> e <strong>S2</strong> estabelecerem ou não um
+            <strong>EtherChannel</strong> usando o padrão aberto da indústria <strong>LACP</strong> depende exclusivamente das combinações
+            de modo configuradas em cada extremidade do cabo de rede.
+          </p>
+        </div>
+
+        <div class="p2p-topology-lacp">
+          <div class="p2p-canvas-wrapper-lacp">
+            <svg class="p2p-svg-canvas-lacp" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker
+                  id="arrow-start-lacp"
+                  viewBox="0 0 10 10"
+                  refX="5"
+                  refY="5"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M 10 0 L 0 5 L 10 10 z" fill="var(--secondary)" />
+                </marker>
+                <marker id="arrow-end-lacp" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--secondary)" />
+                </marker>
+              </defs>
+
+              <line x1="230" y1="90" x2="570" y2="90" class="p2p-wire-lacp" />
+              <line x1="230" y1="110" x2="570" y2="110" class="p2p-wire-lacp" />
+
+              <line
+                x1="280"
+                y1="50"
+                x2="520"
+                y2="50"
+                class="p2p-negotiation-line-lacp"
+                marker-start="url(#arrow-start-lacp)"
+                marker-end="url(#arrow-end-lacp)"
+              />
+
+              <ellipse cx="400" cy="100" rx="10" ry="24" class="p2p-bundle-ellipse-lacp" />
+            </svg>
+
+            <div class="p2p-device-lacp dev-s1-lacp">
+              <div class="p2p-icon-box-lacp"><i class="fas fa-network-wired"></i></div>
+              <span class="p2p-name-lacp">Switch S1</span>
+            </div>
+
+            <div class="p2p-protocol-tag-lacp">Mensagens LACP (IEEE)</div>
+
+            <div class="p2p-device-lacp dev-s2-lacp">
+              <div class="p2p-icon-box-lacp"><i class="fas fa-network-wired"></i></div>
+              <span class="p2p-name-lacp">Switch S2</span>
+            </div>
+          </div>
+          <p class="topology-caption">
+            Fluxo IEEE 802.3ad: S1 e S2 transmitem frames de controle multicast para validar a convergência de parâmetros do
+            <strong>EtherChannel</strong>.
+          </p>
+        </div>
+
+        <div class="card">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Configuração Switch S1</th>
+                <th>Configuração Switch S2</th>
+                <th>Estabelecimento de Canal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>On</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>On</code></td>
+                <td><code>Ativo / Passivo</code></td>
+                <td><span class="matrix-badge channel-down">Não</span></td>
+              </tr>
+              <tr>
+                <td><code>Ativo</code></td>
+                <td><code>Ativo</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Ativo</code></td>
+                <td><code>Passivo</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Passivo</code></td>
+                <td><code>Ativo</code></td>
+                <td><span class="matrix-badge channel-up">Sim</span></td>
+              </tr>
+              <tr>
+                <td><code>Passivo</code></td>
+                <td><code>Passivo</code></td>
+                <td><span class="matrix-badge channel-down">Não</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <style>
+        .p2p-topology-lacp {
+          background: #06090f;
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 2.5rem 1rem;
+          margin: 2rem 0;
+          overflow-x: auto;
+          position: relative;
+          box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .p2p-canvas-wrapper-lacp {
+          position: relative;
+          width: 100%;
+          min-width: 760px;
+          height: 200px;
+          margin: 0 auto;
+        }
+
+        .p2p-svg-canvas-lacp {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+
+        .p2p-wire-lacp {
+          stroke: var(--text-dim);
+          stroke-width: 3px;
+          opacity: 0.4;
+        }
+
+        /* Seta de negociação do LACP (Ciano Elétrico) */
+        .p2p-negotiation-line-lacp {
+          stroke: var(--secondary);
+          stroke-width: 2px;
+          stroke-dasharray: 6 4;
+          animation: p2pPulseLacp 4s linear infinite;
+        }
+
+        @keyframes p2pPulseLacp {
+          0% {
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dashoffset: -50;
+          }
+        }
+
+        /* Elipse do Agrupamento Lógico LACP */
+        .p2p-bundle-ellipse-lacp {
+          fill: none;
+          stroke: var(--secondary);
+          stroke-width: 2.5px;
+          filter: drop-shadow(0 0 4px rgba(0, 245, 212, 0.4));
+        }
+
+        /* Dispositivos */
+        .p2p-device-lacp {
+          position: absolute;
+          z-index: 2;
+          width: 120px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .p2p-icon-box-lacp {
+          background: var(--bg-card);
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          width: 60px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .p2p-icon-box-lacp i {
+          font-size: 1.5rem;
+          color: var(--primary);
+        }
+
+        .p2p-name-lacp {
+          margin-top: 0.5rem;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        .p2p-device-lacp:hover .p2p-icon-box-lacp {
+          border-color: var(--secondary);
+          transform: scale(1.05);
+          box-shadow: 0 0 12px rgba(0, 245, 212, 0.2);
+        }
+
+        .dev-s1-lacp {
+          left: 80px;
+        }
+        .dev-s2-lacp {
+          right: 80px;
+        }
+
+        /* Tag do Protocolo LACP */
+        .p2p-protocol-tag-lacp {
+          position: absolute;
+          top: 15px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-family: 'Consolas', monospace;
+          font-size: 0.75rem;
+          color: var(--secondary);
+          background: rgba(0, 245, 212, 0.05);
+          border: 1px solid rgba(0, 245, 212, 0.2);
+          padding: 3px 10px;
+          border-radius: 4px;
+          z-index: 3;
+        }
+      </style>
+      <section id="secao6-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">6.2.1</span> Diretrizes de Configuração
+        </h2>
+
+        <div class="card">
+          <p>
+            As seguintes diretrizes e restrições devem ser rigorosamente revisadas antes da configuração de um pool de interfaces
+            <strong>EtherChannel</strong>:
+          </p>
+        </div>
+
+        <div class="guidelines-grid">
+          <div class="card guideline-item">
+            <div class="guideline-header">
+              <i class="fas fa-network-wired"></i>
+              <h4>Suporte ao EtherChannel</h4>
+            </div>
+            <p>
+              Todas as interfaces físicas devem suportar a tecnologia <strong>EtherChannel</strong> sem restrições de hardware locais da
+              plataforma do switch.
+            </p>
+          </div>
+
+          <div class="card guideline-item">
+            <div class="guideline-header">
+              <i class="fas fa-tachometer-alt"></i>
+              <h4>Velocidade e Duplex</h4>
+            </div>
+            <p>
+              Configure todas as interfaces membro com a mesma velocidade (Speed) e no modo de transmissão full-duplex para prevenir falhas
+              de negociação.
+            </p>
+          </div>
+
+          <div class="card guideline-item">
+            <div class="guideline-header">
+              <i class="fas fa-layer-group"></i>
+              <h4>Consistência de VLANs</h4>
+            </div>
+            <p>
+              Todas as interfaces no pool devem ser atribuídas à mesma <strong>VLAN</strong> de acesso, ou configuradas como um link
+              <strong>Trunk</strong> compartilhando o mesmo escopo lógico.
+            </p>
+          </div>
+
+          <div class="card guideline-item">
+            <div class="guideline-header">
+              <i class="fas fa-shield-alt"></i>
+              <h4>Escopo de VLANs em Trunk</h4>
+            </div>
+            <p>
+              Se as portas operarem em modo <strong>Trunk</strong>, elas devem suportar exatamente a mesma faixa de VLANs permitidas
+              (Allowed Range) e a mesma <strong>Native VLAN</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 0.5rem"></i>
+          <strong>Consequência de Desalinhamento:</strong> Se essas diretrizes não forem seguidas, o status do
+          <strong>EtherChannel</strong> não convergirá e o switch gerará alertas de inconsistência, suspendendo as portas envolvidas.
+        </div>
+      </section>
+
+      <section id="secao6-2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">6.2.2</span> Exemplo de Configuração de LACP
+        </h2>
+
+        <div class="card">
+          <p>
+            O <strong>Link Aggregation Control Protocol (LACP)</strong> é configurado utilizando comandos aplicados dentro do escopo do
+            submodo de configuração de intervalo de interfaces (<code>interface range</code>). O exemplo prático a seguir demonstra a
+            ativação do protocolo LACP em modo <strong>Active</strong> nas interfaces FastEthernet 0/1 e 0/2 do Switch S1.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>Switch> <strong>enable</strong>
+Switch# <strong>configure terminal</strong>
+Switch(config)# <strong>hostname S1</strong>
+S1(config)# <strong>interface range FastEthernet 0/1 - 2</strong>
+S1(config-if-range)# <strong>channel-group 1 mode active</strong>
+Creating a port-channel interface Port-channel 1
+S1(config-if-range)# <strong>interface port-channel 1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>switchport trunk allowed vlan 1,2,10,20</strong>
+S1(config-if)# <strong>end</strong>
+S1# </pre>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem"></i>
+          <strong>Boas Práticas:</strong> Ao configurar o comando <code>channel-group</code>, o Cisco IOS gera automaticamente a interface
+          lógica virtual (<code>interface port-channel 1</code>). Recomenda-se aplicar todas as diretrizes de encapsulamento e Trunking
+          diretamente dentro dessa interface virtual.
+        </div>
+      </section>
+
+      <style>
+        .guidelines-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+          margin: 1.5rem 0;
+        }
+
+        .guideline-item {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-bottom: 0 !important;
+        }
+
+        .guideline-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .guideline-header i {
+          font-size: 1.4rem;
+          color: var(--secondary);
+          margin-bottom: 0 !important; /* Reseta margem padrão do briefing */
+          filter: drop-shadow(0 0 4px rgba(0, 245, 212, 0.2));
+        }
+
+        .guideline-header h4 {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .guideline-item p {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-dim);
+          margin: 0;
+        }
+
+        .guideline-item strong {
+          color: var(--primary);
+        }
+
+        /* Responsividade do Grid */
+        @media (max-width: 768px) {
+          .guidelines-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+      <section id="secao6-2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">6.2.3</span> Verificação do EtherChannel
+        </h2>
+
+        <div class="card">
+          <p>
+            Como em qualquer implantação de infraestrutura, existem vários comandos Cisco IOS específicos para verificar e diagnosticar a
+            integridade operacional do <strong>EtherChannel</strong> após a sua configuração.
+          </p>
+        </div>
+
+        <div class="verification-grid">
+          <div class="card verify-item">
+            <i class="fas fa-file-alt"></i>
+            <h4>show etherchannel summary</h4>
+            <p>
+              Exibe uma linha de resumo por grupo, listando o número do Port-Channel, o protocolo em uso (LACP/PAgP) e as flags de status
+              das portas membro.
+            </p>
+          </div>
+
+          <div class="card verify-item">
+            <i class="fas fa-code"></i>
+            <h4>show etherchannel port-channel</h4>
+            <p>
+              Exibe a descrição detalhada do status da interface virtual de canal, listando o tempo de atividade e parâmetros lógicos
+              locais.
+            </p>
+          </div>
+
+          <div class="card verify-item">
+            <i class="fas fa-terminal"></i>
+            <h4>show interfaces port-channel</h4>
+            <p>
+              Verifica o status geral e estatísticas de tráfego de Camada 2 da interface lógica, operando de forma idêntica a uma interface
+              física tradicional.
+            </p>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <pre>S1# <strong>show etherchannel summary</strong>
+Flags:  D - down        P - bundled in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate ports
+
+        M - not in use, minimum links not met
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SU)         LACP      Fa0/1(P)    Fa0/2(P)    
+
+S1# <strong>show etherchannel port-channel</strong>
+                Channel-group listing: 
+                -----------------------
+
+Group: 1 
+----------
+                Port-channels in the group: 
+                ---------------------------
+
+Port-channel: Po1    (Primary Aggregator)
+
+------------
+
+Age of the Port-channel   = 0d:00h:14m:22s
+Logical slot/port = 16/1          Number of ports = 2
+HotStandby port = null
+Port state = Port-channel Ag-Inuse 
+Protocol   =   LACP
+Port security = Disabled
+
+Ports in the group:
+
+Index  Load   Port     EC state        No of bits
+------+------+------+------------------+-----------
+  0     00    Fa0/1    Active             0
+  0     00    Fa0/2    Active             0
+
+Characteristics of the group:
+------+------+------+------------------+-----------
+
+S1# </pre>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem"></i>
+          <strong>Análise do Troubleshooting:</strong> No output do comando <code>show etherchannel summary</code>, as flags combinadas
+          <strong>(SU)</strong> ao lado do Port-channel 1 (Po1) confirmer que o canal lógico está operando na Camada 2 (S) e encontra-se
+          ativo em uso (U). A flag <strong>(P)</strong> nas interfaces físicas (Fa0/1 e Fa0/2) indica que ambas convergiram perfeitamente e
+          estão agregadas (bundled) ao canal lógico.
+        </div>
+      </section>
+
+      <style>
+        .verification-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.2rem;
+          margin-bottom: 2rem;
+        }
+
+        .verify-item {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-bottom: 0 !important;
+        }
+
+        .verify-item i {
+          font-size: 1.5rem;
+          color: var(--secondary);
+          margin-bottom: 0.7rem;
+          filter: drop-shadow(0 0 4px rgba(0, 245, 212, 0.2));
+        }
+
+        .verify-item h4 {
+          font-family: 'Consolas', monospace;
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--primary);
+          margin: 0 0 0.5rem 0;
+        }
+
+        .verify-item p {
+          font-size: 0.85rem;
+          line-height: 1.5;
+          color: var(--text-dim);
+          margin: 0;
+        }
+
+        /* Responsividade do grid mobile */
+        @media (max-width: 768px) {
+          .verification-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+      <section id="secao6-2-2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-code"></i>
+          <span class="section-number">6.2.2.b</span> Verificador de Sintaxe: Configuração de LACP
+        </h2>
+
+        <div class="card">
+          <p>
+            Pratique a configuração do protocolo dinâmico <strong>LACP</strong> no Switch S1 seguindo o roteiro do simulador oficial da
+            Cisco para agrupamento de links paralelos.
+          </p>
+        </div>
+
+        <div class="terminal">
+          <pre>S1(config)# <strong>interface range fa 0/1 - 2</strong>
+S1(config-if-range)# <strong>channel-group ?</strong>
+&lt;1-6&gt; Channel group number
+
+S1(config-if-range)# <strong>channel-group 1 ?</strong>
+mode Etherchannel Mode of the interface
+
+S1(config-if-range)# <strong>channel-group 1 mode ?</strong>
+active     Enable LACP unconditionally  
+auto       Enable PAgP only if a PAgP device is   detected  
+desirable  Enable PAgP unconditionally  
+on         Enable Etherchannel only  
+passive    Enable LACP only if a LACP device is detected
+
+S1(config-if-range)# <strong>channel-group 1 mode active</strong>
+*Mar 21 00:02:28.184: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down   
+*Mar 21 00:02:28.193: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to down   
+*Mar 21 00:02:36.179: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up   
+*Mar 21 00:02:36.674: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up    
+*Mar 21 00:04:31.170: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down   
+*Mar 21 00:04:31.186: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to down   
+*Mar 21 00:04:33.116: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up   
+<span style="color: var(--success);">*Mar 21 00:04:34.114: %LINK-3-UPDOWN: Interface Port-channel1, changed state to up</span>   
+*Mar 21 00:04:35.037: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up   
+<span style="color: var(--success);">*Mar 21 00:04:35.121: %LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel1, changed state to up</span>
+
+S1(config-if-range)# <strong>interface port-channel 1</strong>
+S1(config-if)# <strong>switchport mode trunk</strong>
+S1(config-if)# <strong>switchport trunk allowed vlan 1,2,20</strong>
+S1(config-if)# </pre>
+        </div>
+
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem"></i>
+          <strong>Etapa Concluída:</strong> Você configurou o EtherChannel com sucesso. Os syslogs confirmam a convergência e transição de
+          estado estável da interface agregada para <strong>UP</strong>.
+        </div>
+      </section>
+    </div>
+
+    <footer style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem">
+      Cisco Networking Academy | CCNA 2 v7.0 (SRWE) - Ambiente de Documentação Técnica Exclusiva.
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

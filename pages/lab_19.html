@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configuração Completa de EtherChannel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_19.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao-introducao"><i class="fas fa-info-circle"></i> Cenário & Objetivos</a>
+        </li>
+        <li>
+          <a href="#secao-planejamento"><i class="fas fa-table"></i> 1.1 Tabela de Canais</a>
+        </li>
+        <li>
+          <a href="#secao-fundamentos"><i class="fas fa-book"></i> 1.1.2 Glossário e Sintaxe</a>
+        </li>
+        <li>
+          <a href="#secao-topologia"><i class="fas fa-project-diagram"></i> 1.2 Análise da Topologia</a>
+        </li>
+        <li>
+          <a href="#secao-analogia-humanizada"><i class="fas fa-graduation-cap"></i> 1.3 Caso de Uso Prático</a>
+        </li>
+        <li>
+          <a href="#secao-scripts"><i class="fas fa-terminal"></i> 2.1 Scripts de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao-verificacao"><i class="fas fa-check-double"></i> 2.2 Diagnóstico & STP</a>
+        </li>
+        <li>
+          <a href="#secao-diretrizes"><i class="fas fa-shield-alt"></i> Diretrizes e Restrições</a>
+        </li>
+        <li>
+          <a href="../labs/lab_19.pka"><i class="fas fa-cloud-download-alt"></i> Download Resolução</a>
+        </li>
+        <li>
+          <a href="#secao-conceitos-essenciais"><i class="fas fa-graduation-cap"></i> 2.3 Conceitos e Protocolos</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Agregação de Links - Roteiro Completo Avançado</span>
+        <h1>Configuração do EtherChannel</h1>
+        <p style="color: var(--text-dim)">
+          Unificação de uplinks redundantes usando protocolos PAgP e LACP com otimização e controle de convergência do Spanning Tree
+          Protocol.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao-introducao" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span class="section-number">1.0</span> Objetivos e Histórico do Laboratório
+        </h2>
+        <div class="card">
+          <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">Objetivos de Aprendizado:</h3>
+          <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; color: var(--text); display: flex; flex-direction: column; gap: 0.4rem">
+            <li><strong>Parte 1:</strong> Configurar as definições básicas do Switch.</li>
+            <li><strong>Parte 2:</strong> Configurar um EtherChannel com Cisco PAgP.</li>
+            <li><strong>Parte 3:</strong> Configurar um EtherChannel 802.3ad LACP.</li>
+            <li><strong>Parte 4:</strong> Configurar um link EtherChannel redundante.</li>
+          </ul>
+          <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">Histórico do Cenário:</h3>
+          <p style="color: var(--text-dim)">
+            Três switches foram recentemente instalados. Há uplinks redundantes entre os switches. Conforme configurado originalmente,
+            apenas um desses links pode ser usado pelo sistema; caso contrário, um loop de ponte fatal pode ocorrer na rede.
+          </p>
+          <p style="color: var(--text-dim); margin-top: 0.5rem">
+            No entanto, usar apenas um enlace utiliza somente metade da largura de banda disponível. O EtherChannel resolve esse problema
+            permitindo agrupar até oito links redundantes em conjunto com um único link lógico. Neste laboratório, configuramos o Port
+            Aggregation Protocol (PAgP), um protocolo proprietário da Cisco, e o Link Aggregation Control Protocol (LACP), uma versão de
+            padrão aberto IEEE 802.3ad.
+          </p>
+        </div>
+      </section>
+
+      <section id="secao-planejamento" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.1</span> Tabela Oficial de Canais de Porta
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1rem">
+            Mapeamento rigoroso dos grupos lógicos, mapeamentos físicos e protocolos exigidos para validação do Packet Tracer:
+          </p>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Grupo de Canais</th>
+                <th>Switches Destino</th>
+                <th>Portas Físicas</th>
+                <th>Protocolo Aplicado</th>
+                <th>Modo Operacional CLI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Grupo 1</strong></td>
+                <td>S1 &leftrightarrow; S3</td>
+                <td>FastEthernet 0/21, FastEthernet 0/22</td>
+                <td>PAgP (Cisco)</td>
+                <td>Desirable &leftrightarrow; Desirable</td>
+              </tr>
+              <tr>
+                <td><strong>Grupo 2</strong></td>
+                <td>S1 &leftrightarrow; S2</td>
+                <td>GigabitEthernet 0/1, GigabitEthernet 0/2</td>
+                <td>LACP (Standard)</td>
+                <td>Active &leftrightarrow; Active</td>
+              </tr>
+              <tr>
+                <td><strong>Grupo 3</strong></td>
+                <td>S2 &leftrightarrow; S3</td>
+                <td>FastEthernet 0/23, FastEthernet 0/24</td>
+                <td>LACP Negociado</td>
+                <td>Passive (S2) &leftrightarrow; Active (S3)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao-fundamentos" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book"></i>
+          <span class="section-number">1.1.2</span> Glossário Técnico e Justificativa de Comandos
+        </h2>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem">
+            <i class="fas fa-language"></i> Glossário Técnico Essencial
+          </h3>
+          <dl style="display: flex; flex-direction: column; gap: 1rem; color: var(--text-dim)">
+            <dt style="color: var(--primary); font-weight: 600; font-family: monospace">Port-Channel (Interface Lógica):</dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Interface virtual unificada gerada pelo switch. Agrega as propriedades físicas dos cabos agrupados, agindo como um link único
+              perante a tabela de roteamento e o Spanning Tree.
+            </dd>
+
+            <dt style="color: var(--primary); font-weight: 600; font-family: monospace">Uplink Redundante:</dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Caminhos de comunicação adicionais instalados entre switches para prover alta disponibilidade (backup) caso a rota principal
+              caia.
+            </dd>
+
+            <dt style="color: var(--primary); font-weight: 600; font-family: monospace">Trunking (Entroncamento Estático):</dt>
+            <dd style="margin-left: 1rem; color: var(--text)">
+              Configuração imperativa de porta que permite o encapsulamento e tráfego de dados de múltiplas VLANs simultaneamente em um
+              mesmo link físico ou lógico.
+            </dd>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem">
+            <i class="fas fa-code-branch"></i> Por que usamos esses comandos específicos na CLI?
+          </h3>
+          <ul style="margin-left: 1.5rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 0.75rem">
+            <li>
+              <strong style="color: var(--text)">interface range [interfaces]:</strong> Permite injetar comandos em múltiplos cabos ao mesmo
+              tempo. Evita assimetrias na configuração e falhas humanas porta a porta.
+            </li>
+            <li>
+              <strong style="color: var(--text)">shutdown (Antes do Agrupamento):</strong> Comando de segurança vital. Desliga
+              temporariamente os links evitando que o switch envie pacotes de teste assíncronos que ativariam o mecanismo de proteção
+              <em>EtherChannel Misconfig Guard</em> (o qual derrubaria as portas em status de err-disabled).
+            </li>
+            <li>
+              <strong style="color: var(--text)">switchport mode trunk:</strong> Força as portas a saírem do modo padrão de DTP (Dynamic
+              Auto). Sem essa definição estática, as portas permaneceriam operando em modo Access e o canal lógico entraria em colapso.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="secao-topologia" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">1.2</span> Análise Estrutural da Topologia Anexada
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1.5rem">
+            Abaixo está mapeada a topologia triangular do laboratório. Note a pinagem e o arranjo físico dos links redundantes:
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 750px;
+              margin: 0 auto 1.5rem auto;
+              background: #141414;
+              padding: 12px;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <img
+              src="../assets/Captura de tela de 2026-07-01 16-16-28.png"
+              alt="Topologia Packet Tracer do Laboratório de EtherChannel contendo Switches S1, S2 e S3"
+              style="width: 100%; height: auto; display: block; border-radius: 8px"
+            />
+          </div>
+
+          <h3 style="color: var(--primary); margin: 1rem 0 0.5rem 0; font-size: 1.1rem">
+            Interpretação Operacional dos Indicadores Visuais:
+          </h3>
+          <ul style="margin-left: 1.5rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 0.5rem">
+            <li>
+              <strong>Grupo Port-Channel 1 (S1-S3):</strong> Gerenciado por cabos FastEthernet nos slots 21 e 22. Veja que no switch S3 os
+              indicadores gráficos encontram-se em <span style="color: #ffa500; font-weight: bold">Laranja (Blocking)</span> antes da
+              convergência final, evidenciando o bloqueio provisório do STP para prevenir loops em anel.
+            </li>
+            <li>
+              <strong>Grupo Port-Channel 2 (S1-S2):</strong> Interligado por cabos de alta performance GigabitEthernet 0/1 e 0/2. Possuem
+              indicadores em formato de triângulos <span style="color: #00ff88; font-weight: bold">Verdes (Forwarding)</span>, sendo o
+              backbone principal de transmissão de pacotes.
+            </li>
+            <li>
+              <strong>Grupo Port-Channel 3 (S2-S3):</strong> Agrupamento negociado via LACP pelas interfaces FastEthernet 23 e 24, operando
+              em modo passivo no switch S2 e ativo no switch S3.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="secao-analogia-humanizada" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">1.3</span> Caso de Uso Prático Humanizado: A Equipe de Logística
+        </h2>
+        <div class="card">
+          <p>
+            Para fixar esses fundamentos de maneira simples e definitiva, vamos traduzir os conceitos de infraestrutura para uma operação de
+            logística de distribuição convencional.
+          </p>
+
+          <h3 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0; font-size: 1.1rem">
+            <i class="fas fa-truck-moving"></i> A Analogia: Os Galpões de Distribuição e as Rotas Paralelas
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Imagine uma transportadora gerenciada por três diretores regionais localizados em galpões diferentes:
+            <strong>Carlos (S1), Amanda (S2) e Bruno (S3)</strong>. Para garantir que as mercadorias cheguem caso uma rota seja interditada,
+            eles constroem estradas diretas de duas pistas ligando todos os galpões entre si, gerando um formato triangular de malha
+            rodoviária.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-shipping-fast"></i> <strong>O Desastre (Rede Sem STP/EtherChannel):</strong><br />
+            Um cliente deixa uma carga no galpão de Carlos com um bilhete vago: <em>"Entregar em qualquer um dos galpões"</em>. Carlos
+            repassa os caminhões para Amanda. Amanda, sem saber o destino final, repassa os caminhões para Bruno. Bruno recebe e despacha de
+            volta para Carlos... Em minutos, as estradas estão paralisadas com caminhões rodando em círculos, os motoristas estão esgotados
+            e toda a operação congela. Na área de redes, chamamos isso de <strong>Tempestade de Broadcast (Broadcast Storm)</strong>.
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0">
+            <i class="fas fa-traffic-light"></i> Engenharia de Tráfego: O Papel do STP
+          </h4>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Para consertar isso, a empresa contrata um guarda de trânsito (o protocolo STP). Ele analisa o circuito e coloca uma barreira de
+            contenção bloqueando a estrada entre o galpão do Bruno e da Amanda. O loop acaba, mas a empresa sofre com uma ineficiência
+            severa: **metade das estradas construídas com dinheiro da firma agora ficam bloqueadas e inutilizadas**, gerando um enorme
+            gargalo nas rotas ativas.
+          </p>
+
+          <h4 style="color: var(--primary); margin: 1rem 0 0.5rem 0">
+            <i class="fas fa-road"></i> A Solução: Amarrando os Links com EtherChannel
+          </h4>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Para aproveitar todas as rotas, os gerentes removem os bloqueios e unificam as vias paralelas em um único canal lógico. Eles
+            instruem o guarda de trânsito:
+            <em
+              >"Guarda, não bloqueie estas pistas. Nós as amarramos sob a mesma estrutura. Elas agora não funcionam como rotas separadas,
+              mas sim como uma única super-autoestrada unificada de quatro faixas de tráfego!"</em
+            >. O tráfego de dados flui com o dobro da capacidade de vazão útil.
+          </p>
+
+          <div class="alert alert-success">
+            <i class="fas fa-heartbeat"></i> <strong>Alta Disponibilidade Ativa na Queda de Link:</strong><br />
+            Se um acidente fechar uma das faixas físicas dessa autoestrada lúdica, **os caminhões não param e a rota não cai**. O tráfego é
+            espremido em tempo real e continua fluindo de forma ininterrupta pelas pistas funcionais remanescentes dentro do mesmo canal,
+            assegurando que os dados cheguem com estabilidade até o destino.
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-scripts" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">2.1</span> Scripts Consolidados de Configuração CLI
+        </h2>
+        <div class="card">
+          <p>
+            Abaixo estão mapeados os scripts técnicos de configuração global. Siga rigorosamente a sequência de comandos em cada switch
+            ativo para assegurar a pontuação correta da tarefa no simulador:
+          </p>
+
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-cube"></i> Terminal de Linha de Comando: Switch S1</h4>
+          <div class="terminal">
+            <pre>
+S1# configure terminal
+S1(config)# hostname S1
+S1(config)# interface range f0/21 - 22, g0/1 - 2
+S1(config-if-range)# switchport mode trunk
+! Configuração do Canal 1 (PAgP Desirable) com S3
+S1(config)# interface range f0/21 - 22
+S1(config-if-range)# shutdown
+S1(config-if-range)# channel-group 1 mode desirable
+S1(config-if-range)# no shutdown
+! Configuração do Canal 2 (LACP Active) com S2
+S1(config)# interface range g0/1 - 2
+S1(config-if-range)# shutdown
+S1(config-if-range)# channel-group 2 mode active
+S1(config-if-range)# no shutdown
+! Forçar encapsulamento de tronco nos canais lógicos virtuais
+S1(config)# interface port-channel 1
+S1(config-if) # switchport mode trunk
+S1(config)# interface port-channel 2
+S1(config-if) # switchport mode trunk
+S1(config)# end</pre
+            >
+          </div>
+
+          <h4 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 0.5rem">
+            <i class="fas fa-cube"></i> Terminal de Linha de Comando: Switch S2
+          </h4>
+          <div class="terminal">
+            <pre>
+S2# configure terminal
+S2(config)# hostname S2
+S2(config)# interface range g0/1 - 2, f0/23 - 24
+S2(config-if-range)# switchport mode trunk
+! Configuração do Canal 2 (LACP Active) com S1
+S2(config)# interface range g0/1 - 2
+S2(config-if-range)# shutdown
+S2(config-if-range)# channel-group 2 mode active
+S2(config-if-range)# no shutdown
+! Configuração do Canal 3 (LACP Passive) com S3
+S2(config)# interface range f0/23 - 24
+S2(config-if-range)# shutdown
+S2(config-if-range)# channel-group 3 mode passive
+S2(config-if-range)# no shutdown
+! Ajustar troncos das interfaces lógicas geradas
+S2(config)# interface port-channel 2
+S2(config-if) # switchport mode trunk
+S2(config)# interface port-channel 3
+S2(config-if) # switchport mode trunk
+S2(config)# end</pre
+            >
+          </div>
+
+          <h4 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 0.5rem">
+            <i class="fas fa-cube"></i> Terminal de Linha de Comando: Switch S3
+          </h4>
+          <div class="terminal">
+            <pre>
+S3# configure terminal
+S3(config)# hostname S3
+S3(config)# interface range f0/21 - 22, f0/23 - 24
+S3(config-if-range)# switchport mode trunk
+! Configuração do Canal 1 (PAgP Desirable) com S1
+S3(config)# interface range f0/21 - 22
+S3(config-if-range)# shutdown
+S3(config-if-range)# channel-group 1 mode desirable
+S3(config-if-range)# no shutdown
+! Configuração do Canal 3 (LACP Active) com S2
+S3(config)# interface range f0/23 - 24
+S3(config-if-range)# shutdown
+S3(config-if-range)# channel-group 3 mode active
+S3(config-if-range)# no shutdown
+! Ajustar troncos das interfaces lógicas geradas
+S3(config)# interface port-channel 1
+S3(config-if) # switchport mode trunk
+S3(config)# interface port-channel 3
+S3(config-if) # switchport mode trunk
+S3(config)# end</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-verificacao" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">2.2</span> Verificação de Status e Correção de Prioridade Spanning Tree
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1rem">
+            A criação de links EtherChannel não impede que a Spanning Tree detecte loops de switching. Se emitirmos o comando de status no
+            switch <strong>S1</strong>, notaremos que o protocolo STP colocará o canal de alta velocidade Gigabit (Port-Channel 2) em estado
+            de bloqueio preventivo para proteger a malha:
+          </p>
+
+          <div class="terminal">
+            <pre>
+S1# show spanning-tree active
+Interface Role Sts Cost Prio.Nbr Type
+--------- ---- --- ---- -------- --------------------------------
+Po1       Root FWD 9    128.27   Shr
+Po2       Altn BLK 3    128.28   Shr</pre
+            >
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-magic"></i> <strong>Correção de Engenharia de Tráfego:</strong><br />
+            Bloquear o link Gigabit (Po2) e deixar o link lento FastEthernet (Po1) ativo é prejudicial ao desempenho da rede. Para forçar a
+            ativação contínua da via Gigabit, configure o switch <strong>S1</strong> como Root Bridge primário e ajuste sua prioridade para
+            <strong>24576</strong>.
+          </div>
+
+          <div class="terminal">
+            <pre>
+S1# configure terminal
+S1(config)# spanning-tree vlan 1 root primary
+S1(config)# spanning-tree vlan 1 priority 24576
+S1(config)# end</pre
+            >
+          </div>
+
+          <p style="margin-top: 1.5rem; margin-bottom: 0.5rem">
+            Use o comando abaixo para certificar que os agrupamentos lógicos exibem a flag de estabilidade <strong>(SU)</strong> e as portas
+            físicas operam no modo <strong>(P)</strong>:
+          </p>
+          <div class="terminal">
+            <pre>
+S1# show etherchannel summary
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SU)       PAgP        Fa0/21(P)   Fa0/22(P)   
+2      Po2(SU)       LACP        Gi0/1(P)    Gi0/2(P)</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-diretrizes" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">3.0</span> Diretrizes e Restrições Oficiais do EtherChannel
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1rem">
+            Normas técnicas obrigatórias listadas ao final do roteiro oficial da Cisco para prevenção de falhas em malhas de Camada 2:
+          </p>
+          <ol style="margin-left: 1.5rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 0.6rem">
+            <li>
+              Todas as interfaces Ethernet suportam EtherChannel até um máximo de oito interfaces sem necessidade de que as interfaces
+              estejam no mesmo módulo de interface.
+            </li>
+            <li>Todas as interfaces dentro de um EtherChannel devem operar na mesma velocidade e duplex.</li>
+            <li>Os links EtherChannel podem funcionar como portas de acesso VLAN simples ou como links de tronco entre switches.</li>
+            <li>Todas as interfaces em um EtherChannel de Camada 2 devem ser membros da mesma VLAN ou ser configuradas como troncos.</li>
+            <li>
+              Se configurado como links de tronco, o EtherChannel da Camada 2 deverá ter a mesma VLAN nativa e ter as mesmas VLANs
+              permitidas em ambos os switches conectados ao tronco.
+            </li>
+            <li>
+              Ao configurar links EtherChannel, todas as interfaces devem ser desativadas antes de iniciar a configuração do EtherChannel.
+              Quando a configuração estiver concluída, os links podem ser reativados.
+            </li>
+            <li>Depois de configurar o EtherChannel, verifique se todas as interfaces estão no estado up/up.</li>
+            <li>
+              É possível configurar um EtherChannel como estático, ou para que ele use PAgP ou LACP para negociar a conexão EtherChannel. A
+              determinação de como um EtherChannel é configurado é o valor do comando
+              <code style="color: var(--primary)">channel-group number mode</code>.
+            </li>
+            <li>
+              As portas LAN podem formar um EtherChannel usando PAgP se os modos forem compatíveis. Os modos PAgP compatíveis são:
+              <strong>desirable &rArr; desirable</strong> ou <strong>desirable &rArr; auto</strong>. Se ambas as interfaces estiverem no
+              modo automático, não será possível formar um Etherchannel.
+            </li>
+            <li>
+              As portas LAN podem formar um EtherChannel usando LACP se os modos forem compatíveis. Os modos LACP compatíveis são:
+              <strong>active &rArr; active</strong> ou <strong>active &rArr; passive</strong>. Se ambas as interfaces estiverem no modo
+              passivo, um EtherChannel não poderá se formar usando LACP.
+            </li>
+            <li>
+              Os números de canais de grupos são locais para o switch individual. Embora essa atividade use o mesmo número de grupo de
+              canais em qualquer extremidade da conexão EtherChannel, ela não é um requisito. Channel-group 1 (interface po1) em um switch
+              pode formar um EtherChannel com Channel-group 5 (interface po5) em outro switch.
+            </li>
+          </ol>
+        </div>
+      </section>
+      <section id="secao-conceitos-essenciais" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">3.1</span> Entendendo o Músculo da Rede: EtherChannel, LACP e PAgP
+        </h2>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.2rem">
+            <i class="fas fa-link"></i> O que é o EtherChannel?
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            Imagine que você precisa esvaziar um balde de água usando um canudo. Vai demorar muito tempo, certo? Se você colocar dois ou
+            três canudos juntos, o fluxo de água aumenta drasticamente. O <strong>EtherChannel</strong> faz exatamente isso com os cabos de
+            rede.
+          </p>
+          <p style="color: var(--text-dim); margin-bottom: 1rem">
+            É uma tecnologia de agrupamento de links lógicos desenvolvida para combinar várias interfaces físicas de rede (cabos Ethernet)
+            em um único link virtual. Para os switches, é como se os cabos individuais se fundissem para formar um canal de transmissão
+            muito mais potente e largo.
+          </p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem">
+            <div
+              style="
+                flex: 1;
+                min-width: 250px;
+                background: rgba(0, 255, 136, 0.02);
+                border: 1px solid var(--border);
+                padding: 1rem;
+                border-radius: 8px;
+              "
+            >
+              <strong style="color: var(--primary)"><i class="fas fa-bolt"></i> Benefício 1: Fim do Desperdício</strong>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.3rem">
+                O Spanning Tree (STP) não bloqueia mais as conexões redundantes de backup. Todos os cabos agrupados passam a trabalhar ao
+                mesmo tempo.
+              </p>
+            </div>
+            <div
+              style="
+                flex: 1;
+                min-width: 250px;
+                background: rgba(0, 120, 212, 0.02);
+                border: 1px solid var(--border);
+                padding: 1rem;
+                border-radius: 8px;
+              "
+            >
+              <strong style="color: var(--info)"><i class="fas fa-tachometer-alt"></i> Benefício 2: Multiplicação de Velocidade</strong>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.3rem">
+                Se você agrupar dois links de 1 Gbps, seu canal lógico resultante passará a ter uma capacidade de tráfego de 2 Gbps.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem">
+            <i class="fas fa-handshake"></i> Quem gerencia a união? Conheça os Protocolos
+          </h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+            Para que os cabos se unam de verdade, os switches nas duas pontas precisam conversar e concordar com as regras. Para isso,
+            existem dois "gerentes" de negociação automática:
+          </p>
+
+          <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border)">
+            <h4 style="color: var(--info); font-size: 1.1rem; margin-bottom: 0.5rem">
+              <span
+                class="badge-lab"
+                style="background: rgba(0, 120, 212, 0.1); color: var(--info); border-color: rgba(0, 120, 212, 0.3); padding: 0.2rem 0.6rem"
+                >LACP</span
+              >
+              Link Aggregation Control Protocol (IEEE 802.3ad)
+            </h4>
+            <p style="color: var(--text-dim); font-size: 0.95rem">
+              O <strong>LACP</strong> é o protocolo de mercado universal, regulamentado internacionalmente. Ele permite que equipamentos de
+              marcas diferentes (como um switch Cisco conectado a um switch HP, Dell ou Huawei) negociem e criem um EtherChannel sem
+              barreiras.
+            </p>
+            <p style="color: var(--text-dim); font-size: 0.95rem; margin-top: 0.5rem">
+              <strong>Modos de Operação:</strong> Ele opera nos modos <code style="color: var(--primary)">active</code> (onde o switch
+              inicia a conversa ativamente) e <code style="color: var(--warning)">passive</code> (onde o switch fica calado esperando a
+              outra ponta pedir para formar o canal).
+            </p>
+          </div>
+
+          <div>
+            <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem">
+              <span class="badge-lab" style="padding: 0.2rem 0.6rem">PAgP</span> Port Aggregation Protocol (Cisco Proprietário)
+            </h4>
+            <p style="color: var(--text-dim); font-size: 0.95rem">
+              O <strong>PAgP</strong> é o protocolo pioneiro desenvolvido exclusivamente pela Cisco. Por ser proprietário, ele só funciona
+              se os switches de ambas as pontas do cabo forem da Cisco. Ele monitora a saúde das portas e detecta inconsistências de
+              configuração em tempo de execução para blindar a infraestrutura.
+            </p>
+            <p style="color: var(--text-dim); font-size: 0.95rem; margin-top: 0.5rem">
+              <strong>Modos de Operação:</strong> Ele opera nos modos <code style="color: var(--primary)">desirable</code> (toma a
+              iniciativa da negociação de forma incondicional) e <code style="color: var(--warning)">auto</code> (espera passivamente que o
+              outro lado inicie o diálogo).
+            </p>
+          </div>
+        </div>
+
+        <div class="alert alert-info" style="margin-top: 1rem">
+          <i class="fas fa-lightbulb"></i> <strong>Regra de Ouro para o Exame CCNA:</strong> Para que o EtherChannel automático se forme,
+          pelo menos uma das duas pontas conectadas **deve** ter a iniciativa da conversa (Modo Ativo/Active no LACP ou Modo Desirable no
+          PAgP). Se você configurar as duas pontas em modo passivo (Passive-Passive ou Auto-Auto), os switches nunca vão se falar e o canal
+          lógico jamais será criado!
+        </div>
+      </section>
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas e 100% de aproveitamento.
+          </p>
+          <a href="../labs/lab_19.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
