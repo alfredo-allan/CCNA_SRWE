@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Packet Tracer | Implementar EtherChannel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+        <span>Menu de Navegação</span>
+      </button>
+      <div class="badge-lab"><i class="fas fa-check-circle"></i> Lab Completo (100%)</div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-folder"></i> Seções do Guia</h3>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao-topologia" class="active"><i class="fas fa-network-wired"></i> 1. Topologia e Cabeamento</a>
+        </li>
+        <li>
+          <a href="#secao-scripts"><i class="fas fa-terminal"></i> 2. Scripts de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao-porques"><i class="fas fa-question-circle"></i> 3. Defesa Técnica e Porquês</a>
+        </li>
+        <li>
+          <a href="#secao-glossario"><i class="fas fa-book"></i> 4. Glossário de Protocolos</a>
+        </li>
+        <li>
+          <a href="#secao-downloads"><i class="fas fa-download"></i> 5.0 Arquivos do Laboratório</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <div class="container">
+        <header class="hero">
+          <span class="badge-lab" style="background: rgba(0, 255, 136, 0.05); color: var(--success); border-color: rgba(0, 255, 136, 0.2)"
+            >Cisco NetAcad Documentação Oficial</span
+          >
+          <h1>Implementar EtherChannel</h1>
+          <p>
+            Guia prático e teórico documentando a construção de topologia redundante, agregação de largura de banda e correção de modos
+            operacionais LACP e PAgP.
+          </p>
+        </header>
+
+        <section id="secao-topologia" class="section">
+          <h2 class="section-title"><span class="section-number">1.</span> Arquitetura de Rede e Conexões Físicas</h2>
+
+          <div class="card">
+            <h3><i class="fas fa-layer-group"></i> Layout do Triângulo Panorâmico</h3>
+            <p>
+              Conforme especificado nas instruções da Parte 1, a rede foi montada do zero arrastando três switches Cisco Catalyst 2960. Seus
+              nomes de exibição (labels de workspace) foram mapeados em caixa alta exatamente como <strong>SWA</strong>,
+              <strong>SWB</strong> e <strong>SWC</strong>.
+            </p>
+
+            <div class="table-container">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>Port Channel</th>
+                    <th>Dispositivos Parceiros</th>
+                    <th>Conexões de Porta</th>
+                    <th>Tipo de Mídia / Cabo</th>
+                    <th>Protocolo Alvo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Canal 1</strong></td>
+                    <td>SWA para SWB</td>
+                    <td>G0/1 para G0/1 e G0/2 para G0/2</td>
+                    <td>Cabo Direto (Copper Straight-Through)</td>
+                    <td>PAgP (Desirable)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Canal 2</strong></td>
+                    <td>SWA para SWC</td>
+                    <td>F0/21 para F0/21 e F0/22 para F0/22</td>
+                    <td>Cabo Direto (Copper Straight-Through)</td>
+                    <td>LACP (Active)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Canal 3</strong></td>
+                    <td>SWB para SWC</td>
+                    <td>F0/23 para F0/23 e F0/24 para F0/24</td>
+                    <td>Cabo Direto (Copper Straight-Through)</td>
+                    <td>LACP Backup (Passive/Active)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle"></i> <strong>Regra de Hardware Estrita:</strong> O Canal 1 utiliza as interfaces mais velozes
+              (Gigabit - 1 Gbps), enquanto os canais 2 e 3 fecham a base do triângulo com interfaces FastEthernet (100 Mbps). Nunca misture
+              portas de velocidades diferentes no mesmo grupo!
+            </div>
+          </div>
+        </section>
+
+        <section id="secao-scripts" class="section">
+          <h2 class="section-title"><span class="section-number">2.</span> Scripts CLI Consolidados por Switch</h2>
+
+          <div class="card">
+            <h3><i class="fas fa-terminal"></i> Injeção de Comandos na CLI da Cisco</h3>
+            <p>
+              Estes são os blocos finais de comandos limpos e aplicados em cada switch para atingir o score máximo e corrigir os problemas
+              de sincronização.
+            </p>
+
+            <h4 style="color: var(--primary); margin: 1rem 0 0.5rem 0">1. Configuração do Switch SWA</h4>
+            <div class="terminal">
+              <pre>
+SWA# configure terminal
+SWA(config)# interface range gigabitEthernet 0/1 - 2
+SWA(config-if-range)# switchport mode trunk
+SWA(config-if-range)# shutdown
+SWA(config-if-range)# channel-group 1 mode desirable
+SWA(config-if-range)# no shutdown
+SWA(config-if-range)# exit
+SWA(config)# interface range fastEthernet 0/21 - 22
+SWA(config-if-range)# switchport mode trunk
+SWA(config-if-range)# shutdown
+SWA(config-if-range)# channel-group 2 mode active
+SWA(config-if-range)# no shutdown
+SWA(config-if-range)# exit
+SWA(config)# interface port-channel 1
+SWA(config-if)# switchport mode trunk
+SWA(config-if)# interface port-channel 2
+SWA(config-if)# switchport mode trunk
+SWA(config-if)# end
+SWA# write memory</pre
+              >
+            </div>
+
+            <h4 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0">2. Configuração do Switch SWB (Com Correção de Modo)</h4>
+            <div class="terminal">
+              <pre>
+SWB# configure terminal
+SWB(config)# interface range gigabitEthernet 0/1 - 2
+SWB(config-if-range)# switchport mode trunk
+SWB(config-if-range)# shutdown
+SWB(config-if-range)# channel-group 1 mode desirable
+SWB(config-if-range)# no shutdown
+SWB(config-if-range)# exit
+SWB(config)# interface range fastEthernet 0/23 - 24
+SWB(config-if-range)# switchport mode trunk
+SWB(config-if-range)# shutdown
+SWB(config-if-range)# no channel-group 3
+SWB(config-if-range)# channel-group 3 mode passive
+SWB(config-if-range)# no shutdown
+SWB(config-if-range)# exit
+SWB(config)# interface port-channel 1
+SWB(config-if)# switchport mode trunk
+SWB(config-if)# interface port-channel 3
+SWB(config-if)# switchport mode trunk
+SWB(config-if)# end
+SWB# write memory</pre
+              >
+            </div>
+
+            <h4 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0">3. Configuração do Switch SWC</h4>
+            <div class="terminal">
+              <pre>
+SWC# configure terminal
+SWC(config)# interface range fastEthernet 0/21 - 22
+SWC(config-if-range)# switchport mode trunk
+SWC(config-if-range)# shutdown
+SWC(config-if-range)# channel-group 2 mode active
+SWC(config-if-range)# no shutdown
+SWC(config-if-range)# exit
+SWC(config)# interface range fastEthernet 0/23 - 24
+SWC(config-if-range)# switchport mode trunk
+SWC(config-if-range)# shutdown
+SWC(config-if-range)# channel-group 3 mode active
+SWC(config-if-range)# no shutdown
+SWC(config-if-range)# exit
+SWC(config)# interface port-channel 2
+SWC(config-if)# switchport mode trunk
+SWC(config-if)# interface port-channel 3
+SWC(config-if)# switchport mode trunk
+SWC(config-if)# end
+SWC# write memory</pre
+              >
+            </div>
+          </div>
+        </section>
+
+        <section id="secao-porques" class="section">
+          <h2 class="section-title"><span class="section-number">3.</span> Defesa Técnica dos Comandos Utilizados</h2>
+
+          <div class="card">
+            <h3><i class="fas fa-brain"></i> Por que executamos essa sequência específica?</h3>
+            <p>Cada linha inserida no prompt obedece a uma razão estrutural de conformidade da Cisco e prevenção de loops:</p>
+
+            <ul style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem">
+              <li>
+                <strong>Por que usar o 'shutdown' temporário antes de enturmar as portas?</strong> Quando portas físicas paralelas sobem ao
+                mesmo tempo, o Spanning Tree pode interpretá-las como loops redundantes antes que o canal lógico se feche. O desligamento
+                congela o tráfego de frames eleitorais, prevenindo o travamento preventivo do switch por erro (<em>err-disabled</em>).
+              </li>
+              <li>
+                <strong>Por que rodamos o 'no channel-group 3' no SWB?</strong> O validador acusou erro nas portas F0/23 e F0/24 do SWB
+                porque elas herdaram um modo de negociação inadequado na primeira tentativa. O comando <code>no channel-group</code> apaga o
+                lixo residual de memória, limpando o caminho para receber o modo correto.
+              </li>
+              <li>
+                <strong>Por que forçar 'switchport mode trunk' nas portas físicas E nas interfaces Port-Channel?</strong> Configurar as
+                portas físicas garante o alinhamento nativo do link de tronco. Configurar a interface virtual Port-Channel assegura que a
+                nova super estrada de dados transporte tags 802.1Q de múltiplas VLANs em vez de prender-se a uma única rede de acesso por
+                padrão.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="secao-glossario" class="section">
+          <h2 class="section-title"><span class="section-number">4.</span> Glossário de Conceitos e Protocolos</h2>
+
+          <div class="card">
+            <h3><i class="fas fa-book-open"></i> PAgP (Port Aggregation Protocol)</h3>
+            <p>
+              Protocolo proprietário da Cisco. Ele automatiza a criação de links EtherChannel enviando pacotes contínuos de verificação
+              estrutural entre portas idênticas. Modos operacionais:
+            </p>
+            <ul>
+              <li><strong>Desirable:</strong> Inicia ativamente as requisições e força a negociação com o switch remoto.</li>
+              <li><strong>Auto:</strong> Estado passivo; responde apenas se for convidado pelo outro lado.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3><i class="fas fa-globe"></i> LACP (Link Aggregation Control Protocol / IEEE 802.3ad)</h3>
+            <p>
+              Protocolo padronizado internacionalmente e aberto para a indústria de redes. Garante que switches de fabricantes diferentes
+              (Cisco, HP, Juniper) consigam criar agregações lógicas entre si. Modos operacionais:
+            </p>
+            <ul>
+              <li>
+                <strong>Active:</strong> Coloca a interface em estado de negociação ativo, enviando pacotes LACP frame por frame para
+                convencer a outra ponta a fechar o canal.
+              </li>
+              <li>
+                <strong>Passive:</strong> Mantém a interface em escuta silenciosa. Só responde e fecha o agrupamento se receber um frame
+                LACP vindo de um parceiro configurado como Active.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3><i class="fas fa-exchange-alt"></i> Trunking (Entroncamento 802.1Q)</h3>
+            <p>
+              Mecanismo de encapsulamento que adiciona uma etiqueta numérica (tag) de 4 bytes no cabeçalho do frame Ethernet. É graças ao
+              Trunk que um único cabo físico — ou um super canal unificado por EtherChannel — consegue trafegar pacotes de dezenas de redes
+              locais virtuais (VLANs) sem misturar os fluxos, garantindo isolamento corporativo e segurança lógica.
+            </p>
+          </div>
+        </section>
+        <section id="secao-downloads" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-download"></i>
+            <span class="section-number">5.0</span> Download do Arquivo de Laboratório (.PKA)
+          </h2>
+
+          <div class="card" style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
+            <h3><i class="fas fa-file-archive"></i> Cenário Prático Packet Tracer</h3>
+            <p style="margin-bottom: 0.5rem">
+              Disponibilizamos abaixo o arquivo oficial deste laboratório completo e validado em 100%. Você pode baixar o arquivo
+              <code>.pka</code> para estudar a topologia física estruturada, validar os comandos diretamente na CLI dos switches ou refazer
+              o desafio do zero.
+            </p>
+
+            <div class="alert alert-info" style="width: 100%; margin: 0 0 0.5rem 0">
+              <i class="fas fa-exclamation-triangle"></i> <strong>Requisito de Software:</strong> Para a execução correta dos scripts de
+              automação e validação interna deste cenário, recomenda-se a utilização do <strong>Cisco Packet Tracer v8.0</strong> ou
+              superior.
+            </div>
+
+            <a
+              href="../labs/lab_21.pka"
+              download
+              class="badge-lab"
+              style="
+                text-decoration: none;
+                padding: 0.75rem 1.5rem;
+                background: var(--primary);
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                font-weight: 700;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: background 0.2s ease;
+              "
+            >
+              <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKA
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('toggleSidebar')
+        const sidebar = document.getElementById('sidebar')
+        const navLinks = document.querySelectorAll('.nav-modules a')
+
+        // Toggle do menu mobile
+        if (toggleBtn && sidebar) {
+          toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            sidebar.classList.toggle('open')
+          })
+        }
+
+        // Fechar menu mobile se clicar no workspace principal
+        document.addEventListener('click', (e) => {
+          if (window.innerWidth <= 992 && sidebar && sidebar.classList.contains('open')) {
+            if (!sidebar.contains(e.target) && e.target !== toggleBtn) {
+              sidebar.classList.remove('open')
+            }
+          }
+        })
+
+        // Efeito de detecção de scroll para menu ativo dinâmico
+        const sections = document.querySelectorAll('.section')
+        window.addEventListener('scroll', () => {
+          let current = ''
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 100
+            if (pageYOffset >= sectionTop) {
+              current = section.getAttribute('id')
+            }
+          })
+
+          navLinks.forEach((link) => {
+            link.classList.remove('active')
+            if (link.getAttribute('href') === `#${current}`) {
+              link.classList.add('active')
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>

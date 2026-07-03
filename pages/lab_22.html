@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Implementar EtherChannel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/labs.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_22.pkt" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao-topo"><i class="fas fa-network-wired"></i> 0.1 Topologia & Tabelas</a>
+        </li>
+        <li>
+          <a href="#secao1-1"><i class="fas fa-terminal"></i> 1.1 Configurações Básicas</a>
+        </li>
+        <li>
+          <a href="#secao2-1"><i class="fas fa-layer-group"></i> 2.1 VLANs e Portas</a>
+        </li>
+        <li>
+          <a href="#secao3-1"><i class="fas fa-route"></i> 3.1 Troncos 802.1Q</a>
+        </li>
+        <li>
+          <a href="#secao4-1"><i class="fas fa-link"></i> 4.1 Implementação LACP</a>
+        </li>
+        <li>
+          <a href="#secao-validacao"><i class="fas fa-check-double"></i> 5.1 Outputs de Validação</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab">Agregação de Links (LACP)</span>
+        <h1>Laboratório - Implementar EtherChannel</h1>
+        <p style="color: var(--text-dim)">
+          Documentação técnica e consolidação de comandos para configuração de canais EtherChannel utilizando o protocolo IEEE 802.3ad.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="secao-topo" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">0.1</span> Topologia e Dados de Endereçamento
+        </h2>
+        <div class="card">
+          <p>Abaixo estão consolidadas as informações de conexões físicas e lógicas que estruturam o cenário prático do laboratório.</p>
+
+          <div
+            style="
+              background: #151515;
+              border: 1px dashed var(--border);
+              border-radius: 12px;
+              padding: 2rem;
+              text-align: center;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              <img src="../assets/Captura de tela de 2026-07-02 21-14-44.png" alt="" />
+            </p>
+          </div>
+
+          <h3>Tabela de Endereçamento Lógico</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Dispositivo</th>
+                <th>Interface</th>
+                <th>Endereço IP</th>
+                <th>Máscara de Sub-rede</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S1</strong></td>
+                <td>VLAN 10</td>
+                <td>192.168.10.11</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>S2</strong></td>
+                <td>VLAN 10</td>
+                <td>192.168.10.12</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>PC-A</strong></td>
+                <td>Placa de rede (NIC)</td>
+                <td>192.168.20.3</td>
+                <td>255.255.255.0</td>
+              </tr>
+              <tr>
+                <td><strong>PC-B</strong></td>
+                <td>Placa de rede (NIC)</td>
+                <td>192.168.20.4</td>
+                <td>255.255.255.0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: 1.5rem">Tabela de Definição de VLANs</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>VLAN</th>
+                <th>Nome</th>
+                <th>Interface Atribuída</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10</td>
+                <td>Gerenciamento</td>
+                <td>VLAN 10 (S1 e S2)</td>
+              </tr>
+              <tr>
+                <td>20</td>
+                <td>Clientes</td>
+                <td>S1: F0/6 | S2: F0/18</td>
+              </tr>
+              <tr>
+                <td>999</td>
+                <td>Parking_Lot</td>
+                <td>S1: F0/3-5, F0/7-24, G0/1-2<br />S2: F0/3-17, F0/19-24, G0/1-2</td>
+              </tr>
+              <tr>
+                <td>1000</td>
+                <td>Nativa</td>
+                <td>N/D (Aplicada aos Troncos)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="secao1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.1</span> Configurações Básicas dos Dispositivos
+        </h2>
+        <div class="card">
+          <p>Inicialização dos parâmetros globais de gerência, criptografia local e desativação de pesquisas DNS nos switches S1 e S2.</p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> <strong>Instrução de Validação:</strong> O comando
+            <code>service password-encryption</code> garante a conversão de todas as senhas em texto claro para hash criptográfico no
+            arquivo de configuração ativa.
+          </div>
+
+          <h4>Procedimento de Linha de Comando (Aplicado em S1 e S2):</h4>
+          <div class="terminal">
+            <pre>
+! Configurações globais em S1
+S1(config)# hostname S1
+S1(config)# no ip domain-lookup
+S1(config)# enable secret class
+S1(config)# line console 0
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+S1(config)# line vty 0 4
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+S1(config)# service password-encryption
+S1(config)# banner motd # ACESSO NAO AUTORIZADO PROIBIDO #
+
+! Repetir o mesmo padrão alterando apenas o hostname para S2</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-layer-group"></i>
+          <span class="section-number">2.1</span> Criação de VLANs e Atribuição de Portas
+        </h2>
+        <div class="card">
+          <p>
+            Configuração das VLANs de dados, gerência e isolamento de segurança para contenção de tráfego broadcast nas portas inativas.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Aviso de Validação Técnica:</strong> Mover as interfaces não utilizadas para
+            a VLAN 999 (Parking_Lot) e aplicar o comando <code>shutdown</code> é mandatório para alcançar os 100% no validador.
+          </div>
+
+          <h4>Configuração das Interfaces - Switch S1:</h4>
+          <div class="terminal">
+            <pre>
+S1(config)# vlan 10
+S1(config-vlan)# name Gerenciamento
+S1(config-vlan)# vlan 20
+S1(config-vlan)# name Clientes
+S1(config-vlan)# vlan 999
+S1(config-vlan)# name Parking_Lot
+S1(config-vlan)# vlan 1000
+S1(config-vlan)# name Nativa
+S1(config-vlan)# exit
+S1(config)# interface vlan 10
+S1(config-if)# ip address 192.168.10.11 255.255.255.0
+S1(config-if)# no shutdown
+S1(config-if)# exit
+S1(config)# interface f0/6
+S1(config-if)# switchport mode access
+S1(config-if)# switchport access vlan 20
+S1(config-if)# exit
+S1(config)# interface range f0/3 - 5, f0/7 - 24, g0/1 - 2
+S1(config-if-range)# switchport mode access
+S1(config-if-range)# switchport access vlan 999
+S1(config-if-range)# shutdown</pre
+            >
+          </div>
+
+          <h4>Configuração das Interfaces - Switch S2:</h4>
+          <div class="terminal">
+            <pre>
+S2(config)# vlan 10
+S2(config-vlan)# name Gerenciamento
+S2(config-vlan)# vlan 20
+S2(config-vlan)# name Clientes
+S2(config-vlan)# vlan 999
+S2(config-vlan)# name Parking_Lot
+S2(config-vlan)# vlan 1000
+S2(config-vlan)# name Nativa
+S2(config-vlan)# exit
+S2(config)# interface vlan 10
+S2(config-if)# ip address 192.168.10.12 255.255.255.0
+S2(config-if)# no shutdown
+S2(config-if)# exit
+S2(config)# interface f0/18
+S2(config-if)# switchport mode access
+S2(config-if)# switchport access vlan 20
+S2(config-if)# exit
+S2(config)# interface range f0/3 - 17, f0/19 - 24, g0/1 - 2
+S2(config-if-range)# switchport mode access
+S2(config-if-range)# switchport access vlan 999
+S2(config-if-range)# shutdown</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao3-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">3.1</span> Configuração de Troncos 802.1Q Estáticos
+        </h2>
+        <div class="card">
+          <p>
+            Forçamento manual do entroncamento nos links físicos de interconexão. Modificação da VLAN nativa para evitar ataques de salto de
+            VLAN e definição de restrição de tráfego.
+          </p>
+
+          <h4>Comandos Executados nos Links de Interconexão (S1 e S2):</h4>
+          <div class="terminal">
+            <pre>
+! Comando aplicado no range de portas de ambos os switches
+S1(config)# interface range f0/1 - 2
+S1(config-if-range)# switchport mode trunk
+S1(config-if-range)# switchport trunk native vlan 1000
+S1(config-if-range)# switchport trunk allowed vlan 10,20,1000</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao4-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-link"></i>
+          <span class="section-number">4.1</span> Configuração do EtherChannel Baseado em LACP
+        </h2>
+        <div class="card">
+          <p>
+            Agrupamento das portas físicas no canal lógico dinâmico utilizando a negociação ativa do protocolo padrão aberto IEEE 802.3ad.
+          </p>
+
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> <strong>Ponto Crítico de Validação:</strong> Para que a interface Port-Channel
+            funcione de forma robusta e seja pontuada, ela precisa espelhar exatamente a configuração de trunking realizada nas portas
+            físicas.
+          </div>
+
+          <h4>Configuração de Agrupamento Dinâmico (S1 e S2):</h4>
+          <div class="terminal">
+            <pre>
+! Configuração do canal e amarração lógica
+S1(config)# interface range f0/1 - 2
+S1(config-if-range)# channel-group 1 mode active
+S1(config-if-range)# exit
+S1(config)# interface port-channel 1
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk native vlan 1000
+S1(config-if)# switchport trunk allowed vlan 10,20,1000</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="secao-validacao" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">5.1</span> Evidências de Validação e Homologação de Linha
+        </h2>
+        <div class="card">
+          <p>
+            Logs reais extraídos diretamente do console CLI dos switches após a conclusão das configurações, atestando o funcionamento
+            perfeito do canal lógico unificado.
+          </p>
+
+          <h3>1. Status Resumido do EtherChannel (Switch S2 e S1)</h3>
+          <div class="terminal">
+            <pre>
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+1      Po1(SU)           LACP   Fa0/1(P) Fa0/2(P)</pre
+            >
+          </div>
+
+          <h3>2. Estado de Entroncamento da Interface Port-Channel (S1 e S2)</h3>
+          <div class="terminal">
+            <pre>
+Port        Mode         Encapsulation  Status        Native vlan
+Po1         on           802.1q         trunking      1000
+
+Port        Vlans allowed on trunk
+Po1         10,20,1000
+
+Port        Vlans allowed and active in management domain
+Po1         10,20,1000
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Po1         10,20,1000</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas.
+          </p>
+          <a href="../labs/lab_22.pkt" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
