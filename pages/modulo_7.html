@@ -1,0 +1,1839 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 7: DHCPv4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="#" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="#" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao7-0-1"><i class="fas fa-info-circle"></i> 7.0.1 Visão Geral do Módulo</a>
+        </li>
+        <li>
+          <a href="#secao7-1-1"><i class="fas fa-server"></i> 7.1.1 Servidor e Cliente DHCPv4</a>
+        </li>
+        <li>
+          <a href="#secao7-1-2"><i class="fas fa-cogs"></i> 7.1.2 Operação do DHCPv4</a>
+        </li>
+        <li>
+          <a href="#secao7-1-3"><i class="fas fa-list-ol"></i> 7.1.3 Etapas para obter um leasing</a>
+        </li>
+        <li>
+          <a href="#secao7-1-4"><i class="fas fa-sync-alt"></i> 7.1.4 Etapas para renovar um leasing</a>
+        </li>
+        <li>
+          <a href="#secao7-2-1"><i class="fas fa-tools"></i> 7.2.1 Etapas de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao7-2-2"><i class="fas fa-code"></i> 7.2.2 Exemplo de Configuração</a>
+        </li>
+        <li>
+          <a href="#secao7-2-3"><i class="fas fa-check-circle"></i> 7.2.3 Verificação do Servidor</a>
+        </li>
+        <li>
+          <a href="#secao7-2-4"><i class="fas fa-toggle-off"></i> 7.2.4 Desativar o Servidor</a>
+        </li>
+        <li>
+          <a href="#secao7-2-5 "><i class="fas fa-route"></i> 7.3.1 Agente de Retransmissão</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <section class="hero">
+      <div class="badge-lab">Módulo 7 • Cisco IOS Adaptive Framework</div>
+      <h1>DHCPv4</h1>
+      <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; padding: 0 1rem">
+        Configuração, verificação e troubleshooting de atribuição dinâmica de endereçamento IP em redes corporativas.
+      </p>
+    </section>
+
+    <div class="container">
+      <section id="secao7-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span class="section-number">7.0.1</span> Por que devo cursar este módulo?
+        </h2>
+
+        <div class="card">
+          <p>Bem-vindo ao <strong>DHCPv4</strong>!</p>
+          <p>
+            O protocolo <strong>DHCP (Dynamic Host Configuration Protocol)</strong> atribui dinamicamente endereços IP aos dispositivos. O
+            DHCPv4 é projetado especificamente para uma infraestrutura baseada em IPv4. Isso significa que você, como administrador da rede,
+            não precisa passar o dia configurando manualmente endereços IP estáticos para cada host presente no ambiente.
+          </p>
+          <p>
+            Em uma pequena residência ou escritório, a gerência estática não seria muito complexa, mas qualquer grande infraestrutura
+            corporativa pode conter centenas ou mesmo milhares de dispositivos finais conectados simultaneamente.
+          </p>
+        </div>
+
+        <div class="alert alert-info">
+          <div class="alert-title"><i class="fas fa-lightbulb"></i> INSIGHT TÉCNICO</div>
+          <div class="alert-content">
+            Neste módulo, aprenderá a configurar um roteador Cisco IOS para atuar como um <strong>servidor DHCPv4</strong> dedicado.
+            Adicionalmente, verá como configurar o próprio roteador Cisco IOS para operar como um <strong>cliente DHCPv4</strong> (recebendo
+            IP em interfaces WAN, por exemplo).
+          </div>
+        </div>
+      </section>
+      <section id="secao7-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list-ol"></i>
+          <span class="section-number">7.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <p><strong>Título do módulo:</strong> DHCPv4</p>
+          <p><strong>Objetivo do módulo:</strong> Implementar o DHCPv4 para operar em várias LANs.</p>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Título do Tópico</th>
+                <th>Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Conceitos DHCPv4</strong></td>
+                <td>Explique como o DHCPv4 opera em empresas de pequeno e médio porte remota.</td>
+              </tr>
+              <tr>
+                <td><strong>Configurar um servidor DHCPv4 do Cisco IOS</strong></td>
+                <td>Configurar um roteador como servidor DHCPv4.</td>
+              </tr>
+              <tr>
+                <td><strong>Configurar um cliente DHCPv4</strong></td>
+                <td>Configurar um roteador como cliente DHCPv4.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="secao7-1-1" class="section">
+        <style>
+          /* Estilos específicos para a topologia interativa e responsiva */
+          .topology-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .topology-container-711 {
+            min-width: 750px !important; /* Força uma largura mínima para evitar esmagamento em telas mobile */
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.5rem !important;
+            padding: 1rem !important;
+          }
+
+          /* Linhas de Fluxo de Mensagens superiores */
+          .flow-arrows {
+            display: flex !important;
+            justify-content: space-between !important;
+            padding: 0 4rem !important;
+            position: relative !important;
+          }
+
+          .arrow-box {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            font-family: monospace !important;
+            font-size: 0.85rem !important;
+            color: var(--warning) !important;
+            width: 40% !important;
+          }
+
+          .arrow-box.left-to-right {
+            justify-content: flex-start !important;
+          }
+
+          .arrow-box.right-to-left {
+            justify-content: flex-end !important;
+          }
+
+          .arrow-line {
+            height: 2px !important;
+            background: var(--warning) !important;
+            position: relative !important;
+            flex-grow: 1 !important;
+          }
+
+          .arrow-line.ltr::after {
+            content: '' !important;
+            position: absolute !important;
+            right: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-left-color: var(--warning) !important;
+          }
+
+          .arrow-line.rtl::after {
+            content: '' !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-right-color: var(--warning) !important;
+          }
+
+          .badge-step {
+            background: var(--bg-dark) !important;
+            border: 2px solid var(--warning) !important;
+            color: var(--warning) !important;
+            border-radius: 50% !important;
+            width: 24px !important;
+            height: 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: bold !important;
+          }
+
+          /* Alinhamento dos Dispositivos */
+          .devices-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 0 2rem !important;
+          }
+
+          .dev-card {
+            background: var(--bg-card) !important;
+            border: 2px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 1rem !important;
+            width: 160px !important;
+            text-align: center !important;
+            transition: all 0.3s !important;
+          }
+
+          .dev-card:hover {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.2) !important;
+          }
+
+          .dev-card i {
+            font-size: 2.2rem !important;
+            color: var(--primary) !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .dev-title {
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+          }
+
+          .link-cable {
+            flex-grow: 1 !important;
+            height: 2px !important;
+            background: var(--border) !important;
+            margin: 0 1rem !important;
+          }
+
+          /* Legenda do diagrama */
+          .diagram-legend {
+            margin-top: 1.5rem !important;
+            border-top: 1px solid var(--border) !important;
+            padding-top: 1rem !important;
+          }
+
+          .legend-item {
+            display: flex !important;
+            gap: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+            font-size: 0.85rem !important;
+            color: var(--text-dim) !important;
+          }
+
+          .legend-num {
+            color: var(--warning) !important;
+            font-weight: 700 !important;
+            font-family: monospace !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">7.1.1</span> Servidor e cliente DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>
+            O <strong>Dynamic Host Configuration Protocol v4 (DHCPv4)</strong> atribui endereços IPv4 e outras informações de configuração
+            de rede dinamicamente. Como os clientes desktop geralmente constituem a grande maioria dos nós de uma rede, o DHCPv4 é uma
+            ferramenta extremamente útil para poupar o tempo dos administradores da rede.
+          </p>
+          <p>
+            Um servidor dedicado de DHCPv4 é escalável e relativamente fácil de gerenciar. Entretanto, em um pequeno escritório remoto ou
+            local de escritórios domésticos, um roteador da Cisco pode ser configurado para proporcionar serviços DHCPv4 sem a necessidade
+            de um servidor dedicado. O software Cisco IOS oferece suporte a um servidor DHCPv4 adicional, completo.
+          </p>
+          <p>
+            O servidor DHCPv4 atribui, ou aluga, dinamicamente, um endereço IPv4 de um pool de endereços por um período limitado de tempo
+            escolhido pelo servidor ou até que o cliente não precise mais do endereço.
+          </p>
+          <p>
+            Os clientes alugam as informações do servidor por um período definido administrativamente. Os administradores configuram os
+            servidores DHCPv4 para definir os aluguéis para expirarem em intervalos diferentes. O aluguel ocorre normalmente de 24 horas a
+            uma semana ou mais. Quando o aluguel expira, o cliente precisa pedir outro endereço, embora geralmente receba novamente o mesmo
+            endereço.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-exchange-alt" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Fluxo de Troca de Mensagens DHCPv4
+        </h3>
+
+        <div class="topology-wrapper">
+          <div class="topology-container-711">
+            <div class="flow-arrows">
+              <div class="arrow-box left-to-right">
+                <span class="badge-step">2</span>
+                <div class="arrow-line ltr"></div>
+              </div>
+              <div class="arrow-box right-to-left">
+                <div class="arrow-line rtl"></div>
+                <span class="badge-step">1</span>
+              </div>
+            </div>
+
+            <div class="devices-row">
+              <div class="dev-card">
+                <i class="fas fa-server"></i>
+                <div class="dev-title">Servidor DHCPv4</div>
+              </div>
+
+              <div class="link-cable"></div>
+
+              <div class="dev-card" style="width: 120px !important">
+                <i class="fas fa-layer-group" style="color: var(--secondary) !important"></i>
+                <div class="dev-title">Switch</div>
+              </div>
+
+              <div class="link-cable"></div>
+
+              <div class="dev-card">
+                <i class="fas fa-desktop"></i>
+                <div class="dev-title">Cliente DHCPv4</div>
+              </div>
+            </div>
+
+            <div class="diagram-legend">
+              <div class="legend-item">
+                <span class="legend-num">1.</span>
+                <span
+                  >O processo de concessão DHCPv4 começa com o cliente enviando uma mensagem solicitando os serviços de um servidor
+                  DHCP.</span
+                >
+              </div>
+              <div class="legend-item">
+                <span class="legend-num">2.</span>
+                <span
+                  >Se houver um servidor DHCPv4 que recebe a mensagem, ele responderá com um endereço IPv4 e possíveis outras informações de
+                  configuração de rede.</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao7-1-2" class="section">
+        <style>
+          /* Componente visual nativo focado no ciclo de aluguel (Lease) */
+          .lease-flow-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .lease-flow-container {
+            display: flex !important;
+            gap: 1.5rem !important;
+            min-width: 750px !important;
+            justify-content: space-between !important;
+          }
+
+          .lease-step-card {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px !important;
+            padding: 1.2rem !important;
+            flex: 1 !important;
+            transition: all 0.3s !important;
+          }
+
+          .lease-step-card:hover {
+            border-color: var(--secondary) !important;
+            background: var(--bg-card-hover) !important;
+            transform: translateY(-2px) !important;
+          }
+
+          .lease-step-header {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.6rem !important;
+            margin-bottom: 0.75rem !important;
+            font-weight: 700 !important;
+            color: var(--primary) !important;
+            font-size: 0.95rem !important;
+          }
+
+          .lease-step-icon {
+            background: rgba(0, 180, 216, 0.1) !important;
+            color: var(--primary) !important;
+            width: 30px !important;
+            height: 30px !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.9rem !important;
+          }
+
+          .lease-step-body {
+            font-size: 0.85rem !important;
+            color: var(--text) !important;
+            line-height: 1.5 !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-cogs"></i>
+          <span class="section-number">7.1.2</span> Operação do DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>
+            O DHCPv4 funciona no modo cliente / servidor. Quando um cliente se comunica com um servidor DHCPv4, o servidor atribui ou
+            arrenda o endereço IPv4 para esse cliente. O cliente se conecta à rede com esse endereço IPv4 concedido até que a concessão
+            expire. O cliente deve entrar em contato com o servidor DHCP periodicamente para estender o aluguel.
+          </p>
+          <p>
+            Este mecanismo de aluguel garante que os clientes que se mudem ou fiquem sem energia não mantenham os endereços de que não
+            precisam. Quando um aluguel expirar, o servidor DHCP devolverá o endereço ao pool, onde ele poderá ser realocado conforme
+            necessário.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-sync-alt" style="color: var(--secondary); margin-right: 0.5rem"></i>
+          Ciclo de Vida do Aluguel (Lease Time)
+        </h3>
+
+        <div class="lease-flow-wrapper">
+          <div class="lease-flow-container">
+            <div class="lease-step-card">
+              <div class="lease-step-header">
+                <div class="lease-step-icon"><i class="fas fa-file-contract"></i></div>
+                <span>1. Aluguel Inicial</span>
+              </div>
+              <div class="lease-step-body">
+                O servidor DHCPv4 concede e vincula um endereço IPv4 disponível a um host cliente por um período temporário definido.
+              </div>
+            </div>
+
+            <div class="lease-step-card">
+              <div class="lease-step-header">
+                <div class="lease-step-icon" style="color: var(--warning) !important; background: rgba(255, 183, 3, 0.1) !important">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <span style="color: var(--warning) !important">2. Renovação Periódica</span>
+              </div>
+              <div class="lease-step-body">
+                O cliente ativo envia requisições periodicamente para estender a validade do seu aluguel atual antes do término do tempo
+                limite.
+              </div>
+            </div>
+
+            <div class="lease-step-card">
+              <div class="lease-step-header">
+                <div class="lease-step-icon" style="color: var(--danger) !important; background: rgba(255, 77, 109, 0.1) !important">
+                  <i class="fas fa-undo-alt"></i>
+                </div>
+                <span style="color: var(--danger) !important">3. Devolução ao Pool</span>
+              </div>
+              <div class="lease-step-body">
+                Caso a concessão expire sem renovação, o endereço IPv4 é desalocado e retorna imediatamente para o pool de distribuição.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao7-1-3" class="section">
+        <style>
+          /* Estilização das Abas Interativas (Tabs Framework) */
+          .tabs-container {
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            background: #070a12 !important;
+            overflow: hidden !important;
+            margin: 2rem 0 !important;
+          }
+
+          .tabs-header-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-bottom: 1px solid var(--border) !important;
+            background: rgba(18, 24, 36, 0.8) !important;
+          }
+
+          .tabs-header {
+            display: flex !important;
+            min-width: 750px !important; /* Força espaço para as 4 abas em mobile */
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+
+          .tab-btn {
+            flex: 1 !important;
+            padding: 1.2rem 1rem !important;
+            background: transparent !important;
+            border: none !important;
+            color: var(--text-dim) !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            text-align: center !important;
+            border-right: 1px solid var(--border) !important;
+          }
+
+          .tab-btn:last-child {
+            border-right: none !important;
+          }
+
+          .tab-btn:hover {
+            color: var(--text) !important;
+            background: rgba(0, 180, 216, 0.05) !important;
+          }
+
+          .tab-btn.active-tab {
+            color: var(--bg-dark) !important;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)) !important;
+            font-weight: 700 !important;
+          }
+
+          .tabs-content {
+            padding: 2rem !important;
+          }
+
+          .tab-panel {
+            display: none !important;
+          }
+
+          .tab-panel.active-panel {
+            display: block !important;
+          }
+
+          /* Topologia Dinâmica Interna das Mensagens */
+          .msg-flow-box {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 1.5rem !important;
+            margin-top: 1.5rem !important;
+            overflow-x: auto !important;
+          }
+
+          .msg-topology {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1rem !important;
+            min-width: 600px !important;
+            padding: 1rem 0 !important;
+          }
+
+          .msg-nodes {
+            display: flex !important;
+            justify-content: space-between !important;
+            padding: 0 3rem !important;
+          }
+
+          .msg-node-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            width: 140px !important;
+          }
+
+          .msg-node-item i {
+            font-size: 2.2rem !important;
+            color: var(--primary) !important;
+          }
+
+          .msg-node-name {
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+          }
+
+          /* Setas e Envelopes de Sinalização de Pacotes */
+          .packet-lane {
+            display: flex !important;
+            align-items: center !important;
+            position: relative !important;
+            height: 40px !important;
+            border-left: 2px dashed var(--border) !important;
+            border-right: 2px dashed var(--border) !important;
+            margin: 0 6.5rem !important;
+            padding: 0 1rem !important;
+          }
+
+          .packet-arrow {
+            width: 100% !important;
+            height: 2px !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+
+          .packet-arrow.c-to-s {
+            background: var(--warning) !important;
+            justify-content: flex-start !important;
+          }
+
+          .packet-arrow.c-to-s::after {
+            content: '' !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-right-color: var(--warning) !important;
+          }
+
+          .packet-arrow.s-to-c {
+            background: var(--success) !important;
+            justify-content: flex-end !important;
+          }
+
+          .packet-arrow.s-to-c::after {
+            content: '' !important;
+            position: absolute !important;
+            right: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-left-color: var(--success) !important;
+          }
+
+          .packet-label {
+            position: absolute;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: #070a12 !important;
+            padding: 2px 10px !important;
+            border-radius: 4px !important;
+            font-family: monospace !important;
+            font-size: 0.75rem !important;
+            border: 1px solid var(--border) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.4rem !important;
+          }
+
+          .packet-label.c-to-s {
+            color: var(--warning) !important;
+          }
+          .packet-label.s-to-c {
+            color: var(--success) !important;
+          }
+
+          .step-number-badge {
+            background: var(--bg-dark) !important;
+            border-radius: 50% !important;
+            width: 18px !important;
+            height: 18px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.7rem !important;
+            font-weight: bold !important;
+          }
+          .packet-label.c-to-s .step-number-badge {
+            border: 1px solid var(--warning) !important;
+          }
+          .packet-label.s-to-c .step-number-badge {
+            border: 1px solid var(--success) !important;
+          }
+
+          .packet-lane.disabled-lane {
+            opacity: 0.15 !important;
+          }
+          .packet-lane.disabled-lane .packet-arrow {
+            background: var(--text-dim) !important;
+          }
+          .packet-lane.disabled-lane .packet-arrow::after {
+            border-right-color: var(--text-dim) !important;
+            border-left-color: var(--text-dim) !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-list-ol"></i>
+          <span class="section-number">7.1.3</span> Etapas para obter um leasing
+        </h2>
+
+        <div class="card">
+          <p>
+            Quando o cliente inicializa (ou deseja ingressar em uma rede), inicia um processo de quatro etapas para obter uma concessão:
+          </p>
+          <ol style="margin-left: 2rem; margin-bottom: 1.5rem; color: var(--text); display: flex; flex-direction: column; gap: 0.25rem">
+            <li>1. Descoberta do DHCP (<span style="color: var(--primary); font-family: monospace">DHCPDISCOVER</span>)</li>
+            <li>2. Pacote de DHCP Offer (<span style="color: var(--primary); font-family: monospace">DHCPOFFER</span>)</li>
+            <li>3. Solicitação de DHCP (<span style="color: var(--primary); font-family: monospace">DHCPREQUEST</span>)</li>
+            <li>4. Reconhecimento de DHCP (<span style="color: var(--primary); font-family: monospace">DHCPACK</span>)</li>
+          </ol>
+
+          <div class="alert alert-info" style="margin-top: 1rem">
+            <div class="alert-title"><i class="fas fa-mouse-pointer"></i> INTERATIVIDADE</div>
+            <div class="alert-content">
+              Clique em cada botão nas abas abaixo para acompanhar detalhadamente o processo de quatro etapas para obter uma concessão
+              DHCPv4 e visualizar a sinalização correspondente.
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs-container">
+          <div class="tabs-header-wrapper">
+            <div class="tabs-header">
+              <button class="tab-btn active-tab" onclick="switchDhcpTab(event, 'etapa1')">Etapa 1. DHCP Discover</button>
+              <button class="tab-btn" onclick="switchDhcpTab(event, 'etapa2')">Etapa 2. Oferta de DHCP</button>
+              <button class="tab-btn" onclick="switchDhcpTab(event, 'etapa3')">Etapa 3. Solicitação de DHCP</button>
+              <button class="tab-btn" onclick="switchDhcpTab(event, 'etapa4')">Etapa 4. Confirmação de DHCP</button>
+            </div>
+          </div>
+
+          <div class="tabs-content">
+            <div id="etapa1" class="tab-panel active-panel">
+              <h4 style="color: var(--secondary); margin-bottom: 0.75rem">Etapa 1. DHCP Discover (DHCPDISCOVER)</h4>
+              <p style="font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem">
+                O cliente inicia o processo usando uma mensagem
+                <span style="font-family: monospace; color: var(--warning)">DHCPDISCOVER</span> de broadcast com seu próprio endereço MAC
+                para descobrir os servidores DHCPv4 disponíveis. Como o cliente não tem informações válidas de IPv4 durante a inicialização,
+                ele usa endereços de broadcast de Camada 2 e Camada 3 para se comunicar com o servidor. O objetivo da mensagem DHCPDISCOVER
+                é encontrar servidores DHCPv4 na rede.
+              </p>
+
+              <div class="msg-flow-box">
+                <div class="msg-topology">
+                  <div class="msg-nodes">
+                    <div class="msg-node-item">
+                      <i class="fas fa-server"></i>
+                      <div class="msg-node-name">Servidor DHCPv4</div>
+                    </div>
+                    <div class="msg-node-item">
+                      <i class="fas fa-desktop"></i>
+                      <div class="msg-node-name">Cliente DHCPv4</div>
+                    </div>
+                  </div>
+                  <div class="packet-lane">
+                    <div class="packet-arrow c-to-s"></div>
+                    <div class="packet-label c-to-s">
+                      <span class="step-number-badge">1</span> <i class="fas fa-envelope"></i> DHCPDISCOVER (Broadcast)
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="etapa2" class="tab-panel">
+              <h4 style="color: var(--secondary); margin-bottom: 0.75rem">Etapa 2. Oferta de DHCP (DHCPOFFER)</h4>
+              <p style="font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem">
+                Quando o servidor DHCPv4 recebe uma mensagem DHCPDISCOVER, reserva o endereço IPv4 disponível para alugar para o cliente. O
+                servidor também cria uma entrada ARP que consiste no endereço MAC do cliente solicitante e o endereço IPv4 alugado do
+                cliente. O servidor DHCPv4 envia a mensagem <span style="font-family: monospace; color: var(--success)">DHCPOFFER</span> de
+                ligação ao cliente solicitante.
+              </p>
+
+              <div class="msg-flow-box">
+                <div class="msg-topology">
+                  <div class="msg-nodes">
+                    <div class="msg-node-item">
+                      <i class="fas fa-server"></i>
+                      <div class="msg-node-name">Servidor DHCPv4</div>
+                    </div>
+                    <div class="msg-node-item">
+                      <i class="fas fa-desktop"></i>
+                      <div class="msg-node-name">Cliente DHCPv4</div>
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane Birds-eye-view">
+                    <div class="packet-arrow s-to-c"></div>
+                    <div class="packet-label s-to-c">
+                      <span class="step-number-badge">2</span> <i class="fas fa-envelope"></i> DHCPOFFER (Unicast / Broadcast)
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="etapa3" class="tab-panel">
+              <h4 style="color: var(--secondary); margin-bottom: 0.75rem">Etapa 3. Solicitação de DHCP (DHCPREQUEST)</h4>
+              <p style="font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem">
+                Quando o cliente recebe o DHCPOFFER do servidor, ele envia uma mensagem
+                <span style="font-family: monospace; color: var(--warning)">DHCPREQUEST</span>. Esta mensagem é usada para para geração e
+                renovação do aluguel. Quando usado para geração de aluguel, DHCPREQUEST atua como um aviso de aceitação de vinculação para o
+                servidor selecionado para os parâmetros que oferecia e uma recusa implícita a todos os outros servidores que possam ter
+                fornecido ao cliente uma oferta de vinculação.
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem">
+                Muitas redes corporativas usam vários servidores DHCPv4. A mensagem DHCPREQUEST é enviada na forma de um broadcast para
+                informar esse servidor DHCPv4 e todos os outros servidores DHCPv4 sobre a oferta aceita.
+              </p>
+
+              <div class="msg-flow-box">
+                <div class="msg-topology">
+                  <div class="msg-nodes">
+                    <div class="msg-node-item">
+                      <i class="fas fa-server"></i>
+                      <div class="msg-node-name">Servidor DHCPv4</div>
+                    </div>
+                    <div class="msg-node-item">
+                      <i class="fas fa-desktop"></i>
+                      <div class="msg-node-name">Cliente DHCPv4</div>
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                  <div class="packet-lane">
+                    <div class="packet-arrow c-to-s"></div>
+                    <div class="packet-label c-to-s">
+                      <span class="step-number-badge">3</span> <i class="fas fa-envelope"></i> DHCPREQUEST (Broadcast)
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="etapa4" class="tab-panel">
+              <h4 style="color: var(--secondary); margin-bottom: 0.75rem">Etapa 4. Confirmação de DHCP (DHCPACK)</h4>
+              <p style="font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem">
+                Ao receber a mensagem DHCPREQUEST, o servidor pode verificar as informações de concessão com um ping ICMP nesse endereço
+                para garantir que não esteja sendo usado, criará uma nova entrada ARP para a concessão do cliente e responderá com uma
+                mensagem <span style="font-family: monospace; color: var(--success)">DHCPACK</span>. A mensagem DHCPACK é uma cópia de
+                DHCPOFFER, exceto por uma mudança no campo do tipo de mensagem. Quando o cliente recebe a mensagem DHCPACK, ele registra as
+                informações de configuração e pode executar uma pesquisa ARP para o endereço atribuído. Se não houver resposta ao ARP, o
+                cliente sabe que o endereço IPv4 é válido e começa a usá-lo como seu próprio.
+              </p>
+
+              <div class="msg-flow-box">
+                <div class="msg-topology">
+                  <div class="msg-nodes">
+                    <div class="msg-node-item">
+                      <i class="fas fa-server"></i>
+                      <div class="msg-node-name">Servidor DHCPv4</div>
+                    </div>
+                    <div class="msg-node-item">
+                      <i class="fas fa-desktop"></i>
+                      <div class="msg-node-name">Cliente DHCPv4</div>
+                    </div>
+                  </div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow s-to-c"></div></div>
+                  <div class="packet-lane disabled-lane"><div class="packet-arrow c-to-s"></div></div>
+                  <div class="packet-lane">
+                    <div class="packet-arrow s-to-c"></div>
+                    <div class="packet-label s-to-c">
+                      <span class="step-number-badge">4</span> <i class="fas fa-envelope"></i> DHCPACK (Unicast)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function switchDhcpTab(evt, tabId) {
+            var i, tabpanels, tablinks
+
+            // Oculta todos os painéis
+            tabpanels = document.querySelectorAll('.tab-panel')
+            for (i = 0; i < tabpanels.length; i++) {
+              tabpanels[i].className = tabpanels[i].className.replace(' active-panel', '')
+            }
+
+            // Remove a classe ativa de todos os botões
+            tablinks = document.querySelectorAll('.tab-btn')
+            for (i = 0; i < tablinks.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(' active-tab', '')
+            }
+
+            // Mostra o painel atual e marca o botão correspondente como ativo
+            document.getElementById(tabId).className += ' active-panel'
+            evt.currentTarget.className += ' active-tab'
+          }
+        </script>
+      </section>
+      <section id="secao7-1-4" class="section">
+        <style>
+          /* Estilização focada no fluxo bidirecional de renovação Unicast */
+          .renew-container {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .renew-topology {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.2rem !important;
+            min-width: 650px !important;
+            padding: 1rem 0 !important;
+          }
+
+          .renew-nodes {
+            display: flex !important;
+            justify-content: space-between !important;
+            padding: 0 4rem !important;
+          }
+
+          .renew-node {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            width: 150px !important;
+          }
+
+          .renew-node i {
+            font-size: 2.5rem !important;
+            color: var(--primary) !important;
+          }
+
+          .renew-node-name {
+            font-size: 0.9rem !important;
+            font-weight: 700 !important;
+          }
+
+          /* Canaletas de sinalização de pacotes de renovação */
+          .renew-lane {
+            display: flex !important;
+            align-items: center !important;
+            position: relative !important;
+            height: 45px !important;
+            border-left: 2px dashed var(--border) !important;
+            border-right: 2px dashed var(--border) !important;
+            margin: 0 8.5rem !important;
+            padding: 0 1rem !important;
+          }
+
+          .renew-arrow {
+            width: 100% !important;
+            height: 2px !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+
+          .renew-arrow.c-to-s {
+            background: var(--warning) !important;
+            justify-content: flex-start !important;
+          }
+
+          .renew-arrow.c-to-s::after {
+            content: '' !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-right-color: var(--warning) !important;
+          }
+
+          .renew-arrow.s-to-c {
+            background: var(--success) !important;
+            justify-content: flex-end !important;
+          }
+
+          .renew-arrow.s-to-c::after {
+            content: '' !important;
+            position: absolute !important;
+            right: 0 !important;
+            top: -4px !important;
+            border: 5px solid transparent !important;
+            border-left-color: var(--success) !important;
+          }
+
+          .renew-label {
+            position: absolute;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: #070a12 !important;
+            padding: 3px 12px !important;
+            border-radius: 6px !important;
+            font-family: monospace !important;
+            font-size: 0.8rem !important;
+            border: 1px solid var(--border) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+          }
+
+          .renew-label.c-to-s {
+            color: var(--warning) !important;
+          }
+          .renew-label.s-to-c {
+            color: var(--success) !important;
+          }
+
+          .renew-badge {
+            background: var(--bg-dark) !important;
+            border-radius: 50% !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.75rem !important;
+            font-weight: bold !important;
+          }
+          .renew-label.c-to-s .renew-badge {
+            border: 1px solid var(--warning) !important;
+          }
+          .renew-label.s-to-c .renew-badge {
+            border: 1px solid var(--success) !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-sync-alt"></i>
+          <span class="section-number">7.1.4</span> Etapas para renovar um leasing
+        </h2>
+
+        <div class="card">
+          <p>
+            Antes da expiração da concessão, o cliente inicia um processo de duas etapas para renovar a concessão com o servidor DHCPv4,
+            conforme detalhado a seguir:
+          </p>
+
+          <ol
+            style="
+              margin-left: 2rem;
+              margin-top: 1rem;
+              margin-bottom: 1rem;
+              color: var(--text);
+              display: flex;
+              flex-direction: column;
+              gap: 0.75rem;
+            "
+          >
+            <li>
+              <strong>1. Solicitação de DHCP (<span style="color: var(--warning); font-family: monospace">DHCPREQUEST</span>):</strong>
+              <br />Antes que a concessão expire, o cliente envia uma mensagem
+              <span style="font-family: monospace; color: var(--primary)">DHCPREQUEST</span> diretamente ao servidor DHCPv4 que
+              originalmente ofereceu o endereço IPv4. Se um <span style="font-family: monospace; color: var(--primary)">DHCPACK</span> não
+              for recebido dentro de um período especificado, o cliente envia outro
+              <span style="font-family: monospace; color: var(--primary)">DHCPREQUEST</span>, de modo que um dos outros servidores DHCPv4
+              possa estender o aluguel.
+            </li>
+            <li>
+              <strong>2. Confirmação de DHCP (<span style="color: var(--success); font-family: monospace">DHCPACK</span>):</strong>
+              <br />Ao receber a mensagem <span style="font-family: monospace; color: var(--primary)">DHCPREQUEST</span>, o servidor
+              verifica as informações de concessão retornando um <span style="font-family: monospace; color: var(--primary)">DHCPACK</span>.
+            </li>
+          </ol>
+
+          <p style="margin-top: 1.5rem; color: var(--text-dim); font-size: 0.9rem">
+            <strong>Observação:</strong> Essas mensagens (principalmente o <span style="font-family: monospace">DHCPOFFER</span> e o
+            <span style="font-family: monospace">DHCPACK</span>) podem ser enviadas como unicast ou transmitidas de acordo com a
+            <strong>IETF RFC 2131</strong>.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-exchange-alt" style="color: var(--secondary); margin-right: 0.5rem"></i>
+          Fluxo Lógico de Troca de Pacotes de Renovação
+        </h3>
+
+        <div class="renew-container">
+          <div class="renew-topology">
+            <div class="renew-nodes">
+              <div class="renew-node">
+                <i class="fas fa-server"></i>
+                <div class="renew-node-name">Servidor DHCPv4</div>
+              </div>
+              <div class="renew-node">
+                <i class="fas fa-desktop"></i>
+                <div class="renew-node-name">Cliente DHCPv4</div>
+              </div>
+            </div>
+
+            <div class="renew-lane">
+              <div class="renew-arrow c-to-s"></div>
+              <div class="renew-label c-to-s">
+                <span class="renew-badge">1</span>
+                <i class="fas fa-envelope"></i> DHCPREQUEST (Unicast) — <em>"Gostaria de renovar meu leasing."</em>
+              </div>
+            </div>
+
+            <div class="renew-lane">
+              <div class="renew-arrow s-to-c"></div>
+              <div class="renew-label s-to-c">
+                <span class="renew-badge">2</span>
+                <i class="fas fa-envelope"></i> DHCPACK (Unicast) — <em>"Sua solicitação é reconhecida."</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="secao7-2-1" class="section">
+        <style>
+          /* Estilização da topologia conceitual de configuração */
+          .config-topology-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .config-topology-container {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between !important;
+            min-width: 850px !important; /* Preserva o alinhamento horizontal em dispositivos móveis */
+            padding: 1rem 0 !important;
+          }
+
+          .config-node {
+            background: var(--bg-card) !important;
+            border: 2px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.2rem !important;
+            width: 240px !important;
+            text-align: center !important;
+            position: relative !important;
+            transition: all 0.3s !important;
+          }
+
+          .config-node:hover {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.2) !important;
+          }
+
+          .config-node-step {
+            position: absolute !important;
+            top: -15px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: var(--bg-dark) !important;
+            border: 2px solid var(--secondary) !important;
+            color: var(--secondary) !important;
+            font-family: monospace !important;
+            font-weight: bold !important;
+            font-size: 0.9rem !important;
+            width: 30px !important;
+            height: 30px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+
+          .config-node i {
+            font-size: 2rem !important;
+            color: var(--primary) !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+
+          .config-node-title {
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
+            color: var(--text) !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .config-node-desc {
+            font-size: 0.8rem !important;
+            color: var(--text-dim) !important;
+            line-height: 1.4 !important;
+          }
+
+          .config-connector {
+            flex-grow: 1 !important;
+            height: 2px !important;
+            background: linear-gradient(90deg, var(--border), var(--primary), var(--border)) !important;
+            position: relative !important;
+            display: flex !important;
+            justify-content: center !important;
+          }
+
+          .config-connector::after {
+            content: '➔' !important;
+            color: var(--primary) !important;
+            position: absolute !important;
+            top: -10px !important;
+            font-size: 0.9rem !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">7.2.1</span> Etapas para configurar um servidor DHCPv4 do Cisco IOS
+        </h2>
+
+        <div class="card">
+          <p>
+            Um roteador Cisco rodando o software Cisco IOS pode ser configurado para atuar como um servidor DHCPv4 completo. O servidor
+            DHCPv4 do Cisco IOS atribui e gerencia endereços IPv4 de pools de endereços especificados no roteador para os clientes DHCPv4.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-sitemap" style="color: var(--secondary); margin-right: 0.5rem"></i>
+          Fluxo Lógico de Implementação do Servidor
+        </h3>
+
+        <div class="config-topology-wrapper">
+          <div class="config-topology-container">
+            <div class="config-node">
+              <!-- <div class="config-node-step">1</div> -->
+              <i class="fas fa-ban"></i>
+              <div class="config-node-title">Excluir Endereços</div>
+              <div class="config-node-desc">Remove IPs estáticos (Gateways, Switches, Servidores) do pool de atribuição automática.</div>
+            </div>
+
+            <div class="config-connector"></div>
+
+            <div class="config-node">
+              <!-- <div class="config-node-step">2</div> -->
+              <i class="fas fa-folder-plus"></i>
+              <div class="config-node-title">Criar o Pool DHCP</div>
+              <div class="config-node-desc">Define um nome exclusivo para o pool e muda o contexto da CLI para o modo dhcp-config.</div>
+            </div>
+
+            <div class="config-connector"></div>
+
+            <div class="config-node">
+              <!-- <div class="config-node-step">3</div> -->
+              <i class="fas fa-sliders-h"></i>
+              <div class="config-node-title">Configurar Parâmetros</div>
+              <div class="config-node-desc">Define a rede operacional (network), gateway padrão (default-router) e o servidor DNS.</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Sintaxe de Comandos IOS Correspondente
+        </h3>
+
+        <div class="terminal">
+          <pre>Router(config)# <strong>ip dhcp excluded-address 192.168.10.1 192.168.10.9</strong>
+Router(config)# <strong>ip dhcp pool LAN-POOL-10</strong>
+Router(dhcp-config)# <strong>network 192.168.10.0 255.255.255.0</strong>
+Router(dhcp-config)# <strong>default-router 192.168.10.1</strong>
+Router(dhcp-config)# <strong>dns-server 209.165.200.225</strong></pre>
+        </div>
+      </section>
+      <section id="secao7-2-2" class="section">
+        <style>
+          /* Estilização para a topologia fiel ao cenário de laboratório Cisco */
+          .cisco-topology-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .cisco-topology-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            min-width: 800px !important;
+            padding: 1rem 0 !important;
+          }
+
+          .cisco-node {
+            background: var(--bg-card) !important;
+            border: 2px solid var(--border) !important;
+            border-radius: 10px !important;
+            padding: 1rem !important;
+            width: 190px !important;
+            text-align: center !important;
+            transition: all 0.3s !important;
+          }
+
+          .cisco-node:hover {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.15) !important;
+          }
+
+          .cisco-node i {
+            font-size: 2.2rem !important;
+            color: var(--primary) !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .cisco-node-title {
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            color: var(--text) !important;
+          }
+
+          .cisco-node-info {
+            font-size: 0.75rem !important;
+            color: var(--text-dim) !important;
+            font-family: monospace !important;
+            margin-top: 0.3rem !important;
+          }
+
+          .cisco-line {
+            flex-grow: 1 !important;
+            height: 2px !important;
+            background: var(--border) !important;
+            position: relative !important;
+            display: flex !important;
+            justify-content: center !important;
+          }
+
+          .cisco-line-label {
+            position: absolute !important;
+            top: -22px !important;
+            font-size: 0.7rem !important;
+            font-family: monospace !important;
+            color: var(--secondary) !important;
+            background: #070a12 !important;
+            padding: 2px 6px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 4px !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-code"></i>
+          <span class="section-number">7.2.2</span> Exemplo de Configuração de Servidor DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>Como mostrado na figura, o roteador R1 está configurado para fornecer serviços DHCPv4 na sub-rede 192.168.10.0/24.</p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-network-wired" style="color: var(--secondary); margin-right: 0.5rem"></i>
+          Topologia do Exemplo de Configuração
+        </h3>
+
+        <div class="cisco-topology-wrapper">
+          <div class="cisco-topology-container">
+            <div class="cisco-node">
+              <i class="fas fa-server"></i>
+              <div class="cisco-node-title">Roteador R1</div>
+              <div class="cisco-node-info">Servidor DHCPv4</div>
+              <div class="cisco-node-info" style="color: var(--warning)">G0/0/0: 192.168.10.1</div>
+            </div>
+
+            <div class="cisco-line"><div class="cisco-line-label">Rede: 192.168.10.0/24</div></div>
+
+            <div class="cisco-node" style="width: 130px !important">
+              <i class="fas fa-layer-group" style="color: var(--secondary) !important"></i>
+              <div class="cisco-node-title">Switch S1</div>
+            </div>
+
+            <div class="cisco-line"><div class="cisco-line-label">Pool: LAN-POOL-10</div></div>
+
+            <div class="cisco-node">
+              <i class="fas fa-desktop"></i>
+              <div class="cisco-node-title">PC-A</div>
+              <div class="cisco-node-info">Cliente DHCPv4</div>
+              <div class="cisco-node-info" style="color: var(--success)">IP Dinâmico</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Abaixo está o exemplo de configuração para excluir os endereços de 192.168.10.1 a 192.168.10.9, bem como o endereço de broadcast
+            final da sub-rede 192.168.10.254. Em seguida, o pool de endereços chamado <strong>LAN-POOL-10</strong> é configurado com o
+            default gateway, o DNS Server e o Domain Name correspondentes.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Comandos de Configuração no Roteador R1
+        </h3>
+
+        <div class="terminal">
+          <pre>R1(config)# <strong>ip dhcp excluded-address 192.168.10.1 192.168.10.9</strong>
+R1(config)# <strong>ip dhcp excluded-address 192.168.10.254</strong>
+R1(config)# <strong>ip dhcp pool LAN-POOL-10</strong>
+R1(dhcp-config)# <strong>network 192.168.10.0 255.255.255.0</strong>
+R1(dhcp-config)# <strong>default-router 192.168.10.1</strong>
+R1(dhcp-config)# <strong>dns-server 209.165.200.225</strong>
+R1(dhcp-config)# <strong>domain-name ccna-lab.com</strong></pre>
+        </div>
+
+        <div class="alert alert-info">
+          <div class="alert-title"><i class="fas fa-lightbulb"></i> NOTA DE CONFIGURAÇÃO</div>
+          <div class="alert-content">
+            A Microsoft recomenda não implementar o WINS, em vez disso, configurar o DNS para resolução de nomes do Windows e descontinuar o
+            WINS.
+          </div>
+        </div>
+      </section>
+      <section id="secao7-2-3" class="section">
+        <style>
+          /* Estilos adicionais para melhorar a legibilidade de tabelas de comandos inline */
+          .cmd-summary-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 1.5rem 0 !important;
+          }
+          .cmd-summary-table th,
+          .cmd-summary-table td {
+            padding: 0.75rem 1rem !important;
+            border-bottom: 1px solid var(--border) !important;
+            text-align: left !important;
+            font-size: 0.9rem !important;
+          }
+          .cmd-summary-table th {
+            color: var(--primary) !important;
+            background: rgba(20, 30, 49, 0.4) !important;
+            font-weight: 600 !important;
+          }
+          .cmd-highlight {
+            font-family: monospace !important;
+            color: var(--secondary) !important;
+            font-weight: bold !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">7.2.3</span> Verificar o Servidor DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>Use os comandos de verificação na tabela para revisar a configuração do DHCPv4.</p>
+
+          <table class="cmd-summary-table">
+            <thead>
+              <tr>
+                <th>Comando de Verificação</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cmd-highlight">show ip dhcp binding</span></td>
+                <td>
+                  Exibe uma lista de todas as vinculações de endereço IPv4 para endereço MAC que foram fornecidas pelo serviço DHCPv4.
+                </td>
+              </tr>
+              <tr>
+                <td><span class="cmd-highlight">show ip dhcp server statistic</span></td>
+                <td>Exibe informações de contagem de mensagens sobre o número de mensagens DHCPv4 que foram enviadas e recebidas.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.1rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Exemplo de Saída: show ip dhcp binding
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.5rem">
+          A saída a seguir exibe as vinculações de endereços IPv4 automáticas criadas pelo servidor para os clientes conectados:
+        </p>
+        <div class="terminal">
+          <pre>R1# <strong>show ip dhcp binding</strong>
+Bindings from all pools not associated with VRF:
+IP address      Client-ID/              Lease expiration        Type
+                Hardware address/
+                User name
+192.168.10.10   0100.5079.e36d.01       Jul 05 2026 12:47 PM    Automatic</pre>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.1rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Exemplo de Saída: show ip dhcp server statistic
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.5rem">
+          O comando a seguir é usado para verificar se as mensagens estão sendo recebidas ou enviadas pelo roteador:
+        </p>
+        <div class="terminal">
+          <pre>R1# <strong>show ip dhcp server statistic</strong>
+Memory usage         42312
+Address pools        1
+Database agents      0
+Automatic bindings   1
+Manual bindings      0
+Expired bindings     0
+Malformed messages   0
+Secure arp entries   0
+
+Message              Received
+BOOTREQUEST          0
+DHCPDISCOVER         1
+DHCPREQUEST          1
+DHCPDECLINE          0
+DHCPRELEASE          0
+DHCPINFORM           0
+
+Message              Sent
+BOOTREPLY            0
+DHCPOFFER            1
+DHCPACK              1
+DHCPNAK              0</pre>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem">
+          <p style="font-size: 0.9rem; color: var(--text); margin: 0">
+            A saída estatística confirma que o servidor recebeu uma mensagem
+            <span style="font-family: monospace; color: var(--warning)">DHCPDISCOVER</span> e uma mensagem
+            <span style="font-family: monospace; color: var(--warning)">DHCPREQUEST</span>, e respondeu enviando uma mensagem
+            <span style="font-family: monospace; color: var(--success)">DHCPOFFER</span> e uma mensagem
+            <span style="font-family: monospace; color: var(--success)">DHCPACK</span>.
+          </p>
+        </div>
+      </section>
+      <section id="secao7-2-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-toggle-off"></i>
+          <span class="section-number">7.2.4</span> Desativar o Servidor DHCPv4 do Cisco IOS
+        </h2>
+
+        <div class="card">
+          <p>
+            O serviço DHCPv4 é habilitado por padrão em roteadores Cisco rodando o software Cisco IOS. Para desabilitar o serviço, use o
+            comando de configuração global
+            <span style="font-family: monospace; color: var(--danger); font-weight: bold">no service dhcp</span>.
+          </p>
+          <p>
+            Use o comando de configuração global
+            <span style="font-family: monospace; color: var(--success); font-weight: bold">service dhcp</span> para readmitir o servidor
+            DHCPv4, conforme mostrado no exemplo.
+          </p>
+          <p style="color: var(--text-dim); font-size: 0.9rem">
+            <strong>Observação:</strong> Limpar as configurações do pool ou endereços excluídos não desativa o processo em si. Se o serviço
+            não for explicitamente desativado, o roteador ainda poderá responder a requisições DHCPv4 vazias ou gerar overhead desnecessário
+            de processamento.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.1rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Desativando e Reativando o Serviço DHCPv4
+        </h3>
+
+        <div class="terminal">
+          <pre>R1(config)# <strong>no service dhcp</strong>
+R1(config)# <strong>service dhcp</strong></pre>
+        </div>
+      </section>
+      <section id="secao7-2-5" class="section">
+        <style>
+          /* Estilização para a topologia multimáquinas de Retransmissão DHCP */
+          .relay-topology-wrapper {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 2rem 0 !important;
+            background: #070a12 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+          }
+
+          .relay-topology-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            min-width: 950px !important;
+            padding: 1rem 0 !important;
+          }
+
+          .relay-node {
+            background: var(--bg-card) !important;
+            border: 2px solid var(--border) !important;
+            border-radius: 10px !important;
+            padding: 0.8rem !important;
+            width: 170px !important;
+            text-align: center !important;
+            transition: all 0.3s !important;
+          }
+
+          .relay-node:hover {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.15) !important;
+          }
+
+          .relay-node i {
+            font-size: 2rem !important;
+            color: var(--primary) !important;
+            margin-bottom: 0.4rem !important;
+          }
+
+          .relay-node-title {
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            color: var(--text) !important;
+          }
+
+          .relay-node-info {
+            font-size: 0.75rem !important;
+            color: var(--text-dim) !important;
+            font-family: monospace !important;
+            margin-top: 0.2rem !important;
+          }
+
+          .relay-line {
+            flex-grow: 1 !important;
+            height: 2px !important;
+            background: var(--border) !important;
+            position: relative !important;
+            display: flex !important;
+            justify-content: center !important;
+          }
+
+          .relay-line-label {
+            position: absolute !important;
+            top: -22px !important;
+            font-size: 0.65rem !important;
+            font-family: monospace !important;
+            color: var(--info) !important;
+            background: #070a12 !important;
+            padding: 2px 5px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 4px !important;
+          }
+        </style>
+
+        <h2 class="section-title">
+          <i class="fas fa-route"></i>
+          <span class="section-number">7.3.1</span> Configurar o Agente de Retransmissão DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>
+            Em uma rede complexa, os servidores corporativos geralmente estão localizados em uma sub-rede centralizada. Esses servidores
+            podem fornecer serviços DHCPv4, DNS, TFTP e FTP para a empresa. Os clientes da rede geralmente não estão na mesma sub-rede que
+            esses servidores.
+          </p>
+          <p>
+            Como as mensagens de requisição DHCPv4 dos clientes são enviadas via <strong>Broadcast</strong>, os roteadores por padrão não
+            encaminham essas transmissões de Camada 3 além da sub-rede local, bloqueando o tráfego.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
+          <i class="fas fa-network-wired" style="color: var(--secondary); margin-right: 0.5rem"></i>
+          Cenário de Encaminhamento de IP Helper
+        </h3>
+
+        <div class="relay-topology-wrapper">
+          <div class="relay-topology-container">
+            <div class="relay-node">
+              <i class="fas fa-desktop"></i>
+              <div class="relay-node-title">PC-A</div>
+              <div class="relay-node-info" style="color: var(--warning)">DHCP Client</div>
+            </div>
+
+            <div class="relay-line"><div class="relay-line-label">Camada 2 Broadcast</div></div>
+
+            <div class="relay-node" style="width: 110px !important">
+              <i class="fas fa-layer-group" style="color: var(--secondary) !important"></i>
+              <div class="relay-node-title">Switch S1</div>
+            </div>
+
+            <div class="relay-line"><div class="relay-line-label">G0/0/0 (192.168.10.1)</div></div>
+
+            <div class="relay-node">
+              <i class="fas fa-router"></i>
+              <div class="relay-node-title">Roteador R1</div>
+              <div class="relay-node-info" style="color: var(--primary)">DHCP Relay Agent</div>
+              <div class="relay-node-info">G0/0/1: 10.1.1.1</div>
+            </div>
+
+            <div class="relay-line"><div class="relay-line-label">Rede 10.1.1.0/30</div></div>
+
+            <div class="relay-node" style="width: 120px !important">
+              <i class="fas fa-router"></i>
+              <div class="relay-node-title">Roteador R2</div>
+              <div class="relay-node-info">G0/0/0: 10.1.1.2</div>
+            </div>
+
+            <div class="relay-line"><div class="relay-line-label">Rede 192.168.11.0/24</div></div>
+
+            <div class="relay-node">
+              <i class="fas fa-server"></i>
+              <div class="relay-node-title">Servidor DHCPv4</div>
+              <div class="relay-node-info" style="color: var(--success)">192.168.11.5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p>
+            Para resolver esse problema no roteador <strong>R1</strong>, você deve configurar a interface de entrada ligada aos clientes
+            (neste exemplo, a interface GigabitEthernet 0/0/0) com o comando de configuração de interface
+            <span style="font-family: monospace; color: var(--secondary); font-weight: bold">ip helper-address [endereço-do-servidor]</span
+            >.
+          </p>
+          <p>
+            Quando o roteador R1 recebe a transmissão de descoberta (<span style="font-family: monospace">DHCPDISCOVER</span>) na interface
+            G0/0/0, ele altera o endereço de origem para seu próprio endereço IP na interface de saída e converte o destino de broadcast
+            para o endereço <strong>Unicast</strong> do servidor DHCPv4 (192.168.11.5), permitindo o roteamento entre as sub-redes.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 2rem; font-size: 1.1rem; color: var(--text)">
+          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
+          Configuração do ip helper-address no Roteador R1
+        </h3>
+
+        <div class="terminal">
+          <pre>R1(config)# <strong>interface gigabitethernet 0/0/0</strong>
+R1(config-if)# <strong>ip helper-address 192.168.11.5</strong>
+R1(config-if)# <strong>end</strong>
+R1#</pre>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem">
+          <h4 style="color: var(--info); margin-bottom: 0.5rem">
+            <i class="fas fa-info-circle"></i> Outros Serviços Retransmitidos por Padrão
+          </h4>
+          <p style="font-size: 0.9rem; margin-bottom: 0">
+            O comando <span style="font-family: monospace">ip helper-address</span> encaminha por padrão não apenas requisições DHCPv4, mas
+            também os seguintes 8 serviços baseados em UDP:
+          </p>
+          <ul
+            style="
+              margin-left: 2rem;
+              margin-top: 0.5rem;
+              font-size: 0.85rem;
+              font-family: monospace;
+              color: var(--text-dim);
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 0.25rem;
+            "
+          >
+            <li>• Porta 37: Time</li>
+            <li>• Porta 49: TACACS</li>
+            <li>• Porta 53: DNS</li>
+            <li>• Porta 67: DHCP/BOOTP Server</li>
+            <li>• Porta 68: DHCP/BOOTP Client</li>
+            <li>• Porta 69: TFTP</li>
+            <li>• Porta 137: NetBIOS Name Service</li>
+            <li>• Porta 138: NetBIOS Datagram Service</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Cisco Systems Framework UI — CCNA 2 (SRWE) Interactive Design Guide</p>
+    </footer>
+
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
