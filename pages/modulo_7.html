@@ -54,7 +54,22 @@
           <a href="#secao7-2-4"><i class="fas fa-toggle-off"></i> 7.2.4 Desativar o Servidor</a>
         </li>
         <li>
-          <a href="#secao7-2-5 "><i class="fas fa-route"></i> 7.3.1 Agente de Retransmissão</a>
+          <a href="#secao7-2-5"><i class="fas fa-check-circle"></i> 7.2.5 Verifique se o DHCPv4 está operacional</a>
+        </li>
+        <li>
+          <a href="#secao7-2-6"><i class="fas fa-code"></i> 7.2.6 Syntax Checker - DHCPv4</a>
+        </li>
+        <li>
+          <a href="#secao7-2-7"><i class="fas fa-power-off"></i> 7.2.7 Desativar DHCPv4</a>
+        </li>
+        <li>
+          <a href="#secao7-2-8"><i class="fas fa-exchange-alt"></i> 7.2.8 Retransmissão DHCPv4</a>
+        </li>
+        <li>
+          <a href="#secao7-2-9"><i class="fas fa-broadcast"></i> 7.2.9 Outras Transmissões de Serviço</a>
+        </li>
+        <li>
+          <a href="../pages/lab_23.html"><i class="fas fa-dhcp"></i> 7.2.10 Packet Tracer - Configurar DHCPv4</a>
         </li>
       </ul>
     </div>
@@ -1579,202 +1594,1896 @@ R1(config)# <strong>service dhcp</strong></pre>
         </div>
       </section>
       <section id="secao7-2-5" class="section">
-        <style>
-          /* Estilização para a topologia multimáquinas de Retransmissão DHCP */
-          .relay-topology-wrapper {
-            width: 100% !important;
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-            margin: 2rem 0 !important;
-            background: #070a12 !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 12px !important;
-            padding: 1.5rem !important;
-          }
-
-          .relay-topology-container {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            min-width: 950px !important;
-            padding: 1rem 0 !important;
-          }
-
-          .relay-node {
-            background: var(--bg-card) !important;
-            border: 2px solid var(--border) !important;
-            border-radius: 10px !important;
-            padding: 0.8rem !important;
-            width: 170px !important;
-            text-align: center !important;
-            transition: all 0.3s !important;
-          }
-
-          .relay-node:hover {
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 12px rgba(0, 180, 216, 0.15) !important;
-          }
-
-          .relay-node i {
-            font-size: 2rem !important;
-            color: var(--primary) !important;
-            margin-bottom: 0.4rem !important;
-          }
-
-          .relay-node-title {
-            font-weight: 700 !important;
-            font-size: 0.85rem !important;
-            color: var(--text) !important;
-          }
-
-          .relay-node-info {
-            font-size: 0.75rem !important;
-            color: var(--text-dim) !important;
-            font-family: monospace !important;
-            margin-top: 0.2rem !important;
-          }
-
-          .relay-line {
-            flex-grow: 1 !important;
-            height: 2px !important;
-            background: var(--border) !important;
-            position: relative !important;
-            display: flex !important;
-            justify-content: center !important;
-          }
-
-          .relay-line-label {
-            position: absolute !important;
-            top: -22px !important;
-            font-size: 0.65rem !important;
-            font-family: monospace !important;
-            color: var(--info) !important;
-            background: #070a12 !important;
-            padding: 2px 5px !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 4px !important;
-          }
-        </style>
-
         <h2 class="section-title">
-          <i class="fas fa-route"></i>
-          <span class="section-number">7.3.1</span> Configurar o Agente de Retransmissão DHCPv4
+          <i class="fas fa-dhcp"></i>
+          <span class="section-number">7.2.5</span> Verifique se o DHCPv4 está operacional
         </h2>
 
         <div class="card">
           <p>
-            Em uma rede complexa, os servidores corporativos geralmente estão localizados em uma sub-rede centralizada. Esses servidores
-            podem fornecer serviços DHCPv4, DNS, TFTP e FTP para a empresa. Os clientes da rede geralmente não estão na mesma sub-rede que
-            esses servidores.
-          </p>
-          <p>
-            Como as mensagens de requisição DHCPv4 dos clientes são enviadas via <strong>Broadcast</strong>, os roteadores por padrão não
-            encaminham essas transmissões de Camada 3 além da sub-rede local, bloqueando o tráfego.
+            A topologia mostrada na figura é usada na saída de exemplo. Neste exemplo, <strong>R1</strong> foi configurado para proporcionar
+            serviços DHCPv4. O PC1 não foi ligado e, portanto, não possui um endereço IP.
           </p>
         </div>
 
-        <h3 style="margin-top: 2rem; font-size: 1.2rem; color: var(--text)">
-          <i class="fas fa-network-wired" style="color: var(--secondary); margin-right: 0.5rem"></i>
-          Cenário de Encaminhamento de IP Helper
-        </h3>
+        <!-- TOPOLOGIA COM WRAPPER RESPONSIVO -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-network-wired"></i> Topologia de Verificação DHCPv4
+          </h3>
 
-        <div class="relay-topology-wrapper">
-          <div class="relay-topology-container">
-            <div class="relay-node">
-              <i class="fas fa-desktop"></i>
-              <div class="relay-node-title">PC-A</div>
-              <div class="relay-node-info" style="color: var(--warning)">DHCP Client</div>
+          <!-- WRAPPER RESPONSIVO BLINDADO -->
+          <div
+            style="
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              background: #090d16 !important;
+              padding: 1.5rem !important;
+            "
+          >
+            <!-- CONTEÚDO COM LARGURA FIXA INTERNA -->
+            <div style="width: 680px !important; min-width: 680px !important; background: transparent !important">
+              <!-- LINHA 1: Dispositivos Principais -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.5rem 0 !important;
+                "
+              >
+                <!-- PC1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC1</div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    (Sem IP)
+                  </div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S1</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- R1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--secondary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      box-shadow: 0 0 15px rgba(0, 245, 212, 0.15) !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-router" style="color: var(--secondary) !important; font-size: 1.5rem !important"></i>
+                  </div>
+                  <div style="color: var(--secondary) !important; font-family: monospace !important; font-size: 0.7rem !important">R1</div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    G0/0/0 - G0/0/1
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    Servidor DHCPv4
+                  </div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S2</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- PC2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC2</div>
+                </div>
+              </div>
+
+              <!-- LINHA 2: Redes -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.2rem 0 !important;
+                  border-top: 1px solid var(--border) !important;
+                  border-bottom: 1px solid var(--border) !important;
+                  margin: 0.3rem 0 !important;
+                "
+              >
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.10.0/24</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--primary) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >Rede DHCP</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.11.0/24</span
+                  >
+                </div>
+              </div>
+
+              <!-- LINHA 3: Servidores -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: center !important;
+                  padding: 0.5rem 0 !important;
+                  gap: 4rem !important;
+                "
+              >
+                <!-- Servidor DHCP -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--success) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--success) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--success) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DHCPv4
+                  </div>
+                </div>
+
+                <!-- Servidor DNS -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--primary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--primary) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DNS
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    192.168.11.5/24
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div class="relay-line"><div class="relay-line-label">Camada 2 Broadcast</div></div>
+          <!-- Nota -->
+          <div
+            style="
+              background: rgba(0, 180, 216, 0.05);
+              border-radius: 8px;
+              padding: 0.5rem 1rem;
+              border: 1px solid var(--border);
+              margin-top: 0.5rem;
+            "
+          >
+            <span style="color: var(--text-dim); font-family: monospace; font-size: 0.65rem">
+              <i class="fas fa-info-circle" style="color: var(--primary)"></i>
+              A saída para os comandos a seguir presume que PC1 recebeu suas informações de endereçamento IPv4 do servidor DHCPv4. Talvez
+              seja necessário inserir <strong style="color: var(--secondary)">ipconfig /renew</strong> em um PC com Windows para forçá-lo a
+              enviar uma mensagem DHCPDISCOVER.
+            </span>
+          </div>
+        </div>
 
-            <div class="relay-node" style="width: 110px !important">
-              <i class="fas fa-layer-group" style="color: var(--secondary) !important"></i>
-              <div class="relay-node-title">Switch S1</div>
-            </div>
+        <!-- COMANDOS DE VERIFICAÇÃO -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-search"></i> Comandos de Verificação do DHCPv4
+          </h3>
 
-            <div class="relay-line"><div class="relay-line-label">G0/0/0 (192.168.10.1)</div></div>
+          <p style="color: var(--text); margin-bottom: 1rem">
+            Clique em cada botão abaixo para ver a saída do comando verificando se o DHCPv4 está operacional:
+          </p>
 
-            <div class="relay-node">
-              <i class="fas fa-router"></i>
-              <div class="relay-node-title">Roteador R1</div>
-              <div class="relay-node-info" style="color: var(--primary)">DHCP Relay Agent</div>
-              <div class="relay-node-info">G0/0/1: 10.1.1.1</div>
-            </div>
+          <!-- Botões de Navegação -->
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem">
+            <button
+              onclick="mostrarComando('config')"
+              id="btnConfig"
+              style="
+                background: var(--primary);
+                border: none;
+                color: #fff;
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-cog"></i> Configuração
+            </button>
+            <button
+              onclick="mostrarComando('binding')"
+              id="btnBinding"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-link"></i> Ligações
+            </button>
+            <button
+              onclick="mostrarComando('stats')"
+              id="btnStats"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-chart-bar"></i> Estatísticas
+            </button>
+            <button
+              onclick="mostrarComando('client')"
+              id="btnClient"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-laptop"></i> Cliente
+            </button>
+          </div>
 
-            <div class="relay-line"><div class="relay-line-label">Rede 10.1.1.0/30</div></div>
+          <!-- Área de Exibição dos Comandos -->
+          <div
+            id="dhcpOutput"
+            style="background: #090d16; border-radius: 8px; padding: 1rem; border: 1px solid var(--border); min-height: 200px"
+          >
+            <!-- Conteúdo será inserido via JavaScript -->
+          </div>
+        </div>
 
-            <div class="relay-node" style="width: 120px !important">
-              <i class="fas fa-router"></i>
-              <div class="relay-node-title">Roteador R2</div>
-              <div class="relay-node-info">G0/0/0: 10.1.1.2</div>
-            </div>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          <strong>Verificação Completa:</strong> Com estes comandos é possível validar toda a operação do DHCPv4: configuração (<code
+            >show running-config | section dhcp</code
+          >), ligações (<code>show ip dhcp binding</code>), estatísticas (<code>show ip dhcp server statistics</code>) e endereçamento do
+          cliente (<code>ipconfig /all</code>).
+        </div>
+      </section>
 
-            <div class="relay-line"><div class="relay-line-label">Rede 192.168.11.0/24</div></div>
+      <script>
+        function mostrarComando(tipo) {
+          const output = document.getElementById('dhcpOutput')
 
-            <div class="relay-node">
-              <i class="fas fa-server"></i>
-              <div class="relay-node-title">Servidor DHCPv4</div>
-              <div class="relay-node-info" style="color: var(--success)">192.168.11.5</div>
+          // Resetar estilo dos botões
+          const botoes = ['config', 'binding', 'stats', 'client']
+          botoes.forEach((id) => {
+            const btn = document.getElementById('btn' + id.charAt(0).toUpperCase() + id.slice(1))
+            if (btn) {
+              btn.style.background = 'var(--bg-card)'
+              btn.style.border = '1px solid var(--border)'
+              btn.style.color = 'var(--text)'
+            }
+          })
+
+          // Destacar botão ativo
+          const btnMap = {
+            config: 'btnConfig',
+            binding: 'btnBinding',
+            stats: 'btnStats',
+            client: 'btnClient'
+          }
+          const botaoAtivo = document.getElementById(btnMap[tipo])
+          if (botaoAtivo) {
+            botaoAtivo.style.background = 'var(--primary)'
+            botaoAtivo.style.border = 'none'
+            botaoAtivo.style.color = '#fff'
+          }
+
+          let html = ''
+
+          switch (tipo) {
+            case 'config':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">Verifique a configuração DHCPv4</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Como mostrado no exemplo, a saída do comando <strong style="color: var(--primary);">show running-config | section dhcp</strong> 
+                        exibe os comandos DHCPv4 configurados no R1. O parâmetro <strong style="color: var(--primary);">| section</strong> 
+                        exibe apenas os comandos associados à configuração do DHCPv4.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+R1# <strong>show running-config | section dhcp</strong>
+ip dhcp excluded-address 192.168.10.1 192.168.10.9
+ip dhcp excluded-address 192.168.10.254
+ip dhcp pool LAN-POOL-1
+  network 192.168.10.0 255.255.255.0
+  default-router 192.168.10.1
+  dns-server 192.168.11.5
+  domain-name example.com
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'binding':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">Verifique as ligações DHCPv4</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Como mostrado no exemplo, a operação do DHCPv4 pode ser verificada usando o comando 
+                        <strong style="color: var(--primary);">show ip dhcp binding</strong>. Esse comando exibe uma lista de todos os 
+                        endereços IPv4 para associações de endereço MAC que foram fornecidas pelo serviço DHCPv4.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+R1# <strong>show ip dhcp binding</strong>
+Bindings from all pools not associated with VRF:
+IP address    Client-ID/               Lease expiration    Type        State    Interface
+192.168.10.10 0100.5056.b3ed.d8       Sep 15 2019 8:42 AM  Automatic   Active   GigabitEthernet0/0/0
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'stats':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">Verificar estatísticas DHCPv4</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        A saída do <strong style="color: var(--primary);">show ip dhcp server statistics</strong> é usada para verificar 
+                        se as mensagens estão sendo recebidas ou enviadas pelo roteador. Ele exibe informações sobre a quantidade de 
+                        mensagens DHCPv4 que foram enviadas e recebidas.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+R1# <strong>show ip dhcp server statistics</strong>
+Memory usage                 19465
+Address pools                1
+Database agents              0
+Automatic bindings           2
+Manual bindings              0
+Expired bindings             0
+Malformed messages           0
+Secure arp entries           0
+Renew messages               0
+Workspace timeouts           0
+Static routes                0
+Relay bindings               0
+Relay bindings active        0
+Relay bindings terminated    0
+Relay bindings selecting     0
+Message                      Received
+BOOTREQUEST                  0
+DHCPDISCOVER                 4
+DHCPREQUEST                  2
+DHCPDECLINE                  0
+DHCPRELEASE                  0
+DHCPINFORM                   0
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'client':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">Verificar o endereçamento IPv4 recebido do cliente DHCPv4</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        O comando <strong style="color: var(--primary);">ipconfig /all</strong>, quando emitido no PC1, exibe os parâmetros TCP/IP, 
+                        conforme mostrado no exemplo. Como o PC1 foi conectado ao segmento da rede 192.168.10.0/24, ele recebeu 
+                        automaticamente um sufixo de DNS, endereço IPv4, máscara de sub-rede, gateway padrão e o endereço de servidor 
+                        DNS desse pool. Nenhuma configuração da interface do roteador específica do DHCP é necessária.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+C:\\Users\\Student> <strong>ipconfig /all</strong>
+
+Configuração do IP do Windows
+
+Nome do host ............................ : ciscolab
+Sufixo de DNS primário .................. : 
+Tipo de nó ............................. : Híbrido
+Roteamento de IP ativado ................ : Não
+Proxy WINS ativado ..................... : Não
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  ...... : example.com
+   Descrição ............................ : Realtek PCIe GBE Family Controller
+   Endereço Físico ...................... : 00-05-9A-3C-7A-00
+   DHCP Enabled ......................... : Yes
+   Autoconfiguration Enabled ............ : Yes
+   <strong style="color: var(--secondary);">IPv4 Address</strong> ........................ : 192.168.10.10
+   <strong style="color: var(--secondary);">Máscara de Sub-Rede</strong> ................... : 255.255.255.0
+   Lease Obtained ....................... : Saturday, September 14, 2019 8:42:22 AM
+   Lease Expires ........................ : Sunday, September 15, 2019 8:42:22 AM
+   <strong style="color: var(--secondary);">Default Gateway</strong> ....................... : 192.168.10.1
+   <strong style="color: var(--secondary);">DHCP Server</strong> .......................... : 192.168.10.1
+   <strong style="color: var(--secondary);">Servidores DNS</strong> ....................... : 192.168.11.5
+                    </pre>
+                </div>
+                <div style="background: rgba(3, 244, 135, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--success); margin-top: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        Se um PC estiver conectado a um segmento de rede que tenha um pool de DHCPv4 disponível, 
+                        poderá obter o endereço IPv4 do pool apropriado automaticamente.
+                    </span>
+                </div>
+            `
+              break
+          }
+
+          output.innerHTML = html
+        }
+
+        // Carregar configuração por padrão
+        document.addEventListener('DOMContentLoaded', function () {
+          mostrarComando('config')
+        })
+      </script>
+      <section id="secao7-2-6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-code"></i>
+          <span class="section-number">7.2.6</span> Syntax Checker - Configure DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>
+            Nesta atividade do Verificador de Sintaxe, você configurará o <strong>R1</strong> para ser o servidor DHCPv4 para a rede
+            <strong>192.168.11.0/24</strong>.
+          </p>
+        </div>
+
+        <!-- TOPOLOGIA -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-network-wired"></i> Topologia de Configuração DHCPv4
+          </h3>
+
+          <!-- WRAPPER RESPONSIVO -->
+          <div
+            style="
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              background: #090d16 !important;
+              padding: 1.5rem !important;
+            "
+          >
+            <div style="width: 680px !important; min-width: 680px !important; background: transparent !important">
+              <!-- LINHA 1: Dispositivos -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.5rem 0 !important;
+                "
+              >
+                <!-- PC1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC1</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S1</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- R1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--secondary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      box-shadow: 0 0 15px rgba(0, 245, 212, 0.15) !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-router" style="color: var(--secondary) !important; font-size: 1.5rem !important"></i>
+                  </div>
+                  <div style="color: var(--secondary) !important; font-family: monospace !important; font-size: 0.7rem !important">R1</div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    G0/0/0 - G0/0/1
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    Servidor DHCPv4
+                  </div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S2</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- PC2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC2</div>
+                </div>
+              </div>
+
+              <!-- LINHA 2: Redes -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.2rem 0 !important;
+                  border-top: 1px solid var(--border) !important;
+                  border-bottom: 1px solid var(--border) !important;
+                  margin: 0.3rem 0 !important;
+                "
+              >
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.10.0/24</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--primary) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >Rede DHCP</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.11.0/24</span
+                  >
+                </div>
+              </div>
+
+              <!-- LINHA 3: Servidores -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: center !important;
+                  padding: 0.5rem 0 !important;
+                  gap: 4rem !important;
+                "
+              >
+                <!-- Servidor DHCP -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--success) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--success) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--success) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DHCPv4
+                  </div>
+                </div>
+
+                <!-- Servidor DNS -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--primary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--primary) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DNS
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    192.168.11.6/24
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- CONSOLE INTERATIVO -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-terminal"></i> Verificador de Sintaxe - Configuração DHCPv4
+          </h3>
+
+          <div style="background: #090d16; border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border)">
+            <!-- Etapa 1: Exclusão de Endereços -->
+            <div style="margin-bottom: 1.5rem">
+              <div
+                style="
+                  background: rgba(0, 180, 216, 0.05);
+                  border-radius: 8px;
+                  padding: 0.8rem;
+                  border-left: 3px solid var(--primary);
+                  margin-bottom: 0.8rem;
+                "
+              >
+                <span style="color: var(--text); font-family: monospace; font-size: 0.8rem">
+                  <i class="fas fa-minus-circle" style="color: var(--warning)"></i>
+                  Exclua os seguintes endereços do intervalo de endereços 192.168.11.0/24:
+                </span>
+                <ul style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem; margin-top: 0.3rem; padding-left: 1.5rem">
+                  <li>Exclua o endereço .1 através do .9.</li>
+                  <li>Exclua o endereço .254.</li>
+                </ul>
+              </div>
+
+              <div class="terminal" style="margin-bottom: 0.5rem">
+                <pre>
+R1(config)# <strong>ip dhcp excluded-address 192.168.11.1 192.168.11.9</strong>
+R1(config)# <strong>ip dhcp excluded-address 192.168.11.254</strong>
+                    </pre>
+              </div>
+            </div>
+
+            <!-- Etapa 2: Configuração do Pool -->
+            <div>
+              <div
+                style="
+                  background: rgba(0, 180, 216, 0.05);
+                  border-radius: 8px;
+                  padding: 0.8rem;
+                  border-left: 3px solid var(--primary);
+                  margin-bottom: 0.8rem;
+                "
+              >
+                <span style="color: var(--text); font-family: monospace; font-size: 0.8rem">
+                  <i class="fas fa-database" style="color: var(--primary)"></i>
+                  Configure o pool DHCPv4 com os seguintes requisitos:
+                </span>
+                <ul style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem; margin-top: 0.3rem; padding-left: 1.5rem">
+                  <li>Define the pool name of <strong style="color: var(--secondary)">LAN-POOL-2</strong>.</li>
+                  <li>Configure o endereço de rede.</li>
+                  <li>Configure o endereço de gateway padrão.</li>
+                  <li>Configure o endereço do servidor DNS.</li>
+                  <li>Configure <strong style="color: var(--secondary)">example.com</strong> como o nome de domínio.</li>
+                  <li>Volte ao modo EXEC privilegiado.</li>
+                </ul>
+              </div>
+
+              <div class="terminal">
+                <pre>
+R1(config)# <strong>ip dhcp pool LAN-POOL-2</strong>
+R1(dhcp-config)# <strong>network 192.168.11.0 255.255.255.0</strong>
+R1(dhcp-config)# <strong>default-router 192.168.11.1</strong>
+R1(dhcp-config)# <strong>dns-server 192.168.11.6</strong>
+R1(dhcp-config)# <strong>domain-name example.com</strong>
+R1(dhcp-config)# <strong>end</strong>
+                    </pre>
+              </div>
+            </div>
+
+            <!-- Mensagem de Sucesso -->
+          </div>
+        </div>
+
+        <!-- RESUMO DOS COMANDOS -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-list-check"></i> Resumo da Configuração DHCPv4
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--border)">
+              <span style="color: var(--warning); font-family: monospace; font-weight: bold; font-size: 0.7rem">EXCLUSÃO DE ENDEREÇOS</span>
+              <div style="font-family: monospace; font-size: 0.65rem; color: var(--text); margin-top: 0.3rem">
+                <div><span style="color: var(--text-dim)">Rede:</span> 192.168.11.0/24</div>
+                <div><span style="color: var(--text-dim)">Excluídos:</span> .1 até .9</div>
+                <div><span style="color: var(--text-dim)">Excluídos:</span> .254</div>
+              </div>
+            </div>
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--secondary)">
+              <span style="color: var(--secondary); font-family: monospace; font-weight: bold; font-size: 0.7rem"
+                >POOL DHCP - LAN-POOL-2</span
+              >
+              <div style="font-family: monospace; font-size: 0.65rem; color: var(--text); margin-top: 0.3rem">
+                <div><span style="color: var(--text-dim)">Rede:</span> 192.168.11.0/24</div>
+                <div><span style="color: var(--text-dim)">Gateway:</span> 192.168.11.1</div>
+                <div><span style="color: var(--text-dim)">DNS:</span> 192.168.11.6</div>
+                <div><span style="color: var(--text-dim)">Domínio:</span> example.com</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Configuração Completa!</strong> O R1 agora está configurado como servidor DHCPv4 para a rede 192.168.11.0/24, com
+            exclusão dos endereços .1-.9 e .254, pool LAN-POOL-2, gateway 192.168.11.1, DNS 192.168.11.6 e domínio example.com.
+          </div>
+        </div>
+      </section>
+      <section id="secao7-2-7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-power-off"></i>
+          <span class="section-number">7.2.7</span> Desativar o servidor DHCPv4 do Cisco IOS
+        </h2>
+
         <div class="card">
           <p>
-            Para resolver esse problema no roteador <strong>R1</strong>, você deve configurar a interface de entrada ligada aos clientes
-            (neste exemplo, a interface GigabitEthernet 0/0/0) com o comando de configuração de interface
-            <span style="font-family: monospace; color: var(--secondary); font-weight: bold">ip helper-address [endereço-do-servidor]</span
-            >.
+            O serviço DHCPv4 está <strong>ativado por padrão</strong> nos roteadores Cisco IOS. Para desativar o serviço, use o comando
+            <code>no service dhcp</code> no modo de configuração global. Use o comando <code>service dhcp</code> no modo de configuração
+            global para reativar o processo do servidor DHCPv4, conforme mostrado no exemplo.
           </p>
-          <p>
-            Quando o roteador R1 recebe a transmissão de descoberta (<span style="font-family: monospace">DHCPDISCOVER</span>) na interface
-            G0/0/0, ele altera o endereço de origem para seu próprio endereço IP na interface de saída e converte o destino de broadcast
-            para o endereço <strong>Unicast</strong> do servidor DHCPv4 (192.168.11.5), permitindo o roteamento entre as sub-redes.
-          </p>
+          <div class="alert alert-warning" style="margin-top: 1rem">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Observação:</strong> Limpar as ligações DHCP ou parar e reiniciar o serviço DHCP pode resultar na
+            <strong>atribuição temporária de endereços IP duplicados</strong> na rede.
+          </div>
         </div>
 
-        <h3 style="margin-top: 2rem; font-size: 1.1rem; color: var(--text)">
-          <i class="fas fa-terminal" style="color: var(--primary); margin-right: 0.5rem"></i>
-          Configuração do ip helper-address no Roteador R1
-        </h3>
+        <!-- COMANDOS NO TERMINAL -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-terminal"></i> Comandos de Ativação/Desativação do DHCPv4
+          </h3>
 
-        <div class="terminal">
-          <pre>R1(config)# <strong>interface gigabitethernet 0/0/0</strong>
-R1(config-if)# <strong>ip helper-address 192.168.11.5</strong>
-R1(config-if)# <strong>end</strong>
-R1#</pre>
-        </div>
-
-        <div class="card" style="margin-top: 1.5rem">
-          <h4 style="color: var(--info); margin-bottom: 0.5rem">
-            <i class="fas fa-info-circle"></i> Outros Serviços Retransmitidos por Padrão
-          </h4>
-          <p style="font-size: 0.9rem; margin-bottom: 0">
-            O comando <span style="font-family: monospace">ip helper-address</span> encaminha por padrão não apenas requisições DHCPv4, mas
-            também os seguintes 8 serviços baseados em UDP:
-          </p>
-          <ul
+          <div
             style="
-              margin-left: 2rem;
-              margin-top: 0.5rem;
-              font-size: 0.85rem;
-              font-family: monospace;
-              color: var(--text-dim);
-              display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              gap: 0.25rem;
+              background: rgba(0, 180, 216, 0.05);
+              border-radius: 8px;
+              padding: 0.8rem;
+              border-left: 3px solid var(--primary);
+              margin-bottom: 1rem;
             "
           >
-            <li>• Porta 37: Time</li>
-            <li>• Porta 49: TACACS</li>
-            <li>• Porta 53: DNS</li>
-            <li>• Porta 67: DHCP/BOOTP Server</li>
-            <li>• Porta 68: DHCP/BOOTP Client</li>
-            <li>• Porta 69: TFTP</li>
-            <li>• Porta 137: NetBIOS Name Service</li>
-            <li>• Porta 138: NetBIOS Datagram Service</li>
-          </ul>
+            <span style="color: var(--text); font-family: monospace; font-size: 0.8rem">
+              <i class="fas fa-info-circle" style="color: var(--primary)"></i>
+              Ativar o serviço não terá nenhum efeito se os parâmetros não estiverem configurados.
+            </span>
+          </div>
+
+          <div class="terminal">
+            <pre>
+R1(config)# <strong>no service dhcp</strong>
+R1(config)# <strong>service dhcp</strong>
+R1(config)#
+            </pre>
+          </div>
+
+          <!-- Cards de Explicação -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem">
+            <div
+              style="
+                background: rgba(255, 77, 109, 0.05);
+                border: 1px solid var(--danger);
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+              "
+            >
+              <i class="fas fa-times-circle" style="color: var(--danger); font-size: 2rem"></i>
+              <div style="color: var(--danger); font-family: monospace; font-weight: bold; margin-top: 0.5rem">no service dhcp</div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem; margin-top: 0.3rem">
+                Desativa o servidor DHCPv4<br />
+                <span style="color: var(--text-dim); font-size: 0.6rem">(Para de responder a solicitações DHCP)</span>
+              </div>
+            </div>
+            <div
+              style="
+                background: rgba(3, 244, 135, 0.05);
+                border: 1px solid var(--success);
+                border-radius: 8px;
+                padding: 1rem;
+                text-align: center;
+              "
+            >
+              <i class="fas fa-check-circle" style="color: var(--success); font-size: 2rem"></i>
+              <div style="color: var(--success); font-family: monospace; font-weight: bold; margin-top: 0.5rem">service dhcp</div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem; margin-top: 0.3rem">
+                Reativa o servidor DHCPv4<br />
+                <span style="color: var(--text-dim); font-size: 0.6rem">(Volta a responder a solicitações DHCP)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IMPLICAÇÕES E CUIDADOS -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--warning); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-exclamation-triangle"></i> Implicações e Cuidados
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
+            <div
+              style="
+                background: rgba(18, 24, 36, 0.5);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid var(--border);
+                text-align: center;
+              "
+            >
+              <i class="fas fa-link" style="color: var(--primary); font-size: 1.5rem"></i>
+              <div style="color: var(--text); font-family: monospace; font-size: 0.7rem; margin-top: 0.5rem">
+                <strong style="color: var(--primary)">Ligações DHCP</strong>
+              </div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 0.3rem">
+                Limpar as ligações pode causar<br />atribuição de IPs duplicados
+              </div>
+            </div>
+            <div
+              style="
+                background: rgba(18, 24, 36, 0.5);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid var(--border);
+                text-align: center;
+              "
+            >
+              <i class="fas fa-sync" style="color: var(--warning); font-size: 1.5rem"></i>
+              <div style="color: var(--text); font-family: monospace; font-size: 0.7rem; margin-top: 0.5rem">
+                <strong style="color: var(--warning)">Reiniciar Serviço</strong>
+              </div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 0.3rem">
+                Parar e reiniciar pode resultar<br />em IPs duplicados temporários
+              </div>
+            </div>
+            <div
+              style="
+                background: rgba(18, 24, 36, 0.5);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid var(--border);
+                text-align: center;
+              "
+            >
+              <i class="fas fa-shield-alt" style="color: var(--success); font-size: 1.5rem"></i>
+              <div style="color: var(--text); font-family: monospace; font-size: 0.7rem; margin-top: 0.5rem">
+                <strong style="color: var(--success)">Boa Prática</strong>
+              </div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.6rem; margin-top: 0.3rem">
+                Planeje a manutenção fora<br />do horário comercial
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESUMO -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 0.5rem"><i class="fas fa-list-check"></i> Resumo</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem">
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--border)">
+              <span style="color: var(--text); font-family: monospace; font-weight: bold; font-size: 0.75rem">DESATIVAR DHCPv4</span>
+              <div style="font-family: monospace; font-size: 0.7rem; color: var(--text); margin-top: 0.3rem">
+                <div>
+                  <span style="color: var(--text-dim)">Comando:</span> <strong style="color: var(--danger)">no service dhcp</strong>
+                </div>
+                <div><span style="color: var(--text-dim)">Efeito:</span> Roteador para de responder a solicitações DHCP</div>
+                <div><span style="color: var(--text-dim)">Modo:</span> Configuração Global</div>
+              </div>
+            </div>
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--secondary)">
+              <span style="color: var(--text); font-family: monospace; font-weight: bold; font-size: 0.75rem">REATIVAR DHCPv4</span>
+              <div style="font-family: monospace; font-size: 0.7rem; color: var(--text); margin-top: 0.3rem">
+                <div><span style="color: var(--text-dim)">Comando:</span> <strong style="color: var(--success)">service dhcp</strong></div>
+                <div><span style="color: var(--text-dim)">Efeito:</span> Roteador volta a responder a solicitações DHCP</div>
+                <div><span style="color: var(--text-dim)">Modo:</span> Configuração Global</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1rem">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica:</strong> O comando <code>service dhcp</code> é habilitado por padrão no Cisco IOS. Mesmo que o serviço esteja
+            ativo, ele só funcionará se os pools DHCP estiverem devidamente configurados.
+          </div>
+        </div>
+      </section>
+      <section id="secao7-2-8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exchange-alt"></i>
+          <span class="section-number">7.2.8</span> Retransmissão DHCPv4
+        </h2>
+
+        <div class="card">
+          <p>
+            Em uma rede hierárquica complexa, os servidores corporativos geralmente estão localizados centralmente. Esses servidores podem
+            fornecer serviços de DHCP, DNS, TFTP e FTP para a rede. Os clientes da rede normalmente não estão na mesma sub-rede que esses
+            servidores. Para atender os servidores e receber serviços, os clientes usam frequentemente mensagens de <em>broadcast</em>.
+          </p>
+          <p>
+            Na figura, o <strong>PC1</strong> está tentando adquirir um endereço IPv4 de um servidor DHCPv4 usando uma mensagem de
+            <em>broadcast</em>. Neste cenário, o roteador <strong>R1</strong> não está configurado como um servidor DHCPv4 e não enviará o
+            <em>broadcast</em>. O servidor DHCPv4 está localizado em uma rede diferente, o PC1 não pode receber um endereço IP usando o
+            DHCP. R1 deve ser configurado para <strong>retransmitir mensagens DHCPv4</strong> para o servidor DHCPv4.
+          </p>
+        </div>
+
+        <!-- TOPOLOGIA -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-network-wired"></i> Topologia de Retransmissão DHCPv4
+          </h3>
+
+          <div
+            style="
+              width: 100% !important;
+              overflow-x: auto !important;
+              display: block !important;
+              white-space: nowrap !important;
+              -webkit-overflow-scrolling: touch !important;
+              border-radius: 12px !important;
+              border: 1px solid var(--border) !important;
+              background: #090d16 !important;
+              padding: 1.5rem !important;
+            "
+          >
+            <div style="width: 680px !important; min-width: 680px !important; background: transparent !important">
+              <!-- LINHA 1: Dispositivos -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.5rem 0 !important;
+                "
+              >
+                <!-- PC1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--warning) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--warning) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC1</div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    Procurando DHCP
+                  </div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S1</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- R1 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--secondary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      box-shadow: 0 0 15px rgba(0, 245, 212, 0.15) !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-router" style="color: var(--secondary) !important; font-size: 1.5rem !important"></i>
+                  </div>
+                  <div style="color: var(--secondary) !important; font-family: monospace !important; font-size: 0.7rem !important">R1</div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    G0/0/0 - G0/0/1
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.45rem !important">
+                    Agente de Retransmissão
+                  </div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- S2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">S2</div>
+                </div>
+
+                <div style="color: var(--text-dim) !important; font-size: 0.8rem !important">───</div>
+
+                <!-- PC2 -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--border) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="color: var(--text-dim) !important; font-size: 1.3rem !important"></i>
+                  </div>
+                  <div style="color: var(--text) !important; font-family: monospace !important; font-size: 0.7rem !important">PC2</div>
+                </div>
+              </div>
+
+              <!-- LINHA 2: Redes -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: space-between !important;
+                  padding: 0.2rem 0 !important;
+                  border-top: 1px solid var(--border) !important;
+                  border-bottom: 1px solid var(--border) !important;
+                  margin: 0.3rem 0 !important;
+                "
+              >
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.10.0/24</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--warning) !important; font-family: monospace !important; font-size: 0.5rem !important"
+                    >❌ Não encaminha broadcasts</span
+                  >
+                </div>
+                <div style="width: 33% !important; text-align: center !important">
+                  <span style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.55rem !important"
+                    >192.168.11.0/24</span
+                  >
+                </div>
+              </div>
+
+              <!-- LINHA 3: Servidores -->
+              <div
+                style="
+                  display: flex !important;
+                  align-items: center !important;
+                  justify-content: center !important;
+                  padding: 0.5rem 0 !important;
+                  gap: 4rem !important;
+                "
+              >
+                <!-- Servidor DHCP -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--success) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--success) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--success) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DHCPv4
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    192.168.11.6/24
+                  </div>
+                </div>
+
+                <!-- Servidor DNS -->
+                <div style="text-align: center !important">
+                  <div
+                    style="
+                      background: var(--bg-card) !important;
+                      border: 2px solid var(--primary) !important;
+                      border-radius: 8px !important;
+                      padding: 0.3rem 0.8rem !important;
+                      display: inline-block !important;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary) !important; font-size: 1.2rem !important"></i>
+                  </div>
+                  <div style="color: var(--primary) !important; font-family: monospace !important; font-size: 0.6rem !important">
+                    Servidor DNS
+                  </div>
+                  <div style="color: var(--text-dim) !important; font-family: monospace !important; font-size: 0.5rem !important">
+                    192.168.11.5/24
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMANDOS INTERATIVOS -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-search"></i> Resolução do Problema DHCPv4
+          </h3>
+
+          <p style="color: var(--text); margin-bottom: 1rem">
+            Nesse cenário, um administrador de rede está tentando renovar informações de endereçamento IPv4 para PC1. Clique em cada botão
+            para ver a saída do comando à medida que o administrador de rede resolve esse problema:
+          </p>
+
+          <!-- Botões de Navegação -->
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem">
+            <button
+              onclick="mostrarComandoDHCP('release')"
+              id="btnRelease"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-times-circle"></i> ipconfig /release
+            </button>
+            <button
+              onclick="mostrarComandoDHCP('renew')"
+              id="btnRenew"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-sync"></i> ipconfig /renew
+            </button>
+            <button
+              onclick="mostrarComandoDHCP('helper')"
+              id="btnHelper"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-address-card"></i> ip helper-address
+            </button>
+            <button
+              onclick="mostrarComandoDHCP('showip')"
+              id="btnShowip"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-eye"></i> show ip interface
+            </button>
+            <button
+              onclick="mostrarComandoDHCP('all')"
+              id="btnAll"
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 0.65rem;
+                transition: all 0.3s;
+              "
+            >
+              <i class="fas fa-list"></i> ipconfig /all
+            </button>
+          </div>
+
+          <!-- Área de Exibição -->
+          <div
+            id="dhcpRelayOutput"
+            style="background: #090d16; border-radius: 8px; padding: 1rem; border: 1px solid var(--border); min-height: 250px"
+          >
+            <!-- Conteúdo será inserido via JavaScript -->
+          </div>
+        </div>
+
+        <!-- RESUMO -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 0.5rem">
+            <i class="fas fa-list-check"></i> Resumo: Retransmissão DHCPv4
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem">
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--border)">
+              <span style="color: var(--text); font-family: monospace; font-weight: bold; font-size: 0.75rem">PROBLEMA</span>
+              <div style="font-family: monospace; font-size: 0.7rem; color: var(--text); margin-top: 0.3rem">
+                <div><span style="color: var(--text-dim)">Cliente:</span> PC1 na rede 192.168.10.0/24</div>
+                <div><span style="color: var(--text-dim)">Servidor:</span> DHCP em 192.168.11.6/24</div>
+                <div><span style="color: var(--text-dim)">Problema:</span> Roteadores não encaminham <em>broadcasts</em></div>
+              </div>
+            </div>
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--success)">
+              <span style="color: var(--success); font-family: monospace; font-weight: bold; font-size: 0.75rem">SOLUÇÃO</span>
+              <div style="font-family: monospace; font-size: 0.7rem; color: var(--text); margin-top: 0.3rem">
+                <div>
+                  <span style="color: var(--text-dim)">Comando:</span>
+                  <strong style="color: var(--secondary)">ip helper-address 192.168.11.6</strong>
+                </div>
+                <div><span style="color: var(--text-dim)">Modo:</span> Interface G0/0/0</div>
+                <div><span style="color: var(--text-dim)">Efeito:</span> Retransmite <em>broadcasts</em> DHCP como <em>unicast</em></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Solução Completa!</strong> Com o comando <code>ip helper-address</code> configurado na interface G0/0/0 do R1, o
+            roteador passa a retransmitir as solicitações DHCP do PC1 como <em>unicast</em> para o servidor DHCP em 192.168.11.6, permitindo
+            que o PC1 obtenha um endereço IP corretamente.
+          </div>
+        </div>
+      </section>
+
+      <script>
+        function mostrarComandoDHCP(tipo) {
+          const output = document.getElementById('dhcpRelayOutput')
+
+          // Resetar estilo dos botões
+          const botoes = ['release', 'renew', 'helper', 'showip', 'all']
+          botoes.forEach((id) => {
+            const btn = document.getElementById('btn' + id.charAt(0).toUpperCase() + id.slice(1))
+            if (btn) {
+              btn.style.background = 'var(--bg-card)'
+              btn.style.border = '1px solid var(--border)'
+              btn.style.color = 'var(--text)'
+            }
+          })
+
+          // Destacar botão ativo
+          const btnMap = {
+            release: 'btnRelease',
+            renew: 'btnRenew',
+            helper: 'btnHelper',
+            showip: 'btnShowip',
+            all: 'btnAll'
+          }
+          const botaoAtivo = document.getElementById(btnMap[tipo])
+          if (botaoAtivo) {
+            botaoAtivo.style.background = 'var(--primary)'
+            botaoAtivo.style.border = 'none'
+            botaoAtivo.style.color = '#fff'
+          }
+
+          let html = ''
+
+          switch (tipo) {
+            case 'release':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">ipconfig /release</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        PC1 é um computador Windows. O administrador de rede libera todas as informações de endereçamento IPv4 atuais usando o comando 
+                        <strong style="color: var(--primary);">ipconfig /release</strong>. Observe que o endereço IPv4 foi liberado e nenhum endereço é mostrado.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+C:\\Users\\Student> <strong>ipconfig /release</strong>
+
+Configuração do IP do Windows
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  ...... : 
+   <span style="color: var(--text-dim);">IPv4 Address</span> ........................ : 
+   <span style="color: var(--text-dim);">Máscara de Sub-Rede</span> ................... : 
+   <span style="color: var(--text-dim);">Gateway Padrão</span> ....................... :
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'renew':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">ipconfig /renew</span>
+                </div>
+                <div style="background: rgba(255, 77, 109, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--danger); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Em seguida, o administrador de rede tenta renovar as informações de endereçamento IPv4 com o comando 
+                        <strong style="color: var(--primary);">ipconfig /renew</strong>. Esse comando faz com que o PC1 transmita uma mensagem 
+                        <strong style="color: var(--warning);">DHCPDISCOVER</strong>. A saída mostra se o PC1 consegue localizar o servidor DHCPv4. 
+                        Como os roteadores <strong style="color: var(--danger);">não encaminham broadcasts</strong>, a solicitação não é bem-sucedida.
+                    </span>
+                </div>
+                <div style="background: rgba(255, 183, 3, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--warning); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        <i class="fas fa-info-circle" style="color: var(--warning);"></i>
+                        O administrador de rede pode adicionar servidores DHCPv4 em R1 para todas as sub-redes. No entanto, isso criaria 
+                        <strong style="color: var(--warning);">custos adicionais e custos administrativos</strong>.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+C:\\Users\\Student> <strong>ipconfig /renew</strong>
+
+Configuração do IP do Windows
+
+<span style="color: var(--danger);">Ocorreu um erro ao renovar a interface Ethernet0: não é possível se conectar ao servidor DHCP. A solicitação expirou.</span>
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'helper':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">ip helper-address</span>
+                </div>
+                <div style="background: rgba(3, 244, 135, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--success); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Uma solução melhor é configurar o R1 com o comando <strong style="color: var(--secondary);">ip helper-address address</strong> 
+                        no modo de configuração de interface. Isso fará com que R1 <strong style="color: var(--success);">retransmita transmissões DHCPv4</strong> 
+                        para o servidor DHCPv4. Como mostrado no exemplo, a interface no R1 que recebe a broadcast do PC1 está configurada para 
+                        retransmitir o endereço DHCPv4 para o servidor DHCPv4 em <strong style="color: var(--primary);">192.168.11.6</strong>.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+R1(config)# <strong>interface g0/0/0</strong>
+R1(config-if)# <strong>ip helper-address 192.168.11.6</strong>
+R1(config-if)# <strong>end</strong>
+R1#
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'showip':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">show ip interface</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--primary); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Quando R1 está configurado como um <strong style="color: var(--secondary);">agente de retransmissão do DHCPv4</strong>, 
+                        ele aceita solicitações de <em>broadcast</em> do serviço de DHCPv4 e depois encaminha as solicitações como 
+                        <strong style="color: var(--success);">unicast</strong> ao endereço IPv4 192.168.11.6. O administrador de rede pode 
+                        usar o comando <strong style="color: var(--primary);">show ip interface</strong> para verificar a configuração.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+R1# <strong>show ip interface g0/0/0</strong>
+GigabitEthernet0/0/0 is up, line protocol is up
+  Internet address is 192.168.10.1/24
+  Broadcast address is 255.255.255.255
+  Address determined by setup command
+  MTU is 1500 bytes
+  <span style="color: var(--secondary);">Helper address is 192.168.11.6</span>
+<span style="color: var(--text-dim);">(saída omitida)</span>
+                    </pre>
+                </div>
+            `
+              break
+
+            case 'all':
+              html = `
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.75rem;">ipconfig /all</span>
+                </div>
+                <div style="background: rgba(3, 244, 135, 0.05); border-radius: 4px; padding: 0.5rem; border-left: 3px solid var(--success); margin-bottom: 0.8rem;">
+                    <span style="color: var(--text-dim); font-family: monospace; font-size: 0.7rem;">
+                        Como mostrado na saída, o PC1 agora pode <strong style="color: var(--success);">adquirir um endereço IPv4</strong> 
+                        do servidor DHCPv4, conforme verificado com o comando <strong style="color: var(--primary);">ipconfig /all</strong>.
+                    </span>
+                </div>
+                <div class="terminal">
+                    <pre>
+C:\\Users\\Student> <strong>ipconfig /all</strong>
+
+Configuração do IP do Windows
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  ...... : example.com
+   <strong style="color: var(--secondary);">IPv4 Address</strong> ........................ : 192.168.10.10
+   <strong style="color: var(--secondary);">Máscara de Sub-Rede</strong> ................... : 255.255.255.0
+   <strong style="color: var(--secondary);">Gateway Padrão</strong> ....................... : 192.168.10.1
+                    </pre>
+                </div>
+            `
+              break
+          }
+
+          output.innerHTML = html
+        }
+
+        // Carregar release por padrão
+        document.addEventListener('DOMContentLoaded', function () {
+          mostrarComandoDHCP('release')
+        })
+      </script>
+      <section id="secao7-2-9" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-broadcast"></i>
+          <span class="section-number">7.2.9</span> Outras Transmissões de Serviço Retransmitidas
+        </h2>
+
+        <div class="card">
+          <p>
+            O DHCPv4 não é o único serviço no qual o roteador pode ser configurado para retransmitir. Por padrão, o comando
+            <strong><code>ip helper-address</code></strong> encaminha os <strong>oito serviços UDP</strong> a seguir:
+          </p>
+        </div>
+
+        <!-- TABELA DE SERVIÇOS UDP -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-list"></i> Serviços UDP Retransmitidos pelo <code>ip helper-address</code>
+          </h3>
+
+          <div style="overflow-x: auto">
+            <table class="table-custom" style="min-width: 500px">
+              <thead>
+                <tr>
+                  <th style="width: 80px">Porta</th>
+                  <th style="width: 200px">Serviço</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">37</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">Tempo</span></td>
+                  <td><span style="color: var(--text-dim)">Sincronização de horário</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">49</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">TACACS+</span></td>
+                  <td><span style="color: var(--text-dim)">Autenticação e autorização</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">53</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">DNS</span></td>
+                  <td><span style="color: var(--text-dim)">Resolução de nomes de domínio</span></td>
+                </tr>
+                <tr style="background: rgba(0, 180, 216, 0.05)">
+                  <td><span style="color: var(--secondary); font-family: monospace; font-weight: bold">67</span></td>
+                  <td><span style="color: var(--secondary); font-family: monospace; font-weight: bold">DHCP/BOOTP server</span></td>
+                  <td><span style="color: var(--text-dim)">Servidor DHCP (solicitações)</span></td>
+                </tr>
+                <tr style="background: rgba(0, 180, 216, 0.05)">
+                  <td><span style="color: var(--secondary); font-family: monospace; font-weight: bold">68</span></td>
+                  <td><span style="color: var(--secondary); font-family: monospace; font-weight: bold">DHCP/BOOTP client</span></td>
+                  <td><span style="color: var(--text-dim)">Cliente DHCP (respostas)</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">69</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">TFTP</span></td>
+                  <td><span style="color: var(--text-dim)">Transferência de arquivos</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">137</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">NetBIOS name service</span></td>
+                  <td><span style="color: var(--text-dim)">Resolução de nomes NetBIOS</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--primary); font-family: monospace; font-weight: bold">138</span></td>
+                  <td><span style="color: var(--text); font-family: monospace">NetBIOS datagram service</span></td>
+                  <td><span style="color: var(--text-dim)">Datagramas NetBIOS</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1rem">
+            <i class="fas fa-info-circle"></i>
+            <strong>Dica:</strong> Por padrão, o comando <code>ip helper-address</code> encaminha todos esses 8 serviços UDP. Se necessário,
+            é possível usar o comando <code>no ip forward-protocol udp [porta]</code> para desativar o encaminhamento de serviços
+            específicos.
+          </div>
+        </div>
+
+        <!-- VISUALIZAÇÃO DOS SERVIÇOS -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-diagram-project"></i> Funcionamento do <code>ip helper-address</code>
+          </h3>
+
+          <div style="background: #090d16; border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border)">
+            <!-- Diagrama de Fluxo -->
+            <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem">
+              <!-- Cliente -->
+              <div style="text-align: center">
+                <div style="background: var(--bg-card); border: 2px solid var(--warning); border-radius: 8px; padding: 0.5rem 1rem">
+                  <i class="fas fa-laptop" style="color: var(--warning); font-size: 1.5rem"></i>
+                </div>
+                <span style="color: var(--text); font-family: monospace; font-size: 0.7rem; display: block">Cliente</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem">Broadcast UDP</span>
+              </div>
+
+              <div style="color: var(--text-dim); font-size: 1.5rem">➜</div>
+
+              <!-- Roteador com Helper -->
+              <div style="text-align: center">
+                <div
+                  style="
+                    background: var(--bg-card);
+                    border: 2px solid var(--secondary);
+                    border-radius: 8px;
+                    padding: 0.5rem 1rem;
+                    box-shadow: 0 0 15px rgba(0, 245, 212, 0.15);
+                  "
+                >
+                  <i class="fas fa-router" style="color: var(--secondary); font-size: 1.8rem"></i>
+                </div>
+                <span style="color: var(--secondary); font-family: monospace; font-size: 0.7rem; display: block">Roteador</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem">ip helper-address</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.5rem">Converte Broadcast → Unicast</span>
+              </div>
+
+              <div style="color: var(--text-dim); font-size: 1.5rem">➜</div>
+
+              <!-- Servidor -->
+              <div style="text-align: center">
+                <div style="background: var(--bg-card); border: 2px solid var(--success); border-radius: 8px; padding: 0.5rem 1rem">
+                  <i class="fas fa-server" style="color: var(--success); font-size: 1.5rem"></i>
+                </div>
+                <span style="color: var(--success); font-family: monospace; font-size: 0.7rem; display: block">Servidor</span>
+                <span style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem">Unicast UDP</span>
+              </div>
+            </div>
+
+            <!-- Portas retransmitidas -->
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-top: 1.5rem;
+                border-top: 1px solid var(--border);
+                padding-top: 1rem;
+              "
+            >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 37 - Tempo</span
+              >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 49 - TACACS+</span
+              >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 53 - DNS</span
+              >
+              <span
+                style="
+                  background: rgba(0, 245, 212, 0.15);
+                  border: 1px solid var(--secondary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--secondary);
+                  font-family: monospace;
+                  font-weight: bold;
+                  font-size: 0.6rem;
+                "
+                >Porta 67 - DHCP Server</span
+              >
+              <span
+                style="
+                  background: rgba(0, 245, 212, 0.15);
+                  border: 1px solid var(--secondary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--secondary);
+                  font-family: monospace;
+                  font-weight: bold;
+                  font-size: 0.6rem;
+                "
+                >Porta 68 - DHCP Client</span
+              >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 69 - TFTP</span
+              >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 137 - NetBIOS NS</span
+              >
+              <span
+                style="
+                  background: rgba(0, 180, 216, 0.1);
+                  border: 1px solid var(--primary);
+                  border-radius: 20px;
+                  padding: 0.2rem 0.8rem;
+                  color: var(--text);
+                  font-family: monospace;
+                  font-size: 0.6rem;
+                "
+                >Porta 138 - NetBIOS Datagram</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- COMANDOS ADICIONAIS -->
+        <div class="card" style="border-color: var(--border)">
+          <h3 style="color: var(--primary); font-family: monospace; margin-bottom: 1rem">
+            <i class="fas fa-terminal"></i> Comandos Relacionados
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--border)">
+              <span style="color: var(--text); font-family: monospace; font-weight: bold; font-size: 0.75rem">VERIFICAR SERVIÇOS</span>
+              <div class="terminal" style="margin-top: 0.5rem; padding: 0.5rem">
+                <pre style="font-size: 0.65rem">
+R1# <strong>show ip interface g0/0/0</strong>
+Helper address is 192.168.11.6
+                    </pre>
+              </div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem; margin-top: 0.3rem">
+                Verifica o helper-address configurado
+              </div>
+            </div>
+            <div style="background: rgba(18, 24, 36, 0.5); border-radius: 8px; padding: 0.8rem; border: 1px solid var(--border)">
+              <span style="color: var(--text); font-family: monospace; font-weight: bold; font-size: 0.75rem">DESATIVAR SERVIÇO</span>
+              <div class="terminal" style="margin-top: 0.5rem; padding: 0.5rem">
+                <pre style="font-size: 0.65rem">
+R1(config)# <strong>no ip forward-protocol udp 69</strong>
+                    </pre>
+              </div>
+              <div style="color: var(--text-dim); font-family: monospace; font-size: 0.55rem; margin-top: 0.3rem">
+                Desativa o encaminhamento do TFTP (porta 69)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>Importante:</strong> O comando <code>ip helper-address</code> encaminha <strong>8 serviços UDP por padrão</strong>. Em
+          ambientes com restrições de segurança, é recomendado desativar os serviços desnecessários para evitar tráfego indesejado ou
+          possíveis vulnerabilidades.
         </div>
       </section>
     </div>

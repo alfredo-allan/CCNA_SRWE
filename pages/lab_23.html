@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configurando DHCPv4 em Redes Corporativas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <!-- ============================================= -->
+    <!-- TOP BAR FIXA - MENU E NAVEGAÇÃO PRINCIPAL     -->
+    <!-- ============================================= -->
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_23.pka" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- MENU LATERAL EXPANSÍVEL (SIDEBAR)            -->
+    <!-- ============================================= -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao0-0"><i class="fas fa-home"></i> Visão Geral do Lab</a>
+        </li>
+        <li>
+          <a href="#secao1-1"><i class="fas fa-table"></i> 1.1 Tabela de Endereçamento</a>
+        </li>
+        <li>
+          <a href="#secao1-2"><i class="fas fa-sitemap"></i> 1.2 Topologia do Lab</a>
+        </li>
+        <li>
+          <a href="#secao2-1"><i class="fas fa-server"></i> 2.1 R2 como Servidor DHCP</a>
+        </li>
+        <li>
+          <a href="#secao2-2"><i class="fas fa-forward"></i> 2.2 Retransmissão DHCP</a>
+        </li>
+        <li>
+          <a href="#secao3-1"><i class="fas fa-network-wired"></i> 3.1 R2 como Cliente DHCP</a>
+        </li>
+        <li>
+          <a href="#secao4-1"><i class="fas fa-check-double"></i> 4.1 Verificações e Testes</a>
+        </li>
+        <li>
+          <a href="#secao5-1"><i class="fas fa-tools"></i> 5.1 Comandos de Diagnóstico</a>
+        </li>
+        <li>
+          <a href="#secao6-1"><i class="fas fa-exclamation-triangle"></i> 6.1 Erros Comuns</a>
+        </li>
+        <li>
+          <a href="#secao7-1"><i class="fas fa-clipboard-list"></i> 7.1 Checklist de Validação</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================= -->
+    <!-- HERO - CABEÇALHO IMPACTANTE                   -->
+    <!-- ============================================= -->
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab"><i class="fas fa-server"></i> Laboratório de Serviços de Rede</span>
+        <h1>☁️ Configurando DHCPv4 em Redes Corporativas</h1>
+        <p style="color: var(--text-dim); max-width: 800px; margin: 0 auto">
+          Aprenda a implementar um servidor DHCP centralizado, configurar retransmissão entre filiais e tornar seu roteador um cliente DHCP
+          — tudo em um único laboratório prático.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- CONTEÚDO PRINCIPAL                            -->
+    <!-- ============================================= -->
+    <div class="container">
+      <!-- ========================================= -->
+      <!-- SEÇÃO 0.0 - VISÃO GERAL                   -->
+      <!-- ========================================= -->
+      <section id="secao0-0" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-home"></i>
+          <span class="section-number">0.0</span> Visão Geral do Laboratório
+        </h2>
+        <div class="card">
+          <p>Imagine que você é o administrador de rede de uma empresa com <strong>três filiais</strong>:</p>
+          <ul style="margin: 1rem 0 1rem 2rem; list-style: none">
+            <li style="margin-bottom: 0.5rem">
+              <i class="fas fa-building" style="color: var(--primary); margin-right: 0.75rem"></i><strong>Filial 1 (R1):</strong> Setor
+              Administrativo
+            </li>
+            <li style="margin-bottom: 0.5rem">
+              <i class="fas fa-building" style="color: var(--primary); margin-right: 0.75rem"></i><strong>Filial 2 (R2):</strong> Matriz
+              (onde fica o servidor DHCP)
+            </li>
+            <li style="margin-bottom: 0.5rem">
+              <i class="fas fa-building" style="color: var(--primary); margin-right: 0.75rem"></i><strong>Filial 3 (R3):</strong> Setor de
+              Produção
+            </li>
+          </ul>
+          <p>
+            Seu desafio é fazer com que <strong>todos os computadores</strong> recebam IP automaticamente, mesmo que o servidor DHCP esteja
+            apenas na matriz. É como ter um <strong>"entregador de IPs"</strong>
+            que viaja entre as filiais para entregar endereços!
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Objetivos deste Lab:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem">
+              <li>Configurar o R2 como servidor DHCP para duas redes diferentes</li>
+              <li>Implementar retransmissão DHCP (ip helper-address) nos roteadores R1 e R3</li>
+              <li>Configurar o R2 como cliente DHCP na interface WAN</li>
+              <li>Validar a conectividade entre todos os dispositivos</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 1.1 - TABELA DE ENDEREÇAMENTO       -->
+      <!-- ========================================= -->
+      <section id="secao1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-table"></i>
+          <span class="section-number">1.1</span> Tabela de Endereçamento
+        </h2>
+        <div class="card">
+          <p>Consulte esta tabela durante toda a configuração para garantir a consistência dos endereços.</p>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Dispositivo</th>
+                  <th>Interface</th>
+                  <th>Endereço IPv4</th>
+                  <th>Máscara</th>
+                  <th>Gateway</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>G0/0</td>
+                  <td>192.168.10.1</td>
+                  <td>/24</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>S0/0/0</td>
+                  <td>10.1.1.1</td>
+                  <td>/30</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/0</td>
+                  <td>192.168.20.1</td>
+                  <td>/24</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/1</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>S0/0/0</td>
+                  <td>10.1.1.2</td>
+                  <td>/30</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>S0/0/1</td>
+                  <td>10.2.2.2</td>
+                  <td>/30</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R3</strong></td>
+                  <td>G0/0</td>
+                  <td>192.168.30.1</td>
+                  <td>/24</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>R3</strong></td>
+                  <td>S0/0/1</td>
+                  <td>10.2.2.1</td>
+                  <td>/30</td>
+                  <td>N/D</td>
+                </tr>
+                <tr>
+                  <td><strong>PC1</strong></td>
+                  <td>NIC</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                </tr>
+                <tr>
+                  <td><strong>PC2</strong></td>
+                  <td>NIC</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                  <td>DHCP</td>
+                </tr>
+                <tr>
+                  <td><strong>DNS Server</strong></td>
+                  <td>NIC</td>
+                  <td>192.168.20.254</td>
+                  <td>/24</td>
+                  <td>192.168.20.1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 1.2 - TOPOLOGIA                     -->
+      <!-- ========================================= -->
+      <section id="secao1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">1.2</span> Topologia do Laboratório
+        </h2>
+        <div class="card">
+          <p><i class="fas fa-image" style="color: var(--primary)"></i> Topologia do Laboratório:</p>
+
+          <div
+            style="
+              border: 2px dashed var(--border);
+              border-radius: 16px;
+              padding: 1.5rem;
+              text-align: center;
+              margin: 1.5rem 0;
+              background: rgba(0, 0, 0, 0.3);
+            "
+          >
+            <img
+              src="../assets/lab_23.png"
+              alt="Topologia do Laboratório DHCPv4 - R1 ↔ R2 ↔ R3 com PCs e Servidor DNS"
+              style="max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px"
+            />
+            <p style="color: var(--text-dim); margin-top: 1rem; font-size: 0.85rem">
+              <i class="fas fa-arrows-alt-h" style="color: var(--primary)"></i>
+              R1 (Filial Admin) ↔ R2 (Matriz) ↔ R3 (Filial Produção) — PCs e Servidor DNS
+            </p>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Topologia Resumida:</strong> R1 (Filial Admin) → R2 (Matriz) ← R3 (Filial Produção). O servidor DNS está conectado à
+            rede da matriz (192.168.20.0/24).
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 2.1 - R2 COMO SERVIDOR DHCP        -->
+      <!-- ========================================= -->
+      <section id="secao2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">2.1</span> Configurar R2 como Servidor DHCP
+        </h2>
+
+        <!-- PASSO 1: EXCLUIR ENDEREÇOS -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-ban"></i> Passo 1: Excluir Endereços Reservados</h3>
+          <p>
+            <strong>🎓 Por que fazer isso?</strong> Para evitar que dois dispositivos tenham o mesmo IP — seria como ter duas casas com o
+            mesmo número! Precisamos reservar os IPs dos gateways e de outros equipamentos estáticos.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Instrução de Validação:</strong> Os IPs .1 a .10 de cada rede DEVEM estar excluídos. O validador do Packet Tracer
+            verifica essa condição.
+          </div>
+
+          <p><strong>Acesse o R2:</strong></p>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal</pre
+            >
+          </div>
+
+          <p><strong>Comando 1:</strong> Reservar IPs da rede 192.168.10.0/24 (Filial Administrativa)</p>
+          <div class="terminal">
+            <pre>R2(config)# ip dhcp excluded-address 192.168.10.1 192.168.10.10</pre>
+          </div>
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li><code>ip dhcp excluded-address</code> → Diz ao DHCP quais IPs <strong>NÃO</strong> podem ser entregues</li>
+            <li><code>192.168.10.1 192.168.10.10</code> → Bloqueia do IP .1 até .10</li>
+            <li><strong>.1</strong> → É o gateway do R1 (interface G0/0)</li>
+            <li><strong>.2 a .10</strong> → Reservados para servidores e equipamentos importantes</li>
+          </ul>
+
+          <p><strong>Comando 2:</strong> Reservar IPs da rede 192.168.30.0/24 (Filial de Produção)</p>
+          <div class="terminal">
+            <pre>R2(config)# ip dhcp excluded-address 192.168.30.1 192.168.30.10</pre>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Analogia do Dia a Dia:</strong> É como reservar os 10 primeiros lugares de um estacionamento para os diretores da
+            empresa. Ninguém mais pode usar esses lugares!
+          </div>
+        </div>
+
+        <!-- PASSO 2: POOL R1-LAN -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem">
+            <i class="fas fa-database"></i> Passo 2: Pool DHCP para LAN do R1 (R1-LAN)
+          </h3>
+          <p>
+            <strong>🎓 O que vamos fazer?</strong> Criar uma "caixa" de endereços para a Filial Administrativa. Cada computador dessa filial
+            vai pegar um IP dessa caixa.
+          </p>
+
+          <div class="terminal">
+            <pre>
+R2(config)# ip dhcp pool R1-LAN
+R2(dhcp-config)# network 192.168.10.0 255.255.255.0
+R2(dhcp-config)# default-router 192.168.10.1
+R2(dhcp-config)# dns-server 192.168.20.254
+R2(dhcp-config)# exit</pre
+            >
+          </div>
+
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li><code>ip dhcp pool R1-LAN</code> → Cria a "caixa" com nome R1-LAN</li>
+            <li><code>network 192.168.10.0 255.255.255.0</code> → Define a rede disponível (de .1 até .254)</li>
+            <li><code>default-router 192.168.10.1</code> → Define o "porteiro" que direciona o tráfego para fora</li>
+            <li><code>dns-server 192.168.20.254</code> → Define o servidor que traduz nomes em IPs</li>
+          </ul>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Analogia do Dia a Dia:</strong> O DNS é como uma "lista telefônica" da internet — você fala o nome da pessoa e ela te dá
+            o número!
+          </div>
+        </div>
+
+        <!-- PASSO 3: POOL R3-LAN -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem">
+            <i class="fas fa-database"></i> Passo 3: Pool DHCP para LAN do R3 (R3-LAN)
+          </h3>
+          <p><strong>🎓 O que vamos fazer?</strong> Criar uma "caixa" de endereços para a Filial de Produção.</p>
+
+          <div class="terminal">
+            <pre>
+R2(config)# ip dhcp pool R3-LAN
+R2(dhcp-config)# network 192.168.30.0 255.255.255.0
+R2(dhcp-config)# default-router 192.168.30.1
+R2(dhcp-config)# dns-server 192.168.20.254
+R2(dhcp-config)# exit</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 2.2 - RETRANSMISSÃO DHCP           -->
+      <!-- ========================================= -->
+      <section id="secao2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-forward"></i>
+          <span class="section-number">2.2</span> Configurar Retransmissão DHCP
+        </h2>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-route"></i> Entendendo a Retransmissão</h3>
+          <p>
+            <strong>🎓 Explicação Humanizada:</strong> Agora temos um problema: o servidor DHCP (R2) está na matriz, mas os computadores das
+            filiais R1 e R3 estão em <strong>redes diferentes</strong>. Como eles vão pedir IP se estão "longe" do servidor?
+          </p>
+          <p>
+            É aí que entra o <strong>"agente de retransmissão"</strong> (ip helper-address). Pense como um
+            <strong>"carteiro especial"</strong> que fica nas filiais:
+          </p>
+          <ul style="margin: 0.5rem 0 1rem 2rem; color: var(--text-dim)">
+            <li>📤 Quando um PC pede um IP, o carteiro pega o pedido</li>
+            <li>📦 Ele entrega para o servidor DHCP na matriz</li>
+            <li>📨 O servidor devolve a resposta com o IP</li>
+            <li>📬 O carteiro entrega o IP para o PC</li>
+          </ul>
+          <p><strong>Sem esse "carteiro", os pedidos de IP nunca chegariam ao servidor!</strong></p>
+        </div>
+
+        <!-- PASSO 1: R1 -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem">
+            <i class="fas fa-building"></i> Passo 1: Configurar R1 como Agente de Retransmissão
+          </h3>
+          <p><strong>Acesse o R1:</strong></p>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal
+R1(config)# interface g0/0
+R1(config-if)# ip helper-address 10.1.1.2</pre
+            >
+          </div>
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li><code>ip helper-address</code> → Ativa o "carteiro" na interface</li>
+            <li><code>10.1.1.2</code> → Endereço do servidor DHCP (interface S0/0/0 do R2)</li>
+            <li>Todo pedido DHCP vindo da LAN será encaminhado para esse IP</li>
+          </ul>
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Analogia:</strong> É como ter um porteiro no prédio que recebe as encomendas e avisa o morador. O porteiro é o
+            "helper-address"!
+          </div>
+        </div>
+
+        <!-- PASSO 2: R3 -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem">
+            <i class="fas fa-building"></i> Passo 2: Configurar R3 como Agente de Retransmissão
+          </h3>
+          <p><strong>Acesse o R3:</strong></p>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal
+R3(config)# interface g0/0
+R3(config-if)# ip helper-address 10.2.2.2</pre
+            >
+          </div>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>ATENÇÃO!</strong> Note que o IP é diferente!
+            <ul style="margin: 0.5rem 0 0 1.5rem">
+              <li>R1 usa <code>10.1.1.2</code> (conexão serial entre R1 e R2)</li>
+              <li>R3 usa <code>10.2.2.2</code> (conexão serial entre R3 e R2)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PASSO 3: PCs -->
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-desktop"></i> Passo 3: Configurar PCs para DHCP</h3>
+          <p><strong>No PC1 (Filial Administrativa):</strong></p>
+          <ol style="margin: 0.5rem 0 1rem 2rem; color: var(--text-dim)">
+            <li>Clique no PC1 → Desktop → IP Configuration</li>
+            <li>Selecione <strong>DHCP</strong></li>
+            <li>Aguarde alguns segundos</li>
+          </ol>
+          <p><strong>No PC2 (Filial de Produção):</strong></p>
+          <ol style="margin: 0.5rem 0 1rem 2rem; color: var(--text-dim)">
+            <li>Clique no PC2 → Desktop → IP Configuration</li>
+            <li>Selecione <strong>DHCP</strong></li>
+            <li>Aguarde alguns segundos</li>
+          </ol>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>O que está acontecendo?</strong> Os PCs estão enviando um pedido de IP para toda a rede. O R1/R3 (carteiro) captura esse
+            pedido e encaminha para o R2. O R2 (servidor) responde com um IP da pool correta. O PC recebe o IP e pode se comunicar!
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 3.1 - R2 COMO CLIENTE DHCP         -->
+      <!-- ========================================= -->
+      <section id="secao3-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">3.1</span> Configurar R2 como Cliente DHCP
+        </h2>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-cloud"></i> Configurar Interface G0/1 do R2</h3>
+          <p>
+            <strong>🎓 Explicação Humanizada:</strong> Agora vamos fazer algo interessante: o <strong>próprio roteador R2</strong> vai pedir
+            um IP para a internet!
+          </p>
+          <p>
+            Imagine que sua empresa contrata um provedor de internet. O provedor te dá um cabo e diz: "conecte aqui e você vai receber um IP
+            automaticamente". Isso é exatamente o que vamos fazer com a interface G0/1 do R2.
+          </p>
+          <p><strong>Por que isso é útil?</strong></p>
+          <ul style="margin: 0.5rem 0 1rem 2rem; color: var(--text-dim)">
+            <li>✅ O provedor de internet pode mudar seu IP a qualquer momento</li>
+            <li>✅ Se você configurar manualmente, teria que alterar toda vez</li>
+            <li>✅ Com DHCP, o roteador se adapta automaticamente!</li>
+          </ul>
+
+          <p><strong>No R2:</strong></p>
+          <div class="terminal">
+            <pre>
+configure terminal
+R2(config)# interface g0/1
+R2(config-if)# ip address dhcp
+R2(config-if)# no shutdown
+R2(config-if)# exit</pre
+            >
+          </div>
+
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li><code>interface g0/1</code> → Entra na interface que vai para o ISP</li>
+            <li><code>ip address dhcp</code> → Diz "me dê um IP automaticamente"</li>
+            <li><code>no shutdown</code> → Liga a interface (estava desligada)</li>
+          </ul>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-bolt"></i>
+            <strong>DICA IMPORTANTE:</strong> No Packet Tracer, após digitar os comandos, clique no botão
+            <strong>"Fast Forward Time"</strong> (canto inferior direito) para acelerar a obtenção do IP!
+          </div>
+
+          <p><strong>Verificar se recebeu o IP:</strong></p>
+          <div class="terminal">
+            <pre>R2# show ip interface brief</pre>
+          </div>
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li>🔍 A interface G0/1 deve ter um IP (ex: 209.165.200.226)</li>
+            <li>🔍 O status deve ser <strong>up/up</strong></li>
+            <li>🔍 Se aparecer "unassigned", significa que não recebeu IP</li>
+          </ul>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Analogia:</strong> É como chegar em um hotel e receber um quarto automaticamente na recepção. Você não precisa escolher
+            o número, eles te dão um disponível!
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 4.1 - VERIFICAÇÕES                 -->
+      <!-- ========================================= -->
+      <section id="secao4-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">4.1</span> Verificar DHCP e Conectividade
+        </h2>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-list"></i> Verificar Associações DHCP</h3>
+          <p><strong>No R2:</strong></p>
+          <div class="terminal">
+            <pre>R2# show ip dhcp binding</pre>
+          </div>
+          <p><strong>Saída esperada:</strong></p>
+          <div class="terminal">
+            <pre>
+IP address      Client-ID/          Lease expiration    Type
+                Hardware address
+192.168.10.11   0002.4AA5.1470      --                  Automatic
+192.168.30.11   0004.9A97.2535      --                  Automatic</pre
+            >
+          </div>
+          <ul style="margin: 0.5rem 0 1rem 2rem; font-size: 0.9rem; color: var(--text-dim)">
+            <li><strong>Coluna 1:</strong> IP entregue ao PC</li>
+            <li><strong>Coluna 2:</strong> Endereço MAC do PC (identificador único)</li>
+            <li><strong>Coluna 3:</strong> Tempo de validade (-- significa permanente no lab)</li>
+            <li><strong>Coluna 4:</strong> Tipo de atribuição (automática)</li>
+          </ul>
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Como saber qual é qual?</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem">
+              <li>PC1 (MAC: 0002.4AA5.1470) recebeu 192.168.10.11</li>
+              <li>PC2 (MAC: 0004.9A97.2535) recebeu 192.168.30.11</li>
+            </ul>
+            <p style="margin-top: 0.5rem">
+              📖 <strong>Analogia:</strong> É como olhar uma lista de hóspedes do hotel: "Quarto 101 - João Silva, Quarto 102 - Maria
+              Santos"
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-wifi"></i> Testar Conectividade</h3>
+          <p><strong>Teste 1:</strong> PC1 para PC2</p>
+          <div class="terminal">
+            <pre>PC1> ping 192.168.30.11</pre>
+          </div>
+          <p><strong>Teste 2:</strong> PC1 para DNS Server</p>
+          <div class="terminal">
+            <pre>PC1> ping 192.168.20.254</pre>
+          </div>
+          <p><strong>Teste 3:</strong> PC2 para R1</p>
+          <div class="terminal">
+            <pre>PC2> ping 192.168.10.1</pre>
+          </div>
+          <p><strong>Teste 4:</strong> PC1 para R3</p>
+          <div class="terminal">
+            <pre>PC1> ping 192.168.30.1</pre>
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>O que esperar?</strong> Todos os pings devem ser bem-sucedidos (resposta com 0% de perda). Isso confirma que a rede está
+            funcionando perfeitamente!
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Analogia:</strong> É como fazer uma chamada de teste entre todos os departamentos da empresa para garantir que a
+            comunicação está funcionando.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 5.1 - COMANDOS DE DIAGNÓSTICO      -->
+      <!-- ========================================= -->
+      <section id="secao5-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-tools"></i>
+          <span class="section-number">5.1</span> Comandos de Diagnóstico
+        </h2>
+        <div class="card">
+          <p>Use estes comandos para verificar e diagnosticar sua configuração:</p>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Comando</th>
+                  <th>O que faz?</th>
+                  <th>Quando usar?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>show ip dhcp binding</code></td>
+                  <td>Lista todos os IPs entregues</td>
+                  <td>Para ver quem recebeu IP</td>
+                </tr>
+                <tr>
+                  <td><code>show ip dhcp pool</code></td>
+                  <td>Mostra as pools configuradas</td>
+                  <td>Para ver as "caixas" de IPs</td>
+                </tr>
+                <tr>
+                  <td><code>show ip interface brief</code></td>
+                  <td>Mostra IPs das interfaces</td>
+                  <td>Para verificar IPs dos roteadores</td>
+                </tr>
+                <tr>
+                  <td><code>show running-config | section dhcp</code></td>
+                  <td>Mostra configurações DHCP</td>
+                  <td>Para revisar o que foi configurado</td>
+                </tr>
+                <tr>
+                  <td><code>show ip route</code></td>
+                  <td>Mostra tabela de roteamento</td>
+                  <td>Para verificar caminhos na rede</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 6.1 - ERROS COMUNS                -->
+      <!-- ========================================= -->
+      <section id="secao6-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span class="section-number">6.1</span> Erros Comuns e Soluções
+        </h2>
+        <div class="card">
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Problema</th>
+                  <th>Causa Provável</th>
+                  <th>Solução</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>PC não recebe IP</td>
+                  <td>Helper-address não configurado</td>
+                  <td>Verificar R1 e R3: <code>show running-config interface g0/0</code></td>
+                </tr>
+                <tr>
+                  <td>R2 não recebe IP no G0/1</td>
+                  <td>Interface desligada</td>
+                  <td>Verificar <code>no shutdown</code></td>
+                </tr>
+                <tr>
+                  <td>IP duplicado</td>
+                  <td>Endereço não excluído</td>
+                  <td>Verificar <code>show ip dhcp excluded-address</code></td>
+                </tr>
+                <tr>
+                  <td>Ping não funciona</td>
+                  <td>Roteamento ausente</td>
+                  <td>Configurar rotas estáticas ou protocolo de roteamento</td>
+                </tr>
+                <tr>
+                  <td>Pool DHCP não funciona</td>
+                  <td>Gateway errado</td>
+                  <td>Verificar <code>default-router</code> na pool</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO 7.1 - CHECKLIST DE VALIDAÇÃO       -->
+      <!-- ========================================= -->
+      <section id="secao7-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-clipboard-list"></i>
+          <span class="section-number">7.1</span> Checklist de Validação
+        </h2>
+        <div class="card">
+          <p>Use esta lista para garantir que sua configuração está 100% correta:</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0">
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Endereços excluídos no R2
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Pool R1-LAN criada
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Pool R3-LAN criada
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Helper-address no R1 (G0/0)
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Helper-address no R3 (G0/0)
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> PC1 configurado como DHCP
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> PC2 configurado como DHCP
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> G0/1 do R2 configurada como DHCP
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> R2 recebeu IP na G0/1
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> <code>show ip dhcp binding</code> mostra os PCs
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Ping PC1 → PC2 OK
+            </div>
+            <div
+              style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px"
+            >
+              <span style="color: var(--primary)">☐</span> Ping PC1 → DNS OK
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-trophy"></i>
+            <strong>🎉 Parabéns!</strong> Se todos os itens estão marcados, sua configuração está 100% funcional!
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- SEÇÃO DE DOWNLOAD                         -->
+      <!-- ========================================= -->
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>📁 Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas.
+          </p>
+          <a href="../labs/lab_23.pka" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+
+      <!-- ========================================= -->
+      <!-- RESUMO FINAL                             -->
+      <!-- ========================================= -->
+      <section class="section" style="border-bottom: none; padding-top: 0">
+        <div class="card" style="border-color: var(--primary); background: rgba(0, 255, 136, 0.05)">
+          <h3 style="color: var(--primary)"><i class="fas fa-graduation-cap"></i> Resumo do que Aprendemos</h3>
+          <ol style="margin: 1rem 0 0 2rem; color: var(--text-dim)">
+            <li><strong>Servidor DHCP</strong> no R2 distribui IPs automaticamente</li>
+            <li><strong>Endereços excluídos</strong> protegem equipamentos importantes</li>
+            <li><strong>Pools DHCP</strong> organizam IPs por rede</li>
+            <li><strong>Helper-address</strong> permite DHCP em redes diferentes</li>
+            <li><strong>Cliente DHCP</strong> no roteador recebe IP do provedor</li>
+            <li><strong>Verificações</strong> garantem que tudo funciona</li>
+          </ol>
+          <div class="alert alert-success" style="margin-top: 1.5rem">
+            <i class="fas fa-rocket"></i>
+            <strong>🚀 Você configurou com sucesso um ambiente DHCP completo em uma rede corporativa!</strong>
+          </div>
+          <p style="margin-top: 1rem; color: var(--text-dim); font-style: italic">
+            <i class="fas fa-quote-left" style="color: var(--primary)"></i>
+            A melhor maneira de aprender redes é praticando. Cada comando digitado é um passo a mais no seu conhecimento!
+          </p>
+        </div>
+      </section>
+    </div>
+    <!-- FIM DO CONTAINER -->
+
+    <!-- ============================================= -->
+    <!-- RODAPÉ                                       -->
+    <!-- ============================================= -->
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+      <p style="font-size: 0.7rem; margin-top: 0.5rem">
+        <i class="fas fa-code"></i> Desenvolvido para fins educacionais — Laboratório DHCPv4
+      </p>
+    </footer>
+
+    <!-- ============================================= -->
+    <!-- JAVASCRIPT - CONTROLE DO MENU LATERAL        -->
+    <!-- ============================================= -->
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>

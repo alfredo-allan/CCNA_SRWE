@@ -70,14 +70,22 @@ body {
 
 .badge-lab {
   display: inline-flex;
-  background: rgba(0, 255, 136, 0.1);
+  background: rgba(0, 180, 216, 0.1);
   color: var(--primary);
   padding: 0.5rem 1rem;
   border-radius: 50px;
   font-size: 0.8rem;
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  border: 1px solid rgba(0, 180, 216, 0.3);
   align-items: center;
   gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .badge-lab {
+    display: none;
+  }
 }
 
 .btn-outline {
@@ -93,7 +101,6 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
-
 .btn-outline:hover {
   background: var(--secondary);
   color: var(--text);
