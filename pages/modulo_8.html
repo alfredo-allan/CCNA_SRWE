@@ -1,0 +1,1786 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Módulo 8.0.1 - SLAAC e DHCPv6</title>
+
+    <!-- ============================================
+    IMPORTAÇÕES DE CDN
+    ============================================ -->
+    <!-- Font Awesome 6 (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- ============================================
+    CSS GLOBAL DO PROJETO
+    ============================================ -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+      /* ============================================
+   JANELA WINDOWS (Simulação)
+   ============================================ */
+      .windows-properties {
+        background: #1a1a2e;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        margin: 1.5rem 0;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+
+      .properties-header {
+        background: #2d2d44;
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .properties-header i {
+        color: var(--primary);
+      }
+
+      .properties-header .window-controls {
+        margin-left: auto;
+        display: flex;
+        gap: 0.5rem;
+        color: var(--text-dim);
+      }
+
+      .properties-header .window-controls span {
+        cursor: pointer;
+        padding: 0 0.3rem;
+        transition: color 0.3s;
+      }
+
+      .properties-header .window-controls .close:hover {
+        color: var(--danger);
+      }
+
+      .properties-body {
+        padding: 1.2rem;
+      }
+
+      .properties-tab {
+        font-size: 0.8rem;
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 0.3rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+
+      .properties-description {
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        margin-bottom: 1.2rem;
+        line-height: 1.5;
+      }
+
+      .property-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .property-option input[type='radio'],
+      .property-option input[type='checkbox'] {
+        accent-color: var(--primary);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+
+      .property-option .option-label {
+        font-size: 0.85rem;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .property-fields {
+        padding-left: 1.8rem;
+        margin: 0.5rem 0 0.8rem 0;
+      }
+
+      .property-fields.disabled {
+        opacity: 0.5;
+      }
+
+      .field-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .field-label {
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        min-width: 150px;
+      }
+
+      .field-value {
+        font-size: 0.8rem;
+        color: var(--text);
+        font-family: 'Consolas', 'Courier New', monospace;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+      }
+
+      .field-value.highlight-ip {
+        color: var(--secondary);
+        background: rgba(0, 245, 212, 0.1);
+        border: 1px solid rgba(0, 245, 212, 0.2);
+      }
+
+      .properties-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .properties-footer .btn-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .btn-windows {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.3rem 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        transition: all 0.3s;
+      }
+
+      .btn-windows:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--primary);
+      }
+
+      .btn-windows.btn-ok {
+        background: var(--primary);
+        color: var(--bg-dark);
+        border-color: var(--primary);
+      }
+
+      .btn-windows.btn-ok:hover {
+        background: var(--secondary);
+        border-color: var(--secondary);
+      }
+
+      .btn-windows.btn-cancel:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+
+      @media (max-width: 768px) {
+        .field-label {
+          min-width: 120px;
+          font-size: 0.7rem;
+        }
+
+        .field-value {
+          font-size: 0.7rem;
+        }
+
+        .properties-footer {
+          flex-direction: column;
+          gap: 0.8rem;
+        }
+
+        .properties-footer .btn-group {
+          width: 100%;
+          justify-content: flex-end;
+        }
+
+        .btn-windows {
+          padding: 0.2rem 0.8rem;
+          font-size: 0.7rem;
+        }
+      }
+
+      /* ============================================
+   DESTAQUES ESPECÍFICOS
+   ============================================ */
+      .highlight-lla {
+        color: var(--warning) !important;
+        background: rgba(255, 183, 3, 0.1);
+        padding: 0.1rem 0.3rem;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 183, 3, 0.2);
+      }
+
+      .highlight-ip {
+        color: var(--secondary) !important;
+        background: rgba(0, 245, 212, 0.1);
+        padding: 0.1rem 0.3rem;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 245, 212, 0.2);
+      }
+
+      /* Números de etapas no processo */
+      .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary);
+        color: var(--bg-dark);
+        font-weight: 700;
+        font-size: 0.75rem;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem;
+        background: rgba(9, 13, 22, 0.5);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        transition: all 0.3s;
+      }
+
+      .step-item:hover {
+        border-color: var(--primary);
+        background: rgba(0, 180, 216, 0.05);
+      }
+
+      .step-item .step-text {
+        color: var(--text);
+        font-size: 0.9rem;
+      }
+
+      .step-item .step-text strong {
+        color: var(--secondary);
+      }
+
+      /* ============================================
+   MÉTODOS DE ATRIBUIÇÃO GUA
+   ============================================ */
+      .gua-methods-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .method-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+
+      .method-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: 0 8px 24px rgba(0, 180, 216, 0.15);
+      }
+
+      .method-header {
+        padding: 1rem 1.2rem;
+        border-bottom: 3px solid var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .method-header h4 {
+        color: var(--text);
+        font-size: 1rem;
+        margin: 0;
+        flex: 1;
+      }
+
+      .method-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-stateless {
+        background: rgba(3, 244, 135, 0.15);
+        color: var(--success);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-stateful {
+        background: rgba(255, 183, 3, 0.15);
+        color: var(--warning);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .method-body {
+        padding: 1.2rem;
+      }
+
+      .method-body ul {
+        padding-left: 1.2rem;
+        margin: 0 0 1rem 0;
+        color: var(--text-dim);
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
+
+      .method-body ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .method-body ul li strong {
+        color: var(--text);
+      }
+
+      .method-flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        padding: 0.8rem;
+        background: rgba(9, 13, 22, 0.5);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      .flow-item {
+        font-size: 0.75rem;
+        color: var(--text);
+        font-family: 'Consolas', 'Courier New', monospace;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+      }
+
+      .flow-item i {
+        color: var(--primary);
+      }
+
+      /* Comentários no terminal */
+      .terminal .comment {
+        color: var(--text-dim);
+        font-style: italic;
+      }
+
+      @media (max-width: 768px) {
+        .gua-methods-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .method-flow {
+          flex-direction: column;
+          align-items: stretch;
+          text-align: center;
+        }
+
+        .method-header {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================
+    TOP BAR (HEADER)
+    ============================================ -->
+    <header class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="#" class="top-bar-brand">
+        <i class="fas fa-network-wired"></i>
+        <span>Cisco CCNA 2 (SRWE)</span>
+      </a>
+      <a href="#" class="btn-outline">
+        <i class="fas fa-arrow-left"></i>
+        <span>Painel Central</span>
+      </a>
+    </header>
+
+    <!-- ============================================
+    SIDEBAR (NAVEGAÇÃO LATERAL)
+    ============================================ -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao8-0-1" class="active"><i class="fas fa-door-open"></i> 8.0.1 Bem-vindo</a>
+        </li>
+        <li>
+          <a href="#secao8-1"><i class="fas fa-dharmachakra"></i> 8.1 SLAAC</a>
+        </li>
+        <li>
+          <a href="#secao8-0-2"><i class="fas fa-graduation-cap"></i> 8.0.2 O que vou aprender</a>
+        </li>
+        <li>
+          <a href="#secao8-1-1"><i class="fas fa-desktop"></i> 8.1.1 Configuração de host IPv6</a>
+        </li>
+        <li>
+          <a href="#secao8-1-2"><i class="fas fa-link"></i> 8.1.2 Endereço local do link do host IPv6</a>
+        </li>
+        <li>
+          <a href="#secao8-1-3"><i class="fas fa-address-card"></i> 8.1.3 Atribuição de GUA IPv6</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Overlay para fechar o sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================
+    HERO SECTION
+    ============================================ -->
+    <section class="hero">
+      <div class="badge-lab"><i class="fas fa-terminal"></i> Cisco IOS Interactive Lab</div>
+      <h1><i class="fas fa-ip"></i>SLAAC e DHCPv6</h1>
+      <p>
+        Endereçamento dinâmico IPv6 para redes modernas — automatize a atribuição de endereços e simplifique a gestão de infraestrutura.
+      </p>
+    </section>
+
+    <!-- ============================================
+    CONTEÚDO PRINCIPAL
+    ============================================ -->
+    <main class="container">
+      <!-- ==========================================
+        SEÇÃO 8.0.1 - BEM-VINDO
+        ========================================== -->
+      <section id="secao8-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-door-open"></i>
+          <span class="section-number">8.0.1</span> Bem-vindo
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-smile-wink"></i>
+          <h3>Bem-vindo ao SLAAC e DHCPv6!</h3>
+          <p>
+            SLAAC e DHCPv6 são protocolos de endereçamento dinâmico para uma rede IPv6. Então, um pouco de configuração tornará o seu dia
+            como administrador de rede muito mais fácil. Neste módulo, você aprenderá como usar o <strong>SLAAC</strong> para permitir que
+            os hosts criem seu próprio endereço <strong>Unicast Global</strong> IPv6, bem como configurar um roteador
+            <strong>Cisco IOS</strong> para ser um servidor <strong>DHCPv6</strong>, um cliente DHCPv6 ou um
+            <strong>agente de retransmissão DHCPv6</strong>. Este módulo inclui um laboratório onde você configurará o DHCPv6 em
+            equipamentos reais!
+          </p>
+        </div>
+
+        <!-- Topologia Visual -->
+        <div class="topology-visual">
+          <div class="device">
+            <div class="device-icon router">
+              <i class="fas fa-server"></i>
+            </div>
+            <span class="device-label">R1 (DHCPv6 Server)</span>
+          </div>
+
+          <div class="connection-line"></div>
+
+          <div class="device">
+            <div class="device-icon switch">
+              <i class="fas fa-network-wired"></i>
+            </div>
+            <span class="device-label">SW1 (Relay Agent)</span>
+          </div>
+
+          <div class="connection-line"></div>
+
+          <div class="device">
+            <div class="device-icon pc">
+              <i class="fas fa-desktop"></i>
+            </div>
+            <span class="device-label">PC1 (DHCPv6 Client)</span>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i>
+          <strong>Visão Geral do Módulo:</strong> Este módulo aborda os três principais métodos de atribuição de endereços IPv6:
+          <strong>SLAAC</strong> (Stateless Address Autoconfiguration), <strong>DHCPv6 Stateless</strong> e
+          <strong>DHCPv6 Stateful</strong>. Você aprenderá as diferenças entre eles e quando aplicar cada um.
+        </div>
+
+        <!-- Conceitos em Grid -->
+        <div class="concept-grid">
+          <div class="card">
+            <i class="fas fa-dharmachakra" style="color: var(--success)"></i>
+            <h4>SLAAC</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Autoconfiguração sem estado — hosts geram seu próprio endereço IPv6 usando
+              <strong>EUI-64</strong> ou <strong>Privacy Extensions</strong>.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-dhcp" style="color: var(--primary)"></i>
+            <h4>DHCPv6 Stateless</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Fornece informações adicionais como <strong>DNS</strong>, <strong>NTP</strong> e <strong>Domain Name</strong>, mas o endereço
+              IPv6 vem do SLAAC.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-database" style="color: var(--warning)"></i>
+            <h4>DHCPv6 Stateful</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Atribuição completa de endereços IPv6, similar ao <strong>DHCPv4</strong>, com concessão e renovação de endereços.
+            </p>
+          </div>
+        </div>
+
+        <!-- Terminal CLI - Exemplo de Configuração -->
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Preparando o Roteador para IPv6</h3>
+          <p>Antes de configurar o SLAAC ou DHCPv6, certifique-se de que o roteador tenha IPv6 habilitado:</p>
+          <div class="terminal">
+            <pre>
+<span class="prompt">R1#</span><strong>configure terminal</strong>
+<span class="prompt">R1(config)#</span><strong>ipv6 unicast-routing</strong>
+<span class="output">% IPv6 routing enabled</span>
+<span class="prompt">R1(config)#</span><strong>interface gigabitethernet 0/0/0</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 address 2001:db8:acad:1::1/64</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 enable</strong>
+<span class="prompt">R1(config-if)#</span><strong>no shutdown</strong>
+<span class="success-output">%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up</span>
+<span class="prompt">R1(config-if)#</span><strong>end</strong>
+<span class="prompt">R1#</span><strong>show ipv6 interface brief</strong>
+<span class="output">
+GigabitEthernet0/0/0    [up/up]
+    FE80::1
+    2001:DB8:ACAD:1::1
+</span>
+                    </pre>
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Dica do Engenheiro:</strong> O comando <strong>ipv6 unicast-routing</strong> é obrigatório para habilitar o roteamento
+            IPv6 no roteador. Sem ele, o dispositivo não processará pacotes IPv6 entre interfaces.
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+        SEÇÃO 8.1 - SLAAC (Placeholder)
+        ========================================== -->
+      <!-- ==========================================
+SEÇÃO 8.0.2 - O QUE VOU APRENDER NESTE MÓDULO?
+========================================== -->
+      <section id="secao8-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">8.0.2</span> O que vou aprender neste módulo?
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-bullseye"></i>
+          <h3>Objetivos do Módulo</h3>
+          <p>
+            <strong>Título do módulo:</strong> SLAAC e DHCPv6
+            <br />
+            <strong>Objetivo do módulo:</strong> Configure a alocação de endereços dinâmicos em redes IPv6.
+          </p>
+        </div>
+
+        <!-- Tabela de Objetivos -->
+        <div class="card">
+          <h3><i class="fas fa-list-check"></i> Tópicos e Objetivos</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tag"></i> Título do Tópico</th>
+                <th><i class="fas fa-flag-checkered"></i> Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Atribuição de endereço unicast global IPv6</strong></td>
+                <td>Explique como um host IPv6 pode adquirir sua configuração IPv6.</td>
+              </tr>
+              <tr>
+                <td><strong>SLAAC</strong></td>
+                <td>Explique a operação do SLAAC.</td>
+              </tr>
+              <tr>
+                <td><strong>DHCPv6</strong></td>
+                <td>Explicar a operação de DHCPv6.</td>
+              </tr>
+              <tr>
+                <td><strong>Configurar o Servidor DHCPv6</strong></td>
+                <td>Configure um servidor DHCPv6 com e sem estado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cards Resumo dos Objetivos -->
+        <div class="concept-grid">
+          <div class="card">
+            <i class="fas fa-address-card" style="color: var(--info)"></i>
+            <h4>Atribuição de Endereço</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Entenda como um host IPv6 obtém sua configuração de endereço automaticamente.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-dharmachakra" style="color: var(--success)"></i>
+            <h4>SLAAC</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Aprenda a operação do <strong>Stateless Address Autoconfiguration</strong> e como os hosts geram seus próprios endereços.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-dhcp" style="color: var(--primary)"></i>
+            <h4>DHCPv6</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Compreenda a operação do <strong>DHCPv6</strong> e suas variações (stateless e stateful).
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-server" style="color: var(--warning)"></i>
+            <h4>Configurar Servidor DHCPv6</h4>
+            <p style="font-size: 0.85rem; color: var(--text-dim)">
+              Configure um servidor <strong>DHCPv6</strong> nas modalidades <strong>stateless</strong> e <strong>stateful</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="fas fa-lightbulb"></i>
+          <strong>Dica de Estudo:</strong> Ao final deste módulo, você será capaz de configurar a alocação dinâmica de endereços IPv6 usando
+          diferentes métodos, entendendo quando aplicar cada um deles em cenários reais de rede.
+        </div>
+
+        <!-- Terminal CLI - Verificação de Aprendizado -->
+        <div class="card">
+          <h3><i class="fas fa-microchip"></i> Comandos que você aprenderá</h3>
+          <p>Durante este módulo, você dominará os seguintes comandos Cisco IOS para configuração IPv6:</p>
+          <div class="terminal">
+            <pre>
+<span class="prompt">R1(config)#</span><strong>ipv6 unicast-routing</strong>
+<span class="prompt">R1(config)#</span><strong>ipv6 dhcp pool NOME_POOL</strong>
+<span class="prompt">R1(config-dhcpv6)#</span><strong>address prefix 2001:db8:acad:1::/64</strong>
+<span class="prompt">R1(config-dhcpv6)#</span><strong>dns-server 2001:db8:acad::1</strong>
+<span class="prompt">R1(config-dhcpv6)#</span><strong>domain-name exemplo.local</strong>
+<span class="prompt">R1(config)#</span><strong>interface gigabitethernet 0/0/0</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd other-config-flag</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 dhcp server NOME_POOL</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd managed-config-flag</strong>
+<span class="prompt">R1#</span><strong>show ipv6 dhcp pool</strong>
+<span class="prompt">R1#</span><strong>show ipv6 dhcp binding</strong>
+<span class="prompt">R1#</span><strong>debug ipv6 dhcp detail</strong>
+            </pre>
+          </div>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Pronto para Configurar!</strong> Cada um desses comandos será detalhado nas seções seguintes, com exemplos práticos e
+            explicações passo a passo.
+          </div>
+        </div>
+      </section>
+      <!-- ==========================================
+SEÇÃO 8.1.1 - CONFIGURAÇÃO DE HOST IPv6
+========================================== -->
+      <section id="secao8-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-desktop"></i>
+          <span class="section-number">8.1.1</span> Configuração de host IPv6
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-flag-checkered"></i>
+          <h3>Comece pelo começo</h3>
+          <p>
+            Para usar a configuração automática de endereço sem estado (<strong>SLAAC</strong>) ou
+            <strong>DHCPv6</strong>, você deve revisar endereços <strong>Unicast Globais (GUAs)</strong> e endereços de
+            <strong>Link Local (LLAs)</strong>. Este tópico abrange ambos.
+          </p>
+          <p>
+            Em um roteador, um endereço <strong>Unicast Global</strong> IPv6 (GUA) é configurado manualmente usando o comando
+            <strong>ipv6 address <em>ipv6-address</em> <em>prefix-length</em></strong>
+            no modo de configuração de interface.
+          </p>
+          <p>
+            Um host Windows também pode ser configurado manualmente com uma configuração de endereço IPv6 GUA, conforme mostrado na figura
+            abaixo.
+          </p>
+        </div>
+
+        <!-- Representação Visual da Configuração Manual IPv6 -->
+        <div class="card">
+          <h3><i class="fas fa-hand-holding"></i> Configuração Manual de IPv6 no Windows</h3>
+          <p style="margin-bottom: 1rem">
+            Inserir manualmente um GUA IPv6 pode ser demorado e suscetível a erros. Por isso, a maioria dos hosts Windows estão habilitados
+            para adquirir dinamicamente uma configuração IPv6 GUA.
+          </p>
+
+          <!-- Simulação da Janela de Propriedades TCP/IPv6 -->
+          <div class="windows-properties">
+            <div class="properties-header">
+              <i class="fas fa-network-wired"></i>
+              <span>Internet Protocol Version 6 (TCP/IPv6) Properties</span>
+              <div class="window-controls">
+                <span class="minimize">─</span>
+                <span class="maximize">☐</span>
+                <span class="close">✕</span>
+              </div>
+            </div>
+            <div class="properties-body">
+              <div class="properties-tab">General</div>
+
+              <div class="properties-content">
+                <p class="properties-description">
+                  You can get IPv6 settings assigned automatically if your network supports this capability. Otherwise, you need to ask your
+                  network administrator for the appropriate IPv6 settings.
+                </p>
+
+                <!-- Opção Automática -->
+                <div class="property-option">
+                  <input type="radio" id="manual-radio" name="ipv6-config" checked />
+                  <label for="manual-radio" class="option-label">Obtain an IPv6 address automatically</label>
+                </div>
+
+                <!-- Opção Manual -->
+                <div class="property-option">
+                  <input type="radio" id="manual-radio" name="ipv6-config" checked />
+                  <label for="manual-radio" class="option-label">Use the following IPv6 address:</label>
+                </div>
+
+                <!-- Campos da Configuração Manual -->
+                <div class="property-fields">
+                  <div class="field-row">
+                    <span class="field-label">IPv6 address:</span>
+                    <span class="field-value highlight-ip">2001:db8:acad:1::10</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Subnet prefix length:</span>
+                    <span class="field-value">64</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Default gateway:</span>
+                    <span class="field-value highlight-ip">2001:db8:acad:1::1</span>
+                  </div>
+                </div>
+
+                <!-- Opção DNS Automático -->
+                <div class="property-option" style="margin-top: 1rem">
+                  <input type="radio" id="dns-auto" name="dns-config" checked />
+                  <label for="dns-auto" class="option-label">Obtain DNS server address automatically</label>
+                </div>
+
+                <!-- Opção DNS Manual -->
+                <div class="property-option">
+                  <input type="radio" id="dns-manual" name="dns-config" checked />
+                  <label for="dns-manual" class="option-label">Use the following DNS server addresses:</label>
+                </div>
+
+                <div class="property-fields">
+                  <div class="field-row">
+                    <span class="field-label">Preferred DNS server:</span>
+                    <span class="field-value highlight-ip">2001:db8:acad:1::1</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Alternate DNS server:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                </div>
+
+                <!-- Checkbox de validação -->
+                <div class="property-option" style="margin-top: 1rem">
+                  <input type="checkbox" id="validate-settings" checked />
+                  <label for="validate-settings" class="option-label">Validate settings upon exit</label>
+                </div>
+              </div>
+
+              <!-- Botões da Janela -->
+              <div class="properties-footer">
+                <button class="btn-windows">Advanced...</button>
+                <div class="btn-group">
+                  <button class="btn-windows btn-ok">OK</button>
+                  <button class="btn-windows btn-cancel">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Configuração Manual:</strong> O endereço <strong>2001:db8:acad:1::10/64</strong> é um exemplo de GUA configurado
+            manualmente em um host Windows, com o gateway padrão apontando para <strong>2001:db8:acad:1::1</strong> (geralmente o roteador
+            local).
+          </div>
+        </div>
+
+        <!-- Configuração Automática (SLAAC/DHCPv6) -->
+        <div class="card">
+          <h3><i class="fas fa-robot"></i> Configuração Automática de IPv6</h3>
+          <p>
+            A maioria dos hosts Windows estão habilitados para adquirir dinamicamente uma configuração IPv6 GUA, conforme mostrado na figura
+            abaixo.
+          </p>
+
+          <!-- Simulação da Janela com Configuração Automática -->
+          <div class="windows-properties">
+            <div class="properties-header">
+              <i class="fas fa-network-wired"></i>
+              <span>Internet Protocol Version 6 (TCP/IPv6) Properties</span>
+              <div class="window-controls">
+                <span class="minimize">─</span>
+                <span class="maximize">☐</span>
+                <span class="close">✕</span>
+              </div>
+            </div>
+            <div class="properties-body">
+              <div class="properties-tab">General</div>
+
+              <div class="properties-content">
+                <p class="properties-description">
+                  You can get IPv6 settings assigned automatically if your network supports this capability. Otherwise, you need to ask your
+                  network administrator for the appropriate IPv6 settings.
+                </p>
+
+                <!-- Opção Automática (Selecionada) -->
+                <div class="property-option">
+                  <input type="radio" id="auto-radio" name="ipv6-config-auto" checked />
+                  <label for="auto-radio" class="option-label" style="color: var(--secondary)">
+                    <i class="fas fa-check-circle"></i> Obtain an IPv6 address automatically
+                  </label>
+                </div>
+
+                <!-- Opção Manual (Desabilitada) -->
+                <div class="property-option">
+                  <input type="radio" id="manual-radio-auto" name="ipv6-config-auto" />
+                  <label for="manual-radio-auto" class="option-label" style="color: var(--text-dim)">
+                    Use the following IPv6 address:
+                  </label>
+                </div>
+
+                <!-- Campos da Configuração Manual (Desabilitados) -->
+                <div class="property-fields disabled">
+                  <div class="field-row">
+                    <span class="field-label">IPv6 address:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Subnet prefix length:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Default gateway:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                </div>
+
+                <!-- Opção DNS Automático (Selecionada) -->
+                <div class="property-option" style="margin-top: 1rem">
+                  <input type="radio" id="dns-auto-auto" name="dns-config-auto" checked />
+                  <label for="dns-auto-auto" class="option-label" style="color: var(--secondary)">
+                    <i class="fas fa-check-circle"></i> Obtain DNS server address automatically
+                  </label>
+                </div>
+
+                <!-- Opção DNS Manual (Desabilitada) -->
+                <div class="property-option">
+                  <input type="radio" id="dns-manual-auto" name="dns-config-auto" />
+                  <label for="dns-manual-auto" class="option-label" style="color: var(--text-dim)">
+                    Use the following DNS server addresses:
+                  </label>
+                </div>
+
+                <div class="property-fields disabled">
+                  <div class="field-row">
+                    <span class="field-label">Preferred DNS server:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                  <div class="field-row">
+                    <span class="field-label">Alternate DNS server:</span>
+                    <span class="field-value" style="color: var(--text-dim)">(empty)</span>
+                  </div>
+                </div>
+
+                <!-- Checkbox de validação -->
+                <div class="property-option" style="margin-top: 1rem">
+                  <input type="checkbox" id="validate-settings-auto" checked />
+                  <label for="validate-settings-auto" class="option-label">Validate settings upon exit</label>
+                </div>
+              </div>
+
+              <!-- Botões da Janela -->
+              <div class="properties-footer">
+                <button class="btn-windows">Advanced...</button>
+                <div class="btn-group">
+                  <button class="btn-windows btn-ok">OK</button>
+                  <button class="btn-windows btn-cancel">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Configuração Automática:</strong> Com esta opção selecionada, o host utilizará <strong>SLAAC</strong> ou
+            <strong>DHCPv6</strong> para obter seu endereço IPv6, prefixo de rede, gateway padrão e servidores DNS automaticamente.
+          </div>
+        </div>
+
+        <!-- Terminal CLI - Configuração no Roteador -->
+        <div class="card">
+          <h3><i class="fas fa-server"></i> Configuração de GUA em um Roteador Cisco</h3>
+          <p>
+            Para configurar um endereço IPv6 GUA em um roteador Cisco IOS, utilize o comando <strong>ipv6 address</strong> no modo de
+            configuração de interface:
+          </p>
+
+          <div class="terminal">
+            <pre>
+<span class="prompt">R1#</span><strong>configure terminal</strong>
+<span class="prompt">R1(config)#</span><strong>interface gigabitethernet 0/0/0</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 address 2001:db8:acad:1::1/64</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 enable</strong>
+<span class="prompt">R1(config-if)#</span><strong>no shutdown</strong>
+<span class="success-output">%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up</span>
+<span class="prompt">R1(config-if)#</span><strong>end</strong>
+<span class="prompt">R1#</span><strong>show ipv6 interface brief</strong>
+<span class="output">
+GigabitEthernet0/0/0    [up/up]
+    FE80::1
+    2001:DB8:ACAD:1::1
+</span>
+<span class="prompt">R1#</span><strong>show ipv6 route</strong>
+<span class="output">
+IPv6 Routing Table - default - 5 entries
+Codes: C - Connected, L - Local, S - Static, ...
+C   2001:DB8:ACAD:1::/64 [0/0]
+     via GigabitEthernet0/0/0, directly connected
+L   2001:DB8:ACAD:1::1/128 [0/0]
+     via GigabitEthernet0/0/0, local
+</span>
+            </pre>
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Observação:</strong> O comando <strong>ipv6 enable</strong> ativa automaticamente o IPv6 na interface e gera um endereço
+            <strong>Link Local (LLA)</strong> baseado no endereço MAC da interface (EUI-64). O LLA é usado para comunicação na rede local e
+            é essencial para o funcionamento do SLAAC e DHCPv6.
+          </div>
+        </div>
+
+        <!-- Tabela Comparativa -->
+        <div class="card">
+          <h3><i class="fas fa-table"></i> Métodos de Configuração IPv6</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-cog"></i> Método</th>
+                <th><i class="fas fa-user-cog"></i> Configuração</th>
+                <th><i class="fas fa-check-circle"></i> Vantagem</th>
+                <th><i class="fas fa-exclamation-triangle"></i> Desvantagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Manual</strong></td>
+                <td>Administrador define o endereço</td>
+                <td>Controle total sobre o endereçamento</td>
+                <td>Propenso a erros, trabalhoso em redes grandes</td>
+              </tr>
+              <tr>
+                <td><strong>SLAAC</strong></td>
+                <td>Host gera seu próprio endereço</td>
+                <td>Automatizado, sem necessidade de servidor</td>
+                <td>Não fornece DNS ou outras configurações</td>
+              </tr>
+              <tr>
+                <td><strong>DHCPv6 Stateless</strong></td>
+                <td>SLAAC + informações adicionais do DHCP</td>
+                <td>Combina autoconfiguração com informações de rede</td>
+                <td>Requere servidor DHCPv6 para informações extras</td>
+              </tr>
+              <tr>
+                <td><strong>DHCPv6 Stateful</strong></td>
+                <td>Servidor DHCP atribui endereço completo</td>
+                <td>Controle centralizado, auditoria de endereços</td>
+                <td>Requere servidor DHCPv6, mais complexo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- ==========================================
+SEÇÃO 8.1.2 - ENDEREÇO LOCAL DO LINK DO HOST IPv6
+========================================== -->
+      <section id="secao8-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-link"></i>
+          <span class="section-number">8.1.2</span> Endereço local do link do host IPv6
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-ethernet"></i>
+          <h3>Endereço de Link Local IPv6</h3>
+          <p>
+            Quando o endereçamento IPv6 automático é selecionado, o host tentará obter e configurar automaticamente as informações de
+            endereço IPv6 na interface. O host usará um dos três métodos definidos pela mensagem de
+            <strong>Internet Control Message Protocol versão 6 (ICMPv6)</strong> <strong>Router Advertisement (RA)</strong> recebida na
+            interface.
+          </p>
+          <p>
+            Um roteador IPv6 que está no mesmo link que o host envia mensagens <strong>RA</strong>
+            que sugerem aos hosts como obter suas informações de endereçamento IPv6. O endereço de
+            <strong>Link Local</strong> IPv6 é criado automaticamente pelo host quando ele é inicializado e a interface Ethernet está ativa.
+          </p>
+        </div>
+
+        <!-- Saída do comando ipconfig -->
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Verificando o Endereço Link Local</h3>
+          <p>
+            A saída do comando <strong>ipconfig</strong> abaixo mostra um endereço de <strong>Link Local (LLA)</strong>
+            gerado automaticamente em uma interface Windows.
+          </p>
+
+          <div class="terminal">
+            <pre>
+<span class="prompt">C:\PC1&gt;</span><strong>ipconfig</strong>
+
+<span class="output">Windows IP Configuration
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  . :
+   IPv6 Address. . . . . . . . . . . :
+   <span class="highlight-lla">Link-Local IPv6 Address . . . . . . : fe80::fb:1d54:839f:f595%21</span>
+   IPv4 Address. . . . . . . . . . . : 169.254.202.140
+   Subnet Mask . . . . . . . . . . . : 255.255.0.0
+   Default Gateway . . . . . . . . . :
+
+<span class="prompt">C:\PC1&gt;</span></span>
+            </pre>
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Observação Importante:</strong> Observe que a interface <strong>não criou um GUA IPv6</strong>. A razão é porque, neste
+            exemplo, o segmento de rede <strong>não tem um roteador</strong> para fornecer instruções de configuração de rede para o host.
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>ID de Zona (Scope ID):</strong> Os sistemas operacionais do host mostrarão às vezes um endereço de link local anexado
+            com um <strong>"%"</strong> e um número (ex: <strong>%21</strong>). Isso é conhecido como <strong>ID de zona</strong> ou
+            <strong>ID de escopo</strong>. Ele é usado pelo SO para associar o LLA a uma interface específica.
+          </div>
+
+          <div class="alert alert-info">
+            <i class="fas fa-file-alt"></i>
+            <strong>RFC 3315:</strong> DHCPv6 é definido na <strong>RFC 3315</strong> — Dynamic Host Configuration Protocol for IPv6
+            (DHCPv6).
+          </div>
+        </div>
+
+        <!-- Métodos de Configuração via RA -->
+        <div class="card">
+          <h3><i class="fas fa-route"></i> Métodos de Configuração via Router Advertisement (RA)</h3>
+          <p>
+            O host usará um dos três métodos definidos pela mensagem <strong>ICMPv6 Router Advertisement (RA)</strong>
+            recebida na interface:
+          </p>
+
+          <div class="concept-grid">
+            <div class="card">
+              <i class="fas fa-dharmachakra" style="color: var(--success)"></i>
+              <h4>SLAAC</h4>
+              <p style="font-size: 0.85rem; color: var(--text-dim)">
+                O host gera seu próprio <strong>GUA</strong> usando o prefixo recebido no RA e o identificador EUI-64 ou Privacy Extensions.
+              </p>
+              <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--primary)"><i class="fas fa-flag"></i> RA Flag: A=1, O=0</div>
+            </div>
+
+            <div class="card">
+              <i class="fas fa-dhcp" style="color: var(--primary)"></i>
+              <h4>DHCPv6 Stateless</h4>
+              <p style="font-size: 0.85rem; color: var(--text-dim)">
+                O host usa <strong>SLAAC</strong> para o GUA, mas utiliza <strong>DHCPv6</strong>
+                para obter informações adicionais (DNS, NTP, Domain Name).
+              </p>
+              <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--primary)"><i class="fas fa-flag"></i> RA Flag: A=1, O=1</div>
+            </div>
+
+            <div class="card">
+              <i class="fas fa-database" style="color: var(--warning)"></i>
+              <h4>DHCPv6 Stateful</h4>
+              <p style="font-size: 0.85rem; color: var(--text-dim)">
+                O host obtém <strong>todo</strong> o endereçamento (GUA, DNS, gateway) via <strong>DHCPv6</strong>, similar ao DHCPv4.
+              </p>
+              <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--primary)"><i class="fas fa-flag"></i> RA Flag: A=0, M=1</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Processo de Geração do LLA -->
+        <div class="card">
+          <h3><i class="fas fa-microchip"></i> Como o Host Gera o Endereço Link Local</h3>
+          <p>
+            O endereço <strong>Link Local</strong> IPv6 é criado automaticamente pelo host quando ele é inicializado e a interface Ethernet
+            está ativa. O processo segue estas etapas:
+          </p>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 0.8rem;
+              margin: 1.5rem 0;
+              padding: 1rem;
+              background: rgba(9, 13, 22, 0.5);
+              border-radius: 12px;
+              border: 1px solid var(--border);
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
+              <span
+                style="
+                  background: var(--primary);
+                  color: var(--bg-dark);
+                  padding: 0.2rem 0.8rem;
+                  border-radius: 20px;
+                  font-weight: 700;
+                  font-size: 0.75rem;
+                "
+                >1</span
+              >
+              <span style="color: var(--text)">O host identifica o <strong>endereço MAC</strong> da interface Ethernet</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
+              <span
+                style="
+                  background: var(--primary);
+                  color: var(--bg-dark);
+                  padding: 0.2rem 0.8rem;
+                  border-radius: 20px;
+                  font-weight: 700;
+                  font-size: 0.75rem;
+                "
+                >2</span
+              >
+              <span style="color: var(--text)">Insere <strong>FF:FE</strong> no meio do endereço MAC (processo EUI-64)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
+              <span
+                style="
+                  background: var(--primary);
+                  color: var(--bg-dark);
+                  padding: 0.2rem 0.8rem;
+                  border-radius: 20px;
+                  font-weight: 700;
+                  font-size: 0.75rem;
+                "
+                >3</span
+              >
+              <span style="color: var(--text)">Inverte o <strong>7º bit</strong> (Universal/Local bit) do primeiro byte</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
+              <span
+                style="
+                  background: var(--primary);
+                  color: var(--bg-dark);
+                  padding: 0.2rem 0.8rem;
+                  border-radius: 20px;
+                  font-weight: 700;
+                  font-size: 0.75rem;
+                "
+                >4</span
+              >
+              <span style="color: var(--text)">Prefixa com <strong>FE80::/10</strong> para formar o endereço Link Local</span>
+            </div>
+          </div>
+
+          <!-- Exemplo de Conversão EUI-64 -->
+          <div class="terminal" style="margin-top: 1rem">
+            <pre>
+<span class="output">Exemplo de geração do LLA a partir do MAC:
+
+MAC Address:    00-1A-2B-3C-4D-5E
+   ↓ Inserir FF:FE
+EUI-64:         001A:2BFF:FE3C:4D5E
+   ↓ Inverter 7º bit (00 → 02)
+EUI-64 Mod:     021A:2BFF:FE3C:4D5E
+   ↓ Prefixo FE80::/10
+Link Local:     FE80::21A:2BFF:FE3C:4D5E</span>
+            </pre>
+          </div>
+        </div>
+
+        <!-- Tipos de Endereços IPv6 -->
+        <div class="card">
+          <h3><i class="fas fa-list-ul"></i> Tipos de Endereços IPv6</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tag"></i> Tipo</th>
+                <th><i class="fas fa-globe"></i> Escopo</th>
+                <th><i class="fas fa-pen"></i> Descrição</th>
+                <th><i class="fas fa-example"></i> Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Unicast Global (GUA)</strong></td>
+                <td>Global (Internet)</td>
+                <td>Endereço público roteável na Internet</td>
+                <td><span class="highlight-ip">2001:db8:acad:1::1</span></td>
+              </tr>
+              <tr>
+                <td><strong>Link Local (LLA)</strong></td>
+                <td>Link Local (mesmo segmento)</td>
+                <td>Comunicação na rede local, não roteável</td>
+                <td><span class="highlight-lla">FE80::21A:2BFF:FE3C:4D5E</span></td>
+              </tr>
+              <tr>
+                <td><strong>Unique Local (ULA)</strong></td>
+                <td>Local (site)</td>
+                <td>Endereço privado, similar ao IPv4 RFC 1918</td>
+                <td><span class="highlight-ip">FD00::/8</span></td>
+              </tr>
+              <tr>
+                <td><strong>Multicast</strong></td>
+                <td>Variável</td>
+                <td>Comunicação one-to-many</td>
+                <td><span class="highlight-ip">FF02::1</span> (todos os nós)</td>
+              </tr>
+              <tr>
+                <td><strong>Anycast</strong></td>
+                <td>Variável</td>
+                <td>Comunicação one-to-nearest</td>
+                <td><span class="highlight-ip">2001:db8::1</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Terminal - Verificação no Roteador -->
+        <div class="card">
+          <h3><i class="fas fa-server"></i> Verificando o LLA no Roteador</h3>
+          <p>No roteador Cisco, o endereço <strong>Link Local</strong> também é gerado automaticamente:</p>
+
+          <div class="terminal">
+            <pre>
+<span class="prompt">R1#</span><strong>show ipv6 interface brief</strong>
+<span class="output">
+GigabitEthernet0/0/0    [up/up]
+    <span class="highlight-lla">FE80::1</span>
+    2001:DB8:ACAD:1::1
+
+GigabitEthernet0/0/1    [up/up]
+    <span class="highlight-lla">FE80::2</span>
+    2001:DB8:ACAD:2::1
+
+Serial0/0/0             [up/up]
+    <span class="highlight-lla">FE80::3</span>
+    2001:DB8:ACAD:3::1
+</span>
+<span class="prompt">R1#</span><strong>show ipv6 interface gigabitethernet 0/0/0</strong>
+<span class="output">
+GigabitEthernet0/0/0 is up, line protocol is up
+  IPv6 is enabled, link-local address is <span class="highlight-lla">FE80::1</span>
+  Global unicast address(es):
+    2001:DB8:ACAD:1::1, subnet is 2001:DB8:ACAD:1::/64
+  Joined group address(es):
+    FF02::1
+    FF02::2
+    FF02::1:FF00:1
+</span>
+            </pre>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Dica do Engenheiro:</strong> O comando <strong>ipv6 enable</strong> ativa automaticamente o IPv6 na interface e gera um
+            endereço <strong>Link Local</strong> baseado no endereço MAC da interface (EUI-64). Este LLA é essencial para o funcionamento do
+            <strong>NDP</strong>
+            (Neighbor Discovery Protocol) e para a comunicação com o roteador local.
+          </div>
+        </div>
+      </section>
+      <!-- ==========================================
+SEÇÃO 8.1.3 - ATRIBUIÇÃO DE GUA IPv6
+========================================== -->
+      <section id="secao8-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-address-card"></i>
+          <span class="section-number">8.1.3</span> Atribuição de GUA IPv6
+        </h2>
+
+        <div class="card">
+          <i class="fas fa-rocket"></i>
+          <h3>Design Simplificado do IPv6</h3>
+          <p>
+            O IPv6 foi projetado para simplificar como um host pode adquirir sua configuração IPv6. Por padrão, um roteador habilitado para
+            IPv6 anuncia suas informações IPv6. Isso permite que um host crie ou adquira dinamicamente sua configuração IPv6.
+          </p>
+          <p>
+            O <strong>GUA IPv6</strong> pode ser atribuído dinamicamente usando serviços <strong>sem estado</strong> e
+            <strong>com estado</strong>, conforme mostrado na figura abaixo.
+          </p>
+          <p>
+            Todos os métodos <strong>sem estado</strong> e <strong>com estado</strong> neste módulo usam mensagens de
+            <strong>RA ICMPv6</strong> para sugerir ao host como criar ou adquirir sua configuração IPv6. Embora os sistemas operacionais
+            host sigam a sugestão do RA, a decisão real depende, em última análise, do host.
+          </p>
+        </div>
+
+        <!-- Representação Visual dos Métodos -->
+        <div class="card">
+          <h3><i class="fas fa-sitemap"></i> Métodos de Atribuição Dinâmica do GUA</h3>
+
+          <!-- Grid de Métodos -->
+          <div class="gua-methods-grid">
+            <!-- SLAAC Only -->
+            <div class="method-card">
+              <div class="method-header" style="border-color: var(--success)">
+                <i class="fas fa-dharmachakra" style="color: var(--success)"></i>
+                <h4>Somente SLAAC</h4>
+                <span class="method-badge" style="background: rgba(3, 244, 135, 0.2); color: var(--success)">Sem Estado</span>
+              </div>
+              <div class="method-body">
+                <ul>
+                  <li>
+                    O roteador envia mensagens de <strong>Router Advertisement (RA)</strong>, fornecendo todas as informações de endereço
+                    IPv6 (prefixo da rede, comprimento do prefixo e gateway padrão)
+                  </li>
+                  <li>
+                    Os hosts usam as informações de RA exclusivamente para todos os endereços, incluindo a criação de seu próprio
+                    <strong>GUA</strong>
+                  </li>
+                </ul>
+                <div class="method-flow">
+                  <span class="flow-item">Host → <i class="fas fa-arrow-right"></i> RS</span>
+                  <span class="flow-item">Roteador → <i class="fas fa-arrow-left"></i> RA (Prefixo, Gateway)</span>
+                  <span class="flow-item">Host → <i class="fas fa-check-circle" style="color: var(--success)"></i> Gera GUA</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SLAAC + DHCPv6 Stateless -->
+            <div class="method-card">
+              <div class="method-header" style="border-color: var(--primary)">
+                <i class="fas fa-dhcp" style="color: var(--primary)"></i>
+                <h4>SLAAC com DHCPv6</h4>
+                <span class="method-badge" style="background: rgba(0, 180, 216, 0.2); color: var(--primary)">Sem Estado</span>
+              </div>
+              <div class="method-body">
+                <ul>
+                  <li>
+                    As mensagens de <strong>RA</strong> do roteador fornecem informações de configuração IPv6 aos hosts e informam que
+                    contatem um servidor <strong>DHCPv6 sem estado</strong> para obter informações adicionais
+                  </li>
+                  <li>
+                    Os hosts usam as informações de RA para criar seu próprio <strong>GUA</strong> exclusivo e obter informações adicionais
+                    de um servidor <strong>DHCPv6</strong>
+                  </li>
+                </ul>
+                <div class="method-flow">
+                  <span class="flow-item">Host → <i class="fas fa-arrow-right"></i> RS</span>
+                  <span class="flow-item">Roteador → <i class="fas fa-arrow-left"></i> RA (A=1, O=1)</span>
+                  <span class="flow-item">Host → <i class="fas fa-arrow-right"></i> DHCPv6 (Info Extra)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DHCPv6 Stateful -->
+            <div class="method-card">
+              <div class="method-header" style="border-color: var(--warning)">
+                <i class="fas fa-database" style="color: var(--warning)"></i>
+                <h4>DHCPv6 Stateful</h4>
+                <span class="method-badge" style="background: rgba(255, 183, 3, 0.2); color: var(--warning)">Com Estado</span>
+              </div>
+              <div class="method-body">
+                <ul>
+                  <li>
+                    As mensagens de <strong>RA</strong> do roteador informam os hosts para contatar um servidor
+                    <strong>DHCPv6 com estado</strong> ou roteador habilitado para DHCPv6 para obter todas as informações de configuração
+                    IPv6, exceto o endereço de <strong>gateway padrão</strong>
+                  </li>
+                  <li>Os hosts contatam um servidor <strong>DHCPv6</strong> para adquirir todas as informações de endereço IPv6</li>
+                  <li>O host obtém informações de <strong>gateway padrão</strong> das mensagens de <strong>RA</strong> do roteador</li>
+                </ul>
+                <div class="method-flow">
+                  <span class="flow-item">Host → <i class="fas fa-arrow-right"></i> RS</span>
+                  <span class="flow-item">Roteador → <i class="fas fa-arrow-left"></i> RA (A=0, M=1)</span>
+                  <span class="flow-item">Host → <i class="fas fa-arrow-right"></i> DHCPv6 (GUA, DNS)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela Comparativa Detalhada -->
+        <div class="card">
+          <h3><i class="fas fa-table"></i> Comparação dos Métodos de Atribuição</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-cog"></i> Método</th>
+                <th><i class="fas fa-tag"></i> Tipo</th>
+                <th><i class="fas fa-flag"></i> Flags RA</th>
+                <th><i class="fas fa-address-card"></i> GUA</th>
+                <th><i class="fas fa-info-circle"></i> Informações Extras</th>
+                <th><i class="fas fa-router"></i> Gateway</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Somente SLAAC</strong></td>
+                <td><span class="badge-stateless">Sem Estado</span></td>
+                <td>A=1, O=0</td>
+                <td>Host gera via EUI-64</td>
+                <td style="color: var(--text-dim)">Não fornece</td>
+                <td>Do RA</td>
+              </tr>
+              <tr>
+                <td><strong>SLAAC + DHCPv6 Stateless</strong></td>
+                <td><span class="badge-stateless">Sem Estado</span></td>
+                <td>A=1, O=1</td>
+                <td>Host gera via EUI-64</td>
+                <td>DNS, NTP, Domain via DHCPv6</td>
+                <td>Do RA</td>
+              </tr>
+              <tr>
+                <td><strong>DHCPv6 Stateful</strong></td>
+                <td><span class="badge-stateful">Com Estado</span></td>
+                <td>A=0, M=1</td>
+                <td>DHCPv6 atribui</td>
+                <td>DNS, NTP, Domain via DHCPv6</td>
+                <td>Do RA</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Processo Detalhado de Atribuição -->
+        <div class="card">
+          <h3><i class="fas fa-project-diagram"></i> Processo de Atribuição do GUA</h3>
+
+          <!-- Topologia Visual do Processo -->
+          <div class="topology-visual" style="flex-direction: column; gap: 1.5rem; padding: 2rem">
+            <!-- Etapa 1: RS -->
+            <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; width: 100%">
+              <div class="device">
+                <div class="device-icon pc">
+                  <i class="fas fa-desktop"></i>
+                </div>
+                <span class="device-label">Host (PC1)</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem">
+                <div style="color: var(--primary); font-size: 1.5rem">⬇️</div>
+                <span style="color: var(--primary); font-size: 0.8rem; font-weight: 600">Router Solicitation (RS)</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem">"Algum roteador aqui?"</span>
+              </div>
+              <div class="device">
+                <div class="device-icon router">
+                  <i class="fas fa-server"></i>
+                </div>
+                <span class="device-label">Roteador (R1)</span>
+              </div>
+            </div>
+
+            <div style="width: 80%; height: 1px; background: var(--border)"></div>
+
+            <!-- Etapa 2: RA -->
+            <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; width: 100%">
+              <div class="device">
+                <div class="device-icon router">
+                  <i class="fas fa-server"></i>
+                </div>
+                <span class="device-label">Roteador (R1)</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem">
+                <div style="color: var(--secondary); font-size: 1.5rem">⬇️</div>
+                <span style="color: var(--secondary); font-size: 0.8rem; font-weight: 600">Router Advertisement (RA)</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem">Prefixo, Gateway, Flags</span>
+              </div>
+              <div class="device">
+                <div class="device-icon pc">
+                  <i class="fas fa-desktop"></i>
+                </div>
+                <span class="device-label">Host (PC1)</span>
+              </div>
+            </div>
+
+            <div style="width: 80%; height: 1px; background: var(--border)"></div>
+
+            <!-- Etapa 3: Decisão do Host -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%">
+              <span style="color: var(--text); font-weight: 600; font-size: 1rem">
+                <i class="fas fa-brain" style="color: var(--warning)"></i> Host decide como obter o GUA
+              </span>
+              <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center">
+                <div style="background: rgba(3, 244, 135, 0.1); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--success)">
+                  <i class="fas fa-dharmachakra" style="color: var(--success)"></i>
+                  <span style="color: var(--text); font-size: 0.85rem">SLAAC</span>
+                </div>
+                <div style="background: rgba(0, 180, 216, 0.1); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--primary)">
+                  <i class="fas fa-dhcp" style="color: var(--primary)"></i>
+                  <span style="color: var(--text); font-size: 0.85rem">DHCPv6 Stateless</span>
+                </div>
+                <div style="background: rgba(255, 183, 3, 0.1); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--warning)">
+                  <i class="fas fa-database" style="color: var(--warning)"></i>
+                  <span style="color: var(--text); font-size: 0.85rem">DHCPv6 Stateful</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal - Configuração do RA -->
+        <div class="card">
+          <h3><i class="fas fa-terminal"></i> Configurando as Flags RA no Roteador</h3>
+          <p>As flags <strong>RA</strong> são configuradas no roteador para indicar ao host qual método de atribuição utilizar:</p>
+
+          <div class="terminal">
+            <pre>
+<span class="prompt">R1#</span><strong>configure terminal</strong>
+
+<span class="comment">// SLAAC Only (A=1, O=0)</span>
+<span class="prompt">R1(config)#</span><strong>interface gigabitethernet 0/0/0</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd prefix 2001:db8:acad:1::/64</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd managed-config-flag</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd other-config-flag</strong>
+
+<span class="comment">// SLAAC + DHCPv6 Stateless (A=1, O=1)</span>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd other-config-flag</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 dhcp server NOME_POOL</strong>
+<span class="comment">// DHCPv6 Stateful (A=0, M=1)</span>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 nd managed-config-flag</strong>
+<span class="prompt">R1(config-if)#</span><strong>ipv6 dhcp server NOME_POOL</strong>
+
+<span class="prompt">R1(config-if)#</span><strong>end</strong>
+<span class="prompt">R1#</span><strong>show ipv6 interface gigabitethernet 0/0/0</strong>
+<span class="output">
+GigabitEthernet0/0/0 is up, line protocol is up
+  IPv6 is enabled, link-local address is FE80::1
+  Global unicast address(es):
+    2001:DB8:ACAD:1::1, subnet is 2001:DB8:ACAD:1::/64
+  ICMP redirects are enabled
+  ND DAD is enabled, number of DAD attempts: 1
+  ND reachable time is 30000 milliseconds
+  ND advertised reachable time is 0 milliseconds
+  ND advertised retransmit interval is 0 milliseconds
+  ND router advertisements are sent every 200 seconds
+  ND router advertisements live for 1800 seconds
+  <span class="highlight-lla">ND advertised default router preference is Medium</span>
+  Hosts use <span class="highlight-lla">stateless autoconfig</span> for addresses
+</span>
+            </pre>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Dica do Engenheiro:</strong>
+            <ul style="margin-top: 0.5rem">
+              <li><strong>ipv6 nd managed-config-flag</strong> → Define a flag M (Managed) = 1 → DHCPv6 Stateful</li>
+              <li><strong>ipv6 nd other-config-flag</strong> → Define a flag O (Other) = 1 → DHCPv6 Stateless</li>
+              <li>Se ambas as flags estiverem desabilitadas → SLAAC Only</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Resumo das Flags RA -->
+        <div class="card">
+          <h3><i class="fas fa-flag"></i> Entendendo as Flags RA</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0">
+            <div style="background: rgba(9, 13, 22, 0.5); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--border)">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary)">A</span>
+                <span style="color: var(--text); font-size: 0.85rem">Autonomous Flag</span>
+              </div>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                <strong>A=1</strong> → Host pode usar SLAAC para criar GUA<br />
+                <strong>A=0</strong> → Host NÃO pode usar SLAAC
+              </p>
+            </div>
+            <div style="background: rgba(9, 13, 22, 0.5); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--border)">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--secondary)">O</span>
+                <span style="color: var(--text); font-size: 0.85rem">Other Config Flag</span>
+              </div>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                <strong>O=1</strong> → Host deve usar DHCPv6 para outras configurações (DNS, NTP, Domain)
+              </p>
+            </div>
+            <div style="background: rgba(9, 13, 22, 0.5); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--border)">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--warning)">M</span>
+                <span style="color: var(--text); font-size: 0.85rem">Managed Config Flag</span>
+              </div>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                <strong>M=1</strong> → Host deve usar DHCPv6 Stateful para obter GUA e outras configurações
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================
+    FOOTER
+    ============================================ -->
+    <footer class="footer">
+      <div class="container">
+        <p>
+          <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) — <i class="fas fa-code"></i> Switching, Routing, and Wireless Essentials
+          <br />
+          <span style="font-size: 0.75rem; color: var(--text-dim)">
+            <i class="fas fa-copyright"></i> Material didático para fins educacionais
+          </span>
+        </p>
+      </div>
+    </footer>
+
+    <!-- ============================================
+    JAVASCRIPT - MENU LATERAL
+    ============================================ -->
+    <script>
+      /**
+       * SidebarMenu - Classe para controle do menu lateral
+       * Gerencia abertura, fechamento e eventos do sidebar
+       */
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          // Abrir menu
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+
+          // Fechar menu pelo botão X
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+
+          // Fechar menu pelo overlay
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          // Fechar menu com tecla ESC
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          // Fechar menu ao clicar em um link
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => {
+              // Remove active de todos os links
+              links.forEach((l) => l.classList.remove('active'))
+              // Adiciona active no link clicado
+              link.classList.add('active')
+              this.close()
+            })
+          })
+
+          // Atualizar link ativo baseado no scroll
+          this.updateActiveOnScroll()
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+
+        /**
+         * Atualiza o link ativo baseado na seção visível na tela
+         */
+        updateActiveOnScroll() {
+          const sections = document.querySelectorAll('.section')
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+
+          if (sections.length === 0 || links.length === 0) return
+
+          window.addEventListener('scroll', () => {
+            let current = ''
+            const scrollPosition = window.scrollY + 100
+
+            sections.forEach((section) => {
+              const sectionTop = section.offsetTop
+              const sectionHeight = section.offsetHeight
+
+              if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute('id')
+              }
+            })
+
+            links.forEach((link) => {
+              link.classList.remove('active')
+              if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active')
+              }
+            })
+          })
+        }
+      }
+
+      // Inicializar o menu quando o DOM estiver carregado
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
