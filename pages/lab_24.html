@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco Academy | Configurar DHCPv6</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/labs.css" />
+  </head>
+  <body>
+    <!-- ========== TOP BAR ========== -->
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <div class="badge-lab" style="margin-bottom: 0; font-weight: 600">
+        <i class="fas fa-ethernet"></i> Cisco Networking Academy | CCNA 2
+      </div>
+      <a href="../labs/lab_24.pkt" class="btn-outline"> <i class="fas fa-download"></i> Arquivo .PKT </a>
+    </div>
+
+    <!-- ========== SIDEBAR ========== -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-compass"></i> Navegação</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao1"><i class="fas fa-book-open"></i> 1.0 Diferenças SLAAC / DHCPv6</a>
+        </li>
+        <li>
+          <a href="#secao2"><i class="fas fa-sitemap"></i> 1.1 Topologia e Tabela</a>
+        </li>
+        <li>
+          <a href="#secao3"><i class="fas fa-network-wired"></i> 1.2 Equipamentos e Conexões</a>
+        </li>
+        <li>
+          <a href="#secao4"><i class="fas fa-terminal"></i> 1.3 Configurações Básicas</a>
+        </li>
+        <li>
+          <a href="#secao5"><i class="fas fa-check-circle"></i> 1.4 Verificar SLAAC PC-A</a>
+        </li>
+        <li>
+          <a href="#secao6"><i class="fas fa-database"></i> 1.5 DHCPv6 Stateless R1</a>
+        </li>
+        <li>
+          <a href="#secao7"><i class="fas fa-server"></i> 1.6 DHCPv6 Stateful R1</a>
+        </li>
+        <li>
+          <a href="#secao8"><i class="fas fa-share-alt"></i> 1.7 Relay DHCPv6 R2</a>
+        </li>
+        <li>
+          <a href="#secao9"><i class="fas fa-check-double"></i> 1.8 Verificação Final</a>
+        </li>
+        <li>
+          <a href="../labs/lab_24.pkt"><i class="fas fa-file-archive"></i> Download .PKT</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+      <div class="container">
+        <span class="badge-lab"><i class="fas fa-microchip"></i> Laboratório Prático - DHCPv6</span>
+        <h1>Configurar DHCPv6</h1>
+        <p style="color: var(--text-dim); max-width: 750px; margin: 1rem auto">
+          Implementação de SLAAC, DHCPv6 Stateless e DHCPv6 Stateful em topologia IPv6 com roteadores Cisco.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========== CONTAINER PRINCIPAL ========== -->
+    <div class="container">
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.0 - DIFERENÇAS ENTRE SLAAC, STATELESS E STATEFUL     -->
+      <!-- ============================================================ -->
+      <section id="secao1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-book-open"></i>
+          <span class="section-number">1.0</span> Diferenças entre SLAAC, DHCPv6 Stateless e DHCPv6 Stateful
+        </h2>
+        <div class="card">
+          <p style="margin-bottom: 1.5rem; color: var(--text-dim)">
+            Antes de iniciar a configuração prática, é fundamental entender os três métodos de atribuição dinâmica de endereços IPv6 que
+            serão utilizados neste laboratório.
+          </p>
+
+          <!-- SLAAC -->
+          <div
+            style="
+              background: rgba(0, 255, 136, 0.05);
+              border-left: 3px solid var(--primary);
+              padding: 1rem 1.2rem;
+              border-radius: 8px;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h3 style="color: var(--primary); margin-bottom: 0.5rem">
+              <i class="fas fa-user-cog"></i> 1. SLAAC (Stateless Address Autoconfiguration)
+            </h3>
+            <p><strong>O que é?</strong> O próprio host (PC) gera seu endereço IPv6 automaticamente, sem precisar de servidor DHCP.</p>
+            <p><strong>Como funciona?</strong></p>
+            <ul style="color: var(--text-dim); padding-left: 1.5rem; margin: 0.5rem 0">
+              <li>O roteador envia <strong>RA (Router Advertisement)</strong> com o prefixo da rede</li>
+              <li>
+                O host combina o prefixo com seu <strong>endereço MAC</strong> (EUI-64) ou gera um endereço <strong>aleatório</strong>
+              </li>
+              <li>O host cria um endereço IPv6 completo</li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 0.5rem; font-size: 0.9rem">
+              <span><span style="color: var(--success)">✅</span> Endereço IPv6: Gerado pelo host</span>
+              <span><span style="color: var(--danger)">❌</span> DNS Server: Não fornecido</span>
+              <span><span style="color: var(--danger)">❌</span> Nome de domínio: Não fornecido</span>
+              <span><span style="color: var(--success)">✅</span> Gateway: Obtido via RA</span>
+              <span><span style="color: var(--warning)">🟡</span> Controle do admin: Baixo</span>
+              <span><span style="color: var(--info)">🏷️</span> Flag RA: Nenhuma</span>
+            </div>
+          </div>
+
+          <!-- DHCPv6 Stateless -->
+          <div
+            style="
+              background: rgba(0, 170, 255, 0.05);
+              border-left: 3px solid var(--info);
+              padding: 1rem 1.2rem;
+              border-radius: 8px;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h3 style="color: var(--info); margin-bottom: 0.5rem"><i class="fas fa-cloud-sun"></i> 2. DHCPv6 Stateless (Sem Estado)</h3>
+            <p>
+              <strong>O que é?</strong> O host <strong>gerencia seu próprio endereço</strong> (via SLAAC), mas usa o DHCP
+              <strong>APENAS</strong> para informações adicionais (DNS, domínio, etc.).
+            </p>
+            <p><strong>Como funciona?</strong></p>
+            <ul style="color: var(--text-dim); padding-left: 1.5rem; margin: 0.5rem 0">
+              <li>
+                O roteador envia RA com a flag <strong><code>other-config-flag</code></strong> (flag O)
+              </li>
+              <li>O host gera seu endereço via SLAAC</li>
+              <li>O host consulta o servidor DHCP <strong>apenas</strong> para obter DNS e domínio</li>
+              <li>O DHCP <strong>NÃO</strong> atribui o endereço IPv6</li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 0.5rem; font-size: 0.9rem">
+              <span><span style="color: var(--success)">✅</span> Endereço IPv6: Gerado pelo host</span>
+              <span><span style="color: var(--success)">✅</span> DNS Server: DHCP fornece</span>
+              <span><span style="color: var(--success)">✅</span> Nome de domínio: DHCP fornece</span>
+              <span><span style="color: var(--success)">✅</span> Gateway: Obtido via RA</span>
+              <span><span style="color: var(--warning)">🟡</span> Controle do admin: Médio</span>
+              <span><span style="color: var(--info)">🏷️</span> Flag RA: <code>other-config-flag</code> (O)</span>
+            </div>
+          </div>
+
+          <!-- DHCPv6 Stateful -->
+          <div
+            style="
+              background: rgba(255, 204, 0, 0.05);
+              border-left: 3px solid var(--warning);
+              padding: 1rem 1.2rem;
+              border-radius: 8px;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h3 style="color: var(--warning); margin-bottom: 0.5rem">
+              <i class="fas fa-cloud-upload-alt"></i> 3. DHCPv6 Stateful (Com Estado)
+            </h3>
+            <p>
+              <strong>O que é?</strong> O servidor DHCP <strong>controla tudo</strong> — atribui o endereço IPv6, DNS, domínio e outras
+              configurações.
+            </p>
+            <p><strong>Como funciona?</strong></p>
+            <ul style="color: var(--text-dim); padding-left: 1.5rem; margin: 0.5rem 0">
+              <li>
+                O roteador envia RA com a flag <strong><code>managed-config-flag</code></strong> (flag M)
+              </li>
+              <li>O host <strong>ignora</strong> o SLAAC e solicita <strong>tudo</strong> do DHCP</li>
+              <li>O servidor DHCP atribui o endereço IPv6 completo</li>
+              <li>O servidor DHCP também fornece DNS, domínio, etc.</li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 0.5rem; font-size: 0.9rem">
+              <span><span style="color: var(--success)">✅</span> Endereço IPv6: DHCP atribui</span>
+              <span><span style="color: var(--success)">✅</span> DNS Server: DHCP fornece</span>
+              <span><span style="color: var(--success)">✅</span> Nome de domínio: DHCP fornece</span>
+              <span><span style="color: var(--success)">✅</span> Gateway: RA ou DHCP</span>
+              <span><span style="color: var(--success)">🟢</span> Controle do admin: Total</span>
+              <span><span style="color: var(--info)">🏷️</span> Flag RA: <code>managed-config-flag</code> (M)</span>
+            </div>
+          </div>
+
+          <!-- Quadro Comparativo -->
+          <div style="margin-top: 1.5rem; overflow-x: auto">
+            <h4 style="color: var(--primary); margin-bottom: 1rem"><i class="fas fa-table"></i> Quadro Comparativo Completo</h4>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Característica</th>
+                  <th>SLAAC</th>
+                  <th>DHCPv6 Stateless</th>
+                  <th>DHCPv6 Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Endereço IPv6</strong></td>
+                  <td>Host gera</td>
+                  <td>Host gera</td>
+                  <td>DHCP atribui</td>
+                </tr>
+                <tr>
+                  <td><strong>DNS Server</strong></td>
+                  <td>Manual/RDNSS</td>
+                  <td>DHCP fornece</td>
+                  <td>DHCP fornece</td>
+                </tr>
+                <tr>
+                  <td><strong>Nome de domínio</strong></td>
+                  <td>Manual</td>
+                  <td>DHCP fornece</td>
+                  <td>DHCP fornece</td>
+                </tr>
+                <tr>
+                  <td><strong>Gateway</strong></td>
+                  <td>RA fornece</td>
+                  <td>RA fornece</td>
+                  <td>RA fornece</td>
+                </tr>
+                <tr>
+                  <td><strong>Controle do admin</strong></td>
+                  <td><span style="color: var(--warning)">🟡 Baixo</span></td>
+                  <td><span style="color: var(--warning)">🟡 Médio</span></td>
+                  <td><span style="color: var(--success)">🟢 Total</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Carga no DHCP</strong></td>
+                  <td>Nenhuma</td>
+                  <td>Baixa</td>
+                  <td>Alta</td>
+                </tr>
+                <tr>
+                  <td><strong>Servidor DHCP</strong></td>
+                  <td>Não precisa</td>
+                  <td>Precisa (só DNS)</td>
+                  <td>Precisa (tudo)</td>
+                </tr>
+                <tr>
+                  <td><strong>Flag no RA</strong></td>
+                  <td>Nenhuma</td>
+                  <td><code>other-config-flag</code> (O)</td>
+                  <td><code>managed-config-flag</code> (M)</td>
+                </tr>
+                <tr>
+                  <td><strong>Binding DHCP</strong></td>
+                  <td>Não existe</td>
+                  <td>Não existe</td>
+                  <td>Existe</td>
+                </tr>
+                <tr>
+                  <td><strong>Lease (aluguel)</strong></td>
+                  <td>Não</td>
+                  <td>Não</td>
+                  <td>Sim</td>
+                </tr>
+                <tr>
+                  <td><strong>Exemplo</strong></td>
+                  <td>Redes domésticas</td>
+                  <td>Pequenas empresas</td>
+                  <td>Grandes empresas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.1 - TOPOLOGIA E TABELA DE ENDEREÇAMENTO              -->
+      <!-- ============================================================ -->
+      <section id="secao2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">1.1</span> Topologia e Tabela de Endereçamento
+        </h2>
+        <div class="card">
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem">
+            <i class="fas fa-info-circle" style="color: var(--info)"></i>
+            <strong>Espaço reservado para imagem da topologia:</strong> Insira aqui a imagem da topologia do laboratório.
+          </p>
+          <div
+            style="
+              background: rgba(0, 0, 0, 0.3);
+              border: 2px dashed var(--border);
+              border-radius: 12px;
+              padding: 3rem 1rem;
+              text-align: center;
+              color: var(--text-dim);
+              margin-bottom: 2rem;
+            "
+          >
+            <img src="../assets/lab_24.png" alt="" />
+            <p style="font-size: 0.8rem">R1 G0/0/0 ↔ R2 G0/0/0 | R1 G0/0/1 ↔ PC-A | R2 G0/0/1 ↔ PC-B</p>
+          </div>
+
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-list"></i> Tabela de Endereçamento</h4>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Dispositivo</th>
+                  <th>Interface</th>
+                  <th>Endereço IPv6</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>G0/0/0</td>
+                  <td>2001:db8:acad:2::1/64</td>
+                </tr>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>G0/0/0 (link-local)</td>
+                  <td>fe80::1</td>
+                </tr>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>G0/0/1</td>
+                  <td>2001:db8:acad:1::1/64</td>
+                </tr>
+                <tr>
+                  <td><strong>R1</strong></td>
+                  <td>G0/0/1 (link-local)</td>
+                  <td>fe80::1</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/0/0</td>
+                  <td>2001:db8:acad:2::2/64</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/0/0 (link-local)</td>
+                  <td>fe80::2</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/0/1</td>
+                  <td>2001:db8:acad:3::1/64</td>
+                </tr>
+                <tr>
+                  <td><strong>R2</strong></td>
+                  <td>G0/0/1 (link-local)</td>
+                  <td>fe80::1</td>
+                </tr>
+                <tr>
+                  <td><strong>PC-A</strong></td>
+                  <td>Placa de rede</td>
+                  <td>DHCP (automático)</td>
+                </tr>
+                <tr>
+                  <td><strong>PC-B</strong></td>
+                  <td>Placa de rede</td>
+                  <td>DHCP (automático)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.2 - EQUIPAMENTOS E CONEXÕES                          -->
+      <!-- ============================================================ -->
+      <section id="secao3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-network-wired"></i>
+          <span class="section-number">1.2</span> Equipamentos e Conexões
+        </h2>
+        <div class="card">
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem"><i class="fas fa-server"></i> Equipamentos Utilizados</h4>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Quantidade</th>
+                  <th>Dispositivo</th>
+                  <th>Modelo</th>
+                  <th>Observação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2</td>
+                  <td>Roteadores</td>
+                  <td>Cisco 4221</td>
+                  <td>IOS XE 16.9.4</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Switches</td>
+                  <td>Cisco 2960</td>
+                  <td>Opcionais - IOS 15.2(2)</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>PCs</td>
+                  <td>Windows</td>
+                  <td>Com emulador de terminal</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 0.5rem"><i class="fas fa-plug"></i> Conexões de Rede</h4>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Conexão</th>
+                  <th>Cabo</th>
+                  <th>Interface Origem</th>
+                  <th>Interface Destino</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>R1 ↔ R2</td>
+                  <td>Ethernet</td>
+                  <td>R1 G0/0/0</td>
+                  <td>R2 G0/0/0</td>
+                </tr>
+                <tr>
+                  <td>R1 ↔ PC-A</td>
+                  <td>Ethernet</td>
+                  <td>R1 G0/0/1</td>
+                  <td>PC-A (via Switch1)</td>
+                </tr>
+                <tr>
+                  <td>R2 ↔ PC-B</td>
+                  <td>Ethernet</td>
+                  <td>R2 G0/0/1</td>
+                  <td>PC-B (via Switch2)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 0.5rem">
+            <i class="fas fa-keyboard"></i> Conexões de Console
+          </h4>
+          <div style="overflow-x: auto">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Dispositivo</th>
+                  <th>Porta Console</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>R1</td>
+                  <td>Console</td>
+                </tr>
+                <tr>
+                  <td>R2</td>
+                  <td>Console</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.3 - CONFIGURAÇÕES BÁSICAS                            -->
+      <!-- ============================================================ -->
+      <section id="secao4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-terminal"></i>
+          <span class="section-number">1.3</span> Configurações Básicas
+        </h2>
+        <div class="card">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Instrução de Validação:</strong> Lembre-se de habilitar o roteamento IPv6 com o comando
+            <code>ipv6 unicast-routing</code> em ambos os roteadores.
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0">
+            <i class="fas fa-toggle-on"></i> Configuração Básica dos Switches (Opcional)
+          </h4>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal
+hostname Switch1
+ip domain-lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+service password-encryption
+banner motd #Acesso não autorizado proibido#
+interface range f0/1-24
+shutdown
+interface range g0/1-2
+shutdown
+end
+write memory</pre
+            >
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-router"></i> Configuração Básica do R1</h4>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal
+hostname R1
+ip domain-lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+service password-encryption
+banner motd #Acesso não autorizado proibido#
+ipv6 unicast-routing
+interface g0/0/0
+ipv6 address 2001:db8:acad:2::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+interface g0/0/1
+ipv6 address 2001:db8:acad:1::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+ipv6 route ::/0 2001:db8:acad:2::2
+end
+write memory</pre
+            >
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-router"></i> Configuração Básica do R2</h4>
+          <div class="terminal">
+            <pre>
+enable
+configure terminal
+hostname R2
+ip domain-lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+service password-encryption
+banner motd #Acesso não autorizado proibido#
+ipv6 unicast-routing
+interface g0/0/0
+ipv6 address 2001:db8:acad:2::2/64
+ipv6 address fe80::2 link-local
+no shutdown
+interface g0/0/1
+ipv6 address 2001:db8:acad:3::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+ipv6 route ::/0 2001:db8:acad:2::1
+end
+write memory</pre
+            >
+          </div>
+
+          <h4 style="color: var(--success); margin: 1rem 0 0.5rem 0"><i class="fas fa-check-circle"></i> Verificação de Conectividade</h4>
+          <div class="terminal">
+            <pre>R1# ping 2001:db8:acad:3::1</pre>
+          </div>
+          <p style="color: var(--text-dim); font-size: 0.9rem">
+            Saída esperada: <span style="color: var(--success)">!!!!! Success rate is 100 percent (5/5)</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.4 - VERIFICAR SLAAC PC-A                             -->
+      <!-- ============================================================ -->
+      <section id="secao5" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-circle"></i>
+          <span class="section-number">1.4</span> Verificar SLAAC no PC-A
+        </h2>
+        <div class="card">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Configuração do PC-A:</strong> Configure a placa de rede para "Obter um endereço IPv6 automaticamente" e "Obter o
+            endereço do servidor DNS automaticamente".
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-desktop"></i> Verificar configuração</h4>
+          <div class="terminal">
+            <pre>
+C:\> ipconfig
+
+IPv6 Address. . . . . . . . . . . : 2001:db8:acad:1:5c43:ee7c:2959:da68
+Link-local IPv6 Address . . . . .: fe80::5c43:ee7c:2959:da68%6
+Gateway Padrão . . . . . . . . .: fe80::1%6</pre
+            >
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-question-circle"></i>
+            <strong>Pergunta:</strong> De onde veio a parte do host-id do endereço?
+            <p style="margin-top: 0.5rem; color: var(--text-dim)">
+              <strong>Resposta:</strong> A parte do host-id (últimos 64 bits) foi gerada automaticamente pelo PC usando o
+              <strong>método EUI-64</strong> ou <strong>endereço temporário aleatório</strong>, baseado no endereço MAC da placa de rede.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.5 - DHCPv6 STATELESS NO R1                           -->
+      <!-- ============================================================ -->
+      <section id="secao6" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-database"></i>
+          <span class="section-number">1.5</span> Configurar DHCPv6 Stateless no R1
+        </h2>
+        <div class="card">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Instrução de Validação:</strong> Lembre-se de configurar a flag <code>other-config-flag</code> na interface G0/0/1.
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-plus-circle"></i> Criar pool DHCP Stateless</h4>
+          <div class="terminal">
+            <pre>
+R1# configure terminal
+R1(config)# ipv6 dhcp pool R1-STATELESS
+R1(config-dhcp)# dns-server 2001:db8:acad::254
+R1(config-dhcp)# domain-name Stateless.com
+R1(config-dhcp)# exit</pre
+            >
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-arrow-right"></i> Aplicar na interface G0/0/1</h4>
+          <div class="terminal">
+            <pre>
+R1(config)# interface g0/0/1
+R1(config-if)# ipv6 nd other-config-flag
+R1(config-if)# ipv6 dhcp server R1-STATELESS
+R1(config-if)# end
+R1# write memory</pre
+            >
+          </div>
+
+          <h4 style="color: var(--success); margin: 1rem 0 0.5rem 0"><i class="fas fa-check-circle"></i> Verificar configuração</h4>
+          <div class="terminal">
+            <pre>
+R1# show ipv6 dhcp pool
+R1# show ipv6 dhcp server</pre
+            >
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Após reiniciar o PC-A, a saída do <code>ipconfig /all</code> deve mostrar:</strong>
+            <div class="terminal" style="margin-top: 0.5rem">
+              <pre>
+Sufixo de DNS primário. . . . . . . : Stateless.com
+Específico de Conexão Sufixo DNS. : STATELESS.com
+Lista de pesquisa de sufixo DNS. . : Stateless.com
+Servidores DNS . . . . . . . . . . . : 2001:db8:acad::254</pre
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.6 - DHCPv6 STATEFUL NO R1                            -->
+      <!-- ============================================================ -->
+      <section id="secao7" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-server"></i>
+          <span class="section-number">1.6</span> Configurar DHCPv6 Stateful no R1
+        </h2>
+        <div class="card">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Instrução de Validação:</strong> O pool Stateful deve conter o prefixo <code>2001:db8:acad:3::/64</code> para atender o
+            PC-B.
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-plus-circle"></i> Criar pool DHCP Stateful</h4>
+          <div class="terminal">
+            <pre>
+R1# configure terminal
+R1(config)# ipv6 dhcp pool R2-STATEFUL
+R1(config-dhcp)# address prefix 2001:db8:acad:3::/64
+R1(config-dhcp)# dns-server 2001:db8:acad::254
+R1(config-dhcp)# domain-name StateFul.com
+R1(config-dhcp)# exit</pre
+            >
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-arrow-right"></i> Aplicar na interface G0/0/0</h4>
+          <div class="terminal">
+            <pre>
+R1(config)# interface g0/0/0
+R1(config-if)# ipv6 dhcp server R2-STATEFUL
+R1(config-if)# end
+R1# write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.7 - RELAY DHCPv6 NO R2                               -->
+      <!-- ============================================================ -->
+      <section id="secao8" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-share-alt"></i>
+          <span class="section-number">1.7</span> Configurar Relay DHCPv6 no R2
+        </h2>
+        <div class="card">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>ATENÇÃO:</strong> O comando <code>ipv6 dhcp relay destination</code> pode não estar disponível em algumas versões do IOS
+            (como a imagem <code>universalk9</code>). Se o comando não for reconhecido, utilize a
+            <strong>SOLUÇÃO ALTERNATIVA</strong> abaixo.
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-arrows-alt-h"></i> Configurar Relay (se disponível)</h4>
+          <div class="terminal">
+            <pre>
+R2# configure terminal
+R2(config)# interface g0/0/1
+R2(config-if)# ipv6 nd managed-config-flag
+R2(config-if)# ipv6 dhcp relay destination 2001:db8:acad:2::1
+R2(config-if)# end
+R2# write memory</pre
+            >
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-lightbulb"></i>
+            <strong>SOLUÇÃO ALTERNATIVA (Caso o relay não funcione):</strong>
+            <p style="margin-top: 0.5rem">Configure o R2 como servidor DHCP diretamente para a rede do PC-B:</p>
+            <div class="terminal" style="margin-top: 0.5rem">
+              <pre>
+R2# configure terminal
+R2(config)# ipv6 dhcp pool R2-STATEFUL
+R2(config-dhcp)# address prefix 2001:db8:acad:3::/64
+R2(config-dhcp)# dns-server 2001:db8:acad::254
+R2(config-dhcp)# domain-name StateFul.com
+R2(config-dhcp)# exit
+R2(config)# interface g0/0/1
+R2(config-if)# ipv6 nd managed-config-flag
+R2(config-if)# ipv6 dhcp server R2-STATEFUL
+R2(config-if)# end
+R2# write memory</pre
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO 1.8 - VERIFICAÇÃO FINAL                                -->
+      <!-- ============================================================ -->
+      <section id="secao9" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-check-double"></i>
+          <span class="section-number">1.8</span> Verificação Final
+        </h2>
+        <div class="card">
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Após reiniciar o PC-B, a saída do <code>ipconfig /all</code> deve mostrar:</strong>
+            <div class="terminal" style="margin-top: 0.5rem">
+              <pre>
+IPv6 Address. . . . . . . . . . . : 2001:db8:acad:3:aaaa:XXXX:XXXX:XXXX
+Sufixo de DNS primário. . . . . . . : StateFul.com
+Servidores DNS . . . . . . . . . . . : 2001:db8:acad::254
+Lista de pesquisa de sufixo DNS. . . : StateFul.com
+Gateway Padrão . . . . . . . . .: fe80::1%6</pre
+              >
+            </div>
+          </div>
+
+          <h4 style="color: var(--info); margin: 1rem 0 0.5rem 0"><i class="fas fa-list"></i> Verificar bindings DHCP</h4>
+          <div class="terminal">
+            <pre>
+R1# show ipv6 dhcp binding
+R2# show ipv6 dhcp binding</pre
+            >
+          </div>
+
+          <h4 style="color: var(--success); margin: 1rem 0 0.5rem 0"><i class="fas fa-network-wired"></i> Teste de conectividade</h4>
+          <div class="terminal">
+            <pre>
+C:\> ping 2001:db8:acad:1::1
+C:\> ping 2001:db8:acad:2::1</pre
+            >
+          </div>
+
+          <!-- CONFIGURAÇÕES COMPLETAS -->
+          <h4 style="color: var(--primary); margin: 1.5rem 0 0.5rem 0"><i class="fas fa-file-code"></i> Configuração Completa do R1</h4>
+          <div class="terminal">
+            <pre>
+hostname R1
+ipv6 unicast-routing
+!
+interface g0/0/0
+ ipv6 address 2001:db8:acad:2::1/64
+ ipv6 address fe80::1 link-local
+ no shutdown
+!
+interface g0/0/1
+ ipv6 address 2001:db8:acad:1::1/64
+ ipv6 address fe80::1 link-local
+ ipv6 nd other-config-flag
+ ipv6 dhcp server R1-STATELESS
+ no shutdown
+!
+ipv6 route ::/0 2001:db8:acad:2::2
+!
+ipv6 dhcp pool R1-STATELESS
+ dns-server 2001:db8:acad::254
+ domain-name Stateless.com
+!
+ipv6 dhcp pool R2-STATEFUL
+ address prefix 2001:db8:acad:3::/64
+ dns-server 2001:db8:acad::254
+ domain-name StateFul.com
+!
+interface g0/0/0
+ ipv6 dhcp server R2-STATEFUL
+!
+end
+write memory</pre
+            >
+          </div>
+
+          <h4 style="color: var(--primary); margin: 1rem 0 0.5rem 0"><i class="fas fa-file-code"></i> Configuração Completa do R2</h4>
+          <div class="terminal">
+            <pre>
+hostname R2
+ipv6 unicast-routing
+!
+interface g0/0/0
+ ipv6 address 2001:db8:acad:2::2/64
+ ipv6 address fe80::2 link-local
+ no shutdown
+!
+interface g0/0/1
+ ipv6 address 2001:db8:acad:3::1/64
+ ipv6 address fe80::1 link-local
+ ipv6 nd managed-config-flag
+ no shutdown
+!
+ipv6 route ::/0 2001:db8:acad:2::1
+!
+ipv6 dhcp pool R2-STATEFUL
+ address prefix 2001:db8:acad:3::/64
+ dns-server 2001:db8:acad::254
+ domain-name StateFul.com
+!
+interface g0/0/1
+ ipv6 dhcp server R2-STATEFUL
+!
+end
+write memory</pre
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SEÇÃO DOWNLOAD                                               -->
+      <!-- ============================================================ -->
+      <section id="download" class="section" style="border-bottom: none">
+        <div class="download-zone">
+          <i class="fas fa-file-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem"></i>
+          <h3>Laboratório Concluído com Sucesso</h3>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem">
+            Baixe a topologia oficial resolvida (.pkt) contendo todas as verificações validadas.
+          </p>
+          <a href="../labs/lab_24.pkt" download class="btn-download"> <i class="fas fa-cloud-download-alt"></i> Baixar Arquivo .PKT </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+      <p>&copy; 2026 - Cisco Networking Academy Clone. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- ========== SCRIPT ========== -->
+    <script>
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+        init() {
+          if (!this.sidebar) return
+          if (this.openBtn) this.openBtn.addEventListener('click', () => this.open())
+          if (this.closeBtn) this.closeBtn.addEventListener('click', () => this.close())
+          if (this.overlay) this.overlay.addEventListener('click', () => this.close())
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) this.close()
+          })
+          document.querySelectorAll('.sidebar .nav-modules a').forEach((link) => {
+            link.addEventListener('click', () => this.close())
+          })
+        }
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+      })
+    </script>
+  </body>
+</html>
