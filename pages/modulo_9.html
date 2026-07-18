@@ -1,0 +1,3311 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | FHRP Concepts - Módulo 9.0.1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <!-- ===== TOP BAR ===== -->
+    <header class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="#" class="top-bar-brand">
+        <i class="fas fa-network-wired"></i>
+        <span>Cisco CCNA 2 (SRWE)</span>
+      </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel Central </a>
+    </header>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos do Lab</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao9-0-1" class="active"><i class="fas fa-network-wired"></i> 9.0.1 Por que devo cursar este módulo?</a>
+        </li>
+        <li>
+          <a href="#secao9-0-2"><i class="fas fa-bullseye"></i> 9.0.2 O que vou aprender neste módulo?</a>
+        </li>
+        <li>
+          <a href="#secao9-1-1" class="active"><i class="fas fa-exclamation-triangle"></i> 9.1.1 Limitações do gateway padrão</a>
+        </li>
+        <li>
+          <a href="#secao9-1-2"><i class="fas fa-sitemap"></i> 9.1.2 Redundância de roteador</a>
+        </li>
+        <li>
+          <a href="#secao9-1-3"><i class="fas fa-exchange-alt"></i> 9.1.3 Etapas para o Failover do Roteador</a>
+        </li>
+        <li>
+          <a href="#secao9-1-4"><i class="fas fa-list"></i> 9.1.4 Opções do FHRP</a>
+        </li>
+        <li>
+          <a href="#secao9-2-1"><i class="fas fa-info-circle"></i> 9.2.1 Visão geral do HSRP</a>
+        </li>
+        <li>
+          <a href="#secao9-2-2"><i class="fas fa-arrow-up"></i> 9.2.2 Prioridade e preempção de HSRP</a>
+        </li>
+        <li>
+          <a href="#secao9-2-3"><i class="fas fa-project-diagram"></i> 9.2.3 Estados e temporizadores de HSRP</a>
+        </li>
+        <li>
+          <a href="#secao9-3-1"><i class="fas fa-graduation-cap"></i> 9.3.1 O que eu aprendi neste módulo?</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="badge-lab"><i class="fas fa-shield-alt"></i> Cisco IOS Interactive Lab</div>
+      <h1>FHRP Concepts</h1>
+      <p>Protocolos de Redundância de First Hop para alta disponibilidade em redes Cisco</p>
+    </section>
+
+    <!-- ===== CONTAINER PRINCIPAL ===== -->
+    <div class="container">
+      <!-- ===== SEÇÃO 9.0.1 ===== -->
+      <section id="secao9-0-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-question-circle"></i>
+          <span class="section-number">9.0.1</span> Por que devo cursar este módulo?
+        </h2>
+        <div class="card">
+          <p><i class="fas fa-rocket" style="font-size: 1.5rem; color: var(--secondary)"></i></p>
+          <p><strong>Bem-vindo à FHRP Concepts!</strong></p>
+          <p>
+            Sua rede está funcionando. Você conquistou a redundância da Camada 2 sem nenhum loop da Camada 2. Todos os seus dispositivos
+            recebem seus endereços dinamicamente. Você é <strong><em>good</em></strong> na administração de rede! Mas, espere. Um de seus
+            roteadores, o roteador de <strong>Default Gateway</strong>, na verdade, foi desativado. Nenhum de seus hosts pode enviar
+            mensagens fora da rede imediata. Vai demorar um pouco para que este roteador de <strong>Default Gateway</strong> volte a
+            funcionar. Você tem um monte de pessoas furiosas perguntando quando a emissora estará "de volta".
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Atenção:</strong> A falha de um único roteador de gateway padrão pode paralisar toda uma sub-rede, causando
+            indisponibilidade crítica para os usuários finais.
+          </div>
+
+          <p>
+            Você pode evitar esse problema facilmente. Os <strong>Protocolos de Redundância de First Hop (FHRPs)</strong> são a solução de
+            que você precisa. Este módulo discute o que o FHRP faz e todos os tipos de FHRPs que estão disponíveis para você. Um desses
+            tipos é um FHRP proprietário da <strong>Cisco</strong> chamado <strong>Hot Standby Router Protocol (HSRP)</strong>. Você
+            aprenderá como o HSRP funciona e, em seguida, concluirá uma atividade de <strong>Packet Tracer</strong> na qual você configurará
+            e verificará o HSRP. Não espere, comece!
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica:</strong> FHRPs são essenciais para garantir a continuidade dos serviços em redes corporativas, proporcionando
+            failover transparente para os hosts finais.
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SEÇÃO 9.1 ===== -->
+      <section id="secao9-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-shield-alt"></i>
+          <span class="section-number">9.1</span> Introdução ao FHRP
+        </h2>
+        <div class="card">
+          <p><i class="fas fa-sitemap" style="font-size: 1.5rem; color: var(--primary)"></i></p>
+          <p>
+            Os <strong>Protocolos de Redundância de First Hop (FHRPs)</strong> são mecanismos que fornecem
+            <strong>alta disponibilidade</strong> para o gateway padrão em uma rede. Eles permitem que múltiplos roteadores compartilhem um
+            único endereço IP virtual, garantindo que, se um roteador falhar, outro assuma imediatamente suas funções.
+          </p>
+
+          <h3 style="color: var(--primary); margin: 1rem 0 0.5rem 0">Tipos de FHRP:</h3>
+          <ul>
+            <li><strong>HSRP (Hot Standby Router Protocol)</strong> - Protocolo proprietário Cisco</li>
+            <li><strong>VRRP (Virtual Router Redundancy Protocol)</strong> - Padrão IETF (RFC 5798)</li>
+            <li><strong>GLBP (Gateway Load Balancing Protocol)</strong> - Protocolo proprietário Cisco com balanceamento de carga</li>
+          </ul>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Sucesso:</strong> Com FHRP, os hosts continuam enviando tráfego para o gateway virtual, mesmo durante falhas de hardware
+            ou manutenção programada.
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.0.2 ===== -->
+      <section id="secao9-0-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-bullseye"></i>
+          <span class="section-number">9.0.2</span> O que vou aprender neste módulo?
+        </h2>
+        <div class="card">
+          <div class="alert alert-info" style="margin-bottom: 1.5rem">
+            <i class="fas fa-graduation-cap"></i>
+            <strong>Título do módulo:</strong> Conceitos de FHRP
+          </div>
+
+          <p style="margin-bottom: 1.5rem">
+            <i class="fas fa-flag-checkered" style="color: var(--secondary); margin-right: 0.5rem"></i>
+            <strong>Objetivo do módulo:</strong> Explicar como os <strong>FHRPs</strong> oferecem serviços de
+            <strong>Default Gateway</strong> em uma rede redundante.
+          </p>
+
+          <h3 style="color: var(--primary); margin: 1.5rem 0 1rem 0; display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-list"></i> Tópicos do Módulo
+          </h3>
+
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tag"></i> Título do Tópico</th>
+                <th><i class="fas fa-bullseye"></i> Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>First Hop Redundancy Protocols (FHRP)</strong></td>
+                <td>Explicar a finalidade e a operação dos diferentes tipos de FHRP.</td>
+              </tr>
+              <tr>
+                <td><strong>HSRP</strong></td>
+                <td>Explicar como o <strong>HSRP</strong> funciona.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Ao final deste módulo, você será capaz de:</strong>
+            <ul style="margin-top: 0.5rem; padding-left: 1.5rem">
+              <li>Compreender a finalidade dos protocolos de redundância de primeiro salto</li>
+              <li>Diferenciar os tipos de FHRP disponíveis no mercado</li>
+              <li>Explicar o funcionamento do HSRP da Cisco</li>
+              <li>Aplicar conceitos de alta disponibilidade em redes corporativas</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.1.1 ===== -->
+      <section id="secao9-1-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span class="section-number">9.1.1</span> Limitações do gateway padrão
+        </h2>
+        <div class="card">
+          <p>
+            Se um roteador ou uma interface de roteador (que serve como um <strong>Default Gateway</strong>) falhar, os hosts configurados
+            com aquele <strong>Default Gateway</strong> são isolados das redes externas. É necessário um mecanismo para fornecer
+            <strong>Default Gateways</strong> alternativos em redes comutadas nas quais dois ou mais roteadores são conectados às mesmas
+            <strong>VLANs</strong>. Esse mecanismo é fornecido por <strong>Protocolos de Redundância de First Hop (FHRPs)</strong>.
+          </p>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>Problema Crítico:</strong> Em uma rede comutada, cada cliente recebe somente um <strong>Default Gateway</strong>. Não há
+            como usar um gateway secundário, mesmo se um segundo caminho existir para levar os pacotes para fora do segmento local.
+          </div>
+
+          <!-- ===== TOPOLOGIA INTERATIVA ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 750px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Linha 1: Servidor e Internet -->
+              <div style="display: flex; justify-content: center; gap: 3rem; align-items: center; flex-wrap: wrap">
+                <!-- Servidor -->
+                <div style="text-align: center; min-width: 140px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--info); border-radius: 12px; padding: 0.8rem 1.2rem">
+                    <i class="fas fa-database" style="color: var(--info); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Servidor</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">10.9.1.50/24</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 2: Roteadores R1, R2, R3 -->
+              <div style="display: flex; justify-content: center; gap: 2rem; align-items: center; flex-wrap: wrap">
+                <!-- R1 -->
+                <div style="text-align: center; min-width: 130px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--primary);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 20px rgba(0, 180, 216, 0.1);
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--primary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--primary); font-size: 0.85rem; font-weight: 700; display: block">R1</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">10.1.10.2/24</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">0014.a855.1788</span>
+                    <span style="color: var(--success); font-size: 0.65rem; display: block; margin-top: 0.2rem">
+                      <i class="fas fa-circle"></i> Active
+                    </span>
+                  </div>
+                </div>
+
+                <!-- R2 -->
+                <div style="text-align: center; min-width: 130px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--text-dim);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      opacity: 0.7;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text-dim); font-size: 0.85rem; font-weight: 700; display: block">R2</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Standby</span>
+                    <span style="color: var(--warning); font-size: 0.65rem; display: block; margin-top: 0.2rem">
+                      <i class="fas fa-circle"></i> Standby
+                    </span>
+                  </div>
+                </div>
+
+                <!-- R3 -->
+                <div style="text-align: center; min-width: 130px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--text-dim);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      opacity: 0.7;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--text-dim); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text-dim); font-size: 0.85rem; font-weight: 700; display: block">R3</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Standby</span>
+                    <span style="color: var(--warning); font-size: 0.65rem; display: block; margin-top: 0.2rem">
+                      <i class="fas fa-circle"></i> Standby
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 3: Conectividade entre roteadores -->
+              <div
+                style="display: flex; justify-content: center; gap: 1rem; align-items: center; color: var(--text-dim); font-size: 0.75rem"
+              >
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-link"></i> Trunk
+                </span>
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-link"></i> Trunk
+                </span>
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-link"></i> Trunk
+                </span>
+              </div>
+
+              <!-- Linha 4: Switch e PC1 -->
+              <div style="display: flex; justify-content: center; gap: 3rem; align-items: center; flex-wrap: wrap">
+                <!-- Switch -->
+                <div style="text-align: center; min-width: 120px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem">
+                    <i class="fas fa-network-wired" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Switch</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Camada 2</span>
+                  </div>
+                </div>
+
+                <!-- PC1 -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--danger);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 20px rgba(255, 77, 109, 0.1);
+                    "
+                  >
+                    <i class="fas fa-desktop" style="color: var(--danger); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--danger); font-size: 0.85rem; font-weight: 700; display: block">PC1</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">10.1.10.3/24</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">0014.a866.2898</span>
+                    <span style="color: var(--danger); font-size: 0.65rem; display: block; margin-top: 0.2rem">
+                      <i class="fas fa-times-circle"></i> Sem gateway
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 5: Mensagem de falha -->
+              <div style="display: flex; justify-content: center">
+                <div class="alert alert-danger" style="max-width: 500px; margin: 0; border-left-color: var(--danger)">
+                  <i class="fas fa-skull-crossbones"></i>
+                  <strong>Falha:</strong> O PC1 não consegue alcançar o <strong>Default Gateway</strong> (R1)
+                </div>
+              </div>
+
+              <!-- Legendas -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 2rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--primary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Principal (Ativo)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--text-dim); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteadores Secundários (Standby)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--danger); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Dispositivo sem conectividade</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <i class="fas fa-link" style="color: var(--secondary)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Conexão Trunk</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 1rem">
+            Os dispositivos finais geralmente são configurados com um único endereço IPv4 para um <strong>Default Gateway</strong>. Esse
+            endereço não é alterado quando a topologia de rede é alterada. Se esse endereço IPv4 do <strong>Default Gateway</strong> não
+            puder ser alcançado, o dispositivo local não poderá enviar pacotes do segmento de rede local, desconectando-o efetivamente de
+            outras redes. Se existe um roteador redundante que possa servir como um <strong>Default Gateway</strong> para esse segmento, não
+            existe método dinâmico pelo qual esses dispositivos possam determinar o endereço de um novo <strong>Default Gateway</strong>.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Observação:</strong> O <strong>IPv6</strong> recebeu seu endereço de <strong>Default Gateway</strong> dinamicamente do
+            <strong>Anúncio do Router ICMPv6</strong>. No entanto, os dispositivos <strong>IPv6</strong> se beneficiam com um
+            <strong>failover</strong> mais rápido para o novo <strong>Default Gateway</strong> ao usar o <strong>FHRP</strong>.
+          </div>
+
+          <div class="alert alert-danger" style="margin-top: 1rem">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Impacto da Falha:</strong> Quando R1 falha, o PC1 (10.1.10.3/24) fica completamente isolado:
+            <ul style="margin-top: 0.5rem; padding-left: 1.5rem">
+              <li>O PC1 continua enviando pacotes para R1 (10.1.10.2)</li>
+              <li>Os pacotes são descartados (Blackholing)</li>
+              <li>Não há failover automático para R2 ou R3</li>
+              <li>O servidor (10.9.1.50) fica inacessível</li>
+              <li>Usuários perdem conectividade com a rede externa</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.1.2 ===== -->
+      <section id="secao9-1-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-sitemap"></i>
+          <span class="section-number">9.1.2</span> Redundância de roteador
+        </h2>
+        <div class="card">
+          <p>
+            Uma maneira de impedir um único ponto de falha no <strong>Default Gateway</strong> é implementar um
+            <strong>roteador virtual</strong>. Para implementar esse tipo de redundância de roteador, vários roteadores são configurados
+            para funcionar juntos, a fim de dar a ilusão de um único roteador para os hosts na <strong>LAN</strong>, como mostrado na
+            figura. Ao compartilhar um endereço IP e um endereço <strong>MAC</strong>, dois ou mais roteadores podem atuar como um único
+            roteador virtual.
+          </p>
+
+          <!-- ===== TOPOLOGIA INTERATIVA ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 750px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Linha 1: Internet/ISP Backbone -->
+              <div style="display: flex; justify-content: center">
+                <div style="text-align: center; min-width: 200px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--info); border-radius: 12px; padding: 0.8rem 1.5rem">
+                    <i class="fas fa-globe" style="color: var(--info); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Internet ou</span>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Backbone de ISP</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 2: Roteadores (Virtual, Forwarding, Standby) -->
+              <div style="display: flex; justify-content: center; gap: 1.5rem; align-items: stretch; flex-wrap: wrap">
+                <!-- Roteador Virtual -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--secondary);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 30px rgba(0, 245, 212, 0.15);
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Roteador Virtual</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.1/24</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">MAC: Virtual</span>
+                    <span style="color: var(--secondary); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-star"></i> Gateway Padrão
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="display: flex; align-items: center; color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                <!-- Roteador de Encaminhamento (Active) -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--success);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 20px rgba(3, 244, 135, 0.1);
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--success); font-size: 0.85rem; font-weight: 700; display: block">Roteador de</span>
+                    <span style="color: var(--success); font-size: 0.85rem; font-weight: 700; display: block">Encaminhamento</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.2/24</span>
+                    <span style="color: var(--success); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-check-circle"></i> Ativo
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Roteador Standby -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--warning);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      opacity: 0.8;
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--warning); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--warning); font-size: 0.85rem; font-weight: 700; display: block">Roteador</span>
+                    <span style="color: var(--warning); font-size: 0.85rem; font-weight: 700; display: block">Standby</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.3/24</span>
+                    <span style="color: var(--warning); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-clock"></i> Standby
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 3: Conectividade entre roteadores -->
+              <div
+                style="display: flex; justify-content: center; gap: 0.5rem; align-items: center; color: var(--text-dim); font-size: 0.7rem"
+              >
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-exchange-alt"></i> Sincronização
+                </span>
+                <span style="color: var(--text-dim)">|</span>
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-heartbeat"></i> Hello Messages
+                </span>
+                <span style="color: var(--text-dim)">|</span>
+                <span style="background: var(--bg-card); padding: 0.2rem 0.8rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-sync"></i> Failover
+                </span>
+              </div>
+
+              <!-- Linha 4: LAN e Hosts -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 2rem;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  border-top: 2px dashed var(--border);
+                  padding-top: 1.5rem;
+                "
+              >
+                <!-- Switch LAN -->
+                <div style="text-align: center; min-width: 120px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem">
+                    <i class="fas fa-network-wired" style="color: var(--primary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">LAN</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Local Area Network</span>
+                  </div>
+                </div>
+
+                <!-- Hosts (PC1, PC2, PC3, PC4) -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+                  <!-- PC1 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC1</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC2 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC2</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC3 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC3</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC4 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC4</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legenda -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--secondary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Virtual (Gateway)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--success); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Ativo (Encaminhamento)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--warning); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Standby</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <i class="fas fa-desktop" style="color: var(--text-dim)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Hosts (PCs)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 1rem">
+            O endereço IPv4 do <strong>roteador virtual</strong> é configurado como o <strong>Default Gateway</strong> para as estações de
+            trabalho em um segmento IPv4 específico. Quando quadros são enviados de dispositivos host para o
+            <strong>Default Gateway</strong>, os hosts usam <strong>ARP</strong> para resolver o endereço <strong>MAC</strong> associado ao
+            endereço IPv4 do <strong>Default Gateway</strong>. A resolução <strong>ARP</strong> retorna o endereço <strong>MAC</strong> do
+            <strong>roteador virtual</strong>. Os quadros enviados para o endereço <strong>MAC</strong> do
+            <strong>roteador virtual</strong> podem, então, ser fisicamente processados pelo atual roteador ativo dentro do grupo do
+            roteador virtual. Utiliza-se um protocolo para identificar dois ou mais roteadores como os dispositivos responsáveis pelo
+            processamento dos quadros enviados para o <strong>MAC</strong> ou para o endereço IP de um único roteador virtual. Os
+            dispositivos host enviam o tráfego para o endereço do roteador virtual. O roteador físico que encaminha esse tráfego é
+            transparente para os dispositivos host.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Transparência:</strong> Um protocolo de redundância proporciona o mecanismo para determinar qual roteador deve assumir a
+            função ativa no tráfego de encaminhamento. Ele também determina quando a função de encaminhamento deve ser assumida por um
+            roteador em <strong>Standby</strong>. A transição de um roteador de transmissão para outro é <strong>transparente</strong> para
+            os dispositivos finais.
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Redundância de Primeiro Salto:</strong> A capacidade de uma rede de se recuperar dinamicamente da falha de um
+            dispositivo que atua como um <strong>Default Gateway</strong> é conhecida como <strong>redundância de primeiro salto</strong>.
+          </div>
+
+          <!-- Fluxo de funcionamento -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-project-diagram"></i> Como funciona a Redundância de Roteador?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.8rem">
+              <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>1.</strong> Hosts usam <strong>Gateway Virtual</strong> (192.0.2.1)
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>2.</strong> ARP resolve MAC do <strong>Roteador Virtual</strong>
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>3.</strong> <strong>Roteador Ativo</strong> processa o tráfego
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem">
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>4.</strong> Falha no <strong>Roteador Ativo</strong>
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>5.</strong> <strong>Roteador Standby</strong> assume (failover)
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    font-size: 0.85rem;
+                  "
+                >
+                  <strong>6.</strong> <strong>Transparente</strong> para os hosts! ✅
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabela comparativa -->
+          <h4 style="color: var(--primary); margin: 1.5rem 0 1rem 0; display: flex; align-items: center; gap: 0.5rem">
+            <i class="fas fa-table"></i> Comparação entre os Roteadores
+          </h4>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Função</th>
+                <th>Endereço IP</th>
+                <th>Status</th>
+                <th>Processa Tráfego?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--secondary)">Roteador Virtual</strong></td>
+                <td>192.0.2.1/24</td>
+                <td>
+                  <span style="color: var(--secondary)"><i class="fas fa-circle"></i> Gateway</span>
+                </td>
+                <td><span style="color: var(--text-dim)">Não (é o IP compartilhado)</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--success)">Roteador de Encaminhamento</strong></td>
+                <td>192.0.2.2/24</td>
+                <td>
+                  <span style="color: var(--success)"><i class="fas fa-check-circle"></i> Ativo</span>
+                </td>
+                <td>
+                  <span style="color: var(--success)"><i class="fas fa-check"></i> Sim</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--warning)">Roteador Standby</strong></td>
+                <td>192.0.2.3/24</td>
+                <td>
+                  <span style="color: var(--warning)"><i class="fas fa-clock"></i> Standby</span>
+                </td>
+                <td>
+                  <span style="color: var(--text-dim)"><i class="fas fa-times"></i> Não (aguarda failover)</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.1.3 ===== -->
+      <section id="secao9-1-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-exchange-alt"></i>
+          <span class="section-number">9.1.3</span> Etapas para o Failover do Roteador
+        </h2>
+        <div class="card">
+          <p>
+            Quando o roteador ativo falha, o protocolo de redundância faz a transição do roteador em <strong>Standby</strong> para a nova
+            função do roteador ativo, conforme mostrado na figura. Estas são as etapas que ocorrem quando o roteador ativo falha:
+          </p>
+
+          <div style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-list-ol"></i> Etapas do Failover
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 1rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 1rem;
+                  background: var(--bg-dark);
+                  padding: 0.8rem 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid var(--danger);
+                "
+              >
+                <span
+                  style="
+                    background: var(--danger);
+                    color: white;
+                    border-radius: 50%;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.8rem;
+                    flex-shrink: 0;
+                  "
+                  >1</span
+                >
+                <span style="color: var(--text); font-size: 0.9rem"
+                  >O roteador em <strong>Standby</strong> para de visualizar mensagens de <strong>Hello</strong> do roteador de
+                  encaminhamento.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 1rem;
+                  background: var(--bg-dark);
+                  padding: 0.8rem 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid var(--warning);
+                "
+              >
+                <span
+                  style="
+                    background: var(--warning);
+                    color: var(--bg-dark);
+                    border-radius: 50%;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.8rem;
+                    flex-shrink: 0;
+                  "
+                  >2</span
+                >
+                <span style="color: var(--text); font-size: 0.9rem"
+                  >O roteador em <strong>Standby</strong> assume a função do roteador de encaminhamento.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 1rem;
+                  background: var(--bg-dark);
+                  padding: 0.8rem 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid var(--success);
+                "
+              >
+                <span
+                  style="
+                    background: var(--success);
+                    color: var(--bg-dark);
+                    border-radius: 50%;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.8rem;
+                    flex-shrink: 0;
+                  "
+                  >3</span
+                >
+                <span style="color: var(--text); font-size: 0.9rem"
+                  >Como o novo roteador de encaminhamento assume os endereços IPv4 e <strong>MAC</strong> do roteador virtual, os
+                  dispositivos host <strong>não percebem interrupções</strong> no serviço.</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Transparência Total:</strong> Os dispositivos host não percebem interrupções no serviço durante o failover.
+          </div>
+
+          <!-- ===== TOPOLOGIA INTERATIVA - CENÁRIO DE FALHA ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 750px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Título do cenário -->
+              <div style="text-align: center">
+                <span
+                  style="
+                    background: rgba(255, 77, 109, 0.15);
+                    color: var(--danger);
+                    padding: 0.4rem 1rem;
+                    border-radius: 50px;
+                    font-size: 0.8rem;
+                    border: 1px solid rgba(255, 77, 109, 0.3);
+                  "
+                >
+                  <i class="fas fa-exclamation-triangle"></i> Falha de link ou dispositivo
+                </span>
+                <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 1rem">
+                  <i class="fas fa-arrow-right"></i> O roteador em standby se torna o roteador de encaminhamento
+                </span>
+              </div>
+
+              <!-- Linha 1: Internet/ISP Backbone -->
+              <div style="display: flex; justify-content: center">
+                <div style="text-align: center; min-width: 200px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--info); border-radius: 12px; padding: 0.8rem 1.5rem">
+                    <i class="fas fa-globe" style="color: var(--info); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Internet ou</span>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Backbone de ISP</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 2: Roteadores (Virtual, Active, Standby) -->
+              <div style="display: flex; justify-content: center; gap: 1.5rem; align-items: stretch; flex-wrap: wrap">
+                <!-- Roteador Virtual -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--secondary);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 30px rgba(0, 245, 212, 0.15);
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Roteador Virtual</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.1/24</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">MAC: Virtual</span>
+                    <span style="color: var(--secondary); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-star"></i> Gateway Padrão
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="display: flex; align-items: center; color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                <!-- NOVO Roteador de Encaminhamento (ex-Standby agora Active) -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--success);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 30px rgba(3, 244, 135, 0.2);
+                      height: 100%;
+                      position: relative;
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        top: -10px;
+                        right: -10px;
+                        background: var(--success);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 50px;
+                        font-size: 0.6rem;
+                        font-weight: 700;
+                      "
+                    >
+                      <i class="fas fa-arrow-up"></i> NOVO
+                    </div>
+                    <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--success); font-size: 0.85rem; font-weight: 700; display: block">Novo roteador</span>
+                    <span style="color: var(--success); font-size: 0.85rem; font-weight: 700; display: block">de encaminhamento</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.2/24</span>
+                    <span style="color: var(--success); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-check-circle"></i> Ativo (Antigo Standby)
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Roteador com Falha (antigo Active) -->
+                <div style="text-align: center; min-width: 140px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--danger);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      opacity: 0.4;
+                      height: 100%;
+                      position: relative;
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        top: -10px;
+                        right: -10px;
+                        background: var(--danger);
+                        color: white;
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 50px;
+                        font-size: 0.6rem;
+                        font-weight: 700;
+                      "
+                    >
+                      <i class="fas fa-skull"></i> FALHA
+                    </div>
+                    <i class="fas fa-server" style="color: var(--danger); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--danger); font-size: 0.85rem; font-weight: 700; display: block">Roteador com</span>
+                    <span style="color: var(--danger); font-size: 0.85rem; font-weight: 700; display: block">Falha</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">192.0.2.100/24</span>
+                    <span style="color: var(--danger); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-times-circle"></i> Indisponível
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 3: Mensagem de status -->
+              <div style="display: flex; justify-content: center">
+                <div class="alert alert-success" style="max-width: 500px; margin: 0; border-left-color: var(--success)">
+                  <i class="fas fa-sync-alt"></i>
+                  <strong>Failover Concluído:</strong> O roteador em standby assumiu com sucesso!
+                </div>
+              </div>
+
+              <!-- Linha 4: LAN e Hosts -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 2rem;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  border-top: 2px dashed var(--border);
+                  padding-top: 1.5rem;
+                "
+              >
+                <!-- Switch LAN -->
+                <div style="text-align: center; min-width: 120px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem">
+                    <i class="fas fa-network-wired" style="color: var(--primary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">LAN</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Local Area Network</span>
+                  </div>
+                </div>
+
+                <!-- Hosts (PC1, PC2, PC3, PC4) -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+                  <!-- PC1 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--success); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC1</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC2 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--success); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC2</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC3 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--success); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC3</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+
+                  <!-- PC4 -->
+                  <div style="text-align: center; min-width: 90px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--success); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC4</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">Gateway: 192.0.2.1</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legenda -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--secondary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Virtual (Gateway)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--success); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Novo Roteador Ativo</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--danger); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador com Falha</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <i class="fas fa-desktop" style="color: var(--success)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Hosts (Conectados)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quadro resumo do processo -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-arrows-rotate"></i> Resumo do Processo de Failover
+            </h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--danger);
+                "
+              >
+                <i
+                  class="fas fa-exclamation-circle"
+                  style="color: var(--danger); font-size: 1.5rem; display: block; margin-bottom: 0.5rem"
+                ></i>
+                <h5 style="color: var(--text); font-size: 0.85rem">1. Detecção</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem">Standby para de receber mensagens <strong>Hello</strong></p>
+              </div>
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--warning);
+                "
+              >
+                <i class="fas fa-arrow-right" style="color: var(--warning); font-size: 1.5rem; display: block; margin-bottom: 0.5rem"></i>
+                <h5 style="color: var(--text); font-size: 0.85rem">2. Transição</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem">Standby assume função <strong>Ativa</strong></p>
+              </div>
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--success);
+                "
+              >
+                <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.5rem; display: block; margin-bottom: 0.5rem"></i>
+                <h5 style="color: var(--text); font-size: 0.85rem">3. Transparência</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem">Hosts <strong>não percebem</strong> a mudança</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica Importante:</strong> O failover é completamente <strong>transparente</strong> para os hosts porque o novo roteador
+            de encaminhamento assume os mesmos endereços IPv4 e <strong>MAC</strong> do roteador virtual. Os hosts continuam enviando
+            tráfego para o mesmo gateway de sempre, sem saber que o roteador físico mudou.
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.1.4 ===== -->
+      <section id="secao9-1-4" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-list"></i>
+          <span class="section-number">9.1.4</span> Opções do FHRP
+        </h2>
+        <div class="card">
+          <p>
+            O <strong>FHRP</strong> usado em um ambiente de produção depende em grande parte do equipamento e das necessidades da rede. A
+            tabela lista todas as opções disponíveis para <strong>FHRPs</strong>.
+          </p>
+
+          <!-- ===== TABELA COMPLETA DE FHRPS ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <table class="table-custom" style="min-width: 700px">
+              <thead>
+                <tr>
+                  <th style="width: 20%"><i class="fas fa-tag"></i> Opções do FHRP</th>
+                  <th style="width: 80%"><i class="fas fa-info-circle"></i> Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- HSRP -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-shield-alt" style="color: var(--primary)"></i>
+                      <strong style="color: var(--primary)">HSRP</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Proprietário Cisco
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv4</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    <strong>HSRP</strong> é um FHRP proprietário da <strong>Cisco</strong> que foi projetado para permitir
+                    <strong>failover</strong> transparente de um dispositivo IPv4 de primeiro salto. O HSRP fornece alta disponibilidade de
+                    rede fornecendo redundância de roteamento de primeiro salto para <strong>IPv4</strong> hosts em redes configuradas com
+                    um endereço de <strong>Default Gateway</strong> IPv4. HSRP é usado em um grupo de roteadores para selecionar um
+                    dispositivo <strong>ativo</strong> e um dispositivo de <strong>Standby</strong>. Em um grupo de interfaces de
+                    dispositivo, o dispositivo ativo é o dispositivo usado para rotear pacotes; o dispositivo em <strong>Standby</strong> é
+                    o dispositivo que assume quando o dispositivo ativo falha ou quando condições pré-definidas são atendidas. A função do
+                    roteador de <strong>Standby</strong> HSRP é monitorar o status operacional do grupo HSRP e assumir rapidamente
+                    responsabilidade de encaminhamento de pacotes se o roteador ativo falhar.
+                  </td>
+                </tr>
+
+                <!-- HSRP para IPv6 -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-shield-alt" style="color: var(--secondary)"></i>
+                      <strong style="color: var(--secondary)">HSRP para IPv6</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Proprietário Cisco
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv6</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Este é um FHRP proprietário da <strong>Cisco</strong> que fornece a mesma funcionalidade do HSRP, mas em um ambiente
+                    <strong>IPv6</strong>. Um grupo HSRP IPv6 tem um <strong>MAC</strong> virtual derivado do número do grupo HSRP e de um
+                    <strong>link IPv6</strong> virtual derivado do endereço <strong>MAC</strong> virtual HSRP.
+                    <strong>Anúncios de Roteador (RAs)</strong> periódicos são enviados para o HSRP virtual IPv6
+                    <strong>link local</strong> quando o grupo HSRP está ativo. Quando o grupo se torna inativo, esses
+                    <strong>RAs</strong> param depois que um <strong>RA</strong> final é enviado.
+                  </td>
+                </tr>
+
+                <!-- VRRPv2 -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-balance-scale" style="color: var(--warning)"></i>
+                      <strong style="color: var(--warning)">VRRPv2</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Padrão Aberto (RFC 3768)
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv4</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Este é um protocolo eleitoral <strong>não proprietário</strong> que atribui dinamicamente responsabilidade por um ou
+                    mais roteadores virtuais para os roteadores <strong>VRRP</strong> em uma <strong>LAN IPv4</strong>. Isso permite que
+                    vários roteadores em um link de <strong>multiaccesso</strong> usem o mesmo endereço IPv4 virtual. Um roteador
+                    <strong>VRRP</strong> está configurado para executar o <strong>VRRP</strong> em conjunto com um ou mais outros
+                    roteadores conectados a uma <strong>LAN</strong>. Em uma configuração <strong>VRRP</strong>, um roteador é eleito como o
+                    roteador <strong>mestre virtual</strong>, com os outros roteadores atuando como <strong>backups</strong>, caso o
+                    roteador mestre virtual venha a falhar.
+                  </td>
+                </tr>
+
+                <!-- VRRPv3 -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-balance-scale" style="color: var(--info)"></i>
+                      <strong style="color: var(--info)">VRRPv3</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Padrão Aberto (RFC 5798)
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv4 e IPv6</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Isso fornece a capacidade de suportar endereços <strong>IPv4</strong> e <strong>IPv6</strong>.
+                    <strong>VRRPv3</strong> funciona em ambientes de <strong>múltiplos fornecedores</strong> e é mais escalável que o
+                    <strong>VRRPv2</strong>.
+                  </td>
+                </tr>
+
+                <!-- GLBP -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-layer-group" style="color: var(--success)"></i>
+                      <strong style="color: var(--success)">GLBP</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Proprietário Cisco
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv4</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Este é um FHRP proprietário da <strong>Cisco</strong> que protege o tráfego de dados de uma falha no roteador ou
+                    circuito, como <strong>HSRP</strong> e <strong>VRRP</strong>, ao mesmo tempo em que permite o
+                    <strong>balanceamento de carga</strong> (também chamado de <strong>compartilhamento de carga</strong>) entre um grupo de
+                    roteadores redundantes.
+                  </td>
+                </tr>
+
+                <!-- GLBP para IPv6 -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-layer-group" style="color: var(--secondary)"></i>
+                      <strong style="color: var(--secondary)">GLBP para IPv6</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Proprietário Cisco
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv6</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Este é um FHRP proprietário da <strong>Cisco</strong> que fornece a mesma funcionalidade do <strong>GLBP</strong>, mas
+                    em um ambiente <strong>IPv6</strong>. O <strong>GLBP para IPv6</strong> fornece <strong>failover</strong> automático do
+                    roteador para os hosts <strong>IPv6</strong> configurados com um único <strong>Default Gateway</strong> em uma
+                    <strong>LAN</strong>. Vários roteadores de primeiro salto na <strong>LAN</strong> se combinam para oferecer um único
+                    roteador <strong>IPv6</strong> de primeiro salto virtual ao compartilhar o encaminhamento de pacotes
+                    <strong>IPv6</strong>.
+                  </td>
+                </tr>
+
+                <!-- IRDP -->
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem">
+                      <i class="fas fa-history" style="color: var(--text-dim)"></i>
+                      <strong style="color: var(--text-dim)">IRDP</strong>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem">
+                      <i class="fas fa-tag"></i> Padrão Aberto (RFC 1256)
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim)"><i class="fas fa-globe"></i> IPv4 (Legado)</div>
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Especificado na <strong>RFC 1256</strong>, o <strong>IRDP</strong> é uma solução FHRP <strong>legada</strong>. O
+                    <strong>IRDP</strong> permite <strong>IPv4</strong> hosts localizar roteadores que fornecem conectividade
+                    <strong>IPv4</strong> a outras redes IP (não locais).
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ===== RESUMO VISUAL DOS FHRPS ===== -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-th-list"></i> Resumo das Opções de FHRP
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem">
+              <!-- Cisco Proprietary -->
+              <div style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--primary)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                  <i class="fas fa-crown" style="color: var(--primary)"></i>
+                  <h5 style="color: var(--primary); font-size: 0.9rem">Proprietários Cisco</h5>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--primary); font-size: 0.7rem"></i> HSRP (IPv4)
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); font-size: 0.7rem"></i> HSRP para IPv6
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--success); font-size: 0.7rem"></i> GLBP (IPv4)
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--secondary); font-size: 0.7rem"></i> GLBP para IPv6
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Open Standards -->
+              <div style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--warning)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                  <i class="fas fa-unlock" style="color: var(--warning)"></i>
+                  <h5 style="color: var(--warning); font-size: 0.9rem">Padrões Abertos</h5>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--warning); font-size: 0.7rem"></i> VRRPv2 (IPv4)
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--info); font-size: 0.7rem"></i> VRRPv3 (IPv4/IPv6)
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-check-circle" style="color: var(--text-dim); font-size: 0.7rem"></i> IRDP (IPv4 - Legado)
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Comparison -->
+              <div style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--info)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+                  <i class="fas fa-balance-scale" style="color: var(--info)"></i>
+                  <h5 style="color: var(--info); font-size: 0.9rem">Comparação Rápida</h5>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-arrow-right" style="color: var(--primary); font-size: 0.7rem"></i>
+                    <strong>HSRP/VRRP:</strong> Ativo/Standby
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-arrow-right" style="color: var(--success); font-size: 0.7rem"></i> <strong>GLBP:</strong> Ativo/Ativo
+                    (Load Balancing)
+                  </li>
+                  <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.85rem">
+                    <i class="fas fa-arrow-right" style="color: var(--warning); font-size: 0.7rem"></i> <strong>VRRPv3:</strong> Suporte
+                    Dual-Stack
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== NOTA IMPORTANTE ===== -->
+          <div class="alert alert-info" style="margin-top: 1.5rem">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica para Escolha:</strong>
+            <ul style="margin-top: 0.5rem; padding-left: 1.5rem">
+              <li>Ambientes <strong>100% Cisco</strong> → HSRP ou GLBP (com balanceamento de carga)</li>
+              <li>Ambientes <strong>Multivendedor (Múltiplos Fornecedores)</strong> → VRRPv2 ou VRRPv3</li>
+              <li>Rede <strong>IPv6</strong> → HSRP para IPv6, GLBP para IPv6 ou VRRPv3</li>
+              <li>Necessidade de <strong>balanceamento de carga</strong> → GLBP (Cisco) ou VRRP com múltiplos grupos</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.2.1 ===== -->
+      <section id="secao9-2-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span class="section-number">9.2.1</span> Visão geral do HSRP
+        </h2>
+        <div class="card">
+          <p>
+            A <strong>Cisco</strong> fornece <strong>HSRP</strong> e <strong>HSRP para IPv6</strong> como uma forma de evitar a perda de
+            acesso externo à rede se o roteador padrão falhar.
+          </p>
+
+          <div class="alert alert-info">
+            <i class="fas fa-shield-alt"></i>
+            <strong>HSRP</strong> é um <strong>FHRP</strong> de propriedade da <strong>Cisco</strong>, projetado para permitir o
+            <strong>failover</strong> transparente de um dispositivo IP de primeiro salto.
+          </div>
+
+          <p>
+            O <strong>HSRP</strong> garante alta disponibilidade de rede, fornecendo redundância de roteamento de primeiro salto para hosts
+            IP em redes configuradas com um endereço de <strong>Default Gateway</strong> IP. O <strong>HSRP</strong> é usado em um grupo de
+            roteadores para selecionar um dispositivo <strong>ativo</strong> e um dispositivo em <strong>Standby</strong>. Em um grupo de
+            interfaces de dispositivo, o dispositivo ativo é aquele usado para rotear pacotes; o dispositivo em <strong>Standby</strong> é
+            aquele que assume controle quando o dispositivo ativo falha ou quando as condições predefinidas são atendidas. A função de
+            roteador em <strong>Standby</strong> do <strong>HSRP</strong> é monitorar o status operacional do grupo de
+            <strong>HSRP</strong> e assumir rapidamente a responsabilidade de encaminhamento de pacotes se o roteador ativo falhar.
+          </p>
+
+          <!-- ===== TOPOLOGIA HSRP ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 750px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Título -->
+              <div style="text-align: center">
+                <span
+                  style="
+                    background: rgba(0, 180, 216, 0.1);
+                    color: var(--primary);
+                    padding: 0.4rem 1rem;
+                    border-radius: 50px;
+                    font-size: 0.8rem;
+                    border: 1px solid rgba(0, 180, 216, 0.3);
+                  "
+                >
+                  <i class="fas fa-shield-alt"></i> Grupo HSRP - Redundância de Gateway
+                </span>
+              </div>
+
+              <!-- Linha 1: Internet -->
+              <div style="display: flex; justify-content: center">
+                <div style="text-align: center; min-width: 180px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--info); border-radius: 12px; padding: 0.8rem 1.5rem">
+                    <i class="fas fa-globe" style="color: var(--info); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Internet</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 2: Roteadores HSRP -->
+              <div style="display: flex; justify-content: center; gap: 2rem; align-items: stretch; flex-wrap: wrap">
+                <!-- Roteador Virtual (Gateway HSRP) -->
+                <div style="text-align: center; min-width: 150px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--secondary);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 30px rgba(0, 245, 212, 0.15);
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Gateway Virtual HSRP</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.1</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace"
+                      >MAC: 0000.0c07.ac01</span
+                    >
+                    <span style="color: var(--secondary); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-star"></i> Default Gateway
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="display: flex; align-items: center; color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                <!-- Roteador Ativo -->
+                <div style="text-align: center; min-width: 150px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--success);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      box-shadow: 0 0 20px rgba(3, 244, 135, 0.1);
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--success); font-size: 0.85rem; font-weight: 700; display: block">Roteador Ativo</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.2</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">Prioridade: 150</span>
+                    <span style="color: var(--success); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-check-circle"></i> Encaminhando Tráfego
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Roteador Standby -->
+                <div style="text-align: center; min-width: 150px">
+                  <div
+                    style="
+                      background: var(--bg-card);
+                      border: 2px solid var(--warning);
+                      border-radius: 12px;
+                      padding: 0.8rem 1.2rem;
+                      height: 100%;
+                    "
+                  >
+                    <i class="fas fa-server" style="color: var(--warning); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--warning); font-size: 0.85rem; font-weight: 700; display: block">Roteador Standby</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.3</span>
+                    <span style="color: var(--text-dim); font-size: 0.65rem; display: block; font-family: monospace">Prioridade: 100</span>
+                    <span style="color: var(--warning); font-size: 0.65rem; display: block; margin-top: 0.3rem">
+                      <i class="fas fa-clock"></i> Aguardando Failover
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha 3: Hello Messages -->
+              <div
+                style="display: flex; justify-content: center; gap: 2rem; align-items: center; color: var(--text-dim); font-size: 0.75rem"
+              >
+                <span style="background: var(--bg-card); padding: 0.3rem 1rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-heartbeat" style="color: var(--success)"></i> Hello (3s)
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span style="background: var(--bg-card); padding: 0.3rem 1rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-heartbeat" style="color: var(--warning)"></i> Hello (3s)
+                </span>
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span style="background: var(--bg-card); padding: 0.3rem 1rem; border-radius: 12px; border: 1px solid var(--border)">
+                  <i class="fas fa-sync-alt" style="color: var(--primary)"></i> Hold Time (10s)
+                </span>
+              </div>
+
+              <!-- Linha 4: Switch e Hosts -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 2rem;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  border-top: 2px dashed var(--border);
+                  padding-top: 1.5rem;
+                "
+              >
+                <!-- Switch -->
+                <div style="text-align: center; min-width: 120px">
+                  <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem">
+                    <i class="fas fa-network-wired" style="color: var(--primary); font-size: 2rem; display: block"></i>
+                    <span style="color: var(--text); font-size: 0.85rem; font-weight: 600; display: block">Switch</span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Camada 2</span>
+                  </div>
+                </div>
+
+                <!-- Hosts -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+                  <div style="text-align: center; min-width: 80px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC1</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">GW: 192.168.1.1</span>
+                    </div>
+                  </div>
+                  <div style="text-align: center; min-width: 80px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC2</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">GW: 192.168.1.1</span>
+                    </div>
+                  </div>
+                  <div style="text-align: center; min-width: 80px">
+                    <div style="background: var(--bg-card); border: 2px solid var(--text-dim); border-radius: 12px; padding: 0.6rem 1rem">
+                      <i class="fas fa-desktop" style="color: var(--text); font-size: 1.5rem; display: block"></i>
+                      <span style="color: var(--text); font-size: 0.75rem; font-weight: 600; display: block">PC3</span>
+                      <span style="color: var(--text-dim); font-size: 0.6rem; display: block">GW: 192.168.1.1</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legenda -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--secondary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Gateway Virtual HSRP</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--success); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Ativo</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--warning); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Standby</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <i class="fas fa-heartbeat" style="color: var(--success)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Hello Messages</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== CARACTERÍSTICAS DO HSRP ===== -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-list-check"></i> Características Principais do HSRP
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem">
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary)">
+                <h5 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-crown"></i> Proprietário Cisco
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.8rem">
+                  Protocolo exclusivo da Cisco, utilizado em ambientes com equipamentos da marca.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success)">
+                <h5 style="color: var(--success); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-sync-alt"></i> Failover Transparente
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.8rem">
+                  Transição automática e invisível para os hosts quando o roteador ativo falha.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--warning)">
+                <h5 style="color: var(--warning); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-layer-group"></i> Grupo Virtual
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.8rem">
+                  Roteadores compartilham um IP e MAC virtual que os hosts usam como gateway.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--info)">
+                <h5 style="color: var(--info); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-heartbeat"></i> Hello/Hold Timers
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.8rem">
+                  Hello (3s) para comunicação entre roteadores, Hold (10s) para detectar falhas.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== VERSÕES DO HSRP ===== -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-code-branch"></i> Versões do HSRP
+            </h4>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Versão</th>
+                  <th>Suporte</th>
+                  <th>Características</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: var(--primary)">HSRPv1</strong></td>
+                  <td>IPv4</td>
+                  <td>
+                    <span style="color: var(--text-dim); font-size: 0.85rem">
+                      <i class="fas fa-check-circle" style="color: var(--success)"></i> Grupo: 0-255<br />
+                      <i class="fas fa-check-circle" style="color: var(--success)"></i> MAC: 0000.0c07.acXX
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--secondary)">HSRPv2</strong></td>
+                  <td>IPv4 e IPv6</td>
+                  <td>
+                    <span style="color: var(--text-dim); font-size: 0.85rem">
+                      <i class="fas fa-check-circle" style="color: var(--success)"></i> Grupo: 0-4095<br />
+                      <i class="fas fa-check-circle" style="color: var(--success)"></i> MAC: 0000.0c9f.fXXX<br />
+                      <i class="fas fa-check-circle" style="color: var(--success)"></i> Suporte IPv6
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1.5rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Benefício Principal:</strong> O HSRP garante que os hosts mantenham conectividade com a rede externa mesmo se o roteador
+            principal falhar, proporcionando <strong>alta disponibilidade</strong> e <strong>confiabilidade</strong> para a rede.
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.2.2 ===== -->
+      <section id="secao9-2-2" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-arrow-up"></i>
+          <span class="section-number">9.2.2</span> Prioridade e preempção de HSRP
+        </h2>
+        <div class="card">
+          <p>
+            A função dos roteadores <strong>ativos</strong> e de <strong>Standby</strong> é determinada durante o processo de
+            <strong>eleição do HSRP</strong>. Por padrão, o roteador com o endereço IPv4 mais alto numericamente é escolhido como o roteador
+            ativo. No entanto, é sempre melhor controlar como a rede funcionará em condições normais, em vez de deixar ao acaso.
+          </p>
+
+          <!-- ===== PRIORIDADE ===== -->
+          <div style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-trophy"></i> Prioridade do HSRP
+            </h4>
+            <p>
+              A <strong>prioridade do HSRP</strong> pode ser usada para determinar o roteador ativo. O roteador com a
+              <strong>maior prioridade</strong> do HSRP será o roteador ativo. Por padrão, a prioridade do HSRP é <strong>100</strong>. Se
+              as prioridades forem iguais, o roteador com o endereço IPv4 mais alto numericamente será escolhido como o roteador ativo.
+            </p>
+
+            <div class="alert alert-info" style="margin-top: 1rem">
+              <i class="fas fa-info-circle"></i>
+              <strong>Comando:</strong> Para configurar um roteador para ser o roteador ativo, use o comando
+              <strong>standby priority</strong> no modo de configuração de interface. O intervalo da prioridade do HSRP é de
+              <strong>0 a 255</strong>.
+            </div>
+
+            <div style="background: #090d16; border-radius: 8px; padding: 0.8rem; margin-top: 0.8rem; border: 1px solid var(--border)">
+              <pre style="margin: 0; color: var(--text); font-size: 0.8rem; font-family: 'Consolas', monospace">
+R1(config-if)# <strong style="color: var(--secondary);">standby 1 priority 150</strong>
+R1(config-if)# <strong style="color: var(--secondary);">end</strong></pre>
+            </div>
+          </div>
+
+          <!-- ===== PREEMPÇÃO ===== -->
+          <div style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+            <h4 style="color: var(--warning); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-undo-alt"></i> Preempção do HSRP
+            </h4>
+            <p>
+              Por padrão, após um roteador se tornar o roteador ativo, ele <strong>continuará ativo</strong>, mesmo que outro roteador com
+              uma prioridade de HSRP maior fique on-line.
+            </p>
+
+            <p style="margin-top: 1rem">
+              Para forçar um novo processo de eleição de HSRP a ocorrer quando um roteador de prioridade mais alta estiver on-line, a
+              <strong>preempção</strong> deve ser habilitada usando o comando <strong>standby preempt</strong> no modo de configuração de
+              interface.
+            </p>
+
+            <div class="alert alert-warning" style="margin-top: 1rem">
+              <i class="fas fa-exclamation-triangle"></i>
+              <strong>Preempção</strong> é a capacidade de um roteador HSRP acionar o processo de <strong>reeleição</strong>. Com a
+              preempção ativada, um roteador on-line com a maior prioridade de HSRP assumirá a função de roteador ativo.
+            </div>
+
+            <div style="background: #090d16; border-radius: 8px; padding: 0.8rem; margin-top: 0.8rem; border: 1px solid var(--border)">
+              <pre style="margin: 0; color: var(--text); font-size: 0.8rem; font-family: 'Consolas', monospace">
+R1(config-if)# <strong style="color: var(--secondary);">standby 1 preempt</strong>
+R1(config-if)# <strong style="color: var(--secondary);">end</strong></pre>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 1rem">
+              <i class="fas fa-lightbulb"></i>
+              <strong>Observação:</strong> A preempção permite que um roteador se torne o roteador ativo,
+              <strong>apenas se ele tiver uma prioridade mais alta</strong>. Um roteador ativado para preempção, com prioridade igual, mas
+              um endereço IPv4 mais alto, <strong>não irá</strong> fazer a preempção de um roteador ativo.
+            </div>
+          </div>
+
+          <!-- ===== TOPOLOGIA - CENÁRIO COMPLETO ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 750px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Título do cenário -->
+              <div style="text-align: center">
+                <span
+                  style="
+                    background: rgba(0, 180, 216, 0.1);
+                    color: var(--primary);
+                    padding: 0.4rem 1rem;
+                    border-radius: 50px;
+                    font-size: 0.8rem;
+                    border: 1px solid rgba(0, 180, 216, 0.3);
+                  "
+                >
+                  <i class="fas fa-arrows-rotate"></i> Cenário: Prioridade e Preempção HSRP
+                </span>
+              </div>
+
+              <!-- ===== ESTADO 1: NORMAL (R1 Ativo, R2 Standby) ===== -->
+              <div style="background: var(--bg-card); border-radius: 12px; padding: 1rem; border: 1px solid var(--success)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem">
+                  <i class="fas fa-check-circle" style="color: var(--success)"></i>
+                  <span style="color: var(--success); font-weight: 600; font-size: 0.9rem">Estado 1: Normal (R1 Ativo | R2 Standby)</span>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center; flex-wrap: wrap">
+                  <!-- R1 Ativo -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="
+                        background: var(--bg-dark);
+                        border: 2px solid var(--success);
+                        border-radius: 12px;
+                        padding: 0.8rem 1.2rem;
+                        box-shadow: 0 0 20px rgba(3, 244, 135, 0.15);
+                      "
+                    >
+                      <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--success); font-size: 0.9rem; font-weight: 700; display: block">R1</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Prioridade: <strong style="color: var(--success)">150</strong></span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Preempção: <strong style="color: var(--success)">Ativada</strong></span
+                      >
+                      <span style="color: var(--success); font-size: 0.7rem; display: block; margin-top: 0.3rem">
+                        <i class="fas fa-check-circle"></i> Roteador Ativo
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- Gateway Virtual -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="background: var(--bg-dark); border: 2px solid var(--secondary); border-radius: 12px; padding: 0.8rem 1.2rem"
+                    >
+                      <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Gateway Virtual</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.1</span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- R2 Standby -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div style="background: var(--bg-dark); border: 2px solid var(--warning); border-radius: 12px; padding: 0.8rem 1.2rem">
+                      <i class="fas fa-server" style="color: var(--warning); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--warning); font-size: 0.9rem; font-weight: 700; display: block">R2</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Prioridade: <strong style="color: var(--text-dim)">100</strong></span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Preempção: <strong style="color: var(--text-dim)">Desativada</strong></span
+                      >
+                      <span style="color: var(--warning); font-size: 0.7rem; display: block; margin-top: 0.3rem">
+                        <i class="fas fa-clock"></i> Roteador Standby
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== ESTADO 2: FALHA (R1 Caiu, R2 Assume) ===== -->
+              <div style="background: var(--bg-card); border-radius: 12px; padding: 1rem; border: 1px solid var(--danger)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem">
+                  <i class="fas fa-exclamation-triangle" style="color: var(--danger)"></i>
+                  <span style="color: var(--danger); font-weight: 600; font-size: 0.9rem"
+                    >Estado 2: Falha de Energia (R1 Caiu | R2 Assume)</span
+                  >
+                </div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center; flex-wrap: wrap">
+                  <!-- R1 com Falha -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="
+                        background: var(--bg-dark);
+                        border: 2px solid var(--danger);
+                        border-radius: 12px;
+                        padding: 0.8rem 1.2rem;
+                        opacity: 0.4;
+                      "
+                    >
+                      <i class="fas fa-server" style="color: var(--danger); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--danger); font-size: 0.9rem; font-weight: 700; display: block">R1</span>
+                      <span style="color: var(--danger); font-size: 0.7rem; display: block">
+                        <i class="fas fa-times-circle"></i> Indisponível
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- Gateway Virtual (mantido) -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="background: var(--bg-dark); border: 2px solid var(--secondary); border-radius: 12px; padding: 0.8rem 1.2rem"
+                    >
+                      <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Gateway Virtual</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.1</span>
+                      <span style="color: var(--success); font-size: 0.65rem; display: block; margin-top: 0.2rem">
+                        <i class="fas fa-check-circle"></i> Mantido
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- R2 assume como Ativo -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="
+                        background: var(--bg-dark);
+                        border: 2px solid var(--success);
+                        border-radius: 12px;
+                        padding: 0.8rem 1.2rem;
+                        box-shadow: 0 0 20px rgba(3, 244, 135, 0.1);
+                      "
+                    >
+                      <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--success); font-size: 0.9rem; font-weight: 700; display: block">R2</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Prioridade: <strong style="color: var(--text-dim)">100</strong></span
+                      >
+                      <span style="color: var(--success); font-size: 0.7rem; display: block; margin-top: 0.3rem">
+                        <i class="fas fa-arrow-right"></i> Assumiu como Ativo!
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== ESTADO 3: RECUPERAÇÃO (R1 Volta, Preempção Ativa) ===== -->
+              <div style="background: var(--bg-card); border-radius: 12px; padding: 1rem; border: 1px solid var(--secondary)">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem">
+                  <i class="fas fa-undo-alt" style="color: var(--secondary)"></i>
+                  <span style="color: var(--secondary); font-weight: 600; font-size: 0.9rem"
+                    >Estado 3: Recuperação (R1 Volta | Preempção Ativa → R1 Assume Novamente)</span
+                  >
+                </div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center; flex-wrap: wrap">
+                  <!-- R1 Recuperado (Ativo novamente) -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="
+                        background: var(--bg-dark);
+                        border: 2px solid var(--success);
+                        border-radius: 12px;
+                        padding: 0.8rem 1.2rem;
+                        box-shadow: 0 0 30px rgba(3, 244, 135, 0.25);
+                        position: relative;
+                      "
+                    >
+                      <div
+                        style="
+                          position: absolute;
+                          top: -10px;
+                          right: -10px;
+                          background: var(--secondary);
+                          color: var(--bg-dark);
+                          padding: 0.2rem 0.6rem;
+                          border-radius: 50px;
+                          font-size: 0.6rem;
+                          font-weight: 700;
+                        "
+                      >
+                        <i class="fas fa-undo-alt"></i> VOLTOU
+                      </div>
+                      <i class="fas fa-server" style="color: var(--success); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--success); font-size: 0.9rem; font-weight: 700; display: block">R1</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Prioridade: <strong style="color: var(--success)">150</strong></span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Preempção: <strong style="color: var(--success)">Ativada</strong></span
+                      >
+                      <span style="color: var(--success); font-size: 0.7rem; display: block; margin-top: 0.3rem">
+                        <i class="fas fa-check-circle"></i> Reassumiu como Ativo!
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- Gateway Virtual (mantido) -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div
+                      style="background: var(--bg-dark); border: 2px solid var(--secondary); border-radius: 12px; padding: 0.8rem 1.2rem"
+                    >
+                      <i class="fas fa-cloud" style="color: var(--secondary); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--secondary); font-size: 0.85rem; font-weight: 700; display: block">Gateway Virtual</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block">IP: 192.168.1.1</span>
+                    </div>
+                  </div>
+
+                  <div style="color: var(--text-dim); font-size: 1.5rem">←</div>
+
+                  <!-- R2 volta a ser Standby -->
+                  <div style="text-align: center; min-width: 150px">
+                    <div style="background: var(--bg-dark); border: 2px solid var(--warning); border-radius: 12px; padding: 0.8rem 1.2rem">
+                      <i class="fas fa-server" style="color: var(--warning); font-size: 2rem; display: block"></i>
+                      <span style="color: var(--warning); font-size: 0.9rem; font-weight: 700; display: block">R2</span>
+                      <span style="color: var(--text-dim); font-size: 0.7rem; display: block"
+                        >Prioridade: <strong style="color: var(--text-dim)">100</strong></span
+                      >
+                      <span style="color: var(--warning); font-size: 0.7rem; display: block; margin-top: 0.3rem">
+                        <i class="fas fa-clock"></i> Voltou a ser Standby
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legenda -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--success); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Ativo</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--warning); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador Standby</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--danger); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Roteador com Falha</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--secondary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Gateway Virtual</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== RESUMO DO PROCESSO ===== -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-list-ol"></i> Resumo do Processo com Preempção
+            </h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--success);
+                "
+              >
+                <h5 style="color: var(--success); font-size: 0.85rem">1. Configuração Inicial</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.3rem">
+                  R1 Prioridade 150<br />
+                  R1 Preempção Ativada<br />
+                  R2 Prioridade 100
+                </p>
+              </div>
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--danger);
+                "
+              >
+                <h5 style="color: var(--danger); font-size: 0.85rem">2. Falha</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.3rem">
+                  R1 cai (falha de energia)<br />
+                  R2 detecta perda de Hello<br />
+                  R2 assume como Ativo
+                </p>
+              </div>
+              <div
+                style="
+                  background: var(--bg-dark);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  text-align: center;
+                  border-left: 3px solid var(--secondary);
+                "
+              >
+                <h5 style="color: var(--secondary); font-size: 0.85rem">3. Recuperação</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.3rem">
+                  R1 volta online<br />
+                  Preempção ativa reeleição<br />
+                  R1 reassume como Ativo
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Observação Importante:</strong> Com a <strong>preempção desativada</strong>, o roteador inicializado se tornará o
+            roteador ativo se não houver outros roteadores online durante o processo de eleição. No entanto, se um roteador com maior
+            prioridade ficar online depois, ele <strong>NÃO</strong> assumirá automaticamente.
+          </div>
+
+          <div class="alert alert-success" style="margin-top: 1rem">
+            <i class="fas fa-check-circle"></i>
+            <strong>Conclusão:</strong> A <strong>preempção</strong> é recomendada quando se deseja que o roteador com maior prioridade seja
+            sempre o Ativo, garantindo que o melhor equipamento (geralmente o mais potente) esteja sempre processando o tráfego da rede.
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.2.3 ===== -->
+      <section id="secao9-2-3" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-project-diagram"></i>
+          <span class="section-number">9.2.3</span> Estados e temporizadores de HSRP
+        </h2>
+        <div class="card">
+          <p>
+            Um roteador pode ser o roteador <strong>HSRP ativo</strong>, responsável por encaminhar o tráfego para o segmento, ou pode ser
+            um roteador <strong>HSRP passivo em standby</strong>, pronto para assumir a função ativa se o roteador ativo falhar. Quando uma
+            interface é configurada com o <strong>HSRP</strong> ou é ativada pela primeira vez com uma configuração atual do
+            <strong>HSRP</strong>, o roteador envia e recebe os pacotes de aviso do <strong>HSRP</strong> para iniciar o processo de
+            determinar qual estado ele assumirá no grupo do <strong>HSRP</strong>.
+          </p>
+
+          <!-- ===== ESTADOS DO HSRP ===== -->
+          <div
+            style="
+              background: #090d16;
+              border-radius: 12px;
+              padding: 1.5rem 1rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <div style="min-width: 700px">
+              <h4
+                style="
+                  color: var(--primary);
+                  margin-bottom: 1.5rem;
+                  text-align: center;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="fas fa-arrows-rotate"></i> Estados do HSRP
+              </h4>
+
+              <!-- Diagrama de Estados -->
+              <div style="display: flex; flex-direction: column; gap: 1rem">
+                <!-- Estado 1: Inicial -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--text-dim);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--text-dim);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >INICIAL</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    Este estado é inserido através de uma alteração na configuração ou quando uma interface se torna disponível pela
+                    primeira vez.
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="text-align: center; color: var(--text-dim)">
+                  <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <!-- Estado 2: Aprendizado -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--warning);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >APRENDIZADO</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    O roteador não determinou o endereço IP virtual e ainda não viu uma mensagem de <strong>Hello</strong> do roteador
+                    ativo. Nesse estado, o roteador espera ouvir do roteador ativo.
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="text-align: center; color: var(--text-dim)">
+                  <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <!-- Estado 3: Escuta -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--info);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--info);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >ESCUTA</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    O roteador conhece o endereço IP virtual, mas o roteador <strong>não é</strong> o roteador ativo nem o roteador
+                    <strong>Standby</strong>. Ele ouve mensagens de <strong>Hello</strong> desses roteadores.
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="text-align: center; color: var(--text-dim)">
+                  <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <!-- Estado 4: Fala -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--primary);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--primary);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >FALA</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    O roteador envia mensagens periódicas de <strong>Hello</strong> e participa ativamente da eleição do roteador ativo e/ou
+                    <strong>Standby</strong>.
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="text-align: center; color: var(--text-dim)">
+                  <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <!-- Estado 5: Standby -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--warning);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >STANDBY</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    O roteador é um <strong>candidato</strong> para se tornar o próximo roteador ativo e envia mensagens
+                    <strong>Hello</strong> periódicas.
+                  </div>
+                </div>
+
+                <!-- Seta -->
+                <div style="text-align: center; color: var(--text-dim)">
+                  <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <!-- Estado 6: Ativo -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    background: var(--bg-card);
+                    padding: 0.8rem 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--success);
+                    box-shadow: 0 0 20px rgba(3, 244, 135, 0.05);
+                  "
+                >
+                  <div style="min-width: 120px; text-align: center">
+                    <span
+                      style="
+                        background: var(--success);
+                        color: var(--bg-dark);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.85rem;
+                      "
+                      >ATIVO</span
+                    >
+                  </div>
+                  <div style="color: var(--text-dim); font-size: 0.9rem; flex: 1">
+                    O roteador está <strong>encaminhando ativamente</strong> o tráfego para o segmento. É o roteador responsável pelo
+                    gateway virtual.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legenda -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: wrap;
+                  border-top: 1px solid var(--border);
+                  padding-top: 1rem;
+                  margin-top: 1.5rem;
+                "
+              >
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--text-dim); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Inicial</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--warning); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Aprendizado / Standby</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--info); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Escuta</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--primary); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Fala</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem">
+                  <div style="width: 16px; height: 16px; background: var(--success); border-radius: 4px"></div>
+                  <span style="color: var(--text-dim); font-size: 0.75rem">Ativo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TABELA DE ESTADOS ===== -->
+          <div
+            style="
+              background: var(--bg-card);
+              border-radius: 12px;
+              padding: 1.5rem;
+              margin: 1.5rem 0;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-table"></i> Resumo dos Estados do HSRP
+            </h4>
+            <table class="table-custom" style="min-width: 600px">
+              <thead>
+                <tr>
+                  <th style="width: 15%"><i class="fas fa-tag"></i> Estado</th>
+                  <th style="width: 85%"><i class="fas fa-info-circle"></i> Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--text-dim);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >INICIAL</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    Este estado é inserido através de uma alteração na configuração ou quando uma interface se torna disponível pela
+                    primeira vez.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >APRENDIZADO</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    O roteador não determinou o endereço IP virtual e ainda não viu uma mensagem de <strong>Hello</strong> do roteador
+                    ativo. Nesse estado, o roteador espera ouvir do roteador ativo.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--info);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >ESCUTA</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    O roteador conhece o endereço IP virtual, mas o roteador <strong>não é</strong> o roteador ativo nem o roteador
+                    <strong>Standby</strong>. Ele ouve mensagens de <strong>Hello</strong> desses roteadores.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--primary);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >FALA</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    O roteador envia mensagens periódicas de <strong>Hello</strong> e participa ativamente da eleição do roteador ativo e/ou
+                    <strong>Standby</strong>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >STANDBY</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    O roteador é um <strong>candidato</strong> para se tornar o próximo roteador ativo e envia mensagens
+                    <strong>Hello</strong> periódicas.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--success);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                      "
+                      >ATIVO</span
+                    >
+                  </td>
+                  <td style="font-size: 0.9rem; line-height: 1.6">
+                    O roteador está <strong>encaminhando ativamente</strong> o tráfego para o segmento. É o roteador responsável pelo
+                    gateway virtual.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ===== TEMPORIZADORES HSRP ===== -->
+          <div style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-clock"></i> Temporizadores HSRP
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem">
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--info)">
+                <h5 style="color: var(--info); font-size: 0.9rem; margin-bottom: 0.3rem"><i class="fas fa-heartbeat"></i> Hello Timer</h5>
+                <p style="color: var(--text-dim); font-size: 0.85rem">
+                  Intervalo padrão: <strong style="color: var(--info)">3 segundos</strong>
+                </p>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.3rem">
+                  Define com que frequência os roteadores HSRP enviam mensagens de <strong>Hello</strong> para o grupo multicast 224.0.0.2.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--warning)">
+                <h5 style="color: var(--warning); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-hourglass-half"></i> Hold Timer
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.85rem">
+                  Intervalo padrão: <strong style="color: var(--warning)">10 segundos</strong>
+                </p>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.3rem">
+                  Tempo que um roteador espera sem receber <strong>Hello</strong> antes de declarar o roteador ativo como
+                  <strong>falho</strong>.
+                </p>
+              </div>
+
+              <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success)">
+                <h5 style="color: var(--success); font-size: 0.9rem; margin-bottom: 0.3rem">
+                  <i class="fas fa-sync-alt"></i> Relação Hello/Hold
+                </h5>
+                <p style="color: var(--text-dim); font-size: 0.85rem">
+                  <strong style="color: var(--success)">Hold = 3 × Hello</strong>
+                </p>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.3rem">
+                  O Hold Timer é geralmente <strong>3 vezes</strong> o Hello Timer para permitir que um ou dois Hellos sejam perdidos sem
+                  declarar falha.
+                </p>
+              </div>
+            </div>
+
+            <div style="background: #090d16; border-radius: 8px; padding: 0.8rem; margin-top: 1rem; border: 1px solid var(--border)">
+              <pre style="margin: 0; color: var(--text); font-size: 0.8rem; font-family: 'Consolas', monospace">
+R1(config-if)# <strong style="color: var(--secondary);">standby 1 timers 5 15</strong>
+R1(config-if)# <strong style="color: var(--secondary);">end</strong></pre>
+              <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.3rem">
+                <i class="fas fa-info-circle"></i> Exemplo: Configura Hello Timer = 5s e Hold Timer = 15s
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== FLUXO DE TRANSIÇÃO ===== -->
+          <div
+            style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border)"
+          >
+            <h4 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-arrows-rotate"></i> Fluxo de Transição de Estados
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.8rem">
+              <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center">
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--text-dim);
+                    font-size: 0.8rem;
+                  "
+                  >INICIAL</span
+                >
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--warning);
+                    font-size: 0.8rem;
+                  "
+                  >APRENDIZADO</span
+                >
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--info);
+                    font-size: 0.8rem;
+                  "
+                  >ESCUTA</span
+                >
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--primary);
+                    font-size: 0.8rem;
+                  "
+                  >FALA</span
+                >
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--warning);
+                    font-size: 0.8rem;
+                  "
+                  >STANDBY</span
+                >
+                <i class="fas fa-arrow-right" style="color: var(--text-dim)"></i>
+                <span
+                  style="
+                    background: var(--bg-dark);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    border: 1px solid var(--success);
+                    font-size: 0.8rem;
+                    box-shadow: 0 0 15px rgba(3, 244, 135, 0.1);
+                  "
+                  >ATIVO</span
+                >
+              </div>
+              <div style="text-align: center; color: var(--text-dim); font-size: 0.75rem; margin-top: 0.5rem">
+                <i class="fas fa-info-circle"></i> A transição ocorre através de mensagens <strong>Hello</strong> e do processo de
+                <strong>eleição</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 1.5rem">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica:</strong> O estado <strong>FALA</strong> é um estado transitório onde o roteador está "falando" para tentar se
+            tornar Ativo ou Standby. Os estados finais são <strong>ATIVO</strong> ou <strong>STANDBY</strong>.
+          </div>
+        </div>
+      </section>
+      <!-- ===== SEÇÃO 9.3.1 ===== -->
+      <section id="secao9-3-1" class="section">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="section-number">9.3.1</span> O que eu aprendi neste módulo?
+        </h2>
+
+        <!-- ===== INTRODUÇÃO ===== -->
+        <div class="card">
+          <p><i class="fas fa-rocket" style="color: var(--secondary); font-size: 1.5rem"></i></p>
+          <p style="font-size: 1.1rem; text-align: center; color: var(--text-dim)">
+            Parabéns! Você concluiu o módulo sobre <strong style="color: var(--primary)">FHRP Concepts</strong>. Vamos revisar os principais
+            conceitos que você aprendeu.
+          </p>
+        </div>
+
+        <!-- ===== PARTE 1: FHRP ===== -->
+        <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem">
+            <i class="fas fa-shield-alt"></i> First Hop Redundancy Protocols (FHRP)
+          </h3>
+
+          <p>
+            Se um roteador ou interface de roteador que serve como <strong>Default Gateway</strong> falhar, os hosts configurados com esse
+            <strong>Default Gateway</strong> serão isolados de redes externas. O <strong>FHRP</strong> fornece
+            <strong>Default Gateways</strong> alternativos em redes comutadas em que dois ou mais roteadores estão conectados às mesmas
+            <strong>VLANs</strong>.
+          </p>
+
+          <p style="margin-top: 0.8rem">
+            Uma forma de impedir um único ponto de falha no <strong>Default Gateway</strong> é implementar um
+            <strong>roteador virtual</strong>. Com um roteador virtual, vários roteadores são configurados para trabalhar juntos para
+            apresentar a ilusão de um único roteador aos hosts da <strong>LAN</strong>.
+          </p>
+
+          <!-- Etapas do Failover -->
+          <div style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 1px solid var(--border)">
+            <h4 style="color: var(--warning); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-list-ol"></i> Etapas do Failover do Roteador
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.8rem;
+                  background: rgba(255, 77, 109, 0.05);
+                  padding: 0.5rem 0.8rem;
+                  border-radius: 6px;
+                  border-left: 3px solid var(--danger);
+                "
+              >
+                <span
+                  style="
+                    background: var(--danger);
+                    color: white;
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.7rem;
+                    flex-shrink: 0;
+                  "
+                  >1</span
+                >
+                <span style="color: var(--text-dim); font-size: 0.85rem"
+                  >O roteador em <strong>Standby</strong> para de visualizar mensagens de <strong>Hello</strong> do roteador de
+                  encaminhamento.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.8rem;
+                  background: rgba(255, 183, 3, 0.05);
+                  padding: 0.5rem 0.8rem;
+                  border-radius: 6px;
+                  border-left: 3px solid var(--warning);
+                "
+              >
+                <span
+                  style="
+                    background: var(--warning);
+                    color: var(--bg-dark);
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.7rem;
+                    flex-shrink: 0;
+                  "
+                  >2</span
+                >
+                <span style="color: var(--text-dim); font-size: 0.85rem"
+                  >O roteador em <strong>Standby</strong> assume a função do roteador de encaminhamento.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.8rem;
+                  background: rgba(3, 244, 135, 0.05);
+                  padding: 0.5rem 0.8rem;
+                  border-radius: 6px;
+                  border-left: 3px solid var(--success);
+                "
+              >
+                <span
+                  style="
+                    background: var(--success);
+                    color: var(--bg-dark);
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.7rem;
+                    flex-shrink: 0;
+                  "
+                  >3</span
+                >
+                <span style="color: var(--text-dim); font-size: 0.85rem"
+                  >Como o novo roteador de encaminhamento assume os endereços IPv4 e <strong>MAC</strong> do roteador virtual, os
+                  dispositivos host <strong>não percebem interrupções</strong> no serviço.</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Opções de FHRP -->
+          <div style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 1px solid var(--border)">
+            <h4 style="color: var(--primary); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-list"></i> Opções de FHRP Disponíveis
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem">
+              <div style="background: var(--bg-card); padding: 0.5rem 0.8rem; border-radius: 6px; border-left: 3px solid var(--primary)">
+                <span style="color: var(--primary); font-weight: 600">HSRP</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem; display: block">e HSRP para IPv6</span>
+              </div>
+              <div style="background: var(--bg-card); padding: 0.5rem 0.8rem; border-radius: 6px; border-left: 3px solid var(--warning)">
+                <span style="color: var(--warning); font-weight: 600">VRRPv2</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem; display: block">e VRRPv3</span>
+              </div>
+              <div style="background: var(--bg-card); padding: 0.5rem 0.8rem; border-radius: 6px; border-left: 3px solid var(--success)">
+                <span style="color: var(--success); font-weight: 600">GLBP</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem; display: block">e GLBP para IPv6</span>
+              </div>
+              <div style="background: var(--bg-card); padding: 0.5rem 0.8rem; border-radius: 6px; border-left: 3px solid var(--text-dim)">
+                <span style="color: var(--text-dim); font-weight: 600">IRDP</span>
+                <span style="color: var(--text-dim); font-size: 0.7rem; display: block">Solução legada (RFC 1256)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== PARTE 2: HSRP ===== -->
+        <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+          <h3 style="color: var(--secondary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem">
+            <i class="fas fa-sitemap"></i> Hot Standby Router Protocol (HSRP)
+          </h3>
+
+          <p>
+            O <strong>HSRP</strong> é um <strong>FHRP</strong> de propriedade da <strong>Cisco</strong>, projetado para permitir o
+            <strong>failover</strong> transparente de um dispositivo IP de primeiro salto.
+          </p>
+
+          <p style="margin-top: 0.8rem">
+            O <strong>HSRP</strong> é usado em um grupo de roteadores para selecionar um dispositivo <strong>ativo</strong> e um dispositivo
+            em <strong>Standby</strong>. Em um grupo de interfaces de dispositivo, o dispositivo ativo é aquele usado para rotear pacotes; o
+            dispositivo em <strong>Standby</strong> é aquele que assume controle quando o dispositivo ativo falha ou quando as condições
+            predefinidas são atendidas.
+          </p>
+
+          <!-- Características HSRP -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem">
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary)">
+              <h5 style="color: var(--primary); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-crown"></i> Proprietário Cisco
+              </h5>
+              <p style="color: var(--text-dim); font-size: 0.8rem">Protocolo exclusivo da Cisco para redundância de gateway.</p>
+            </div>
+
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success)">
+              <h5 style="color: var(--success); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-trophy"></i> Prioridade
+              </h5>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                O roteador com a <strong>maior prioridade</strong> será o roteador ativo (padrão: 100).
+              </p>
+            </div>
+
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--warning)">
+              <h5 style="color: var(--warning); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-undo-alt"></i> Preempção
+              </h5>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                Capacidade de um roteador HSRP acionar o processo de <strong>reeleição</strong>.
+              </p>
+            </div>
+
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--info)">
+              <h5 style="color: var(--info); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem">
+                <i class="fas fa-project-diagram"></i> Estados
+              </h5>
+              <p style="color: var(--text-dim); font-size: 0.8rem">
+                Inicial, Aprendizado, Escuta, Fala, <strong>Standby</strong> e <strong>Ativo</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tabela de Estados HSRP -->
+          <div
+            style="
+              background: var(--bg-dark);
+              border-radius: 12px;
+              padding: 1rem;
+              margin-top: 1rem;
+              border: 1px solid var(--border);
+              overflow-x: auto;
+            "
+          >
+            <h5 style="color: var(--primary); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-table"></i> Resumo dos Estados do HSRP
+            </h5>
+            <table class="table-custom" style="min-width: 500px; margin: 0">
+              <thead>
+                <tr>
+                  <th>Estado</th>
+                  <th>Descrição Resumida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--text-dim);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >INICIAL</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Interface configurada ou ativada</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >APRENDIZADO</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Aguardando descobrir o IP virtual</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--info);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >ESCUTA</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Conhece o IP, mas não é Ativo/Standby</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--primary);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >FALA</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Envia Hello e participa da eleição</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--warning);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >STANDBY</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Candidato a Ativo, pronto para assumir</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span
+                      style="
+                        background: var(--success);
+                        color: var(--bg-dark);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 0.7rem;
+                      "
+                      >ATIVO</span
+                    >
+                  </td>
+                  <td style="font-size: 0.85rem">Encaminhando tráfego ativamente</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== RESUMO FINAL ===== -->
+        <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border)">
+          <h3 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem">
+            <i class="fas fa-check-double"></i> Conceitos-Chave
+          </h3>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem">
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border)">
+              <i class="fas fa-router" style="color: var(--primary); font-size: 1.5rem; display: block; margin-bottom: 0.3rem"></i>
+              <span style="color: var(--text); font-size: 0.85rem; font-weight: 600">Gateway Virtual</span>
+              <p style="color: var(--text-dim); font-size: 0.7rem">IP/MAC compartilhado pelos roteadores</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border)">
+              <i class="fas fa-server" style="color: var(--success); font-size: 1.5rem; display: block; margin-bottom: 0.3rem"></i>
+              <span style="color: var(--text); font-size: 0.85rem; font-weight: 600">Roteador Ativo</span>
+              <p style="color: var(--text-dim); font-size: 0.7rem">Encaminha o tráfego ativamente</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border)">
+              <i class="fas fa-clock" style="color: var(--warning); font-size: 1.5rem; display: block; margin-bottom: 0.3rem"></i>
+              <span style="color: var(--text); font-size: 0.85rem; font-weight: 600">Roteador Standby</span>
+              <p style="color: var(--text-dim); font-size: 0.7rem">Assume se o Ativo falhar</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border)">
+              <i class="fas fa-sync-alt" style="color: var(--secondary); font-size: 1.5rem; display: block; margin-bottom: 0.3rem"></i>
+              <span style="color: var(--text); font-size: 0.85rem; font-weight: 600">Failover</span>
+              <p style="color: var(--text-dim); font-size: 0.7rem">Transição transparente para hosts</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== ALERTA FINAL ===== -->
+        <div class="alert alert-success" style="margin-top: 1rem; border-left-color: var(--secondary)">
+          <i class="fas fa-star" style="color: var(--secondary)"></i>
+          <strong>Parabéns!</strong> Você agora compreende como os <strong>FHRPs</strong> (especialmente o <strong>HSRP</strong>) fornecem
+          <strong>alta disponibilidade</strong> e <strong>redundância</strong> para gateways padrão em redes Cisco.
+          <span style="display: block; margin-top: 0.3rem; color: var(--text-dim)">
+            <i class="fas fa-arrow-right"></i> Continue praticando no <strong>Packet Tracer</strong> para consolidar seus conhecimentos!
+          </span>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <p>
+        <i class="fas fa-network-wired" style="color: var(--primary)"></i>
+        Cisco CCNA 2 (SRWE) - Switching, Routing, and Wireless Essentials
+      </p>
+
+      <p style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-dim)">
+        &copy; 2026 - Laboratório de Redes Cisco | FHRP Concepts - Módulo 9
+      </p>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+      // ===== SIDEBAR MENU =====
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => {
+              this.close()
+              // Update active state
+              links.forEach((l) => l.classList.remove('active'))
+              link.classList.add('active')
+            })
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+
+        // ===== SCROLL SPY - Atualiza link ativo no sidebar =====
+        const sections = document.querySelectorAll('.section')
+        const navLinks = document.querySelectorAll('.sidebar .nav-modules a')
+
+        function updateActiveLink() {
+          let current = ''
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 100
+            if (window.scrollY >= sectionTop) {
+              current = section.getAttribute('id')
+            }
+          })
+
+          navLinks.forEach((link) => {
+            link.classList.remove('active')
+            if (link.getAttribute('href') === '#' + current) {
+              link.classList.add('active')
+            }
+          })
+        }
+
+        window.addEventListener('scroll', updateActiveLink)
+        window.addEventListener('load', updateActiveLink)
+      })
+    </script>
+  </body>
+</html>
