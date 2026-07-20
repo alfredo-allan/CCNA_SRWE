@@ -1,0 +1,2523 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cisco CCNA 2 (SRWE) | Segurança de LAN - Módulo 10</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+      /* ===== ESTILOS ADICIONAIS ESPECÍFICOS DO MÓDULO ===== */
+
+      /* Cards com ícone lateral */
+      .card-icon {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-icon:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        background: var(--bg-card-hover);
+        box-shadow: 0 8px 24px rgba(0, 255, 136, 0.15);
+      }
+
+      .card-icon .icon {
+        font-size: 2.5rem;
+        color: var(--primary);
+        min-width: 50px;
+        text-align: center;
+      }
+
+      .card-icon .content {
+        flex: 1;
+      }
+
+      .card-icon .content h4 {
+        color: var(--text);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .card-icon .content p {
+        color: var(--text-dim);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+
+      .card-icon .content ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 0.5rem;
+      }
+
+      .card-icon .content ul li {
+        padding: 0.3rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        color: var(--text-dim);
+        border-bottom: 1px solid rgba(34, 34, 34, 0.3);
+      }
+
+      .card-icon .content ul li:last-child {
+        border-bottom: none;
+      }
+
+      .card-icon .content ul li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+      }
+
+      .card-icon .content ul li strong {
+        color: var(--text);
+      }
+
+      /* Topologia Visual */
+      .topology-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        padding: 2rem 1rem;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        margin: 1.5rem 0;
+        overflow-x: auto;
+      }
+
+      .topology-grid .device {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: 80px;
+      }
+
+      .topology-grid .device .icon {
+        font-size: 3rem;
+        color: var(--primary);
+      }
+
+      .topology-grid .device .icon.switch {
+        color: var(--secondary);
+      }
+
+      .topology-grid .device .icon.router {
+        color: var(--warning);
+      }
+
+      .topology-grid .device .icon.pc {
+        color: var(--info);
+      }
+
+      .topology-grid .device .label {
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        text-align: center;
+        font-family: 'Courier New', monospace;
+      }
+
+      .topology-grid .device .label strong {
+        color: var(--text);
+      }
+
+      .topology-grid .connection {
+        color: var(--text-dim);
+        font-size: 1.5rem;
+        padding: 0 0.5rem;
+      }
+
+      .topology-grid .connection i {
+        color: var(--warning);
+      }
+
+      /* Tags de segurança */
+      .security-tag {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin: 0.2rem;
+      }
+
+      .security-tag.critical {
+        background: rgba(255, 68, 68, 0.2);
+        color: var(--danger);
+        border: 1px solid rgba(255, 68, 68, 0.3);
+      }
+
+      .security-tag.high {
+        background: rgba(255, 204, 0, 0.2);
+        color: var(--warning);
+        border: 1px solid rgba(255, 204, 0, 0.3);
+      }
+
+      .security-tag.medium {
+        background: rgba(0, 170, 255, 0.2);
+        color: var(--info);
+        border: 1px solid rgba(0, 170, 255, 0.3);
+      }
+
+      .security-tag.low {
+        background: rgba(0, 255, 136, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(0, 255, 136, 0.2);
+      }
+
+      /* Terminal com cores específicas */
+      .terminal .prompt {
+        color: var(--secondary);
+      }
+
+      .terminal .output {
+        color: var(--text-dim);
+      }
+
+      .terminal .success {
+        color: var(--success);
+      }
+
+      .terminal .warning-text {
+        color: var(--warning);
+      }
+
+      .terminal .danger-text {
+        color: var(--danger);
+      }
+
+      @media (max-width: 768px) {
+        .topology-grid {
+          gap: 1rem;
+          padding: 1rem 0.5rem;
+        }
+
+        .topology-grid .device .icon {
+          font-size: 2rem;
+        }
+
+        .topology-grid .connection {
+          font-size: 1rem;
+          padding: 0 0.2rem;
+        }
+
+        .card-icon {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .card-icon .icon {
+          font-size: 2rem;
+          min-width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== TOP BAR ===== -->
+    <div class="top-bar">
+      <button class="menu-toggle" id="openMenu">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+      </button>
+      <a href="../index.html" class="top-bar-brand"> <i class="fas fa-network-wired"></i> Cisco CCNA 2 (SRWE) </a>
+      <a href="../index.html" class="btn-outline"> <i class="fas fa-arrow-left"></i> Painel </a>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-map-marked-alt"></i> Módulos</h3>
+        <button class="close-sidebar" id="closeMenu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <ul class="nav-modules">
+        <li>
+          <a href="#secao10-0-1"><i class="fas fa-shield-alt"></i> 10.0.1 Introdução</a>
+        </li>
+        <li>
+          <a href="#secao10-0-2"><i class="fas fa-shield-alt"></i> 10.0.2 O que vou aprender?</a>
+        </li>
+        <li>
+          <a href="#secao10-1-1"><i class="fas fa-biohazard"></i> 10.1.1 Ataques de Rede</a>
+        </li>
+        <li>
+          <a href="#secao10-1-2"><i class="fas fa-shield-halved"></i> 10.1.2 Dispositivos de Segurança</a>
+        </li>
+        <li>
+          <a href="#secao10-1-3"><i class="fas fa-desktop"></i> 10.1.3 Proteção de Endpoints</a>
+        </li>
+        <li>
+          <a href="#secao10-1-5"><i class="fas fa-globe"></i> 10.1.5 Cisco WSA</a>
+        </li>
+        <li>
+          <a href="#secao10-2-1"><i class="fas fa-key"></i> 10.2.1 Autenticação Local</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+      <!-- ===== HERO SECTION ===== -->
+      <section class="hero">
+        <div class="container">
+          <div class="badge-lab"><i class="fas fa-shield-alt"></i> Cisco IOS Security Lab</div>
+          <h1>Segurança de LAN</h1>
+          <p>Protegendo a infraestrutura de rede contra ameaças internas e externas</p>
+        </div>
+      </section>
+
+      <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+      <div class="container">
+        <!-- ===== SEÇÃO 10.0.1 ===== -->
+        <section id="secao10-0-1" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-shield-alt"></i>
+            <span class="section-number">10.0.1</span> Por que devo cursar este módulo?
+          </h2>
+
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="content">
+              <h4>Bem-vindo aos conceitos de segurança de LAN!</h4>
+              <p>
+                Se a sua carreira estiver em TI, você não estará apenas construindo ou mantendo redes. Você será responsável pela
+                <strong>segurança de sua rede</strong>. Para os arquitetos e administradores de rede atuais, a segurança não é uma reflexão
+                tardia. <strong>É uma prioridade</strong> para eles!
+              </p>
+              <p style="margin-top: 0.5rem">
+                De fato, muitas pessoas em TI agora trabalham exclusivamente na área de
+                <strong>segurança de redes</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            <div class="content">
+              <h4>O que você vai aprender?</h4>
+              <ul>
+                <li>O que torna uma LAN segura?</li>
+                <li>O que os agentes de ameaças podem fazer para quebrar a segurança de uma rede?</li>
+                <li>O que você pode fazer para detê-los?</li>
+              </ul>
+              <div class="alert alert-info" style="margin-top: 1rem">
+                <i class="fas fa-info-circle"></i>
+                Este módulo é sua <strong>introdução ao mundo da segurança de rede</strong>. Não espere e clique em Avançar!
+              </div>
+            </div>
+          </div>
+
+          <!-- Topologia Visual -->
+          <div class="topology-grid">
+            <div class="device">
+              <i class="fas fa-user-circle icon pc"></i>
+              <div class="label"><strong>PC1</strong><br />Usuário</div>
+            </div>
+            <div class="connection"><i class="fas fa-arrow-right"></i></div>
+            <div class="device">
+              <i class="fas fa-server icon switch"></i>
+              <div class="label"><strong>SW1</strong><br />Switch</div>
+            </div>
+            <div class="connection"><i class="fas fa-arrow-right"></i></div>
+            <div class="device">
+              <i class="fas fa-network-wired icon router"></i>
+              <div class="label"><strong>R1</strong><br />Router</div>
+            </div>
+            <div class="connection"><i class="fas fa-arrow-right"></i></div>
+            <div class="device">
+              <i class="fas fa-globe icon" style="color: var(--info)"></i>
+              <div class="label"><strong>Internet</strong><br />Rede Externa</div>
+            </div>
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Ponto de Atenção:</strong> Em cada ponto desta topologia existem vulnerabilidades que precisam ser protegidas. Vamos
+            explorar cada uma delas!
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.0.2 ===== -->
+        <section id="secao10-0-2" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i>
+            <span class="section-number">10.0.2</span> O que vou aprender neste módulo?
+          </h2>
+
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="content">
+              <h4>Módulo: Conceitos de Segurança de LAN</h4>
+              <p><strong>Objetivo do Módulo:</strong> Explicar como as vulnerabilidades comprometem a segurança da LAN.</p>
+            </div>
+          </div>
+
+          <!-- Tabela de Tópicos e Objetivos -->
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tag"></i> Título do Tópico</th>
+                <th><i class="fas fa-flag-checkered"></i> Objetivo do Tópico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Segurança de endpoints</strong></td>
+                <td>Explicar como usar a segurança do endpoint para mitigar ataques.</td>
+              </tr>
+              <tr>
+                <td><strong>Controle de acesso</strong></td>
+                <td>Explicar como AAA e 802.1x são usados para autenticar endpoints e dispositivos de LAN.</td>
+              </tr>
+              <tr>
+                <td><strong>Ameaças à segurança de camada 2</strong></td>
+                <td>Identificar vulnerabilidades de camada 2.</td>
+              </tr>
+              <tr>
+                <td><strong>Ataque na tabela de endereços MAC</strong></td>
+                <td>Explicar como um ataque na tabela de endereços MAC compromete a segurança da LAN.</td>
+              </tr>
+              <tr>
+                <td><strong>Ataques de LAN</strong></td>
+                <td>Explicar como ataques de LAN comprometem a segurança da LAN.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica de Estudo:</strong> Cada tópico deste módulo aborda uma camada específica de segurança. Preste atenção especial aos
+            ataques de Camada 2, pois eles são os mais comuns em ambientes LAN.
+          </div>
+
+          <!-- Mapa Mental Visual -->
+          <div class="card" style="margin-top: 1.5rem">
+            <h3 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-project-diagram"></i> Visão Geral do Módulo
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem">
+              <div
+                style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--border); text-align: center"
+              >
+                <i class="fas fa-desktop" style="color: var(--primary); font-size: 2rem"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                  <strong>Segurança de<br />Endpoints</strong>
+                </p>
+              </div>
+              <div
+                style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--border); text-align: center"
+              >
+                <i class="fas fa-id-card" style="color: var(--secondary); font-size: 2rem"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                  <strong>Controle de<br />Acesso</strong>
+                </p>
+              </div>
+              <div
+                style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--border); text-align: center"
+              >
+                <i class="fas fa-shield-virus" style="color: var(--warning); font-size: 2rem"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                  <strong>Ameaças<br />Camada 2</strong>
+                </p>
+              </div>
+              <div
+                style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--border); text-align: center"
+              >
+                <i class="fas fa-table" style="color: var(--danger); font-size: 2rem"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                  <strong>Ataques MAC<br />Table</strong>
+                </p>
+              </div>
+              <div
+                style="background: var(--bg-dark); border-radius: 12px; padding: 1rem; border: 1px solid var(--border); text-align: center"
+              >
+                <i class="fas fa-network-wired" style="color: var(--info); font-size: 2rem"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                  <strong>Ataques de<br />LAN</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.1.1 ===== -->
+        <section id="secao10-1-1" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-biohazard"></i>
+            <span class="section-number">10.1.1</span> Ataques de Rede hoje
+          </h2>
+
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-newspaper"></i>
+            </div>
+            <div class="content">
+              <p>
+                A imprensa geralmente cobre ataques a redes corporativas. Basta pesquisar na Internet por
+                <strong>"ataques de rede recentes"</strong> para encontrar informações atualizadas sobre ataques atuais. Muito
+                provavelmente, esses ataques envolverão um ou mais dos seguintes itens:
+              </p>
+            </div>
+          </div>
+
+          <!-- Cards de Ataques -->
+          <div class="grid-2">
+            <div class="card" style="border-left: 4px solid var(--danger)">
+              <i class="fas fa-server" style="color: var(--danger)"></i>
+              <h3>DDoS</h3>
+              <p style="color: var(--text-dim); font-size: 0.95rem">
+                <strong>Negação de Serviço Distribuída</strong> - Ataque coordenado de muitos dispositivos, chamados
+                <strong>zumbis</strong>, com a intenção de degradar ou interromper o acesso público ao site e aos recursos de uma
+                organização.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--warning)">
+              <i class="fas fa-database" style="color: var(--warning)"></i>
+              <h3>Violação de Dados</h3>
+              <p style="color: var(--text-dim); font-size: 0.95rem">
+                <strong>Data Breach</strong> - Ataque no qual os servidores ou hosts de dados de uma organização são comprometidos para
+                <strong>roubar informações confidenciais</strong>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--primary); grid-column: 1 / -1">
+              <i class="fas fa-bug" style="color: var(--primary)"></i>
+              <h3>Malware</h3>
+              <p style="color: var(--text-dim); font-size: 0.95rem">
+                Ataque no qual os hosts de uma organização são infectados com software malicioso que causa vários problemas. Por exemplo,
+                <strong>ransomware</strong> como o <strong>WannaCry</strong>, criptografa os dados em um host e bloqueia o acesso a eles até
+                que um resgate seja pago.
+              </p>
+            </div>
+          </div>
+
+          <!-- ===== DIAGRAMA REPRESENTATIVO DO WannaCry ===== -->
+          <div style="margin: 2rem 0">
+            <h4 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem">
+              <i class="fas fa-skull"></i> Exemplo: Ransomware WannaCry
+            </h4>
+
+            <!-- Container do Diagrama com scroll horizontal -->
+            <div
+              style="
+                background: #0a0a0a;
+                border-radius: 16px;
+                border: 1px solid var(--border);
+                padding: 1.5rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
+              "
+            >
+              <!-- Conteúdo do Diagrama - Largura mínima para garantir scroll -->
+              <div style="min-width: 650px; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem">
+                <!-- Lado Esquerdo: Interface do Ransomware -->
+                <div style="background: #1a0a0a; border-radius: 12px; border: 2px solid var(--danger); padding: 1.5rem; position: relative">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 1rem;
+                      border-bottom: 1px solid rgba(255, 68, 68, 0.3);
+                      padding-bottom: 0.5rem;
+                    "
+                  >
+                    <span style="color: var(--danger); font-weight: 700; font-size: 1.1rem">
+                      <i class="fas fa-lock"></i> Wana DecryptOr 2.0
+                    </span>
+                    <span style="color: var(--text-dim); font-size: 0.7rem">
+                      <i class="fas fa-exclamation-triangle" style="color: var(--warning)"></i> CRITICAL
+                    </span>
+                  </div>
+
+                  <h5 style="color: var(--danger); font-size: 1.3rem; margin-bottom: 0.5rem">
+                    <i class="fas fa-skull"></i> Ooops, your files have been encrypted!
+                  </h5>
+
+                  <div
+                    style="
+                      background: rgba(255, 68, 68, 0.1);
+                      border-radius: 8px;
+                      padding: 0.8rem;
+                      margin: 0.8rem 0;
+                      border-left: 3px solid var(--danger);
+                    "
+                  >
+                    <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0">
+                      <strong style="color: var(--text)">What Happened?</strong><br />
+                      Your important files are encrypted. Many of your documents, photos, videos, databases and other files are no longer
+                      accessible.
+                    </p>
+                  </div>
+
+                  <div
+                    style="
+                      background: rgba(255, 204, 0, 0.1);
+                      border-radius: 8px;
+                      padding: 0.8rem;
+                      margin: 0.8rem 0;
+                      border-left: 3px solid var(--warning);
+                    "
+                  >
+                    <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0">
+                      <strong style="color: var(--warning)">⏰ Time Left:</strong>
+                      <span style="color: var(--danger); font-weight: 700">3 days</span> to submit payment
+                    </p>
+                  </div>
+
+                  <div
+                    style="
+                      background: rgba(0, 255, 136, 0.05);
+                      border-radius: 8px;
+                      padding: 0.8rem;
+                      margin: 0.8rem 0;
+                      border: 1px dashed var(--primary);
+                    "
+                  >
+                    <p style="color: var(--text-dim); font-size: 0.75rem; margin: 0; text-align: center">
+                      <i class="fab fa-bitcoin" style="color: var(--warning)"></i>
+                      <strong style="color: var(--text)">Bitcoin Accepted Here</strong><br />
+                      <span style="color: var(--primary); font-family: monospace; font-size: 0.7rem">
+                        12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw
+                      </span>
+                    </p>
+                  </div>
+
+                  <div style="display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: flex-end">
+                    <span
+                      style="
+                        background: rgba(255, 68, 68, 0.2);
+                        color: var(--danger);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 6px;
+                        font-size: 0.7rem;
+                        border: 1px solid rgba(255, 68, 68, 0.3);
+                        cursor: default;
+                      "
+                    >
+                      <i class="fas fa-times"></i> Check Payment
+                    </span>
+                    <span
+                      style="
+                        background: rgba(0, 255, 136, 0.2);
+                        color: var(--primary);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 6px;
+                        font-size: 0.7rem;
+                        border: 1px solid rgba(0, 255, 136, 0.3);
+                        cursor: default;
+                      "
+                    >
+                      <i class="fas fa-unlock"></i> Decrypt
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Lado Direito: Fluxo do Ataque -->
+                <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem">
+                  <h5 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem">
+                    <i class="fas fa-project-diagram"></i> Fluxo do Ataque
+                  </h5>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.8rem">
+                    <!-- Etapa 1 -->
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.8rem;
+                        background: rgba(255, 68, 68, 0.05);
+                        padding: 0.6rem 0.8rem;
+                        border-radius: 8px;
+                        border-left: 3px solid var(--danger);
+                      "
+                    >
+                      <span
+                        style="
+                          background: var(--danger);
+                          color: #fff;
+                          border-radius: 50%;
+                          width: 24px;
+                          height: 24px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 0.7rem;
+                          font-weight: 700;
+                          flex-shrink: 0;
+                        "
+                        >1</span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.85rem">
+                        <strong style="color: var(--text)">Infecção:</strong> Usuário abre e-mail ou link malicioso
+                      </span>
+                    </div>
+
+                    <!-- Etapa 2 -->
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.8rem;
+                        background: rgba(255, 204, 0, 0.05);
+                        padding: 0.6rem 0.8rem;
+                        border-radius: 8px;
+                        border-left: 3px solid var(--warning);
+                      "
+                    >
+                      <span
+                        style="
+                          background: var(--warning);
+                          color: #000;
+                          border-radius: 50%;
+                          width: 24px;
+                          height: 24px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 0.7rem;
+                          font-weight: 700;
+                          flex-shrink: 0;
+                        "
+                        >2</span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.85rem">
+                        <strong style="color: var(--text)">Criptografia:</strong> WannaCry criptografa arquivos locais e em rede
+                      </span>
+                    </div>
+
+                    <!-- Etapa 3 -->
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.8rem;
+                        background: rgba(0, 255, 136, 0.05);
+                        padding: 0.6rem 0.8rem;
+                        border-radius: 8px;
+                        border-left: 3px solid var(--primary);
+                      "
+                    >
+                      <span
+                        style="
+                          background: var(--primary);
+                          color: #000;
+                          border-radius: 50%;
+                          width: 24px;
+                          height: 24px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 0.7rem;
+                          font-weight: 700;
+                          flex-shrink: 0;
+                        "
+                        >3</span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.85rem">
+                        <strong style="color: var(--text)">Resgate:</strong> Exige pagamento em Bitcoin para descriptografar
+                      </span>
+                    </div>
+
+                    <!-- Etapa 4 -->
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.8rem;
+                        background: rgba(0, 170, 255, 0.05);
+                        padding: 0.6rem 0.8rem;
+                        border-radius: 8px;
+                        border-left: 3px solid var(--info);
+                      "
+                    >
+                      <span
+                        style="
+                          background: var(--info);
+                          color: #000;
+                          border-radius: 50%;
+                          width: 24px;
+                          height: 24px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 0.7rem;
+                          font-weight: 700;
+                          flex-shrink: 0;
+                        "
+                        >4</span
+                      >
+                      <span style="color: var(--text-dim); font-size: 0.85rem">
+                        <strong style="color: var(--text)">Propagação:</strong> Se espalha automaticamente via vulnerabilidade SMB
+                      </span>
+                    </div>
+                  </div>
+
+                  <div
+                    style="
+                      margin-top: 1rem;
+                      padding: 0.6rem;
+                      background: rgba(255, 68, 68, 0.1);
+                      border-radius: 8px;
+                      text-align: center;
+                      border: 1px solid rgba(255, 68, 68, 0.2);
+                    "
+                  >
+                    <span style="color: var(--danger); font-size: 0.75rem">
+                      <i class="fas fa-exclamation-circle"></i>
+                      <strong>Impacto Global:</strong> WannaCry afetou mais de 150 países em 2017
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Indicador de Scroll (apenas visual) -->
+              <div
+                style="
+                  margin-top: 1rem;
+                  padding: 0.5rem;
+                  background: rgba(34, 34, 34, 0.5);
+                  border-radius: 8px;
+                  text-align: center;
+                  border: 1px solid var(--border);
+                  display: none;
+                "
+                id="scrollIndicator"
+              >
+                <span style="color: var(--text-dim); font-size: 0.7rem">
+                  <i class="fas fa-arrows-alt-h"></i> Arraste para o lado para ver mais
+                </span>
+              </div>
+            </div>
+
+            <!-- Script para mostrar indicador de scroll em mobile -->
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                const container = document.querySelector('#secao10-1-1 .container-diagrama')
+                if (container) {
+                  const checkScroll = () => {
+                    const indicator = document.getElementById('scrollIndicator')
+                    if (indicator && container.scrollWidth > container.clientWidth) {
+                      indicator.style.display = 'block'
+                    } else if (indicator) {
+                      indicator.style.display = 'none'
+                    }
+                  }
+                  checkScroll()
+                  window.addEventListener('resize', checkScroll)
+                }
+              })
+            </script>
+          </div>
+
+          <div class="alert alert-warning">
+            <i class="fas fa-shield-alt"></i>
+            <strong>Prevenção:</strong> Para se proteger contra ataques como o WannaCry, mantenha sistemas atualizados, use antivírus, faça
+            backups regulares e eduque os usuários sobre <strong>engenharia social</strong>.
+          </div>
+
+          <!-- Terminal com exemplo de log de ataque -->
+          <div class="terminal">
+            <pre>
+<span class="output">[ALERTA] Anomalia detectada no tráfego de rede</span>
+<span class="output">[ALERTA] Tentativa de conexão SMB suspeita de 192.168.1.105</span>
+<span class="output">[ALERTA] Pacote malicioso identificado - assinatura WannaCry</span>
+<span class="output">[ALERTA] Host 192.168.1.105 - Arquivos sendo criptografados</span>
+<span class="danger-text">[CRÍTICO] Ransomware detectado - Isolando host</span>
+<span class="prompt">Firewall#</span> <strong>show security threats</strong>
+<span class="output">Threat Type     : Ransomware (WannaCry)</span>
+<span class="output">Source IP       : 192.168.1.105</span>
+<span class="output">Destination IP  : 192.168.1.1</span>
+<span class="output">Status          : QUARANTINE</span>
+<span class="output">Action Taken    : Port Shutdown</span>
+<span class="prompt">Firewall#</span></pre>
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.1.2 ===== -->
+        <section id="secao10-1-2" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-shield-halved"></i>
+            <span class="section-number">10.1.2</span> Dispositivos para Segurança de Redes
+          </h2>
+
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-network-wired"></i>
+            </div>
+            <div class="content">
+              <p>
+                Vários dispositivos de segurança de rede são necessários para proteger o <strong>perímetro da rede</strong>
+                contra acesso externo. Esses dispositivos podem incluir um roteador habilitado para
+                <strong>Rede Virtual Privada (VPN)</strong>, um <strong>firewall de próxima geração (NGFW)</strong> e um dispositivo de
+                <strong>Controle de Acesso à Rede (NAC)</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- ===== CARDS INTERATIVOS ===== -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0">
+            <!-- Card 1: VPN Router -->
+            <div class="card security-device" data-device="vpn" style="cursor: pointer; position: relative; overflow: hidden">
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center">
+                <div
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background: rgba(0, 255, 136, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 1rem;
+                    border: 2px solid var(--primary);
+                  "
+                >
+                  <i class="fas fa-router" style="font-size: 2rem; color: var(--primary)"></i>
+                </div>
+                <h3 style="color: var(--primary); font-size: 1.1rem">Roteador habilitado para VPN</h3>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem">
+                  <i class="fas fa-chevron-down" style="color: var(--primary)"></i>
+                  Clique para mais informações
+                </p>
+                <div
+                  class="device-description"
+                  id="desc-vpn"
+                  style="
+                    display: none;
+                    margin-top: 1rem;
+                    padding: 1rem;
+                    background: rgba(0, 255, 136, 0.05);
+                    border-radius: 12px;
+                    border-left: 3px solid var(--primary);
+                    text-align: left;
+                    width: 100%;
+                  "
+                >
+                  <p style="color: var(--text); font-size: 0.9rem; margin: 0">
+                    Um roteador habilitado para VPN fornece uma <strong>conexão segura</strong> a usuários remotos através de uma rede
+                    pública e na rede corporativa. Os serviços de VPN podem ser integrados ao firewall.
+                  </p>
+                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap">
+                    <span
+                      style="
+                        background: rgba(0, 255, 136, 0.1);
+                        color: var(--primary);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-lock"></i> IPsec
+                    </span>
+                    <span
+                      style="
+                        background: rgba(0, 255, 136, 0.1);
+                        color: var(--primary);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-key"></i> SSL/TLS
+                    </span>
+                    <span
+                      style="
+                        background: rgba(0, 255, 136, 0.1);
+                        color: var(--primary);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-users"></i> Remote Access
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  height: 3px;
+                  background: linear-gradient(90deg, var(--primary), transparent);
+                  opacity: 0.5;
+                "
+              ></div>
+            </div>
+
+            <!-- Card 2: NGFW -->
+            <div class="card security-device" data-device="ngfw" style="cursor: pointer; position: relative; overflow: hidden">
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center">
+                <div
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background: rgba(0, 170, 255, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 1rem;
+                    border: 2px solid var(--info);
+                  "
+                >
+                  <i class="fas fa-firewall" style="font-size: 2rem; color: var(--info)"></i>
+                </div>
+                <h3 style="color: var(--info); font-size: 1.1rem">NGFW</h3>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem">
+                  <i class="fas fa-chevron-down" style="color: var(--info)"></i>
+                  Clique para mais informações
+                </p>
+                <div
+                  class="device-description"
+                  id="desc-ngfw"
+                  style="
+                    display: none;
+                    margin-top: 1rem;
+                    padding: 1rem;
+                    background: rgba(0, 170, 255, 0.05);
+                    border-radius: 12px;
+                    border-left: 3px solid var(--info);
+                    text-align: left;
+                    width: 100%;
+                  "
+                >
+                  <p style="color: var(--text); font-size: 0.9rem; margin: 0">
+                    Um <strong>NGFW</strong> fornece inspeção de pacotes persistente, visibilidade e controle de aplicativos, um sistema de
+                    prevenção de intrusões (<strong>NGIPS</strong>) de última geração, proteção avançada contra malware
+                    (<strong>AMP</strong>) e filtragem de URL.
+                  </p>
+                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap">
+                    <span
+                      style="
+                        background: rgba(0, 170, 255, 0.1);
+                        color: var(--info);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-search"></i> Deep Packet
+                    </span>
+                    <span
+                      style="
+                        background: rgba(0, 170, 255, 0.1);
+                        color: var(--info);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-shield-virus"></i> NGIPS
+                    </span>
+                    <span
+                      style="
+                        background: rgba(0, 170, 255, 0.1);
+                        color: var(--info);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-bug"></i> AMP
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  height: 3px;
+                  background: linear-gradient(90deg, var(--info), transparent);
+                  opacity: 0.5;
+                "
+              ></div>
+            </div>
+
+            <!-- Card 3: NAC -->
+            <div class="card security-device" data-device="nac" style="cursor: pointer; position: relative; overflow: hidden">
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center">
+                <div
+                  style="
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background: rgba(255, 204, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 1rem;
+                    border: 2px solid var(--warning);
+                  "
+                >
+                  <i class="fas fa-id-card" style="font-size: 2rem; color: var(--warning)"></i>
+                </div>
+                <h3 style="color: var(--warning); font-size: 1.1rem">NAC</h3>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem">
+                  <i class="fas fa-chevron-down" style="color: var(--warning)"></i>
+                  Clique para mais informações
+                </p>
+                <div
+                  class="device-description"
+                  id="desc-nac"
+                  style="
+                    display: none;
+                    margin-top: 1rem;
+                    padding: 1rem;
+                    background: rgba(255, 204, 0, 0.05);
+                    border-radius: 12px;
+                    border-left: 3px solid var(--warning);
+                    text-align: left;
+                    width: 100%;
+                  "
+                >
+                  <p style="color: var(--text); font-size: 0.9rem; margin: 0">
+                    Um dispositivo <strong>NAC</strong> inclui serviços de autenticação, autorização e contabilização
+                    (<strong>AAA</strong>). Em empresas maiores, esses serviços podem ser incorporados a um dispositivo que pode gerenciar
+                    políticas de acesso em uma ampla variedade de usuários e tipos de dispositivos. O
+                    <strong>Cisco Identity Services Engine (ISE)</strong> é um exemplo de dispositivo NAC.
+                  </p>
+                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap">
+                    <span
+                      style="
+                        background: rgba(255, 204, 0, 0.1);
+                        color: var(--warning);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-user-check"></i> AAA
+                    </span>
+                    <span
+                      style="
+                        background: rgba(255, 204, 0, 0.1);
+                        color: var(--warning);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-university"></i> Cisco ISE
+                    </span>
+                    <span
+                      style="
+                        background: rgba(255, 204, 0, 0.1);
+                        color: var(--warning);
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 4px;
+                        font-size: 0.7rem;
+                      "
+                    >
+                      <i class="fas fa-policy"></i> Políticas
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  height: 3px;
+                  background: linear-gradient(90deg, var(--warning), transparent);
+                  opacity: 0.5;
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- ===== TOPOLOGIA COM DISPOSITIVOS DE SEGURANÇA ===== -->
+          <div style="margin: 2rem 0">
+            <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem">
+              <i class="fas fa-sitemap" style="color: var(--primary)"></i> Topologia de Segurança de Rede
+            </h4>
+
+            <div
+              style="
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 16px;
+                border: 1px solid var(--border);
+                padding: 2rem 1rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+              "
+            >
+              <div style="min-width: 700px; display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: nowrap">
+                <!-- Internet -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <i class="fas fa-globe" style="font-size: 2.5rem; color: var(--info)"></i>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)">Internet</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- VPN Router -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <div
+                    style="
+                      width: 60px;
+                      height: 60px;
+                      border-radius: 12px;
+                      background: rgba(0, 255, 136, 0.1);
+                      border: 2px solid var(--primary);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-router" style="font-size: 1.8rem; color: var(--primary)"></i>
+                  </div>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)"><strong style="color: var(--primary)">VPN</strong> Router</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- NGFW -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <div
+                    style="
+                      width: 60px;
+                      height: 60px;
+                      border-radius: 12px;
+                      background: rgba(0, 170, 255, 0.1);
+                      border: 2px solid var(--info);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-firewall" style="font-size: 1.8rem; color: var(--info)"></i>
+                  </div>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)"><strong style="color: var(--info)">NGFW</strong> Firewall</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- NAC / ISE -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <div
+                    style="
+                      width: 60px;
+                      height: 60px;
+                      border-radius: 12px;
+                      background: rgba(255, 204, 0, 0.1);
+                      border: 2px solid var(--warning);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-id-card" style="font-size: 1.8rem; color: var(--warning)"></i>
+                  </div>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)"><strong style="color: var(--warning)">NAC</strong> / ISE</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- LAN Interna -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <div
+                    style="
+                      width: 60px;
+                      height: 60px;
+                      border-radius: 12px;
+                      background: rgba(0, 255, 136, 0.05);
+                      border: 2px solid var(--border);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-network-wired" style="font-size: 1.8rem; color: var(--success)"></i>
+                  </div>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)"><strong style="color: var(--success)">LAN</strong> Interna</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumo em tabela -->
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-cube"></i> Dispositivo</th>
+                <th><i class="fas fa-bolt"></i> Função Principal</th>
+                <th><i class="fas fa-tag"></i> Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--primary)">VPN Router</strong></td>
+                <td>Conexão segura para usuários remotos</td>
+                <td>Cisco ASA</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--info)">NGFW</strong></td>
+                <td>Inspeção profunda, NGIPS, AMP, filtragem URL</td>
+                <td>Cisco Firepower</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--warning)">NAC</strong></td>
+                <td>Autenticação, autorização e políticas de acesso</td>
+                <td>Cisco ISE</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica de Estudo:</strong> Em uma arquitetura de segurança moderna, esses dispositivos trabalham em conjunto para fornecer
+            <strong>defesa em profundidade</strong>. O VPN Router protege o acesso remoto, o NGFW filtra o tráfego e o NAC controla quem
+            pode acessar a rede.
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.1.3 ===== -->
+        <section id="secao10-1-3" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-desktop"></i>
+            <span class="section-number">10.1.3</span> Proteção de Endpoints
+          </h2>
+
+          <!-- Card Principal -->
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-shield-virus"></i>
+            </div>
+            <div class="content">
+              <p>
+                Os dispositivos de LAN, como <strong>comutadores</strong>, <strong>controladores de rede local sem fio (WLCs)</strong> e
+                outros dispositivos de <strong>ponto de acesso (AP)</strong> interconectam terminais. A maioria desses dispositivos é
+                suscetível aos ataques relacionados à LAN que são abordados neste módulo.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card: Ameaças Internas -->
+          <div class="card" style="border-left: 4px solid var(--danger); margin-bottom: 1.5rem">
+            <h3 style="color: var(--danger); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-user-secret"></i> Ameaças Internas
+            </h3>
+            <p style="color: var(--text-dim)">
+              Mas muitos ataques também podem se originar de <strong>dentro da rede</strong>. Se um host interno estiver infiltrado, pode se
+              tornar um ponto de partida para um agente de ameaças obter acesso a dispositivos críticos do sistema, como
+              <strong>servidores e dados confidenciais</strong>.
+            </p>
+          </div>
+
+          <!-- Card: O que são Endpoints -->
+          <div class="card" style="border-left: 4px solid var(--info); margin-bottom: 1.5rem">
+            <h3 style="color: var(--info); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-laptop"></i> O que são Endpoints?
+            </h3>
+            <p style="color: var(--text-dim)">
+              Os <strong>endpoints</strong> são hosts que geralmente consistem em
+              <strong>laptops, desktops, servidores e telefones IP</strong>, além de dispositivos próprios de funcionários que geralmente
+              são chamados de <strong>traga seus próprios dispositivos (BYODs)</strong>.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem">
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-laptop"></i> Laptops
+              </span>
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-desktop"></i> Desktops
+              </span>
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-server"></i> Servidores
+              </span>
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-phone"></i> Telefones IP
+              </span>
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-mobile-alt"></i> BYODs
+              </span>
+            </div>
+          </div>
+
+          <!-- Card: Proteção de Endpoints -->
+          <div class="card" style="border-left: 4px solid var(--primary); margin-bottom: 1.5rem">
+            <h3 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-tools"></i> Proteção de Endpoints
+            </h3>
+            <p style="color: var(--text-dim)">
+              Os endpoints são particularmente suscetíveis a ataques relacionados a <strong>malware</strong> originados por
+              <strong>e-mail</strong> ou <strong>navegação na web</strong>. Esses endpoints geralmente usam recursos de segurança
+              tradicionais para hosts, como:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.8rem 0">
+              <span
+                style="
+                  background: rgba(0, 255, 136, 0.05);
+                  color: var(--text-dim);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid var(--border);
+                "
+              >
+                <i class="fas fa-shield-alt"></i> Antivírus/Antimalware
+              </span>
+              <span
+                style="
+                  background: rgba(0, 255, 136, 0.05);
+                  color: var(--text-dim);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid var(--border);
+                "
+              >
+                <i class="fas fa-fire"></i> Firewalls de Host
+              </span>
+              <span
+                style="
+                  background: rgba(0, 255, 136, 0.05);
+                  color: var(--text-dim);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid var(--border);
+                "
+              >
+                <i class="fas fa-robot"></i> HIPS
+              </span>
+            </div>
+            <p style="color: var(--text-dim); margin-top: 0.5rem">
+              No entanto, hoje os endpoints são melhor protegidos por uma combinação de:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.8rem 0">
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-id-card"></i> NAC
+              </span>
+              <span
+                style="
+                  background: rgba(0, 255, 136, 0.1);
+                  color: var(--primary);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 255, 136, 0.2);
+                "
+              >
+                <i class="fas fa-bug"></i> AMP
+              </span>
+              <span
+                style="
+                  background: rgba(0, 170, 255, 0.1);
+                  color: var(--info);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 170, 255, 0.2);
+                "
+              >
+                <i class="fas fa-envelope"></i> ESA
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-globe"></i> WSA
+              </span>
+            </div>
+            <div class="alert alert-info" style="margin-top: 0.5rem">
+              <i class="fas fa-info-circle"></i>
+              Produtos para <strong>Proteção Avançada contra Malware (AMP)</strong> incluem soluções para endpoints, como o
+              <strong>Cisco AMP para Endpoints</strong>.
+            </div>
+          </div>
+
+          <!-- ===== TOPOLOGIA COMPLETA ===== -->
+          <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin: 2rem 0 1rem 0">
+            <i class="fas fa-sitemap" style="color: var(--primary)"></i> Topologia de Segurança - Proteção de Endpoints
+          </h4>
+
+          <div
+            style="
+              background: rgba(0, 0, 0, 0.4);
+              border-radius: 16px;
+              border: 1px solid var(--border);
+              padding: 2rem 1rem;
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+              position: relative;
+            "
+          >
+            <div style="min-width: 900px; display: flex; flex-direction: column; gap: 1.5rem">
+              <!-- Linha 1: Internet até NAC -->
+              <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: nowrap">
+                <!-- Internet -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <i class="fas fa-globe" style="font-size: 2.5rem; color: var(--info)"></i>
+                  <span style="font-size: 0.6rem; color: var(--text-dim)">Internet</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- Usuário Remoto -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <i class="fas fa-user-circle" style="font-size: 2.5rem; color: var(--primary)"></i>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    >Usuário Remoto<br /><strong style="color: var(--primary)">VPN Client</strong></span
+                  >
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- VPN Router -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(0, 255, 136, 0.1);
+                      border: 2px solid var(--primary);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-router" style="font-size: 1.8rem; color: var(--primary)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    ><strong style="color: var(--primary)">VPN</strong> Router</span
+                  >
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- NGFW -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(0, 170, 255, 0.1);
+                      border: 2px solid var(--info);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-firewall" style="font-size: 1.8rem; color: var(--info)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    ><strong style="color: var(--info)">NGFW</strong></span
+                  >
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- NAC / ISE -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(255, 204, 0, 0.1);
+                      border: 2px solid var(--warning);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-id-card" style="font-size: 1.8rem; color: var(--warning)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    ><strong style="color: var(--warning)">NAC</strong> AAA/ISE</span
+                  >
+                </div>
+              </div>
+
+              <!-- Linha 2: ESA/WSA + WLC + Endpoints -->
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 1.5rem;
+                  flex-wrap: nowrap;
+                  padding-top: 1rem;
+                  border-top: 1px dashed var(--border);
+                "
+              >
+                <!-- ESA/WSA -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(0, 170, 255, 0.05);
+                      border: 2px solid var(--border);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 0.3rem;
+                    "
+                  >
+                    <i class="fas fa-envelope" style="font-size: 1.2rem; color: var(--info)"></i>
+                    <i class="fas fa-globe" style="font-size: 1.2rem; color: var(--warning)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    ><strong style="color: var(--text)">ESA</strong> / <strong style="color: var(--text)">WSA</strong></span
+                  >
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- WLC -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(0, 255, 136, 0.05);
+                      border: 2px solid var(--border);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-wifi" style="font-size: 1.8rem; color: var(--success)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    ><strong style="color: var(--success)">WLC</strong></span
+                  >
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- Endpoints com AMP -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 55px;
+                      height: 55px;
+                      border-radius: 12px;
+                      background: rgba(0, 255, 136, 0.1);
+                      border: 2px solid var(--primary);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 0.2rem;
+                    "
+                  >
+                    <i class="fas fa-laptop" style="font-size: 1.2rem; color: var(--primary)"></i>
+                    <i class="fas fa-mobile-alt" style="font-size: 1.2rem; color: var(--primary)"></i>
+                    <i class="fas fa-server" style="font-size: 1.2rem; color: var(--primary)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center"
+                    >Endpoints com e sem fio<br /><strong style="color: var(--primary)">AMP Protegidos</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Indicador de Scroll -->
+            <div
+              style="
+                margin-top: 1rem;
+                padding: 0.3rem;
+                background: rgba(34, 34, 34, 0.3);
+                border-radius: 8px;
+                text-align: center;
+                border: 1px solid var(--border);
+                display: none;
+              "
+              id="scrollIndicatorTopology"
+            >
+              <span style="color: var(--text-dim); font-size: 0.7rem">
+                <i class="fas fa-arrows-alt-h"></i> Arraste para o lado para ver toda a topologia
+              </span>
+            </div>
+          </div>
+
+          <!-- Script para indicador de scroll -->
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const container = document.querySelector('#secao10-1-3 [style*="overflow-x: auto"]')
+              if (container) {
+                const checkScroll = () => {
+                  const indicator = document.getElementById('scrollIndicatorTopology')
+                  if (indicator && container.scrollWidth > container.clientWidth) {
+                    indicator.style.display = 'block'
+                  } else if (indicator) {
+                    indicator.style.display = 'none'
+                  }
+                }
+                checkScroll()
+                window.addEventListener('resize', checkScroll)
+                container.addEventListener('scroll', checkScroll)
+              }
+            })
+          </script>
+
+          <!-- Resumo em Tabela -->
+          <table class="table-custom" style="margin-top: 2rem">
+            <thead>
+              <tr>
+                <th><i class="fas fa-cube"></i> Dispositivo/Solução</th>
+                <th><i class="fas fa-bolt"></i> Função</th>
+                <th><i class="fas fa-tag"></i> Exemplo Cisco</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--primary)">VPN Router</strong></td>
+                <td>Conexão segura para usuários remotos</td>
+                <td>Cisco ASA</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--info)">NGFW</strong></td>
+                <td>Inspeção profunda, NGIPS, AMP, filtragem URL</td>
+                <td>Cisco Firepower</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--warning)">NAC / ISE</strong></td>
+                <td>Autenticação, autorização e políticas de acesso</td>
+                <td>Cisco ISE</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--info)">ESA</strong></td>
+                <td>Segurança de e-mail (Email Security Appliance)</td>
+                <td>Cisco ESA</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--warning)">WSA</strong></td>
+                <td>Segurança de web (Web Security Appliance)</td>
+                <td>Cisco WSA</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--success)">WLC</strong></td>
+                <td>Controlador de rede local sem fio</td>
+                <td>Cisco WLC</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--primary)">AMP</strong></td>
+                <td>Proteção Avançada contra Malware para endpoints</td>
+                <td>Cisco AMP para Endpoints</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Arquitetura de Segurança Completa:</strong> Esta topologia representa todos os dispositivos de segurança de rede e
+            soluções de endpoints discutidos neste módulo, formando uma <strong>defesa em profundidade</strong> contra ameaças internas e
+            externas.
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.1.5 ===== -->
+        <section id="secao10-1-5" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-globe"></i>
+            <span class="section-number">10.1.5</span> Cisco Web Security Appliance (WSA)
+          </h2>
+
+          <!-- Card Principal -->
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-shield-alt" style="color: var(--warning)"></i>
+            </div>
+            <div class="content">
+              <p>
+                O <strong>Cisco Web Security Appliance (WSA)</strong> é uma tecnologia de mitigação para ameaças baseadas na Web. Ajuda as
+                organizações a enfrentar os desafios de proteger e controlar o tráfego da Web.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card: Funcionalidades -->
+          <div class="card" style="border-left: 4px solid var(--warning); margin-bottom: 1.5rem">
+            <h3 style="color: var(--warning); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-sliders-h"></i> Funcionalidades do Cisco WSA
+            </h3>
+            <p style="color: var(--text-dim)">
+              O Cisco WSA combina <strong>proteção avançada contra malware</strong>,
+              <strong>visibilidade e controle de aplicativos</strong>, controles de política de uso aceitável e <strong>relatórios</strong>.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1rem 0">
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-ban"></i> Lista Negra de URLs
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-filter"></i> Filtragem de URL
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-bug"></i> Varredura de Malware
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-tags"></i> Categorização de URL
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-mobile-alt"></i> Filtragem de Apps Web
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 0.8rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-lock"></i> Criptografia/Descriptografia
+              </span>
+            </div>
+          </div>
+
+          <!-- Card: Controle de Acesso -->
+          <div class="card" style="border-left: 4px solid var(--info); margin-bottom: 1.5rem">
+            <h3 style="color: var(--info); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-users-cog"></i> Controle de Acesso à Internet
+            </h3>
+            <p style="color: var(--text-dim)">
+              O Cisco WSA fornece <strong>controle completo</strong> sobre como os usuários acessam a Internet. Certos recursos e aplicações
+              podem ser:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.8rem 0">
+              <span
+                style="
+                  background: rgba(0, 255, 136, 0.1);
+                  color: var(--success);
+                  padding: 0.3rem 1rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(0, 255, 136, 0.2);
+                "
+              >
+                <i class="fas fa-check"></i> Permitidos
+              </span>
+              <span
+                style="
+                  background: rgba(255, 204, 0, 0.1);
+                  color: var(--warning);
+                  padding: 0.3rem 1rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 204, 0, 0.2);
+                "
+              >
+                <i class="fas fa-clock"></i> Restritos (tempo/banda)
+              </span>
+              <span
+                style="
+                  background: rgba(255, 68, 68, 0.1);
+                  color: var(--danger);
+                  padding: 0.3rem 1rem;
+                  border-radius: 50px;
+                  font-size: 0.8rem;
+                  border: 1px solid rgba(255, 68, 68, 0.2);
+                "
+              >
+                <i class="fas fa-ban"></i> Bloqueados
+              </span>
+            </div>
+            <p style="color: var(--text-dim); font-size: 0.9rem">
+              <i class="fas fa-comment-dots" style="color: var(--info)"></i> Exemplos: bate-papo, mensagens instantâneas, vídeo e áudio
+              podem ser controlados de acordo com os requisitos da organização.
+            </p>
+          </div>
+
+          <!-- Diagrama WSA -->
+          <div style="margin: 2rem 0">
+            <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem">
+              <i class="fas fa-diagram-project" style="color: var(--warning)"></i> Fluxo de Proteção - Cisco WSA
+            </h4>
+            <div
+              style="
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 16px;
+                border: 1px solid var(--border);
+                padding: 1.5rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+              "
+            >
+              <div style="min-width: 700px; display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: nowrap">
+                <!-- Usuário -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <i class="fas fa-user" style="font-size: 2rem; color: var(--text-dim)"></i>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center">Usuário<br />Smartphone</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- Solicitação Web -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="padding: 0.5rem 1rem; background: rgba(255, 204, 0, 0.05); border-radius: 8px; border: 1px solid var(--border)"
+                  >
+                    <i class="fas fa-globe" style="color: var(--warning)"></i>
+                    <span style="color: var(--text-dim); font-size: 0.6rem; margin-left: 0.3rem">HTTP</span>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim); text-align: center">http://example.com/bad</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- Firewall -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="
+                      width: 50px;
+                      height: 50px;
+                      border-radius: 12px;
+                      background: rgba(0, 170, 255, 0.1);
+                      border: 2px solid var(--info);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-firewall" style="font-size: 1.5rem; color: var(--info)"></i>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim)">Firewall</span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- WSA -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 80px">
+                  <div
+                    style="
+                      width: 60px;
+                      height: 60px;
+                      border-radius: 12px;
+                      background: rgba(255, 204, 0, 0.1);
+                      border: 2px solid var(--warning);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      position: relative;
+                    "
+                  >
+                    <i class="fas fa-globe" style="font-size: 1.5rem; color: var(--warning)"></i>
+                    <span
+                      style="
+                        position: absolute;
+                        bottom: -6px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: var(--danger);
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 0.1rem 0.4rem;
+                        font-size: 0.5rem;
+                        font-weight: 700;
+                        white-space: nowrap;
+                      "
+                      >BLOCK</span
+                    >
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim)"><strong style="color: var(--warning)">Cisco WSA</strong></span>
+                </div>
+
+                <div style="color: var(--text-dim); font-size: 1.2rem">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <!-- Resultado -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 70px">
+                  <div
+                    style="padding: 0.5rem 0.8rem; background: rgba(255, 68, 68, 0.1); border-radius: 8px; border: 1px solid var(--danger)"
+                  >
+                    <i class="fas fa-times-circle" style="color: var(--danger); font-size: 1.5rem"></i>
+                    <span style="color: var(--danger); font-size: 0.55rem; margin-left: 0.3rem; font-weight: 700">ACESSO NEGADO</span>
+                  </div>
+                  <span style="font-size: 0.55rem; color: var(--text-dim)">Site na Lista Negra</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Legenda do Fluxo -->
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1.5rem;
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(0, 0, 0, 0.3);
+                border-radius: 12px;
+                border: 1px solid var(--border);
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span style="width: 12px; height: 12px; background: var(--info); border-radius: 50%; display: inline-block"></span>
+                <span style="color: var(--text-dim); font-size: 0.8rem"> <strong>1.</strong> Usuário tenta acessar site </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span style="width: 12px; height: 12px; background: var(--warning); border-radius: 50%; display: inline-block"></span>
+                <span style="color: var(--text-dim); font-size: 0.8rem"> <strong>2.</strong> Firewall encaminha para WSA </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span style="width: 12px; height: 12px; background: var(--danger); border-radius: 50%; display: inline-block"></span>
+                <span style="color: var(--text-dim); font-size: 0.8rem"> <strong>3.</strong> WSA avalia e bloqueia (Lista Negra) </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <strong>Proteção Completa:</strong> O Cisco WSA trabalha em conjunto com o Cisco ESA para fornecer uma
+            <strong>defesa em camadas</strong> contra ameaças baseadas em e-mail e Web.
+          </div>
+        </section>
+        <!-- ===== SEÇÃO 10.2.1 ===== -->
+        <section id="secao10-2-1" class="section">
+          <h2 class="section-title">
+            <i class="fas fa-key"></i>
+            <span class="section-number">10.2.1</span> Autenticação com uma senha local
+          </h2>
+
+          <!-- Card Principal -->
+          <div class="card-icon">
+            <div class="icon">
+              <i class="fas fa-user-lock"></i>
+            </div>
+            <div class="content">
+              <p>
+                No tópico anterior, você aprendeu que um dispositivo <strong>NAC</strong> fornece serviços <strong>AAA</strong>. Neste
+                tópico, você aprenderá mais sobre o AAA e as maneiras de controlar o acesso.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card: Método mais simples (menos seguro) -->
+          <div class="card" style="border-left: 4px solid var(--danger); margin-bottom: 1.5rem">
+            <h3 style="color: var(--danger); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-exclamation-triangle"></i> Método mais simples (e menos seguro)
+            </h3>
+            <p style="color: var(--text-dim)">
+              O método mais simples de autenticação de acesso remoto é configurar uma combinação de
+              <strong>login e senha</strong> no console, linhas vty e portas auxiliares. Este método é o <strong>mais fácil</strong> de
+              implementar, mas também é o <strong style="color: var(--danger)">mais fraco e menos seguro</strong>.
+            </p>
+            <div
+              style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 12px;
+                padding: 0.8rem 1rem;
+                margin-top: 0.8rem;
+                border-left: 3px solid var(--danger);
+              "
+            >
+              <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0">
+                <i class="fas fa-times-circle" style="color: var(--danger)"></i>
+                Este método <strong>não oferece responsabilidade</strong> e a senha é enviada em
+                <strong style="color: var(--danger)">texto sem formatação</strong>. Qualquer pessoa com a senha pode obter acesso ao
+                dispositivo.
+              </p>
+            </div>
+          </div>
+
+          <!-- Terminal: Configuração básica (insegura) -->
+          <div style="margin: 1.5rem 0">
+            <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+              <i class="fas fa-code" style="color: var(--danger)"></i> Configuração Básica (Insegura)
+            </h4>
+            <div class="terminal">
+              <pre>
+<span class="prompt">R1(config)#</span> <strong>line vty 0 4</strong>
+<span class="prompt">R1(config-line)#</span> <strong>password ci5c0</strong>
+<span class="prompt">R1(config-line)#</span> <strong>login</strong>
+<span class="output">% Senha configurada em texto plano - vulnerável a sniffing</span>
+<span class="prompt">R1(config-line)#</span> <strong>exit</strong>
+<span class="prompt">R1(config)#</span></pre>
+            </div>
+            <div class="alert alert-danger" style="margin-top: 0.5rem">
+              <i class="fas fa-skull"></i>
+              <strong>Vulnerabilidade:</strong> A senha é transmitida em <strong>texto claro</strong> e pode ser capturada por sniffers de
+              rede. Qualquer pessoa com acesso à senha pode se passar por qualquer usuário, sem rastreabilidade.
+            </div>
+          </div>
+
+          <!-- Card: SSH - Método mais seguro -->
+          <div class="card" style="border-left: 4px solid var(--success); margin-bottom: 1.5rem">
+            <h3 style="color: var(--success); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-shield-alt"></i> SSH - Método mais seguro
+            </h3>
+            <p style="color: var(--text-dim)">O <strong>SSH</strong> é uma forma mais segura de acesso remoto:</p>
+            <ul style="list-style: none; padding: 0; margin: 0.8rem 0">
+              <li
+                style="
+                  padding: 0.5rem 0;
+                  padding-left: 1.8rem;
+                  position: relative;
+                  color: var(--text-dim);
+                  border-bottom: 1px solid rgba(34, 34, 34, 0.3);
+                "
+              >
+                <span style="position: absolute; left: 0; color: var(--success)">✅</span>
+                Requer um <strong>nome de usuário e uma senha</strong>, ambos <strong>criptografados</strong> durante a transmissão
+              </li>
+              <li
+                style="
+                  padding: 0.5rem 0;
+                  padding-left: 1.8rem;
+                  position: relative;
+                  color: var(--text-dim);
+                  border-bottom: 1px solid rgba(34, 34, 34, 0.3);
+                "
+              >
+                <span style="position: absolute; left: 0; color: var(--success)">✅</span>
+                O nome de usuário e a senha podem ser autenticados pelo método do <strong>banco de dados local</strong>
+              </li>
+              <li style="padding: 0.5rem 0; padding-left: 1.8rem; position: relative; color: var(--text-dim)">
+                <span style="position: absolute; left: 0; color: var(--success)">✅</span>
+                Oferece mais <strong>responsabilidade</strong> porque o nome de usuário é registrado quando um usuário faz login
+              </li>
+            </ul>
+          </div>
+
+          <!-- Terminal: Configuração SSH -->
+          <div style="margin: 1.5rem 0">
+            <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem">
+              <i class="fas fa-lock" style="color: var(--success)"></i> Configuração SSH + Banco de Dados Local
+            </h4>
+            <div class="terminal">
+              <pre>
+<span class="prompt">R1(config)#</span> <strong>ip domain-name example.com</strong>
+<span class="prompt">R1(config)#</span> <strong>crypto key generate rsa general-keys modulus 2048</strong>
+<span class="output">% Gerando chave RSA de 2048 bits...</span>
+<span class="output">% Chave RSA gerada com sucesso</span>
+<span class="prompt">R1(config)#</span> <strong>username Admin secret Str0ng3rPa55w0rd</strong>
+<span class="prompt">R1(config)#</span> <strong>ip ssh version 2</strong>
+<span class="prompt">R1(config)#</span> <strong>line vty 0 4</strong>
+<span class="prompt">R1(config-line)#</span> <strong>transport input ssh</strong>
+<span class="prompt">R1(config-line)#</span> <strong>login local</strong>
+<span class="output">% SSH configurado com sucesso - acesso criptografado</span>
+<span class="prompt">R1(config-line)#</span> <strong>exit</strong>
+<span class="prompt">R1(config)#</span></pre>
+            </div>
+            <div class="alert alert-success" style="margin-top: 0.5rem">
+              <i class="fas fa-check-circle"></i>
+              <strong>Seguro:</strong> O SSH utiliza <strong>criptografia</strong> para proteger as credenciais durante a transmissão e
+              oferece <strong>rastreabilidade</strong> através do registro do nome de usuário.
+            </div>
+          </div>
+
+          <!-- Card: Limitações do Banco de Dados Local -->
+          <div class="card" style="border-left: 4px solid var(--warning); margin-bottom: 1.5rem">
+            <h3 style="color: var(--warning); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-exclamation-circle"></i> Limitações do Banco de Dados Local
+            </h3>
+            <p style="color: var(--text-dim)">O método de banco de dados local possui algumas limitações:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem">
+              <div
+                style="background: rgba(255, 204, 0, 0.05); border-radius: 12px; padding: 1rem; border: 1px solid rgba(255, 204, 0, 0.2)"
+              >
+                <i class="fas fa-database" style="color: var(--warning); font-size: 1.5rem"></i>
+                <h5 style="color: var(--text); margin: 0.5rem 0 0.3rem 0">Gerenciamento Distribuído</h5>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0">
+                  As contas de usuário devem ser configuradas <strong>localmente em cada dispositivo</strong>. Em um ambiente corporativo de
+                  grande porte com vários roteadores e switches para gerenciar, pode levar <strong>tempo</strong> para implementar e alterar
+                  os bancos de dados locais em cada dispositivo.
+                </p>
+              </div>
+              <div
+                style="background: rgba(255, 204, 0, 0.05); border-radius: 12px; padding: 1rem; border: 1px solid rgba(255, 204, 0, 0.2)"
+              >
+                <i class="fas fa-exclamation-triangle" style="color: var(--warning); font-size: 1.5rem"></i>
+                <h5 style="color: var(--text); margin: 0.5rem 0 0.3rem 0">Sem Fallback</h5>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0">
+                  A configuração do banco de dados local <strong>não fornece método de autenticação reserva (fallback)</strong>. Por
+                  exemplo, e se o administrador esquecer o nome de usuário e a senha para este dispositivo? Sem o método alternativo
+                  disponível para autenticação, a <strong>recuperação de senha</strong> é a única opção.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Solução Centralizada -->
+          <div class="card" style="border-left: 4px solid var(--primary); margin-bottom: 1.5rem">
+            <h3 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem">
+              <i class="fas fa-server"></i> Solução: Servidor Centralizado
+            </h3>
+            <p style="color: var(--text-dim)">
+              Uma solução melhor é fazer com que <strong>todos os dispositivos</strong> se refiram ao
+              <strong>mesmo banco de dados de nomes de usuário e senhas</strong> de um servidor central.
+            </p>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 2rem;
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(0, 255, 136, 0.05);
+                border-radius: 12px;
+                border: 1px solid var(--border);
+                flex-wrap: wrap;
+              "
+            >
+              <div style="display: flex; flex-direction: column; align-items: center">
+                <i class="fas fa-server" style="font-size: 2.5rem; color: var(--primary)"></i>
+                <span style="color: var(--text-dim); font-size: 0.7rem; margin-top: 0.3rem">Servidor AAA</span>
+              </div>
+              <div style="color: var(--text-dim); font-size: 1.5rem">
+                <i class="fas fa-arrows-alt-h"></i>
+              </div>
+              <div style="display: flex; gap: 1.5rem">
+                <div style="display: flex; flex-direction: column; align-items: center">
+                  <i class="fas fa-router" style="font-size: 1.8rem; color: var(--text-dim)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.6rem">R1</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center">
+                  <i class="fas fa-server" style="font-size: 1.8rem; color: var(--text-dim)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.6rem">SW1</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center">
+                  <i class="fas fa-router" style="font-size: 1.8rem; color: var(--text-dim)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.6rem">R2</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center">
+                  <i class="fas fa-server" style="font-size: 1.8rem; color: var(--text-dim)"></i>
+                  <span style="color: var(--text-dim); font-size: 0.6rem">SW2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabela Comparativa -->
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th><i class="fas fa-cube"></i> Método</th>
+                <th><i class="fas fa-bolt"></i> Segurança</th>
+                <th><i class="fas fa-check-circle"></i> Vantagens</th>
+                <th><i class="fas fa-times-circle"></i> Desvantagens</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--danger)">Senha Local (Telnet)</strong></td>
+                <td><span style="color: var(--danger)">🔴 Baixa</span></td>
+                <td>Fácil implementação</td>
+                <td>Texto plano, sem rastreabilidade</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--success)">SSH + DB Local</strong></td>
+                <td><span style="color: var(--warning)">🟡 Média</span></td>
+                <td>Criptografia, rastreabilidade</td>
+                <td>Gerenciamento distribuído, sem fallback</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--primary)">Servidor Centralizado</strong></td>
+                <td><span style="color: var(--success)">🟢 Alta</span></td>
+                <td>Gerenciamento central, fallback, escala</td>
+                <td>Requer infraestrutura adicional</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="alert alert-info">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Dica de Estudo:</strong> Em ambientes corporativos, a melhor prática é utilizar
+            <strong>servidores AAA centralizados</strong> (como RADIUS ou TACACS+) para gerenciar autenticação, autorização e contabilização
+            de forma escalável e segura.
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <footer>
+        <div class="container">
+          <p>
+            <i class="fas fa-shield-alt" style="color: var(--primary)"></i>
+            Cisco CCNA 2 (SRWE) - Módulo 10: Segurança de LAN
+            <br />
+            <span style="color: var(--text-dim); font-size: 0.85rem">
+              <i class="fas fa-code"></i> Comandos Cisco IOS em destaque | <i class="fas fa-terminal"></i> CLI Interativa
+            </span>
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ===== JAVASCRIPT DO MENU ===== -->
+    <script>
+      // ===== SIDEBAR MENU =====
+      class SidebarMenu {
+        constructor() {
+          this.sidebar = document.getElementById('sidebar')
+          this.overlay = document.getElementById('sidebarOverlay')
+          this.openBtn = document.getElementById('openMenu')
+          this.closeBtn = document.getElementById('closeMenu')
+          this.init()
+        }
+
+        init() {
+          if (!this.sidebar) return
+
+          if (this.openBtn) {
+            this.openBtn.addEventListener('click', () => this.open())
+          }
+          if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', () => this.close())
+          }
+          if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.close())
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.sidebar.classList.contains('open')) {
+              this.close()
+            }
+          })
+
+          const links = document.querySelectorAll('.sidebar .nav-modules a')
+          links.forEach((link) => {
+            link.addEventListener('click', () => {
+              this.close()
+              links.forEach((l) => l.classList.remove('active'))
+              link.classList.add('active')
+            })
+          })
+        }
+
+        open() {
+          this.sidebar.classList.add('open')
+          this.overlay.classList.add('active')
+          document.body.style.overflow = 'hidden'
+        }
+
+        close() {
+          this.sidebar.classList.remove('open')
+          this.overlay.classList.remove('active')
+          document.body.style.overflow = ''
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        new SidebarMenu()
+
+        // ===== DESTAQUE DO LINK ATIVO NA SIDEBAR =====
+        const links = document.querySelectorAll('.sidebar .nav-modules a')
+        const sections = document.querySelectorAll('.section')
+
+        function updateActiveLink() {
+          let current = ''
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 100
+            const sectionBottom = sectionTop + section.offsetHeight
+            if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+              current = section.getAttribute('id')
+            }
+          })
+
+          links.forEach((link) => {
+            link.classList.remove('active')
+            if (link.getAttribute('href') === '#' + current) {
+              link.classList.add('active')
+            }
+          })
+        }
+
+        window.addEventListener('scroll', updateActiveLink)
+        updateActiveLink()
+      })
+
+      // ===== CARDS INTERATIVOS DE SEGURANÇA =====
+      document.addEventListener('DOMContentLoaded', function () {
+        const devices = document.querySelectorAll('.security-device')
+
+        devices.forEach((device) => {
+          device.addEventListener('click', function () {
+            const description = this.querySelector('.device-description')
+            const icon = this.querySelector('.fa-chevron-down')
+
+            // Fecha todas as outras descrições
+            document.querySelectorAll('.device-description').forEach((desc) => {
+              if (desc !== description) {
+                desc.style.display = 'none'
+                const otherIcon = desc.closest('.security-device').querySelector('.fa-chevron-down')
+                if (otherIcon) {
+                  otherIcon.style.transform = 'rotate(0deg)'
+                }
+              }
+            })
+
+            // Alterna a descrição atual
+            if (description.style.display === 'block') {
+              description.style.display = 'none'
+              if (icon) icon.style.transform = 'rotate(0deg)'
+            } else {
+              description.style.display = 'block'
+              if (icon) icon.style.transform = 'rotate(180deg)'
+              // Scroll suave para o card
+              this.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
