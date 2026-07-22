@@ -305,6 +305,7 @@
         <li><a href="#secao10-2-4"><i class="fas fa-user-lock"></i> 10.2.4 Autorização AAA</a></li>
         <li><a href="#secao10-2-5"><i class="fas fa-clipboard-list"></i> 10.2.5 Accounting AAA</a></li>
         <li><a href="#secao10-2-6"><i class="fas fa-wifi"></i> 10.2.6 802.1X</a></li>
+        <li><a href="#secao10-3-1"><i class="fas fa-layer-group"></i> 10.3.1 Vulnerabilidades da Camada 2</a></li>
       </ul>
     </div>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -6675,6 +6676,401 @@
             </ul>
         </div>
     </div>
+</section>
+<!-- ===== SEÇÃO 10.3.1 ===== -->
+<section id="secao10-3-1" class="section">
+    <h2 class="section-title">
+        <i class="fas fa-layer-group"></i>
+        <span class="section-number">10.3.1</span> Vulnerabilidades da Camada 2
+    </h2>
+
+    <!-- Card Principal -->
+    <div class="card-icon">
+        <div class="icon">
+            <i class="fas fa-shield-virus" style="color: var(--danger);"></i>
+        </div>
+        <div class="content">
+            <p>
+                Os dois tópicos anteriores discutiram a <strong>proteção de endpoints</strong>. Neste tópico, 
+                você continuará aprendendo sobre maneiras de proteger a LAN, concentrando-se nos 
+                <strong>quadros encontrados na camada de enlace de dados (Camada 2)</strong> e no switch.
+            </p>
+        </div>
+    </div>
+
+    <!-- Card: Importância da Camada 2 -->
+    <div class="card" style="border-left: 4px solid var(--danger); margin-bottom: 1.5rem;">
+        <h3 style="color: var(--danger); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-exclamation-triangle"></i> Por que a Camada 2 é Crítica?
+        </h3>
+        <p style="color: var(--text-dim);">
+            Lembre-se de que o modelo de referência OSI é dividido em <strong>sete camadas</strong>, que 
+            funcionam independentemente uma da outra. Os administradores de rede implementam rotineiramente 
+            soluções de segurança para proteger os elementos da <strong>camada 3 até a camada 7</strong>.
+        </p>
+        <div style="
+            background: rgba(255, 68, 68, 0.05);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            margin-top: 0.8rem;
+            border-left: 3px solid var(--danger);
+        ">
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin: 0;">
+                <i class="fas fa-skull" style="color: var(--danger);"></i>
+                No entanto, se a <strong style="color: var(--danger);">camada 2 estiver comprometida</strong>, 
+                <strong style="color: var(--text);">todas as camadas acima também serão afetadas</strong>.
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== MODELO OSI - CAMADA 2 EM DESTAQUE ===== -->
+    <div style="margin: 2rem 0;">
+        <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-diagram-project" style="color: var(--primary);"></i> Modelo OSI - Foco na Camada 2
+        </h4>
+
+        <div style="
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        ">
+            <div style="
+                min-width: 600px;
+                display: grid;
+                grid-template-columns: 80px 1fr 120px;
+                gap: 0.5rem;
+                align-items: center;
+            ">
+                <!-- Cabeçalho -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.7rem; font-weight: 700; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+                    Camada
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.7rem; font-weight: 700; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+                    Nome
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.7rem; font-weight: 700; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+                    Elementos
+                </div>
+
+                <!-- Camada 7 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.05); border-radius: 4px;">
+                    7
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.05); border-radius: 4px;">
+                    Aplicação
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.05); border-radius: 4px;">
+                    HTTP, HTTPS, SSH
+                </div>
+
+                <!-- Camada 6 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    6
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Apresentação
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    SSL, TLS
+                </div>
+
+                <!-- Camada 5 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    5
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Sessão
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Portas
+                </div>
+
+                <!-- Camada 4 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    4
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Transporte
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    TCP, UDP
+                </div>
+
+                <!-- Camada 3 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    3
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Rede
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Endereços IP
+                </div>
+
+                <!-- CAMADA 2 - DESTAQUE -->
+                <div style="
+                    text-align: center; 
+                    font-size: 0.8rem; 
+                    font-weight: 700; 
+                    padding: 0.5rem 0; 
+                    background: rgba(255, 68, 68, 0.15);
+                    border-radius: 4px;
+                    border: 2px solid var(--danger);
+                ">
+                    <span style="color: var(--danger);">2</span>
+                </div>
+                <div style="
+                    color: var(--text); 
+                    font-size: 0.8rem; 
+                    padding: 0.5rem 0.5rem; 
+                    background: rgba(255, 68, 68, 0.15);
+                    border-radius: 4px;
+                    border: 2px solid var(--danger);
+                    font-weight: 700;
+                ">
+                    <span style="color: var(--danger);">Enlace de Dados</span>
+                </div>
+                <div style="
+                    color: var(--text); 
+                    font-size: 0.7rem; 
+                    text-align: center; 
+                    padding: 0.5rem 0.5rem; 
+                    background: rgba(255, 68, 68, 0.15);
+                    border-radius: 4px;
+                    border: 2px solid var(--danger);
+                ">
+                    <span style="color: var(--danger); font-weight: 700;">Quadros Ethernet</span>
+                </div>
+
+                <!-- Camada 1 -->
+                <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    1
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Física
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.7rem; text-align: center; padding: 0.3rem 0.5rem; background: rgba(0, 170, 255, 0.03); border-radius: 4px;">
+                    Links físicos
+                </div>
+
+                <!-- Setas indicando comprometimento -->
+                <div style="grid-column: 1 / -1; text-align: center; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; color: var(--danger);">
+                        <i class="fas fa-arrow-up"></i>
+                        <span style="color: var(--danger); font-weight: 700; font-size: 0.8rem;">
+                            ⚠️ Se a Camada 2 é comprometida → <strong style="color: var(--text);">Todas as camadas superiores são afetadas</strong>
+                        </span>
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card: Consequências -->
+    <div class="card" style="border-left: 4px solid var(--danger); margin-bottom: 1.5rem;">
+        <h3 style="color: var(--danger); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-skull-crossbones"></i> Consequências de um Ataque à Camada 2
+        </h3>
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        ">
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+            ">
+                <i class="fas fa-user-secret" style="color: var(--danger);"></i>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.3rem;">
+                    <strong style="color: var(--text);">Captura de Quadros</strong><br>
+                    Agente de ameaças captura quadros da Camada 2
+                </p>
+            </div>
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+            ">
+                <i class="fas fa-ban" style="color: var(--danger);"></i>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.3rem;">
+                    <strong style="color: var(--text);">Segurança Inútil</strong><br>
+                    Toda segurança das camadas superiores é inútil
+                </p>
+            </div>
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+            ">
+                <i class="fas fa-database" style="color: var(--danger);"></i>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.3rem;">
+                    <strong style="color: var(--text);">Danos à Infraestrutura</strong><br>
+                    Danos significativos na infraestrutura da LAN
+                </p>
+            </div>
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 8px;
+                padding: 0.8rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+            ">
+                <i class="fas fa-network-wired" style="color: var(--danger);"></i>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.3rem;">
+                    <strong style="color: var(--text);">Comprometimento Total</strong><br>
+                    Rede interna totalmente comprometida
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exemplo Prático -->
+    <div class="card" style="border-left: 4px solid var(--warning);">
+        <h3 style="color: var(--warning); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-lightbulb"></i> Exemplo Prático
+        </h3>
+        <div style="
+            background: rgba(255, 204, 0, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        ">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">
+                <strong style="color: var(--text);">Cenário:</strong> Um agente de ameaças com acesso à rede 
+                interna captura <strong style="color: var(--danger);">quadros da Camada 2</strong>.
+            </p>
+            <div style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+                justify-content: center;
+            ">
+                <span style="
+                    background: rgba(255, 68, 68, 0.1);
+                    color: var(--danger);
+                    padding: 0.3rem 0.8rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    border: 1px solid rgba(255, 68, 68, 0.2);
+                ">
+                    <i class="fas fa-times-circle"></i> VPN inútil
+                </span>
+                <span style="
+                    background: rgba(255, 68, 68, 0.1);
+                    color: var(--danger);
+                    padding: 0.3rem 0.8rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    border: 1px solid rgba(255, 68, 68, 0.2);
+                ">
+                    <i class="fas fa-times-circle"></i> Firewall ignorado
+                </span>
+                <span style="
+                    background: rgba(255, 68, 68, 0.1);
+                    color: var(--danger);
+                    padding: 0.3rem 0.8rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    border: 1px solid rgba(255, 68, 68, 0.2);
+                ">
+                    <i class="fas fa-times-circle"></i> IPS contornado
+                </span>
+                <span style="
+                    background: rgba(255, 68, 68, 0.1);
+                    color: var(--danger);
+                    padding: 0.3rem 0.8rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    border: 1px solid rgba(255, 68, 68, 0.2);
+                ">
+                    <i class="fas fa-times-circle"></i> Criptografia quebrada
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ATAQUES COMUNS DA CAMADA 2 ===== -->
+    <div style="margin: 1.5rem 0;">
+        <h4 style="color: var(--text); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-bug" style="color: var(--danger);"></i> Ataques Comuns à Camada 2
+        </h4>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+                text-align: center;
+            ">
+                <i class="fas fa-list" style="color: var(--danger); font-size: 1.5rem;"></i>
+                <h5 style="color: var(--text); font-size: 0.9rem; margin: 0.3rem 0;">MAC Flooding</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem;">Inundação da tabela MAC</p>
+            </div>
+            <div style="
+                background: rgba(255, 204, 0, 0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255, 204, 0, 0.1);
+                text-align: center;
+            ">
+                <i class="fas fa-exchange-alt" style="color: var(--warning); font-size: 1.5rem;"></i>
+                <h5 style="color: var(--text); font-size: 0.9rem; margin: 0.3rem 0;">ARP Spoofing</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem;">Envenenamento ARP</p>
+            </div>
+            <div style="
+                background: rgba(0, 170, 255, 0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(0, 170, 255, 0.1);
+                text-align: center;
+            ">
+                <i class="fas fa-sitemap" style="color: var(--info); font-size: 1.5rem;"></i>
+                <h5 style="color: var(--text); font-size: 0.9rem; margin: 0.3rem 0;">VLAN Hopping</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem;">Pular entre VLANs</p>
+            </div>
+            <div style="
+                background: rgba(0, 255, 136, 0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(0, 255, 136, 0.1);
+                text-align: center;
+            ">
+                <i class="fas fa-project-diagram" style="color: var(--primary); font-size: 1.5rem;"></i>
+                <h5 style="color: var(--text); font-size: 0.9rem; margin: 0.3rem 0;">STP Manipulation</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem;">Manipulação do STP</p>
+            </div>
+            <div style="
+                background: rgba(255, 68, 68, 0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255, 68, 68, 0.1);
+                text-align: center;
+            ">
+                <i class="fas fa-user-slash" style="color: var(--danger); font-size: 1.5rem;"></i>
+                <h5 style="color: var(--text); font-size: 0.9rem; margin: 0.3rem 0;">CDP/LLDP Spoofing</h5>
+                <p style="color: var(--text-dim); font-size: 0.75rem;">Falsificação de descoberta</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>Atenção!</strong> A segurança da Camada 2 é frequentemente <strong>negligenciada</strong> 
+        porque os administradores focam em firewalls e VPNs. No entanto, um ataque bem-sucedido na Camada 2 
+        pode <strong>contornar todas</strong> as defesas das camadas superiores. A 
+        <strong>defesa em profundidade</strong> deve incluir proteção em <strong>todas as camadas</strong>!
+    </div>
+
 </section>
       </div>
 
